@@ -1,0 +1,42 @@
+{
+  "name": "mobile",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~53.0.20",
+    "expo-status-bar": "~2.2.3",
+    "expo-linear-gradient": "~14.1.0",
+    "expo-font": "~13.1.0",
+    "@expo/vector-icons": "^14.2.5",
+    "react": "19.0.0",
+    "react-native": "0.79.5",
+    "@react-navigation/native": "^7.1.17",
+    "@react-navigation/stack": "^7.2.12",
+    "@react-navigation/bottom-tabs": "^7.3.8",
+    "react-native-screens": "~4.4.1",
+    "react-native-safe-area-context": "~5.1.2",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-reanimated": "~3.18.1",
+    "zustand": "^5.0.2",
+    "@react-native-async-storage/async-storage": "~2.2.2",
+    "react-hook-form": "^7.54.2",
+    "@hookform/resolvers": "^3.10.0",
+    "zod": "^3.24.1",
+    "nativewind": "^2.0.11",
+    "react-native-svg": "15.10.2",
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~19.0.10",
+    "typescript": "~5.8.3",
+    "tailwindcss": "^3.4.34"
+  },
+  "private": true
+}

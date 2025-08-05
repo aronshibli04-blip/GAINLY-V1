@@ -1,0 +1,148 @@
+You are a senior full-stack developer. Build a cross-platform mobile app using React Native and TypeScript. The app is for “hardgainers” who want to gain weight. It uses AI (OpenAI API) to generate personalized meal plans based on the user's actual Total Daily Energy Expenditure (TDEE) calculated from 7–28 days of tracked input. Build the app with modular, scalable architecture. Do not simplify.
+
+📱 GENERAL FEATURES:
+Build as a mobile app (React Native + TypeScript)
+
+Clean, modern UI (dark theme by default, Grok-inspired)
+
+Use Tailwind CSS (via NativeWind) for styling
+
+Use Expo for deployment and testing
+
+All user data should be stored locally or via Firebase (optional setup)
+
+🔐 ONBOARDING:
+Welcome screen
+
+Ask for:
+
+Age, sex, weight, height
+
+Goal: weight gain
+
+Daily activity level (steps or occupation)
+
+Dietary preferences (halal, no pork, dairy-free, etc.)
+
+Create a local user profile
+
+🔍 PHASE 1 – TDEE CALIBRATION (First 7 Days):
+App tracks:
+
+Daily weight (manual input)
+
+Daily calorie intake (manual input or estimated from meals)
+
+Activity (steps or light/manual input)
+
+At day 7:
+
+App calculates average TDEE using weight trend and caloric intake
+
+If weight stable → maintenance = intake
+
+If weight rises/falls → adjust with 7700 kcal per kg rule
+
+After 7 days, add 1100 kcal to TDEE to initiate surplus
+
+Store all values in local DB or Firebase
+
+📈 PHASE 2 – SMART MEAL PLAN GENERATION (AI-based):
+Use OpenAI API (GPT-4) to generate daily meal plans based on:
+
+Calculated TDEE + surplus
+
+User preferences (halal, etc.)
+
+Preferred food types (chicken, rice, beef, etc.)
+
+Maximum number of meals per day
+
+Cooking time preferences
+
+Each day generates:
+
+3–5 meals
+
+Total kcal, macros per meal
+
+Shopping list (ingredients per day and for the full week)
+
+Plans can be regenerated or adjusted with button: “I want a new plan”
+
+🛒 PHASE 3 – MEALPREP MODE (Weekly):
+Every Sunday:
+
+Offer a “Mealprep Mode”:
+
+Generate the full week’s plan in one view
+
+Show: Total ingredients, total kcal/day
+
+Option to export or screenshot plan
+
+🔁 PHASE 4 – TRACKING + AI LEARNING:
+User logs:
+
+Weight (daily or weekly)
+
+Food intake (did you follow the plan? Yes / No / Partially)
+
+Feedback on food (emoji or score)
+
+App adjusts:
+
+Future plans
+
+TDEE precision over 28 days
+
+Suggestions (e.g. "Try more fat-rich meals")
+
+🧠 AI MODULES:
+GPT-4 prompts should:
+
+Ask clarifying questions before plan generation
+
+Always calculate kcal/macros
+
+Optimize plans over time based on user feedback
+
+Example input prompt for GPT:
+
+“Create a daily meal plan for a 21-year-old male, 183 cm, 67 kg, with a TDEE of 4900 kcal + 1100 surplus. He avoids pork, prefers rice-based meals, and wants 3–4 meals per day. Keep it simple, clean, and mealprep-friendly. Show macros per meal and per day.”
+
+📦 OPTIONAL TECH STACK:
+React Native + TypeScript (Expo)
+
+NativeWind (Tailwind for RN)
+
+Zustand or Redux for state management
+
+Firebase (optional)
+
+OpenAI API (GPT-4 or gpt-3.5-turbo for cost)
+
+⚙️ MODULAR CODE STRUCTURE:
+plaintext
+Kopier
+Rediger
+/src
+  /components
+  /screens
+  /api
+  /hooks
+  /utils
+  /assets
+  App.tsx
+🛠️ FUTURE FEATURES (for later versions):
+Barcode scanner for groceries
+
+Calendar view of mealplans
+
+AI-based recipe generator
+
+Progress analytics
+
+✅ OUTPUT:
+Build the full project structure, and generate files step-by-step. Use placeholder components or dummy content where needed, but keep the architecture clean and real-world ready.
+

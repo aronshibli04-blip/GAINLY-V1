@@ -1,6 +1,14 @@
 # Overview
 
-Hardgainer AI is a fitness tracking application designed to help users gain weight through intelligent calorie and activity monitoring. The application combines user data tracking with AI-powered analysis to provide personalized recommendations for achieving weight gain goals. It features a modern React frontend with a Node.js/Express backend, utilizing PostgreSQL for data persistence and Drizzle ORM for database management.
+Hardgainer AI is a comprehensive mobile fitness application designed to help hardgainers gain weight through intelligent TDEE calculation and AI-powered meal plan generation. The app uses 7-28 days of tracked data to calculate actual TDEE, then leverages OpenAI API to generate personalized meal plans. It features a React Native frontend with cross-platform mobile capabilities, utilizing local storage and optional Firebase integration for data persistence.
+
+## Recent Changes (August 2025)
+- **Complete Hardgainer AI Implementation**: Built comprehensive web-based weight gain tracking app
+- **Client-Side State Management**: Implemented Zustand store for local data persistence with browser storage
+- **Real TDEE Calculation**: Added intelligent TDEE calculation based on 7+ days of weight/calorie tracking
+- **AI Integration**: OpenAI API integration for personalized meal plan generation with user-provided API keys
+- **Phase-Based User Journey**: Three-phase system (calibration → meal planning → tracking) with progress indicators
+- **Comprehensive UI**: Full tracking interface with charts, insights, progress monitoring, and onboarding flow
 
 # User Preferences
 
@@ -9,15 +17,17 @@ Preferred communication style: Simple, everyday language.
 # System Architecture
 
 ## Frontend Architecture
-- **Framework**: React with TypeScript using Vite as the build tool
-- **UI Library**: Radix UI components with shadcn/ui design system
-- **Styling**: Tailwind CSS with CSS variables for theming support
-- **State Management**: TanStack Query (React Query) for server state management
-- **Routing**: Wouter for lightweight client-side routing
-- **Forms**: React Hook Form with Zod validation
-- **Charts**: Recharts for data visualization
+- **Framework**: React with TypeScript and Vite for fast web development
+- **UI Library**: Radix UI primitives with shadcn/ui components and Tailwind CSS
+- **Styling**: Tailwind CSS with dark theme support and responsive design
+- **State Management**: Zustand for client-side state with localStorage persistence and TanStack Query for server caching
+- **Navigation**: Wouter for lightweight client-side routing
+- **Forms**: React Hook Form with Zod validation for type-safe form handling
+- **AI Integration**: OpenAI API (GPT-4o-mini) for intelligent meal plan generation with user-provided API keys
+- **Storage**: Browser localStorage for data persistence with Zustand persist middleware
+- **Charts**: Recharts for weight progress visualization and data trends
 
-The frontend follows a component-based architecture with a clear separation between pages, reusable UI components, and business logic. The application uses a mobile-first responsive design approach.
+The web app follows a component-based architecture with clean separation between UI, state management, and business logic layers.
 
 ## Backend Architecture
 - **Runtime**: Node.js with Express.js framework
