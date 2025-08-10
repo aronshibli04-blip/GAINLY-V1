@@ -40,20 +40,46 @@ export function calculateTdee(
   }
 
   // Calculate average daily calories
-  const totalCalories = calorieEntries.reduce((sum, entry) => sum + entry.calories, 0);
-  const averageCalories = calorieEntries.length > 0 ? totalCalories / calorieEntries.length : 2500;
+  const dailyCaloriesByDate = new Map<string, number>();
+  
+  // Group calories by date to get daily totals
+  calorieEntries.forEach(entry => {
+    const existing = dailyCaloriesByDate.get(entry.date) || 0;
+    dailyCaloriesByDate.set(entry.date, existing + entry.calories);
+  });
+  
+  const dailyCalorieTotals = Array.from(dailyCaloriesByDate.values());
+  const averageCalories = dailyCalorieTotals.length > 0 
+    ? dailyCalorieTotals.reduce((sum, calories) => sum + calories, 0) / dailyCalorieTotals.length 
+    : 2500;
 
   // Calculate TDEE based on weight change and calorie intake
   let tdee = averageCalories;
+  
+  console.log('TDEE Calculation Debug:', {
+    weightTrend: weightTrend,
+    averageCalories: averageCalories,
+    dailyCalorieTotals: dailyCalorieTotals,
+    weightEntries: sortedWeights.map(w => ({ date: w.date, weight: w.weight }))
+  });
   
   if (Math.abs(weightTrend) > 0.05) { // If there's significant weight change (>50g/week)
     // 1 kg = ~7700 calories
     // Weight trend is in kg/week, so convert to daily calorie surplus/deficit
     const dailyCalorieBalance = (weightTrend * 7700) / 7;
+    // TDEE = Average Intake - Daily Surplus/Deficit
+    // If gaining weight (positive trend), then intake > TDEE, so TDEE = intake - surplus
+    // If losing weight (negative trend), then intake < TDEE, so TDEE = intake - deficit (which is intake + positive value)
     tdee = Math.round(averageCalories - dailyCalorieBalance);
+    
+    console.log('Weight change detected:', {
+      dailyCalorieBalance: dailyCalorieBalance,
+      calculatedTdee: tdee
+    });
   } else {
-    // If weight is stable, assume current intake is close to TDEE
+    // If weight is stable (no significant change), assume current intake equals TDEE
     tdee = Math.round(averageCalories);
+    console.log('Weight stable, TDEE = average calories:', tdee);
   }
 
   // Ensure TDEE is within reasonable bounds for adults
