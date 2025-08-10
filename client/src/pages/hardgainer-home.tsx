@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useUserStore, useUserProgress } from "@/store/userStore";
-import { CalendarDays, Scale, Utensils, Activity, TrendingUp, Target, Plus, Settings, Sparkles } from "lucide-react";
+import { CalendarDays, Scale, Utensils, Activity, TrendingUp, Target, Plus, Settings, Sparkles, FastForward } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
 import { calculateTdee, generateTdeeAnalysis, getProgressInsights } from "@/utils/tdee";
@@ -33,6 +33,7 @@ export default function HardgainerHome() {
     setTdeeAnalysis,
     addMealPlan,
     updatePhase,
+    skipToNextDay,
   } = useUserStore();
 
   const progress = useUserProgress();
@@ -298,21 +299,48 @@ export default function HardgainerHome() {
         {/* Phase Status */}
         <Card className="mb-8">
           <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className={`w-12 h-12 rounded-full ${phaseInfo.color} flex items-center justify-center`}>
-                <Activity className="h-6 w-6 text-white" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className={`w-12 h-12 rounded-full ${phaseInfo.color} flex items-center justify-center`}>
+                  <Activity className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {phaseInfo.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {phaseInfo.subtitle}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                    {phaseInfo.description}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {phaseInfo.title}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {phaseInfo.subtitle}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  {phaseInfo.description}
-                </p>
-              </div>
+              
+              {/* Skip Day Button - Only show during calibration phase */}
+              {currentPhase === 'calibration' && (
+                <div className="flex flex-col items-end">
+                  <Button 
+                    onClick={() => {
+                      skipToNextDay();
+                      toast({ 
+                        title: "Day Skipped!", 
+                        description: "Added simulated data for testing purposes" 
+                      });
+                    }}
+                    variant="outline" 
+                    size="sm"
+                    className="mb-2"
+                    data-testid="button-skip-day"
+                  >
+                    <FastForward className="h-4 w-4 mr-2" />
+                    Skip to Next Day
+                  </Button>
+                  <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
+                    Testing feature
+                  </p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
