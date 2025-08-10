@@ -28,7 +28,7 @@ export default function WelcomeScreen({ onGetStarted }: WelcomeScreenProps) {
             <View style={styles.iconContainer}>
               <Ionicons name="fitness" size={64} color="#4ade80" />
             </View>
-            <Text style={styles.title}>Hardgainer AI</Text>
+            <Text style={styles.title}>GAINLY</Text>
             <Text style={styles.subtitle}>
               Smart Weight Gain Through Real TDEE Calculation
             </Text>

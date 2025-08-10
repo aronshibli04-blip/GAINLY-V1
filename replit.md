@@ -1,9 +1,9 @@
 # Overview
 
-Hardgainer AI is a comprehensive mobile fitness application designed to help hardgainers gain weight through intelligent TDEE calculation and AI-powered meal plan generation. The app uses 7-28 days of tracked data to calculate actual TDEE, then leverages OpenAI API to generate personalized meal plans. It features a React Native frontend with cross-platform mobile capabilities, utilizing local storage and optional Firebase integration for data persistence.
+GAINLY is a comprehensive mobile fitness application designed to help hardgainers gain weight through intelligent TDEE calculation and AI-powered meal plan generation. The app uses 7-28 days of tracked data to calculate actual TDEE, then leverages OpenAI API to generate personalized meal plans. It features a React Native frontend with cross-platform mobile capabilities, utilizing local storage and optional Firebase integration for data persistence.
 
 ## Recent Changes (August 2025)
-- **Complete Hardgainer AI Implementation**: Built comprehensive mobile-first weight gain tracking app
+- **Complete GAINLY Implementation**: Built comprehensive mobile-first weight gain tracking app
 - **Goal Weight Feature**: Added goal weight setting with progress tracking and time-to-goal calculations
 - **Real-Time TDEE Calibration**: AI continuously recalibrates TDEE with each data entry for maximum accuracy
 - **Subtle UI Updates**: Replaced prominent "AI Analysis Ready" status with discrete real-time calibration indicators

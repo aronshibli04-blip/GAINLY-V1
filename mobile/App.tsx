@@ -77,7 +77,7 @@ function LoadingScreen() {
   return (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color="#10b981" />
-      <Text style={styles.loadingText}>Loading Hardgainer AI...</Text>
+      <Text style={styles.loadingText}>Loading GAINLY...</Text>
     </View>
   );
 }

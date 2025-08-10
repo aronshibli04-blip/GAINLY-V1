@@ -39,7 +39,7 @@ export default function ProfileSetup() {
     onSuccess: (user) => {
       toast({
         title: "Profile created successfully!",
-        description: "Welcome to Hardgainer AI. Let's start tracking your progress.",
+        description: "Welcome to GAINLY. Let's start tracking your progress.",
       });
       // Store user ID in localStorage for demo purposes
       localStorage.setItem("userId", user.id);

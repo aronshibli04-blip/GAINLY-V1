@@ -178,7 +178,7 @@ export default function ProfileScreen() {
 
         {/* App Info */}
         <View style={styles.appInfoCard}>
-          <Text style={styles.appName}>Hardgainer AI</Text>
+          <Text style={styles.appName}>GAINLY</Text>
           <Text style={styles.appVersion}>Version 1.0.0</Text>
           <Text style={styles.appDescription}>
             Smart weight gain through real TDEE calculation and AI-powered meal planning

@@ -81,7 +81,7 @@ export default function MobileHome() {
       default:
         return {
           title: "Getting Started",
-          subtitle: "Welcome to Hardgainer AI",
+          subtitle: "Welcome to GAINLY",
           color: "bg-gray-500",
           progress: 0
         };
@@ -98,7 +98,7 @@ export default function MobileHome() {
         <div className="flex items-center justify-between pt-4">
           <div>
             <h1 className="text-2xl font-bold grok-text-gradient">
-              Hardgainer AI
+              GAINLY
             </h1>
             <p className="text-sm text-muted-foreground">
               Your AI-powered bulk companion
