@@ -1,30 +1,54 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import HardgainerHome from "@/pages/hardgainer-home";
-import HardgainerProfileSetup from "@/pages/hardgainer-profile-setup";
-import NotFound from "@/pages/not-found";
+import { useUserStore } from "@/store/userStore";
+import { useEffect } from "react";
 
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={HardgainerHome} />
-      <Route path="/setup" component={HardgainerProfileSetup} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+// Mobile pages
+import MobileHome from "@/pages/mobile-home";
+import MobileCalories from "@/pages/mobile-calories";
+import MobileTraining from "@/pages/mobile-training";
+import MobileAICoach from "@/pages/mobile-ai-coach";
+import MobileMeals from "@/pages/mobile-meals";
+
+// Setup pages
+import HardgainerProfileSetup from "@/pages/hardgainer-profile-setup";
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+  const { user, isOnboarded, completeOnboarding } = useUserStore();
+
+  // Force dark theme for Grok-inspired design
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
+  // If no user profile, show setup
+  if (!user || !isOnboarded) {
+    return (
+      <div className="min-h-screen bg-background">
+        <HardgainerProfileSetup />
         <Toaster />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Switch>
+        <Route path="/" component={MobileHome} />
+        <Route path="/calories" component={MobileCalories} />
+        <Route path="/training" component={MobileTraining} />
+        <Route path="/ai-coach" component={MobileAICoach} />
+        <Route path="/meals" component={MobileMeals} />
+        <Route path="/setup" component={HardgainerProfileSetup} />
+        
+        {/* Fallback */}
+        <Route>
+          <MobileHome />
+        </Route>
+      </Switch>
+      
+      <Toaster />
+    </div>
   );
 }
 
