@@ -60,7 +60,7 @@ export function TdeeAnalysisCard() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Brain className="h-5 w-5 text-primary" />
-            <span className="font-semibold text-white">Live TDEE Analysis</span>
+            <span className="font-semibold text-white">AI TDEE Calibration</span>
           </div>
           <Button
             variant="ghost"
@@ -114,7 +114,7 @@ export function TdeeAnalysisCard() {
         </div>
 
         <div className="text-xs text-muted-foreground text-center pt-2 border-t border-border/30">
-          Updates automatically as you log more data
+          Continuously recalibrated with each weight, calorie & activity entry
         </div>
       </CardContent>
     </Card>

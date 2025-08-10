@@ -47,22 +47,22 @@ export default function MobileHome() {
         };
       case 'calibration':
         return {
-          title: "Calibration Phase",
-          subtitle: `Day ${totalDays}/7 - Building your profile`,
+          title: "Building Profile",
+          subtitle: `Day ${totalDays} - TDEE being calibrated by AI in real time`,
           color: "bg-yellow-500",
           progress: progressPercent
         };
       case 'meal_planning':
         return {
-          title: "AI Analysis Ready",
-          subtitle: "Your TDEE has been calculated",
+          title: "Profile Active",
+          subtitle: "TDEE continuously updated with each data point",
           color: "bg-green-500",
           progress: 100
         };
       case 'tracking':
         return {
-          title: "Tracking Phase",
-          subtitle: "Follow your personalized plan",
+          title: "Profile Active",
+          subtitle: "TDEE adapting in real time to your progress",
           color: "bg-purple-500",
           progress: 100
         };
@@ -97,19 +97,11 @@ export default function MobileHome() {
           </div>
         </div>
 
-        {/* Phase Status Card */}
-        <Card className="grok-glow-hover">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className={`w-3 h-3 rounded-full ${phaseInfo.color}`} />
-              <div>
-                <h3 className="font-semibold text-white">{phaseInfo.title}</h3>
-                <p className="text-sm text-muted-foreground">{phaseInfo.subtitle}</p>
-              </div>
-            </div>
-            <Progress value={phaseInfo.progress} className="h-2" />
-          </CardContent>
-        </Card>
+        {/* Phase Status - Subtle indicator */}
+        <div className="flex items-center space-x-2 py-2">
+          <div className={`w-2 h-2 rounded-full ${phaseInfo.color}`} />
+          <p className="text-xs text-muted-foreground">{phaseInfo.subtitle}</p>
+        </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">

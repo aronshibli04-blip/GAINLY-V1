@@ -76,24 +76,27 @@ export function calculateTdee(
   const surplus = 500; // Conservative surplus for steady weight gain
   const targetCalories = tdee + surplus;
 
-  // Calculate confidence based on data quality
+  // Calculate confidence based on data quality - more responsive for real-time calibration
   const uniqueWeightDays = new Set(weightEntries.map(e => e.date)).size;
   const uniqueCalorieDays = new Set(calorieEntries.map(e => e.date)).size;
   const dataPoints = Math.min(uniqueWeightDays, uniqueCalorieDays);
   
-  let confidence = 0.3; // Base confidence
-  if (dataPoints >= 7) confidence += 0.3;
-  if (dataPoints >= 14) confidence += 0.2;
-  if (dataPoints >= 21) confidence += 0.1;
+  let confidence = 0.2; // Base confidence starts higher for real-time feel
+  if (dataPoints >= 2) confidence += 0.1; // Early data helps with calibration
+  if (dataPoints >= 4) confidence += 0.2; // Building confidence
+  if (dataPoints >= 7) confidence += 0.2; // Good week of data
+  if (dataPoints >= 14) confidence += 0.2; // Two weeks is solid
+  if (dataPoints >= 21) confidence += 0.1; // Three weeks is excellent
   if (Math.abs(weightTrend) < 0.2) confidence += 0.1; // Consistent data is good
   
   confidence = Math.min(1, confidence);
 
-  // Determine data quality
+  // Determine data quality - adjusted for continuous calibration
   let dataQuality: 'poor' | 'fair' | 'good' | 'excellent' = 'poor';
   if (dataPoints >= 21) dataQuality = 'excellent';
   else if (dataPoints >= 14) dataQuality = 'good';
   else if (dataPoints >= 7) dataQuality = 'fair';
+  else if (dataPoints >= 2) dataQuality = 'poor'; // But still functional for real-time updates
 
   return {
     tdee,

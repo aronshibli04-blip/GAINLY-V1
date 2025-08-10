@@ -3,12 +3,13 @@
 Hardgainer AI is a comprehensive mobile fitness application designed to help hardgainers gain weight through intelligent TDEE calculation and AI-powered meal plan generation. The app uses 7-28 days of tracked data to calculate actual TDEE, then leverages OpenAI API to generate personalized meal plans. It features a React Native frontend with cross-platform mobile capabilities, utilizing local storage and optional Firebase integration for data persistence.
 
 ## Recent Changes (August 2025)
-- **Complete Hardgainer AI Implementation**: Built comprehensive web-based weight gain tracking app
-- **Client-Side State Management**: Implemented Zustand store for local data persistence with browser storage
-- **Real TDEE Calculation**: Added intelligent TDEE calculation based on 7+ days of weight/calorie tracking
-- **AI Integration**: OpenAI API integration for personalized meal plan generation with user-provided API keys
-- **Phase-Based User Journey**: Three-phase system (calibration → meal planning → tracking) with progress indicators
-- **Comprehensive UI**: Full tracking interface with charts, insights, progress monitoring, and onboarding flow
+- **Complete Hardgainer AI Implementation**: Built comprehensive mobile-first weight gain tracking app
+- **Goal Weight Feature**: Added goal weight setting with progress tracking and time-to-goal calculations
+- **Real-Time TDEE Calibration**: AI continuously recalibrates TDEE with each data entry for maximum accuracy
+- **Subtle UI Updates**: Replaced prominent "AI Analysis Ready" status with discrete real-time calibration indicators
+- **Mobile-First Design**: Dark theme with Grok-inspired green accents and bottom navigation tabs
+- **1kg/Week Focus**: All meal plans use aggressive 1100 calorie surplus targeting rapid hardgainer gains
+- **Live Weight Logging**: Front-page weight entry with immediate TDEE updates and progress visualization
 
 # User Preferences
 
