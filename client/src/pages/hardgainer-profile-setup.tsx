@@ -129,55 +129,131 @@ export default function HardgainerProfileSetup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 to-blue-50/50 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-500 text-white rounded-full mb-6">
-            <TrendingUp className="h-8 w-8" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
+      {/* Animated Background Grid */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }} />
+      </div>
+      
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute w-2 h-2 bg-primary/30 rounded-full animate-pulse" style={{top: '20%', left: '10%', animationDelay: '0s'}} />
+        <div className="absolute w-1 h-1 bg-primary/40 rounded-full animate-pulse" style={{top: '40%', left: '80%', animationDelay: '1s'}} />
+        <div className="absolute w-3 h-3 bg-primary/20 rounded-full animate-pulse" style={{top: '70%', left: '20%', animationDelay: '2s'}} />
+        <div className="absolute w-1.5 h-1.5 bg-primary/50 rounded-full animate-pulse" style={{top: '80%', left: '70%', animationDelay: '3s'}} />
+      </div>
+
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="text-center mb-12">
+          {/* Futuristic Icon */}
+          <div className="relative inline-flex items-center justify-center w-24 h-24 mb-8">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-purple-500 animate-spin" style={{animationDuration: '3s'}} />
+            <div className="absolute inset-1 rounded-full bg-background" />
+            <div className="relative z-10 w-16 h-16 rounded-full grok-gradient flex items-center justify-center">
+              <TrendingUp className="h-8 w-8 text-black animate-pulse" />
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            AI Calibration Phase
+          
+          {/* Title with Glow Effect */}
+          <h1 className="text-5xl font-bold grok-text-gradient mb-6 tracking-tight">
+            AI CALIBRATION PHASE
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
-            Initialize biometric parameters for AI-driven metabolic analysis
-          </p>
+          <div className="relative">
+            <p className="text-xl text-primary/80 font-medium tracking-wide uppercase text-center">
+              Initialize biometric parameters
+            </p>
+            <p className="text-lg text-muted-foreground mt-2">
+              Neural networks analyzing metabolic patterns
+            </p>
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+          </div>
         </div>
 
-        <Card className="max-w-2xl mx-auto">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                <CardTitle>Personal Information</CardTitle>
+        <div className="max-w-3xl mx-auto">
+          {/* Futuristic Card */}
+          <div className="relative">
+            {/* Glowing Border Animation */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-purple-500 to-primary rounded-2xl opacity-30 blur animate-pulse" />
+            <Card className="relative bg-card/95 backdrop-blur-xl border-primary/20 rounded-2xl overflow-hidden">
+              {/* Header Section */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-purple-500/5" />
+                <CardHeader className="relative z-10 pb-8">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+                        <User className="h-5 w-5 text-black" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl text-white tracking-wide">BIOMETRIC INITIALIZATION</CardTitle>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                          <span className="text-xs text-primary font-medium uppercase tracking-wider">Neural Network Ready</span>
+                        </div>
+                      </div>
+                    </div>
+                    {user && (
+                      <Button variant="outline" size="sm" className="border-primary/30 hover:border-primary" asChild>
+                        <a href="/">
+                          <ArrowLeft className="h-4 w-4 mr-2" />
+                          Exit
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                  <div className="mt-6">
+                    <p className="text-muted-foreground leading-relaxed">
+                      Advanced AI algorithms require precise biometric data to construct your unique metabolic profile
+                    </p>
+                  </div>
+                </CardHeader>
               </div>
-              {user && (
-                <Button variant="outline" size="sm" asChild>
-                  <a href="/">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to Home
-                  </a>
-                </Button>
-              )}
-            </div>
-            <CardDescription>
-              This information helps us calculate your real TDEE and create personalized meal plans
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Personal Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="firstName">First Name *</Label>
-                  <Input
-                    id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    placeholder="Your first name"
-                    required
-                    data-testid="input-first-name"
-                  />
+              <CardContent className="relative">
+                {/* Progress Indicator */}
+                <div className="mb-8">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+                    <span>CALIBRATION PROGRESS</span>
+                    <span>45% COMPLETE</span>
+                  </div>
+                  <div className="w-full bg-muted/20 rounded-full h-1 overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full transition-all duration-1000" style={{width: '45%'}} />
+                  </div>
                 </div>
+
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Personal Details Section */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <span className="text-primary font-bold text-sm">01</span>
+                      </div>
+                      <h3 className="text-lg font-semibold text-white tracking-wide">PERSONAL IDENTIFIERS</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName" className="text-sm font-medium text-primary uppercase tracking-wider">First Name</Label>
+                        <div className="relative">
+                          <Input
+                            id="firstName"
+                            value={formData.firstName}
+                            onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                            required
+                            className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
+                            placeholder="Neural ID Required"
+                            data-testid="input-first-name"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                          </div>
+                        </div>
+                      </div>
 
                 <div>
                   <Label htmlFor="age">Age *</Label>
