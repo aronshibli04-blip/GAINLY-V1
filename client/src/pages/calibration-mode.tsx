@@ -7,12 +7,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Calendar, Scale, Utensils, Activity, Clock, Zap } from "lucide-react";
+import { Brain, Calendar, Scale, Utensils, Activity, Clock, Zap, RotateCcw } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 
 export default function CalibrationMode() {
   const { toast } = useToast();
-  const { user, setUser } = useUserStore();
+  const { user, setUser, addWeightEntry, addCalorieEntry, addActivityEntry, weightEntries, calorieEntries, clearUserData } = useUserStore();
   
   const [formData, setFormData] = useState({
     weight: '',
@@ -29,12 +29,17 @@ export default function CalibrationMode() {
       const currentDate = new Date();
       const daysDiff = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
       
-      const remaining = Math.max(0, 7 - daysDiff);
+      // Calculate progress based on unique days with data entries
+      const uniqueWeightDays = new Set(weightEntries.map(w => w.date)).size;
+      const uniqueCalorieDays = new Set(calorieEntries.map(c => c.date)).size;
+      const dataEntryDays = Math.max(uniqueWeightDays, uniqueCalorieDays);
+      
+      const remaining = Math.max(0, 7 - dataEntryDays);
       setDaysRemaining(remaining);
-      setCalibrationProgress((daysDiff / 7) * 100);
+      setCalibrationProgress((dataEntryDays / 7) * 100);
 
-      // Check if calibration is complete
-      if (daysDiff >= 7 && !user.hasCompletedCalibration) {
+      // Check if calibration is complete (7 days of data)
+      if (dataEntryDays >= 7 && !user.hasCompletedCalibration) {
         setUser({ ...user, hasCompletedCalibration: true });
         toast({
           title: "🎉 AI Calibration Complete!",
@@ -43,7 +48,7 @@ export default function CalibrationMode() {
         window.location.href = '/';
       }
     }
-  }, [user, setUser, toast]);
+  }, [user, setUser, toast, weightEntries, calorieEntries]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,8 +84,32 @@ export default function CalibrationMode() {
       return;
     }
 
-    // Store today's data (in real app, this would go to database)
+    // Store today's data
     const today = new Date().toISOString().split('T')[0];
+    
+    // Add weight entry
+    addWeightEntry({
+      userId: user?.id || 'user',
+      weight: weight,
+      date: today
+    });
+
+    // Add calorie entry
+    addCalorieEntry({
+      userId: user?.id || 'user',
+      calories: calories,
+      description: `Daily intake: ${calories} calories`,
+      date: today
+    });
+
+    // Add activity entry (storing description in a simple way)
+    addActivityEntry({
+      userId: user?.id || 'user',
+      type: 'daily',
+      value: formData.activityDescription.length, // Use description length as a simple metric
+      date: today
+    });
+
     toast({
       title: "✅ Data Recorded",
       description: `Neural network processing ${today} calibration data...`,
@@ -291,6 +320,24 @@ export default function CalibrationMode() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* Reset Button for Testing */}
+            <div className="mt-8 pt-6 border-t border-primary/20">
+              <Button
+                onClick={() => {
+                  if (confirm('Reset all data and start fresh? This cannot be undone.')) {
+                    clearUserData();
+                    localStorage.clear();
+                    window.location.reload();
+                  }
+                }}
+                variant="outline"
+                className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Reset & Start Over
+              </Button>
+            </div>
           </div>
         </div>
       </div>
