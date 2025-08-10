@@ -44,15 +44,15 @@ export default function MobileHome() {
     switch (currentPhase) {
       case 'onboarding':
         return {
-          title: "Getting Started",
-          subtitle: "Complete your profile to begin",
+          title: "Initialization",
+          subtitle: "Complete biometric calibration to begin",
           color: "bg-blue-500",
           progress: 25
         };
       case 'calibration':
         return {
-          title: "Building Profile",
-          subtitle: `Day ${totalDays} - TDEE being calibrated by AI in real time`,
+          title: "Calibration Phase",
+          subtitle: `Day ${totalDays} - AI neural networks learning your metabolism`,
           color: "bg-yellow-500",
           progress: progressPercent
         };

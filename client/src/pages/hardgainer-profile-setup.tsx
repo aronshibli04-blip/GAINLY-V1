@@ -136,10 +136,10 @@ export default function HardgainerProfileSetup() {
             <TrendingUp className="h-8 w-8" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Hardgainer AI Setup
+            AI Calibration Phase
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">
-            Tell us about yourself to get personalized weight gain recommendations
+            Initialize biometric parameters for AI-driven metabolic analysis
           </p>
         </div>
 

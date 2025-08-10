@@ -65,9 +65,9 @@ export default function ProfileSetup() {
           <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Dumbbell className="w-8 h-8 text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome to Hardgainer AI</CardTitle>
+          <CardTitle className="text-2xl font-bold">AI Calibration Phase</CardTitle>
           <CardDescription>
-            Let's set up your profile to start tracking your weight gain journey
+            Initialize your biometric profile for AI-powered TDEE analysis
           </CardDescription>
         </CardHeader>
         <CardContent>
