@@ -84,7 +84,7 @@ export default function MobileHome() {
 
   return (
     <div className="mobile-container">
-      <div className="content-with-bottom-nav p-4 space-y-4">
+      <div className="content-with-bottom-nav p-4 space-y-4 pb-28">
         
         {/* Header */}
         <div className="flex items-center justify-between pt-4">
