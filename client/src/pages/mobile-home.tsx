@@ -8,6 +8,9 @@ import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { WeightChart } from "@/components/ui/weight-chart";
 import { MotivationCard } from "@/components/ui/motivation-card";
 import { GoalWeightCard } from "@/components/ui/goal-weight-card";
+import { AchievementSystem } from "@/components/ui/achievement-system";
+import { DailyChallenges } from "@/components/ui/daily-challenges";
+import { ProgressCelebration } from "@/components/ui/progress-celebration";
 import { useUserStore } from "@/store/userStore";
 import { Zap, TrendingUp, Target, Activity } from "lucide-react";
 import { Link } from "wouter";
@@ -153,6 +156,21 @@ export default function MobileHome() {
             <WeightChart />
           </div>
         )}
+
+        {/* Progress Celebration */}
+        <ProgressCelebration />
+
+        {/* Daily Challenges */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Daily Challenges</h3>
+          <DailyChallenges />
+        </div>
+
+        {/* Achievements */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Achievements</h3>
+          <AchievementSystem />
+        </div>
 
         {/* Daily Motivation */}
         <div className="space-y-3">
