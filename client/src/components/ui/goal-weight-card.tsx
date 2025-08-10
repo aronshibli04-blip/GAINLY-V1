@@ -77,22 +77,9 @@ export function GoalWeightCard() {
   return (
     <Card className="grok-glow-hover border-primary/20">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-white flex items-center justify-between">
-          <div className="flex items-center">
-            <Target className="h-5 w-5 mr-2 text-primary" />
-            Goal Weight
-          </div>
-          {hasGoal && !isEditing && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditing(true)}
-              className="h-8 w-8 p-0"
-              data-testid="button-edit-goal"
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
-          )}
+        <CardTitle className="text-lg text-white flex items-center">
+          <Target className="h-5 w-5 mr-2 text-primary" />
+          Goal Weight
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -141,12 +128,16 @@ export function GoalWeightCard() {
                   {currentWeight}kg
                 </p>
               </div>
-              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
-                <p className="text-xs text-muted-foreground">Goal</p>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="p-3 rounded-lg bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+                data-testid="button-edit-goal"
+              >
+                <p className="text-xs text-muted-foreground">Goal (tap to edit)</p>
                 <p className="text-lg font-bold text-primary">
                   {goalWeight}kg
                 </p>
-              </div>
+              </button>
               <div className="p-3 rounded-lg bg-muted/20">
                 <p className="text-xs text-muted-foreground">To Go</p>
                 <p className="text-lg font-bold text-white">
