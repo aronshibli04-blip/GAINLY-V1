@@ -221,17 +221,20 @@ export default function CalibrationMode() {
           
           <h1 className="text-5xl font-black mb-4 tracking-tight">
             <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent animate-pulse">
-              ◊ NEURAL CALIBRATION MATRIX ◊
+              AI CALIBRATION MODE
             </span>
           </h1>
-          <p className="text-xl text-primary/80 max-w-3xl mx-auto mb-8 font-light tracking-wide">
-            » Initializing quantum metabolic algorithms for personalized optimization «
+          <p className="text-lg text-primary/80 max-w-3xl mx-auto mb-2 font-light tracking-wide">
+            7-day quantum metabolic algorithm for precise body calculation
+          </p>
+          <p className="text-sm text-primary/60 max-w-2xl mx-auto mb-8">
+            Track your weight and calories for 7 days so our AI can learn your unique metabolism and provide accurate recommendations
           </p>
 
           {/* Advanced Progress Section */}
           <div className="max-w-lg mx-auto space-y-6 p-6 rounded-2xl bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-md border border-primary/20">
             <div className="flex items-center justify-between text-lg">
-              <span className="text-primary/80 font-semibold tracking-wider">↳ CALIBRATION STATUS</span>
+              <span className="text-primary/80 font-semibold tracking-wider">CALIBRATION STATUS</span>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                 <span className="text-primary font-bold text-xl">{Math.floor(calibrationProgress)}%</span>
@@ -254,7 +257,7 @@ export default function CalibrationMode() {
             <div className="flex items-center justify-center gap-3 text-primary/70">
               <Clock className="h-5 w-5 animate-spin" style={{ animationDuration: '3s' }} />
               <span className="text-base font-medium tracking-wider">
-                {daysRemaining} CYCLES REMAINING → FULL NEURAL ACTIVATION
+                {daysRemaining} DAYS REMAINING
               </span>
             </div>
           </div>
