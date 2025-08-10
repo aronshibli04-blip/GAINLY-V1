@@ -7,12 +7,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Calendar, Scale, Utensils, Activity, Clock, Zap, RotateCcw } from "lucide-react";
+import { Brain, Calendar, Scale, Utensils, Activity, Clock, Zap, RotateCcw, FastForward } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 
 export default function CalibrationMode() {
   const { toast } = useToast();
-  const { user, setUser, addWeightEntry, addCalorieEntry, addActivityEntry, weightEntries, calorieEntries, clearUserData } = useUserStore();
+  const { user, setUser, addWeightEntry, addCalorieEntry, addActivityEntry, weightEntries, calorieEntries, clearUserData, skipToNextDay } = useUserStore();
   
   const [formData, setFormData] = useState({
     weight: '',
@@ -49,6 +49,14 @@ export default function CalibrationMode() {
       }
     }
   }, [user, setUser, toast, weightEntries, calorieEntries]);
+
+  const handleSkipDay = () => {
+    skipToNextDay();
+    toast({
+      title: "⏩ Day Skipped",
+      description: "Generated realistic test data for the next day.",
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -250,6 +258,22 @@ export default function CalibrationMode() {
                 {daysRemaining} DAYS REMAINING
               </span>
             </div>
+
+            {/* Developer Skip Day Button - Only show in development */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="flex justify-center mt-4 pt-4 border-t border-primary/20">
+                <Button
+                  onClick={handleSkipDay}
+                  variant="outline"
+                  size="sm"
+                  className="bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/50 transition-all duration-200"
+                  data-testid="button-skip-day"
+                >
+                  <FastForward className="h-4 w-4 mr-2" />
+                  Skip Day (Dev)
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
