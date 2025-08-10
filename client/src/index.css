@@ -120,6 +120,130 @@
   }
 }
 
+/* Futuristic Calibration Animations */
+@keyframes grid-flow {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(20px) translateY(20px); }
+}
+
+@keyframes scan-vertical {
+  0% { top: 10%; opacity: 1; }
+  50% { top: 50%; opacity: 0.8; }
+  100% { top: 90%; opacity: 0.3; }
+}
+
+@keyframes scan-horizontal {
+  0% { left: 10%; opacity: 1; }
+  50% { left: 50%; opacity: 0.8; }
+  100% { left: 90%; opacity: 0.3; }
+}
+
+@keyframes energy-flow-0 {
+  0% { 
+    transform: translateX(-100%); 
+    opacity: 0; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateX(100%); 
+    opacity: 0; 
+  }
+}
+
+@keyframes energy-flow-1 {
+  0% { 
+    transform: translateX(-100%) scaleX(0.5); 
+    opacity: 0; 
+  }
+  30% { 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translateX(100%) scaleX(1.2); 
+    opacity: 0; 
+  }
+}
+
+@keyframes energy-flow-2 {
+  0% { 
+    transform: translateX(-100%) scaleY(0.3); 
+    opacity: 0; 
+  }
+  40% { 
+    opacity: 0.6; 
+  }
+  100% { 
+    transform: translateX(100%) scaleY(1); 
+    opacity: 0; 
+  }
+}
+
+.neural-input {
+  @apply bg-slate-800 border-2 border-primary text-primary font-mono tracking-wider;
+  @apply focus:border-primary focus:ring-2 focus:ring-primary focus:bg-slate-700;
+  @apply transition-all duration-300 ease-in-out;
+  background-color: rgba(30, 41, 59, 0.5);
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+}
+
+.neural-input:focus {
+  background-color: rgba(51, 65, 85, 0.5);
+  border-color: rgba(34, 197, 94, 1);
+}
+
+.neural-input:focus {
+  box-shadow: 0 0 20px 2px rgba(34, 197, 94, 0.3);
+  animation: input-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes input-glow {
+  0% { box-shadow: 0 0 20px 2px rgba(34, 197, 94, 0.3); }
+  100% { box-shadow: 0 0 30px 4px rgba(34, 197, 94, 0.5); }
+}
+
+.neural-button {
+  @apply bg-gradient-to-r from-primary via-cyan-400 to-primary;
+  @apply text-black font-black tracking-wider uppercase;
+  @apply border-2 border-primary/50 shadow-lg shadow-primary/30;
+  @apply transition-all duration-300 ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.neural-button:hover {
+  @apply shadow-xl shadow-primary/50 scale-105;
+  animation: button-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes button-pulse {
+  0% { 
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+    transform: scale(1.05);
+  }
+  100% { 
+    box-shadow: 0 0 40px rgba(34, 197, 94, 0.8);
+    transform: scale(1.08);
+  }
+}
+
+.neural-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease-in-out;
+}
+
+.neural-button:hover::before {
+  left: 100%;
+}
+
 /* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
   width: 6px;

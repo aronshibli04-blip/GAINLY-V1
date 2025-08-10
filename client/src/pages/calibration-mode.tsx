@@ -105,7 +105,7 @@ export default function CalibrationMode() {
     // Add activity entry (storing description in a simple way)
     addActivityEntry({
       userId: user?.id || 'user',
-      type: 'daily',
+      type: 'moderate', // Default to moderate activity
       value: formData.activityDescription.length, // Use description length as a simple metric
       date: today
     });
@@ -124,78 +124,167 @@ export default function CalibrationMode() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+      {/* Advanced Neural Grid Background */}
+      <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0" style={{
           backgroundImage: `
+            radial-gradient(circle at 1px 1px, rgba(34, 197, 94, 0.4) 1px, transparent 0),
             linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px'
+          backgroundSize: '80px 80px, 40px 40px, 40px 40px',
+          animation: 'grid-flow 20s linear infinite'
         }} />
       </div>
-      
-      {/* Floating Particles */}
+
+      {/* Holographic Scan Lines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent" 
+             style={{ 
+               top: '20%', 
+               animation: 'scan-vertical 8s ease-in-out infinite alternate' 
+             }} />
+        <div className="absolute h-full w-1 bg-gradient-to-b from-transparent via-primary/30 to-transparent" 
+             style={{ 
+               left: '30%', 
+               animation: 'scan-horizontal 10s ease-in-out infinite alternate' 
+             }} />
+      </div>
+
+      {/* Neural Network Nodes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-primary/30 rounded-full animate-pulse"
+            className="absolute"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
+              left: `${20 + (i % 4) * 20}%`,
+              top: `${20 + Math.floor(i / 4) * 25}%`,
+            }}
+          >
+            <div className="relative">
+              <div className="w-3 h-3 bg-primary/60 rounded-full animate-pulse shadow-lg shadow-primary/50" 
+                   style={{ animationDelay: `${i * 0.5}s` }} />
+              <div className="absolute inset-0 w-3 h-3 bg-primary/20 rounded-full animate-ping" 
+                   style={{ animationDelay: `${i * 0.5 + 1}s` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Energy Flowing Lines */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute h-px"
+            style={{
+              left: '0%',
+              top: `${20 + i * 12}%`,
+              width: '100%',
+              background: 'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.6), transparent)',
+              animation: `energy-flow-${i % 3} 4s linear infinite`,
+              animationDelay: `${i * 1.5}s`
             }}
           />
         ))}
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
-        {/* Header */}
+        {/* Futuristic Header */}
         <div className="text-center mb-12">
-          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-6">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-purple-500 animate-pulse" />
-            <div className="absolute inset-2 rounded-full bg-background" />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-purple-500 flex items-center justify-center">
-              <Brain className="h-8 w-8 text-black" />
+          {/* Advanced Brain Hologram */}
+          <div className="relative inline-flex items-center justify-center w-32 h-32 mb-8">
+            {/* Outer rotating ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-spin" 
+                 style={{ animationDuration: '20s' }} />
+            <div className="absolute inset-2 rounded-full border border-primary/30 animate-spin" 
+                 style={{ animationDuration: '15s', animationDirection: 'reverse' }} />
+            <div className="absolute inset-4 rounded-full border border-primary/40 animate-spin" 
+                 style={{ animationDuration: '10s' }} />
+            
+            {/* Holographic core */}
+            <div className="absolute inset-8 rounded-full bg-gradient-to-r from-primary/20 via-primary/40 to-purple-500/30 animate-pulse backdrop-blur-sm" />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-2xl shadow-primary/50">
+              <Brain className="h-10 w-10 text-black animate-pulse" />
             </div>
+            
+            {/* Energy emanation */}
+            <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping" 
+                 style={{ animationDuration: '3s' }} />
           </div>
           
-          <h1 className="text-4xl font-bold grok-text-gradient mb-4 tracking-tight">
-            AI NEURAL CALIBRATION
+          <h1 className="text-5xl font-black mb-4 tracking-tight">
+            <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent animate-pulse">
+              ◊ NEURAL CALIBRATION MATRIX ◊
+            </span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-            Training neural networks on your unique metabolism patterns
+          <p className="text-xl text-primary/80 max-w-3xl mx-auto mb-8 font-light tracking-wide">
+            » Initializing quantum metabolic algorithms for personalized optimization «
           </p>
 
-          {/* Progress Section */}
-          <div className="max-w-md mx-auto space-y-4">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Calibration Progress</span>
-              <span className="text-primary font-semibold">{Math.floor(calibrationProgress)}%</span>
+          {/* Advanced Progress Section */}
+          <div className="max-w-lg mx-auto space-y-6 p-6 rounded-2xl bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-md border border-primary/20">
+            <div className="flex items-center justify-between text-lg">
+              <span className="text-primary/80 font-semibold tracking-wider">↳ CALIBRATION STATUS</span>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="text-primary font-bold text-xl">{Math.floor(calibrationProgress)}%</span>
+              </div>
             </div>
-            <Progress value={calibrationProgress} className="h-3" />
-            <div className="flex items-center justify-center gap-2">
-              <Clock className="h-4 w-4 text-primary" />
-              <span className="text-sm text-muted-foreground">
-                {daysRemaining} days remaining for full neural activation
+            
+            {/* Enhanced Progress Bar */}
+            <div className="relative">
+              <div className="h-4 bg-slate-800 rounded-full overflow-hidden border border-primary/30">
+                <div 
+                  className="h-full bg-gradient-to-r from-primary via-cyan-400 to-primary rounded-full transition-all duration-1000 ease-out relative"
+                  style={{ width: `${calibrationProgress}%` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+                </div>
+              </div>
+              <div className="absolute inset-0 h-4 bg-gradient-to-r from-primary/20 to-transparent rounded-full animate-pulse" />
+            </div>
+            
+            <div className="flex items-center justify-center gap-3 text-primary/70">
+              <Clock className="h-5 w-5 animate-spin" style={{ animationDuration: '3s' }} />
+              <span className="text-base font-medium tracking-wider">
+                {daysRemaining} CYCLES REMAINING → FULL NEURAL ACTIVATION
               </span>
             </div>
           </div>
         </div>
 
-        {/* Daily Data Entry Form */}
-        <div className="max-w-2xl mx-auto">
-          <Card className="relative overflow-hidden bg-card/95 backdrop-blur-sm border border-primary/20">
-            <CardHeader className="text-center pb-6">
-              <CardTitle className="text-2xl grok-text-gradient flex items-center justify-center gap-2">
-                <Calendar className="h-6 w-6" />
-                Today's Neural Input
+        {/* Futuristic Data Entry Terminal */}
+        <div className="max-w-3xl mx-auto">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-slate-900/80 via-slate-800/60 to-slate-900/80 backdrop-blur-xl border-2 border-primary/30 shadow-2xl shadow-primary/20">
+            {/* Terminal Header */}
+            <div className="relative bg-gradient-to-r from-slate-800 to-slate-700 border-b border-primary/30 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+                    <div className="w-3 h-3 bg-primary rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+                  </div>
+                  <span className="text-primary/80 font-mono text-sm tracking-wider">NEURAL_INTERFACE_v2.7.1</span>
+                </div>
+                <Badge className="bg-primary/20 text-primary border-primary/40 animate-pulse font-mono">
+                  ACTIVE_SESSION
+                </Badge>
+              </div>
+            </div>
+
+            <CardHeader className="text-center pb-8 pt-8">
+              <CardTitle className="text-3xl font-black mb-3 tracking-tight">
+                <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent flex items-center justify-center gap-3">
+                  <Calendar className="h-8 w-8 text-primary animate-pulse" />
+                  ↑ DATA ACQUISITION PROTOCOL ↑
+                </span>
               </CardTitle>
-              <p className="text-muted-foreground">
-                Provide daily data for AI metabolic analysis
+              <p className="text-primary/70 text-lg font-light tracking-wide">
+                » Submit biometric parameters for neural processing «
               </p>
             </CardHeader>
             
@@ -220,8 +309,8 @@ export default function CalibrationMode() {
                     value={formData.weight}
                     onChange={(e) => setFormData({...formData, weight: e.target.value})}
                     required
-                    className="grok-input h-12 bg-muted/20 border-primary/20 focus:border-primary text-white text-lg"
-                    placeholder="Enter today's weight"
+                    className="neural-input h-14 text-lg"
+                    placeholder="► ENTER WEIGHT VALUE"
                     data-testid="input-daily-weight"
                   />
                 </div>
@@ -244,8 +333,8 @@ export default function CalibrationMode() {
                     value={formData.calories}
                     onChange={(e) => setFormData({...formData, calories: e.target.value})}
                     required
-                    className="grok-input h-12 bg-muted/20 border-primary/20 focus:border-primary text-white text-lg"
-                    placeholder="Total calories for today"
+                    className="neural-input h-14 text-lg"
+                    placeholder="► ENTER CALORIE COUNT"
                     data-testid="input-daily-calories"
                   />
                 </div>
@@ -265,23 +354,23 @@ export default function CalibrationMode() {
                     value={formData.activityDescription}
                     onChange={(e) => setFormData({...formData, activityDescription: e.target.value})}
                     required
-                    className="grok-input min-h-[100px] bg-muted/20 border-primary/20 focus:border-primary text-white resize-none"
-                    placeholder="Describe today's activities: work, exercise, general movement..."
+                    className="neural-input min-h-[120px] text-lg resize-none"
+                    placeholder="► DESCRIBE DAILY ACTIVITIES: training, work patterns, movement intensity..."
                     data-testid="textarea-daily-activity"
                   />
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-6">
+                <div className="pt-8">
                   <Button 
                     type="submit" 
-                    className="w-full grok-button h-14 text-lg font-semibold tracking-wide uppercase"
+                    className="neural-button w-full h-16 text-xl font-black tracking-widest"
                     size="lg"
                     data-testid="button-submit-daily-data"
                   >
-                    <span className="relative z-10 flex items-center gap-2">
-                      <Zap className="h-5 w-5" />
-                      TRANSMIT NEURAL DATA
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                      <Zap className="h-6 w-6 animate-pulse" />
+                      ↑ TRANSMIT NEURAL DATA ↑
                     </span>
                   </Button>
                 </div>
