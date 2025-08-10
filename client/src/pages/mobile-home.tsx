@@ -3,6 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { WeightLogger } from "@/components/ui/weight-logger";
+import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
+import { WeightChart } from "@/components/ui/weight-chart";
+import { MotivationCard } from "@/components/ui/motivation-card";
 import { useUserStore } from "@/store/userStore";
 import { Zap, TrendingUp, Target, Activity } from "lucide-react";
 import { Link } from "wouter";
@@ -129,54 +133,32 @@ export default function MobileHome() {
           </Card>
         </div>
 
-        {/* Quick Actions */}
+        {/* Daily Weight Logging */}
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Quick Actions</h3>
-          
-          <div className="grid grid-cols-1 gap-3">
-            <Link href="/calories">
-              <Button 
-                className="w-full justify-start grok-glow-hover h-12"
-                variant="outline"
-                data-testid="button-log-calories"
-              >
-                <Target className="h-5 w-5 mr-3" />
-                Log Calories
-              </Button>
-            </Link>
+          <h3 className="text-lg font-semibold text-white">Today's Weight</h3>
+          <WeightLogger />
+        </div>
 
-            <Link href="/training">
-              <Button 
-                className="w-full justify-start grok-glow-hover h-12"
-                variant="outline"
-                data-testid="button-log-workout"
-              >
-                <Activity className="h-5 w-5 mr-3" />
-                Log Workout
-              </Button>
-            </Link>
-
-            {currentPhase === 'meal_planning' || currentPhase === 'tracking' ? (
-              <Link href="/ai-coach">
-                <Button 
-                  className="w-full justify-start grok-gradient h-12"
-                  data-testid="button-ai-coach"
-                >
-                  <Zap className="h-5 w-5 mr-3 text-black" />
-                  Get AI Coaching
-                </Button>
-              </Link>
-            ) : (
-              <Button 
-                disabled
-                className="w-full justify-start h-12 opacity-50"
-                variant="outline"
-              >
-                <Zap className="h-5 w-5 mr-3" />
-                AI Coaching (Track 7+ days)
-              </Button>
-            )}
+        {/* AI Analysis - Always visible and updating */}
+        {totalDays >= 7 && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">AI Analysis</h3>
+            <TdeeAnalysisCard />
           </div>
+        )}
+
+        {/* Weight Progress Chart */}
+        {weightEntries.length >= 3 && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Weight Progress</h3>
+            <WeightChart />
+          </div>
+        )}
+
+        {/* Daily Motivation */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Daily Motivation</h3>
+          <MotivationCard />
         </div>
 
         {/* Recent Activity */}

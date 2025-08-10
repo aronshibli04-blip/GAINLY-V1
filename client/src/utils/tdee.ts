@@ -56,13 +56,6 @@ export function calculateTdee(
   // Calculate TDEE based on weight change and calorie intake
   let tdee = averageCalories;
   
-  console.log('TDEE Calculation Debug:', {
-    weightTrend: weightTrend,
-    averageCalories: averageCalories,
-    dailyCalorieTotals: dailyCalorieTotals,
-    weightEntries: sortedWeights.map(w => ({ date: w.date, weight: w.weight }))
-  });
-  
   if (Math.abs(weightTrend) > 0.05) { // If there's significant weight change (>50g/week)
     // 1 kg = ~7700 calories
     // Weight trend is in kg/week, so convert to daily calorie surplus/deficit
@@ -71,15 +64,9 @@ export function calculateTdee(
     // If gaining weight (positive trend), then intake > TDEE, so TDEE = intake - surplus
     // If losing weight (negative trend), then intake < TDEE, so TDEE = intake - deficit (which is intake + positive value)
     tdee = Math.round(averageCalories - dailyCalorieBalance);
-    
-    console.log('Weight change detected:', {
-      dailyCalorieBalance: dailyCalorieBalance,
-      calculatedTdee: tdee
-    });
   } else {
     // If weight is stable (no significant change), assume current intake equals TDEE
     tdee = Math.round(averageCalories);
-    console.log('Weight stable, TDEE = average calories:', tdee);
   }
 
   // Ensure TDEE is within reasonable bounds for adults
