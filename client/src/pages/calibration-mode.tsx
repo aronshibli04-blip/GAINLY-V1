@@ -164,8 +164,11 @@ export default function CalibrationMode() {
             }}
           >
             <div className="relative">
-              <div className="w-3 h-3 bg-primary/60 rounded-full animate-pulse shadow-lg shadow-primary/50" 
-                   style={{ animationDelay: `${i * 0.5}s` }} />
+              <div className="w-3 h-3 bg-primary/60 rounded-full animate-pulse shadow-lg"
+                   style={{ 
+                     boxShadow: '0 10px 15px -3px rgba(34, 197, 94, 0.5)',
+                     animationDelay: `${i * 0.5}s`
+                   }} />
               <div className="absolute inset-0 w-3 h-3 bg-primary/20 rounded-full animate-ping" 
                    style={{ animationDelay: `${i * 0.5 + 1}s` }} />
             </div>
@@ -206,7 +209,8 @@ export default function CalibrationMode() {
             
             {/* Holographic core */}
             <div className="absolute inset-8 rounded-full bg-gradient-to-r from-primary/20 via-primary/40 to-purple-500/30 animate-pulse backdrop-blur-sm" />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-2xl shadow-primary/50">
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-2xl"
+                 style={{ boxShadow: '0 25px 50px -12px rgba(34, 197, 94, 0.5)' }}>
               <Brain className="h-10 w-10 text-black animate-pulse" />
             </div>
             

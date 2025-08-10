@@ -207,14 +207,17 @@
 .neural-button {
   @apply bg-gradient-to-r from-primary via-cyan-400 to-primary;
   @apply text-black font-black tracking-wider uppercase;
-  @apply border-2 border-primary/50 shadow-lg shadow-primary/30;
+  @apply border-2 border-primary shadow-lg;
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.3), 0 4px 6px -4px rgba(34, 197, 94, 0.3);
   @apply transition-all duration-300 ease-in-out;
   position: relative;
   overflow: hidden;
 }
 
 .neural-button:hover {
-  @apply shadow-xl shadow-primary/50 scale-105;
+  @apply shadow-xl scale-105;
+  box-shadow: 0 25px 25px -12px rgba(34, 197, 94, 0.5);
   animation: button-pulse 1s ease-in-out infinite alternate;
 }
 
