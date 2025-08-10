@@ -107,17 +107,19 @@ export default function HardgainerProfileSetup() {
       activityLevel: formData.activityDescription,
       dietaryPreferences: preferences,
       createdAt: user?.createdAt || new Date().toISOString(),
+      calibrationStartDate: new Date().toISOString(),
+      hasCompletedCalibration: false,
     };
 
     setUser(userData);
     completeOnboarding();
 
     toast({ 
-      title: "Profile saved successfully!",
-      description: "You can now start tracking your weight and calories."
+      title: "Neural Profile Initialized!",
+      description: "Begin 7-day AI calibration sequence to unlock full capabilities."
     });
 
-    // Redirect to home
+    // Redirect to calibration mode
     window.location.href = '/';
   };
 

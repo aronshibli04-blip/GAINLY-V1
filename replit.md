@@ -13,6 +13,10 @@ Hardgainer AI is a comprehensive mobile fitness application designed to help har
 - **Comprehensive Motivation System**: Added achievements, daily challenges, progress celebrations, and points system
 - **Gamification Elements**: Badge system with rarity levels, milestone celebrations, and visual progress indicators
 - **User Interface Refinement**: Clickable goal weight numbers instead of pencil icons for better UX
+- **7-Day AI Calibration Period**: Implemented mandatory 7-day data collection before full app access
+- **Text-Based Activity Descriptions**: Replaced dropdown with detailed text input for precise activity tracking
+- **Enhanced AI Capabilities Showcase**: Added 6-card grid highlighting neural network features
+- **Futuristic Calibration Interface**: Created dedicated calibration mode with progress tracking and sci-fi aesthetics
 
 # User Preferences
 

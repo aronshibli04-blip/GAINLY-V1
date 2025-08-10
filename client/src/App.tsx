@@ -12,6 +12,7 @@ import MobileMeals from "@/pages/mobile-meals";
 
 // Setup pages
 import HardgainerProfileSetup from "@/pages/hardgainer-profile-setup";
+import CalibrationMode from "@/pages/calibration-mode";
 
 function App() {
   const { user, isOnboarded, completeOnboarding } = useUserStore();
@@ -35,6 +36,7 @@ function App() {
     <div className="min-h-screen bg-background">
       <Switch>
         <Route path="/" component={MobileHome} />
+        <Route path="/calibration" component={CalibrationMode} />
         <Route path="/calories" component={MobileCalories} />
         <Route path="/training" component={MobileTraining} />
         <Route path="/ai-coach" component={MobileAICoach} />

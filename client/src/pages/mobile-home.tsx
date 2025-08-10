@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +25,13 @@ export default function MobileHome() {
     user,
     clearUserData
   } = useUserStore();
+
+  // Redirect to calibration mode if user hasn't completed calibration
+  useEffect(() => {
+    if (user && !user.hasCompletedCalibration) {
+      window.location.href = '/calibration';
+    }
+  }, [user]);
 
   // Get today's data
   const today = new Date().toISOString().split('T')[0];

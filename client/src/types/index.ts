@@ -14,9 +14,11 @@ export interface User {
   height: number; // cm
   weight: number; // kg
   goalWeight: number; // kg
-  activityLevel: 'sedentary' | 'lightly_active' | 'moderately_active' | 'very_active';
+  activityLevel: string; // Free text description of activity level
   dietaryPreferences: DietaryPreference[];
   createdAt: string;
+  calibrationStartDate?: string; // When user started 7-day calibration
+  hasCompletedCalibration?: boolean; // True after 7 days of data entry
 }
 
 // Tracking Types
