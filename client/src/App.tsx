@@ -10,6 +10,8 @@ import MobileTraining from "@/pages/mobile-training";
 import MobileAICoach from "@/pages/mobile-ai-coach";
 import MobileMeals from "@/pages/mobile-meals";
 import MobileProfile from "@/pages/mobile-profile";
+import MobileStatistics from "@/pages/mobile-statistics";
+import MobileMeasurements from "@/pages/mobile-measurements";
 
 // Setup pages
 import HardgainerProfileSetup from "@/pages/hardgainer-profile-setup";
@@ -43,6 +45,8 @@ function App() {
         <Route path="/ai-coach" component={MobileAICoach} />
         <Route path="/meals" component={MobileMeals} />
         <Route path="/profile" component={MobileProfile} />
+        <Route path="/statistics" component={MobileStatistics} />
+        <Route path="/measurements" component={MobileMeasurements} />
         <Route path="/setup" component={HardgainerProfileSetup} />
         
         {/* Fallback */}

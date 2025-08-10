@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { EnhancedMealLogger } from "@/components/ui/enhanced-meal-logger";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
@@ -295,6 +296,9 @@ export default function MobileMeals() {
             </CardContent>
           </Card>
         )}
+
+        {/* Enhanced Meal Logger */}
+        <EnhancedMealLogger />
 
         {/* No Analysis Warning */}
         {!canGenerateMealPlan && (

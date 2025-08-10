@@ -13,8 +13,9 @@ import { AchievementSystem } from "@/components/ui/achievement-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 import { ProgressCelebration } from "@/components/ui/progress-celebration";
 import { useUserStore } from "@/store/userStore";
-import { Zap, TrendingUp, Target, Activity, RotateCcw } from "lucide-react";
+import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler } from "lucide-react";
 import { Link } from "wouter";
+import { SmartNotifications } from "@/components/ui/smart-notifications";
 
 export default function MobileHome() {
   const { 
@@ -92,6 +93,9 @@ export default function MobileHome() {
 
   return (
     <div className="mobile-container">
+      {/* Smart Notifications */}
+      <SmartNotifications />
+      
       <div className="content-with-bottom-nav p-4 space-y-4 pb-28">
         
         {/* Header */}
@@ -136,6 +140,29 @@ export default function MobileHome() {
               </p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Quick Action Cards */}
+        <div className="grid grid-cols-2 gap-4">
+          <Link href="/statistics">
+            <Card className="grok-glow-hover cursor-pointer">
+              <CardContent className="p-4 text-center">
+                <Activity className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
+                <p className="text-xs text-muted-foreground">Advanced</p>
+                <p className="text-sm font-semibold text-white">Statistics</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/measurements">
+            <Card className="grok-glow-hover cursor-pointer">
+              <CardContent className="p-4 text-center">
+                <Ruler className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                <p className="text-xs text-muted-foreground">Body</p>
+                <p className="text-sm font-semibold text-white">Measurements</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Goal Weight Tracking */}
