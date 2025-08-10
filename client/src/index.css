@@ -3,57 +3,137 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(214, 84%, 56%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(142, 76%, 36%);
-  --secondary-foreground: hsl(211, 100%, 99%);
-  --accent: hsl(45, 93%, 47%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
+  /* Grok-inspired futuristic dark theme */
+  --background: hsl(0, 0%, 3%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(0, 0%, 6%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(0, 0%, 6%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(147, 100%, 45%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(0, 0%, 10%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(0, 0%, 8%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --accent: hsl(147, 100%, 45%);
+  --accent-foreground: hsl(0, 0%, 0%);
   --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
-  --radius: 0.5rem;
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(0, 0%, 15%);
+  --input: hsl(0, 0%, 10%);
+  --ring: hsl(147, 100%, 45%);
+  --radius: 0.75rem;
+  
+  /* Grok-specific colors */
+  --grok-green: hsl(147, 100%, 45%);
+  --grok-green-dark: hsl(147, 100%, 35%);
+  --grok-purple: hsl(270, 100%, 70%);
+  --grok-blue: hsl(220, 100%, 70%);
+  --grok-background: hsl(0, 0%, 3%);
+  --grok-surface: hsl(0, 0%, 6%);
+  --grok-surface-hover: hsl(0, 0%, 10%);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(214, 84%, 56%);
-  --primary-foreground: hsl(211, 100%, 99%);
-  --secondary: hsl(142, 76%, 36%);
-  --secondary-foreground: hsl(211, 100%, 99%);
-  --accent: hsl(45, 93%, 47%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
-  --radius: 0.5rem;
+  --background: hsl(0, 0%, 3%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(0, 0%, 6%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(0, 0%, 6%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(147, 100%, 45%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(0, 0%, 10%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(0, 0%, 8%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --accent: hsl(147, 100%, 45%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(0, 0%, 15%);
+  --input: hsl(0, 0%, 10%);
+  --ring: hsl(147, 100%, 45%);
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    background: linear-gradient(135deg, hsl(0, 0%, 3%) 0%, hsl(0, 0%, 1%) 100%);
+    min-height: 100vh;
   }
+  
+  /* Grok-inspired animations */
+  .grok-glow {
+    box-shadow: 0 0 20px hsla(147, 100%, 45%, 0.3);
+  }
+  
+  .grok-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(147, 100%, 45%, 0.5);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+  
+  .grok-gradient {
+    background: linear-gradient(135deg, hsl(147, 100%, 45%) 0%, hsl(270, 100%, 70%) 100%);
+  }
+  
+  .grok-text-gradient {
+    background: linear-gradient(135deg, hsl(147, 100%, 45%) 0%, hsl(270, 100%, 70%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Mobile-first responsive design */
+  .mobile-container {
+    max-width: 428px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: hsl(0, 0%, 3%);
+    position: relative;
+    border-left: 1px solid hsl(0, 0%, 15%);
+    border-right: 1px solid hsl(0, 0%, 15%);
+  }
+  
+  /* Bottom navigation safe area */
+  .content-with-bottom-nav {
+    padding-bottom: 80px;
+  }
+  
+  /* Futuristic input styling */
+  .grok-input {
+    background: hsl(0, 0%, 6%);
+    border: 1px solid hsl(0, 0%, 15%);
+    color: hsl(210, 40%, 98%);
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+  }
+  
+  .grok-input:focus {
+    border-color: hsl(147, 100%, 45%);
+    box-shadow: 0 0 0 2px hsla(147, 100%, 45%, 0.2);
+  }
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(0, 0%, 6%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 15%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(147, 100%, 45%);
 }
