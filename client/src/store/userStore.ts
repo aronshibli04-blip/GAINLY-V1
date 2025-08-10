@@ -30,6 +30,7 @@ interface UserState {
   
   // Actions
   setUser: (user: User) => void;
+  setGoalWeight: (goalWeight: number) => void;
   completeOnboarding: () => void;
   addWeightEntry: (entry: Omit<WeightEntry, 'id' | 'createdAt'>) => void;
   addCalorieEntry: (entry: Omit<CalorieEntry, 'id' | 'createdAt'>) => void;
@@ -59,6 +60,12 @@ export const useUserStore = create<UserState>()(
       // Actions
       setUser: (user) => {
         set({ user });
+      },
+
+      setGoalWeight: (goalWeight) => {
+        set(state => ({
+          user: state.user ? { ...state.user, goalWeight } : null
+        }));
       },
 
       completeOnboarding: () => {

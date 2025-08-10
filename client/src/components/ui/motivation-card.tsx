@@ -4,7 +4,7 @@ import { calculateTdee } from "@/utils/tdee";
 import { Zap, TrendingUp, Target } from "lucide-react";
 
 export function MotivationCard() {
-  const { weightEntries, calorieEntries } = useUserStore();
+  const { weightEntries, calorieEntries, user } = useUserStore();
   
   const totalDays = Math.max(
     new Set(weightEntries.map(w => w.date)).size,
@@ -12,11 +12,18 @@ export function MotivationCard() {
   );
 
   const getMotivationalMessage = () => {
+    const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : user?.weight || 0;
+    const goalWeight = user?.goalWeight;
+    const hasGoal = goalWeight && goalWeight > 0;
+    const remainingWeight = hasGoal ? goalWeight - currentWeight : 0;
+
     if (totalDays === 0) {
       return {
         icon: Target,
         title: "Start Your Journey! 💪",
-        message: "Today is the perfect day to begin tracking your hardgainer transformation. Every rep, every meal, every gram counts!"
+        message: hasGoal 
+          ? `Time to gain ${remainingWeight.toFixed(1)}kg! Begin tracking your hardgainer transformation today.`
+          : "Today is the perfect day to begin tracking your hardgainer transformation. Every rep, every meal, every gram counts!"
       };
     }
     
@@ -36,25 +43,33 @@ export function MotivationCard() {
         return {
           icon: Zap,
           title: "Crushing It! 🚀",
-          message: `You're gaining ${trend.toFixed(1)}kg/week! Your dedication is paying off. Keep this momentum going!`
+          message: hasGoal 
+            ? `Gaining ${trend.toFixed(1)}kg/week! Only ${remainingWeight.toFixed(1)}kg to go until you reach your goal!`
+            : `You're gaining ${trend.toFixed(1)}kg/week! Your dedication is paying off. Keep this momentum going!`
         };
       } else if (trend > 0.1) {
         return {
           icon: TrendingUp,
           title: "Steady Progress 📈",
-          message: `Gaining ${trend.toFixed(1)}kg/week. Consider increasing calories by 200-300 to hit that 1kg/week target!`
+          message: hasGoal
+            ? `${remainingWeight.toFixed(1)}kg to goal. Gaining ${trend.toFixed(1)}kg/week - consider adding 200-300 calories to accelerate!`
+            : `Gaining ${trend.toFixed(1)}kg/week. Consider increasing calories by 200-300 to hit that 1kg/week target!`
         };
       } else if (trend < -0.1) {
         return {
           icon: Target,
           title: "Time to Fuel Up! 🍽️",
-          message: "You're losing weight. Time to increase those calories! Remember: hardgainers need to eat big to get big!"
+          message: hasGoal
+            ? `You're ${remainingWeight.toFixed(1)}kg from your goal but losing weight. Time to increase calories!`
+            : "You're losing weight. Time to increase those calories! Remember: hardgainers need to eat big to get big!"
         };
       } else {
         return {
           icon: Zap,
           title: "Break the Plateau! ⚡",
-          message: "Weight is stable. Add 300-500 calories to your daily intake. Your body is ready for the next growth phase!"
+          message: hasGoal
+            ? `${remainingWeight.toFixed(1)}kg to goal. Weight is stable - add 300-500 calories to start gaining again!`
+            : "Weight is stable. Add 300-500 calories to your daily intake. Your body is ready for the next growth phase!"
         };
       }
     }

@@ -7,6 +7,7 @@ import { WeightLogger } from "@/components/ui/weight-logger";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { WeightChart } from "@/components/ui/weight-chart";
 import { MotivationCard } from "@/components/ui/motivation-card";
+import { GoalWeightCard } from "@/components/ui/goal-weight-card";
 import { useUserStore } from "@/store/userStore";
 import { Zap, TrendingUp, Target, Activity } from "lucide-react";
 import { Link } from "wouter";
@@ -131,6 +132,12 @@ export default function MobileHome() {
               </p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Goal Weight Tracking */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Weight Goal</h3>
+          <GoalWeightCard />
         </div>
 
         {/* Daily Weight Logging */}
