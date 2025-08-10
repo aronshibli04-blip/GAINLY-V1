@@ -12,7 +12,7 @@ import { AchievementSystem } from "@/components/ui/achievement-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 import { ProgressCelebration } from "@/components/ui/progress-celebration";
 import { useUserStore } from "@/store/userStore";
-import { Zap, TrendingUp, Target, Activity } from "lucide-react";
+import { Zap, TrendingUp, Target, Activity, RotateCcw } from "lucide-react";
 import { Link } from "wouter";
 
 export default function MobileHome() {
@@ -21,7 +21,8 @@ export default function MobileHome() {
     calorieEntries, 
     activityEntries, 
     currentPhase,
-    user
+    user,
+    clearUserData
   } = useUserStore();
 
   // Get today's data
@@ -201,6 +202,24 @@ export default function MobileHome() {
             </Card>
           </div>
         )}
+
+        {/* Development Reset Button */}
+        <div className="space-y-3 border-t border-primary/20 pt-4">
+          <Button
+            onClick={() => {
+              if (confirm('Reset all data and start fresh? This cannot be undone.')) {
+                clearUserData();
+                localStorage.clear();
+                window.location.reload();
+              }
+            }}
+            variant="outline"
+            className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
+          >
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Reset App (Start Fresh)
+          </Button>
+        </div>
 
       </div>
 

@@ -1,0 +1,5 @@
+
+// Reset all user data - paste this in browser console
+localStorage.clear();
+window.location.reload();
+
