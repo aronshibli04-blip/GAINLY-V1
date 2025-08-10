@@ -255,144 +255,203 @@ export default function HardgainerProfileSetup() {
                         </div>
                       </div>
 
-                <div>
-                  <Label htmlFor="age">Age *</Label>
-                  <Input
-                    id="age"
-                    type="number"
-                    min="16"
-                    max="100"
-                    value={formData.age}
-                    onChange={(e) => setFormData({...formData, age: e.target.value})}
-                    placeholder="Your age"
-                    required
-                    data-testid="input-age"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="sex">Sex *</Label>
-                <Select onValueChange={(value) => setFormData({...formData, sex: value})} value={formData.sex}>
-                  <SelectTrigger data-testid="select-sex">
-                    <SelectValue placeholder="Select your sex" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Physical Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="height">Height (cm) *</Label>
-                  <Input
-                    id="height"
-                    type="number"
-                    step="0.1"
-                    min="120"
-                    max="250"
-                    value={formData.height}
-                    onChange={(e) => setFormData({...formData, height: e.target.value})}
-                    placeholder="170"
-                    required
-                    data-testid="input-height"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="weight">Current Weight (kg) *</Label>
-                  <Input
-                    id="weight"
-                    type="number"
-                    step="0.1"
-                    min="40"
-                    max="200"
-                    value={formData.weight}
-                    onChange={(e) => setFormData({...formData, weight: e.target.value})}
-                    placeholder="70"
-                    required
-                    data-testid="input-weight"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="goalWeight">Goal Weight (kg) *</Label>
-                  <Input
-                    id="goalWeight"
-                    type="number"
-                    step="0.1"
-                    min="40"
-                    max="200"
-                    value={formData.goalWeight}
-                    onChange={(e) => setFormData({...formData, goalWeight: e.target.value})}
-                    placeholder="80"
-                    required
-                    data-testid="input-goal-weight"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="activityLevel">Activity Level *</Label>
-                <Select onValueChange={(value) => setFormData({...formData, activityLevel: value})} value={formData.activityLevel}>
-                  <SelectTrigger data-testid="select-activity-level">
-                    <SelectValue placeholder="Select your activity level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sedentary">Sedentary (desk job, little exercise)</SelectItem>
-                    <SelectItem value="lightly_active">Lightly Active (light exercise 1-3 days/week)</SelectItem>
-                    <SelectItem value="moderately_active">Moderately Active (moderate exercise 3-5 days/week)</SelectItem>
-                    <SelectItem value="very_active">Very Active (hard exercise 6-7 days/week)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Dietary Restrictions */}
-              <div>
-                <Label>Dietary Restrictions (optional)</Label>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  Select any dietary restrictions or preferences you have
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {restrictions.map((restriction) => (
-                    <div key={restriction} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={restriction}
-                        checked={dietaryPreferences.includes(restriction)}
-                        onCheckedChange={() => handleRestrictionToggle(restriction)}
-                        data-testid={`checkbox-${restriction.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                      />
-                      <Label htmlFor={restriction} className="text-sm">
-                        {restriction}
-                      </Label>
+                      <div className="space-y-2">
+                        <Label htmlFor="age" className="text-sm font-medium text-primary uppercase tracking-wider">Age</Label>
+                        <div className="relative">
+                          <Input
+                            id="age"
+                            type="number"
+                            min="16"
+                            max="100"
+                            value={formData.age}
+                            onChange={(e) => setFormData({...formData, age: e.target.value})}
+                            required
+                            className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
+                            placeholder="Biological Age Required"
+                            data-testid="input-age"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-                </div>
-                {dietaryPreferences.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {dietaryPreferences.map((restriction) => (
-                      <Badge key={restriction} variant="secondary" data-testid={`badge-${restriction.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
-                        {restriction}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              <Button 
-                type="submit" 
-                className="w-full" 
-                size="lg"
-                data-testid="button-create-profile"
-              >
-                {user ? "Update Profile" : "Create Profile & Start Tracking"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <span className="text-primary font-bold text-sm">02</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-white tracking-wide">BIOLOGICAL PARAMETERS</h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="sex" className="text-sm font-medium text-primary uppercase tracking-wider">Biological Sex</Label>
+                        <Select onValueChange={(value) => setFormData({...formData, sex: value})} value={formData.sex}>
+                          <SelectTrigger data-testid="select-sex" className="grok-input h-12 bg-muted/20 border-primary/20 focus:border-primary text-white">
+                            <SelectValue placeholder="Neural Classification Required" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Physical Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="height" className="text-sm font-medium text-primary uppercase tracking-wider">Height (cm)</Label>
+                        <div className="relative">
+                          <Input
+                            id="height"
+                            type="number"
+                            step="0.1"
+                            min="120"
+                            max="250"
+                            value={formData.height}
+                            onChange={(e) => setFormData({...formData, height: e.target.value})}
+                            required
+                            className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
+                            placeholder="Neural Scan Required"
+                            data-testid="input-height"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="weight" className="text-sm font-medium text-primary uppercase tracking-wider">Current Weight (kg)</Label>
+                        <div className="relative">
+                          <Input
+                            id="weight"
+                            type="number"
+                            step="0.1"
+                            min="40"
+                            max="200"
+                            value={formData.weight}
+                            onChange={(e) => setFormData({...formData, weight: e.target.value})}
+                            required
+                            className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
+                            placeholder="Mass Calibration"
+                            data-testid="input-weight"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="goalWeight" className="text-sm font-medium text-primary uppercase tracking-wider">Goal Weight (kg)</Label>
+                        <div className="relative">
+                          <Input
+                            id="goalWeight"
+                            type="number"
+                            step="0.1"
+                            min="40"
+                            max="200"
+                            value={formData.goalWeight}
+                            onChange={(e) => setFormData({...formData, goalWeight: e.target.value})}
+                            required
+                            className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
+                            placeholder="Target Protocol"
+                            data-testid="input-goal-weight"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <span className="text-primary font-bold text-sm">03</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-white tracking-wide">ACTIVITY PROFILE</h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="activityLevel" className="text-sm font-medium text-primary uppercase tracking-wider">Activity Classification</Label>
+                        <Select onValueChange={(value) => setFormData({...formData, activityLevel: value})} value={formData.activityLevel}>
+                          <SelectTrigger data-testid="select-activity-level" className="grok-input h-12 bg-muted/20 border-primary/20 focus:border-primary text-white">
+                            <SelectValue placeholder="Neural Activity Analysis Required" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="sedentary">Sedentary (desk job, little exercise)</SelectItem>
+                            <SelectItem value="lightly_active">Lightly Active (light exercise 1-3 days/week)</SelectItem>
+                            <SelectItem value="moderately_active">Moderately Active (moderate exercise 3-5 days/week)</SelectItem>
+                            <SelectItem value="very_active">Very Active (hard exercise 6-7 days/week)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Dietary Restrictions */}
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <span className="text-primary font-bold text-sm">04</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-white tracking-wide">NUTRITIONAL CONSTRAINTS</h3>
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label className="text-sm font-medium text-primary uppercase tracking-wider">Dietary Parameters (Optional)</Label>
+                        <p className="text-sm text-muted-foreground">
+                          Configure nutritional processing constraints for AI meal optimization
+                        </p>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {restrictions.map((restriction) => (
+                            <div key={restriction} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={restriction}
+                                checked={dietaryPreferences.includes(restriction)}
+                                onCheckedChange={() => handleRestrictionToggle(restriction)}
+                                className="border-primary/30 data-[state=checked]:bg-primary"
+                                data-testid={`checkbox-${restriction.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                              />
+                              <Label htmlFor={restriction} className="text-sm text-white">
+                                {restriction}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+                        {dietaryPreferences.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {dietaryPreferences.map((restriction) => (
+                              <Badge key={restriction} variant="secondary" className="bg-primary/20 text-primary border-primary/30" data-testid={`badge-${restriction.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
+                                {restriction}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="pt-8">
+                      <Button 
+                        type="submit" 
+                        className="w-full grok-button h-14 text-lg font-semibold tracking-wide uppercase" 
+                        size="lg"
+                        data-testid="button-create-profile"
+                      >
+                        <span className="relative z-10">
+                          {user ? "UPDATE NEURAL PROFILE" : "INITIALIZE AI CALIBRATION"}
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-12">

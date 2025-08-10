@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { WeightLogger } from "@/components/ui/weight-logger";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
-import { WeightChart } from "@/components/ui/weight-chart";
+import WeightChart from "@/components/weight-chart";
 import { MotivationCard } from "@/components/ui/motivation-card";
 import { GoalWeightCard } from "@/components/ui/goal-weight-card";
 import { AchievementSystem } from "@/components/ui/achievement-system";
@@ -154,7 +154,13 @@ export default function MobileHome() {
         {weightEntries.length >= 3 && (
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-white">Weight Progress</h3>
-            <WeightChart />
+            <WeightChart weightLogs={weightEntries.map(entry => ({
+              id: entry.id || `${entry.date}-${entry.weight}`,
+              userId: entry.userId || 'user',
+              weight: entry.weight.toString(),
+              logDate: entry.date,
+              createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date()
+            }))} />
           </div>
         )}
 
