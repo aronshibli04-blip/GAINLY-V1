@@ -1,4 +1,4 @@
-import { Home, Utensils, Dumbbell, Brain, TrendingUp } from "lucide-react";
+import { Home, Utensils, Dumbbell, Brain, TrendingUp, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 
@@ -7,7 +7,7 @@ const navItems = [
   { icon: TrendingUp, label: "Calories", path: "/calories" },
   { icon: Dumbbell, label: "Training", path: "/training" },
   { icon: Brain, label: "AI Coach", path: "/ai-coach" },
-  { icon: Utensils, label: "Meals", path: "/meals" },
+  { icon: User, label: "Profile", path: "/profile" },
 ];
 
 export function BottomNav() {
