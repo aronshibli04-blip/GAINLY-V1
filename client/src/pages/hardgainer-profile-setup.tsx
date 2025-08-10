@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, User, Scale, ArrowLeft, Brain, Target, BarChart3, Zap } from "lucide-react";
@@ -21,7 +22,7 @@ export default function HardgainerProfileSetup() {
     height: user?.height?.toString() || '',
     weight: user?.weight?.toString() || '',
     sex: user?.sex || '',
-    activityLevel: user?.activityLevel || '',
+    activityDescription: user?.activityLevel || '',
     goalWeight: user?.goalWeight?.toString() || ''
   });
 
@@ -39,7 +40,7 @@ export default function HardgainerProfileSetup() {
 
     // Validate required fields
     if (!formData.firstName || !formData.age || !formData.height || 
-        !formData.weight || !formData.sex || !formData.activityLevel || 
+        !formData.weight || !formData.sex || !formData.activityDescription || 
         !formData.goalWeight) {
       toast({ 
         title: "Please fill in all required fields", 
@@ -103,7 +104,7 @@ export default function HardgainerProfileSetup() {
       height,
       weight,
       goalWeight,
-      activityLevel: formData.activityLevel as any,
+      activityLevel: formData.activityDescription,
       dietaryPreferences: preferences,
       createdAt: user?.createdAt || new Date().toISOString(),
     };
@@ -377,18 +378,21 @@ export default function HardgainerProfileSetup() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="activityLevel" className="text-sm font-medium text-primary uppercase tracking-wider">Activity Classification</Label>
-                        <Select onValueChange={(value) => setFormData({...formData, activityLevel: value})} value={formData.activityLevel}>
-                          <SelectTrigger data-testid="select-activity-level" className="grok-input h-12 bg-muted/20 border-primary/20 focus:border-primary text-white">
-                            <SelectValue placeholder="Neural Activity Analysis Required" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="sedentary">Sedentary (desk job, little exercise)</SelectItem>
-                            <SelectItem value="lightly_active">Lightly Active (light exercise 1-3 days/week)</SelectItem>
-                            <SelectItem value="moderately_active">Moderately Active (moderate exercise 3-5 days/week)</SelectItem>
-                            <SelectItem value="very_active">Very Active (hard exercise 6-7 days/week)</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Label htmlFor="activityDescription" className="text-sm font-medium text-primary uppercase tracking-wider">Activity Profile Description</Label>
+                        <p className="text-xs text-muted-foreground mb-2">
+                          Describe your daily routine for precise AI metabolic analysis
+                        </p>
+                        <Textarea
+                          id="activityDescription"
+                          value={formData.activityDescription}
+                          onChange={(e) => setFormData({...formData, activityDescription: e.target.value})}
+                          required
+                          className="grok-input min-h-[120px] bg-muted/20 border-primary/20 focus:border-primary text-white resize-none"
+                          placeholder="Describe your typical daily activities, work, and exercise routine...
+
+Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1 hour hypertrophy training 4x per week. On weekends I'm mostly sedentary but do light household activities."
+                          data-testid="textarea-activity-description"
+                        />
                       </div>
                     </div>
 
