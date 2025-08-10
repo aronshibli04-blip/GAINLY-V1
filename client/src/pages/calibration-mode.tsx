@@ -195,41 +195,31 @@ export default function CalibrationMode() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
-        {/* Futuristic Header */}
-        <div className="text-center mb-12">
-          {/* Advanced Brain Hologram */}
-          <div className="relative inline-flex items-center justify-center w-32 h-32 mb-8">
-            {/* Outer rotating ring */}
-            <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-spin" 
-                 style={{ animationDuration: '20s' }} />
-            <div className="absolute inset-2 rounded-full border border-primary/30 animate-spin" 
-                 style={{ animationDuration: '15s', animationDirection: 'reverse' }} />
-            <div className="absolute inset-4 rounded-full border border-primary/40 animate-spin" 
-                 style={{ animationDuration: '10s' }} />
-            
-            {/* Holographic core */}
-            <div className="absolute inset-8 rounded-full bg-gradient-to-r from-primary/20 via-primary/40 to-purple-500/30 animate-pulse backdrop-blur-sm" />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-2xl"
-                 style={{ boxShadow: '0 25px 50px -12px rgba(34, 197, 94, 0.5)' }}>
-              <Brain className="h-10 w-10 text-black animate-pulse" />
+        {/* Compact Header */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-6 mb-6">
+            {/* Compact Brain Hologram */}
+            <div className="relative flex items-center justify-center w-20 h-20">
+              <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-spin" 
+                   style={{ animationDuration: '15s' }} />
+              <div className="absolute inset-1 rounded-full border border-primary/40 animate-spin" 
+                   style={{ animationDuration: '10s', animationDirection: 'reverse' }} />
+              <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-xl">
+                <Brain className="h-7 w-7 text-black animate-pulse" />
+              </div>
             </div>
             
-            {/* Energy emanation */}
-            <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping" 
-                 style={{ animationDuration: '3s' }} />
+            <div className="text-left">
+              <h1 className="text-4xl font-black mb-2 tracking-tight">
+                <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
+                  AI CALIBRATION MODE
+                </span>
+              </h1>
+              <p className="text-base text-primary/70 max-w-md">
+                Track for 7 days • AI learns your metabolism • Get precise recommendations
+              </p>
+            </div>
           </div>
-          
-          <h1 className="text-5xl font-black mb-4 tracking-tight">
-            <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent animate-pulse">
-              AI CALIBRATION MODE
-            </span>
-          </h1>
-          <p className="text-lg text-primary/80 max-w-3xl mx-auto mb-2 font-light tracking-wide">
-            7-day quantum metabolic algorithm for precise body calculation
-          </p>
-          <p className="text-sm text-primary/60 max-w-2xl mx-auto mb-8">
-            Track your weight and calories for 7 days so our AI can learn your unique metabolism and provide accurate recommendations
-          </p>
 
           {/* Advanced Progress Section */}
           <div className="max-w-lg mx-auto space-y-6 p-6 rounded-2xl bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-md border border-primary/20">
