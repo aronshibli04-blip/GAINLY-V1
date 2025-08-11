@@ -99,18 +99,21 @@ export default function MobileHome() {
 
   return (
     <div className="mobile-container">
-      {/* Smart Notifications */}
-      <SmartNotifications />
-      
-      {/* Fixed Calorie Indicator - Top Right Corner */}
-      <div className="fixed top-4 right-4 z-50">
-        <div className="flex items-center gap-1 font-bold text-sm text-primary transition-all duration-300">
-          <Zap className="h-4 w-4" />
-          {todayCalories.toLocaleString()}
+      {/* Top Status Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-sm border-b border-slate-800/50">
+        <div className="flex items-center justify-between px-4 py-3">
+          {/* Smart Notifications */}
+          <SmartNotifications />
+          
+          {/* Calorie Indicator */}
+          <div className="flex items-center gap-1 font-bold text-sm text-primary">
+            <Zap className="h-4 w-4" />
+            {todayCalories.toLocaleString()}
+          </div>
         </div>
       </div>
       
-      <div className="content-with-bottom-nav p-4 space-y-4 pb-28">
+      <div className="content-with-bottom-nav pt-16 p-4 space-y-4 pb-28">
 
         {/* Aggressive 1kg/Week Surplus Tracker */}
         <AggressiveSurplusTracker />

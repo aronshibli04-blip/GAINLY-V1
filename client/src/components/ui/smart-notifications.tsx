@@ -254,25 +254,23 @@ export function SmartNotifications() {
 
   return (
     <>
-      {/* Notification Bell - Moved to left side */}
-      <div className="fixed top-4 left-4 z-50">
-        <Button
-          onClick={() => setShowNotifications(!showNotifications)}
-          variant="outline"
-          size="sm"
-          className="relative bg-slate-800/90 border-primary/30 text-primary hover:bg-primary/20 backdrop-blur-sm"
-          data-testid="button-notifications"
-        >
-          <Bell className="h-4 w-4" />
-          {activeNotifications.length > 0 && (
-            <Badge className={`absolute -top-2 -right-2 w-5 h-5 text-xs flex items-center justify-center p-0 ${
-              hasHighPriority ? 'bg-red-500 text-white' : 'bg-primary text-black'
-            }`}>
-              {activeNotifications.length}
-            </Badge>
-          )}
-        </Button>
-      </div>
+      {/* Notification Bell - Inline in status bar */}
+      <Button
+        onClick={() => setShowNotifications(!showNotifications)}
+        variant="ghost"
+        size="sm"
+        className="relative text-primary hover:bg-primary/20 h-8 px-2"
+        data-testid="button-notifications"
+      >
+        <Bell className="h-4 w-4" />
+        {activeNotifications.length > 0 && (
+          <Badge className={`absolute -top-1 -right-1 w-4 h-4 text-xs flex items-center justify-center p-0 ${
+            hasHighPriority ? 'bg-red-500 text-white' : 'bg-primary text-black'
+          }`}>
+            {activeNotifications.length}
+          </Badge>
+        )}
+      </Button>
 
       {/* Notification Panel */}
       {showNotifications && (
