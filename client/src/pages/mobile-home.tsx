@@ -11,9 +11,12 @@ import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { MotivationCard } from "@/components/ui/motivation-card";
 import { GoalWeightCard } from "@/components/ui/goal-weight-card";
 import { AchievementSystem } from "@/components/ui/achievement-system";
+import { MotivationBoost } from "@/components/ui/motivation-boost";
+import { ProgressStreaks } from "@/components/ui/progress-streaks";
 import { VictoryAnimations } from "@/components/ui/victory-animations";
-import { CompactMotivation } from "@/components/ui/compact-motivation";
-
+import { PowerUpSystem } from "@/components/ui/power-up-system";
+import { DailyChallenges } from "@/components/ui/daily-challenges";
+import { ProgressCelebration } from "@/components/ui/progress-celebration";
 import { useUserStore } from "@/store/userStore";
 import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler } from "lucide-react";
 import { Link } from "wouter";
@@ -210,11 +213,60 @@ export default function MobileHome() {
           </div>
         )}
 
-        {/* Compact Progress & Motivation */}
+        {/* Progress Celebration */}
+        <ProgressCelebration />
+
+        {/* Daily Challenges */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Daily Challenges</h3>
+          <DailyChallenges />
+        </div>
+
+        {/* Achievements */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Achievements</h3>
+          <AchievementSystem />
+        </div>
+
+        {/* Enhanced Motivation System */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Motivasjon & Fremgang</h3>
+          <MotivationBoost />
+        </div>
+
+        {/* Progress Streaks */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Din Streak</h3>
+          <ProgressStreaks />
+        </div>
+
+        {/* Power-up System */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Power-ups</h3>
+          <PowerUpSystem />
+        </div>
+
+        {/* Recent Activity */}
         {totalDays > 0 && (
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Din Fremgang</h3>
-            <CompactMotivation />
+            <h3 className="text-lg font-semibold text-white">Progress</h3>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-muted-foreground">Tracking Days</span>
+                  <Badge variant="secondary">{totalDays} days</Badge>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Data Quality</span>
+                  <Badge 
+                    variant={totalDays >= 7 ? "default" : "outline"}
+                    className={totalDays >= 7 ? "grok-gradient text-black" : ""}
+                  >
+                    {totalDays >= 7 ? "Ready for AI" : "Building..."}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
