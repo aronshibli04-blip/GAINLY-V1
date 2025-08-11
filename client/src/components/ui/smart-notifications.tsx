@@ -168,7 +168,9 @@ export function SmartNotifications() {
     }
     
     // Training reminder for weight gain
-    const lastTrainingEntry = activityEntries.find(a => a.description.toLowerCase().includes('training') || a.description.toLowerCase().includes('workout'));
+    const lastTrainingEntry = activityEntries.find(a => 
+      a && (a.type === 'heavy' || a.type === 'moderate')
+    );
     const daysSinceTraining = lastTrainingEntry 
       ? Math.floor((now.getTime() - new Date(lastTrainingEntry.date).getTime()) / (1000 * 60 * 60 * 24))
       : 999;
