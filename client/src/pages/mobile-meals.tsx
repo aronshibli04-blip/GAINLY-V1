@@ -43,81 +43,41 @@ export default function MobileMeals() {
     setIsGenerating(true);
     
     try {
-      // Simulate AI meal plan generation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       const hardgainerTargetCalories = currentTdeeAnalysis.tdee + 1100; // 1100 cal surplus for 1kg/week
       
-      const mockMealPlan = {
-        id: Date.now().toString(),
-        userId: "user1",
+      // Create proper meal plan request with user preferences
+      const mealPlanRequest = {
         targetCalories: hardgainerTargetCalories,
-        meals: [
-          {
-            id: "1",
-            name: "Hardgainer Breakfast",
-            type: "breakfast" as const,
-            calories: Math.round(hardgainerTargetCalories * 0.25),
-            ingredients: [
-              { id: "1", name: "Oatmeal", amount: 120, unit: "g", calories: 450 },
-              { id: "2", name: "Banana", amount: 2, unit: "medium", calories: 210 },
-              { id: "3", name: "Protein powder", amount: 40, unit: "g", calories: 160 },
-              { id: "4", name: "Peanut butter", amount: 30, unit: "g", calories: 180 },
-              { id: "5", name: "Whole milk", amount: 300, unit: "ml", calories: 200 }
-            ],
-            instructions: "Mix oatmeal with protein powder and milk, add sliced bananas and peanut butter"
-          },
-          {
-            id: "2",
-            name: "Mass-Building Lunch",
-            type: "lunch" as const,
-            calories: Math.round(hardgainerTargetCalories * 0.35),
-            ingredients: [
-              { id: "6", name: "Chicken breast", amount: 250, unit: "g", calories: 415 },
-              { id: "7", name: "Brown rice", amount: 150, unit: "g", calories: 525 },
-              { id: "8", name: "Avocado", amount: 100, unit: "g", calories: 160 },
-              { id: "9", name: "Olive oil", amount: 20, unit: "ml", calories: 160 },
-              { id: "10", name: "Mixed vegetables", amount: 200, unit: "g", calories: 80 }
-            ],
-            instructions: "Grill chicken with olive oil, serve with rice, avocado and vegetables"
-          },
-          {
-            id: "3",
-            name: "Power Dinner",
-            type: "dinner" as const,
-            calories: Math.round(hardgainerTargetCalories * 0.3),
-            ingredients: [
-              { id: "11", name: "Beef steak", amount: 200, unit: "g", calories: 500 },
-              { id: "12", name: "Sweet potato", amount: 300, unit: "g", calories: 270 },
-              { id: "13", name: "Spinach", amount: 150, unit: "g", calories: 35 },
-              { id: "14", name: "Butter", amount: 20, unit: "g", calories: 145 },
-              { id: "15", name: "Cheese", amount: 50, unit: "g", calories: 200 }
-            ],
-            instructions: "Cook steak with butter, serve with roasted sweet potato and cheesy spinach"
-          },
-          {
-            id: "4",
-            name: "Evening Snack",
-            type: "snack" as const,
-            calories: Math.round(hardgainerTargetCalories * 0.1),
-            ingredients: [
-              { id: "16", name: "Greek yogurt", amount: 200, unit: "g", calories: 130 },
-              { id: "17", name: "Granola", amount: 50, unit: "g", calories: 220 },
-              { id: "18", name: "Honey", amount: 20, unit: "g", calories: 60 },
-              { id: "19", name: "Mixed nuts", amount: 30, unit: "g", calories: 180 }
-            ],
-            instructions: "Mix yogurt with granola, nuts and honey for a calorie-dense snack"
-          }
-        ],
-        preferences: preferences || "High protein for muscle gain",
-        createdAt: new Date().toISOString()
+        dietaryPreferences: preferences.trim() ? [preferences.trim()] : [],
+        preferredFoods: ['Rice', 'Chicken', 'Pasta', 'Beef', 'Fish'],
+        maxMealsPerDay: preferences.toLowerCase().includes('three') ? 3 : 4,
+        maxPrepTime: 30,
+        cookingExperience: 'Beginner',
+        userId: 'user1'
       };
 
-      addMealPlan(mockMealPlan);
+      // Call the actual OpenAI API
+      const response = await fetch('/api/generate-meal-plan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mealPlanRequest),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Server error: ${response.status}`);
+      }
+
+      const mealPlan = await response.json();
+      
+      // Use the AI-generated meal plan directly
+      addMealPlan(mealPlan);
       setIsGenerating(false);
       toast({ 
         title: "Meal plan generated!", 
-        description: `${mockMealPlan.targetCalories} calorie plan created`
+        description: `${mealPlan.totalCalories} calorie AI meal plan created`
       });
     } catch (error) {
       setIsGenerating(false);
