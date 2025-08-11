@@ -13,12 +13,10 @@ import { GoalWeightCard } from "@/components/ui/goal-weight-card";
 import { AchievementSystem } from "@/components/ui/achievement-system";
 import { MotivationBoost } from "@/components/ui/motivation-boost";
 import { ProgressStreaks } from "@/components/ui/progress-streaks";
-import { VictoryAnimations } from "@/components/ui/victory-animations";
 import { PowerUpSystem } from "@/components/ui/power-up-system";
 import { GamificationSystem } from "@/components/ui/gamification-system";
-import { PointsCelebration } from "@/components/ui/points-celebration";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
-import { ProgressCelebration } from "@/components/ui/progress-celebration";
+
 import { useUserStore } from "@/store/userStore";
 import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler } from "lucide-react";
 import { Link } from "wouter";
@@ -199,8 +197,7 @@ export default function MobileHome() {
           </div>
         )}
 
-        {/* Progress Celebration */}
-        <ProgressCelebration />
+
 
         {/* Daily Challenges */}
         <div className="space-y-3">
@@ -288,11 +285,7 @@ export default function MobileHome() {
 
       </div>
 
-      {/* Victory Animations */}
-      <VictoryAnimations />
 
-      {/* Points Celebration */}
-      <PointsCelebration />
 
       <BottomNav />
     </div>
