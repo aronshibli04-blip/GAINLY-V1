@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { useUserStore } from "@/store/userStore";
 import { calculateTdee } from "@/utils/tdee";
 import { Brain, RefreshCw, TrendingUp } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function TdeeAnalysisCard() {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -41,9 +41,11 @@ export function TdeeAnalysisCard() {
   };
 
   // Auto-update if needed
-  if (needsUpdate && !isUpdating) {
-    handleUpdateAnalysis();
-  }
+  useEffect(() => {
+    if (needsUpdate && !isUpdating) {
+      handleUpdateAnalysis();
+    }
+  }, [needsUpdate, isUpdating]);
 
   const analysis = currentTdeeAnalysis || {
     tdee: calculation.tdee,
