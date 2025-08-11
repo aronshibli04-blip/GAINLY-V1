@@ -54,16 +54,16 @@ export default function MobileHome() {
     switch (currentPhase) {
       case 'onboarding':
         return {
-          title: "Initialization",
-          subtitle: "Complete biometric calibration to begin",
-          color: "bg-blue-500",
+          title: "Neural Network Initialization",
+          subtitle: "Activating AI systems for metabolic analysis",
+          color: "grok-gradient",
           progress: 25
         };
       case 'calibration':
         return {
-          title: "Calibration Phase",
-          subtitle: `Day ${totalDays} - AI neural networks learning your metabolism`,
-          color: "bg-yellow-500",
+          title: "Neural Calibration Active",
+          subtitle: `Day ${totalDays}/7 - AI systems analyzing metabolic patterns`,
+          color: "grok-gradient animate-pulse",
           progress: progressPercent
         };
       case 'meal_planning':
@@ -117,10 +117,13 @@ export default function MobileHome() {
           </div>
         </div>
 
-        {/* Phase Status - Subtle indicator */}
-        <div className="flex items-center space-x-2 py-2">
-          <div className={`w-2 h-2 rounded-full ${phaseInfo.color}`} />
-          <p className="text-xs text-muted-foreground">{phaseInfo.subtitle}</p>
+        {/* Phase Status - Enhanced Grok-style indicator */}
+        <div className="flex items-center space-x-3 py-2">
+          <div className={`w-3 h-3 rounded-full ${phaseInfo.color.includes('grok-gradient') ? 'grok-gradient' : phaseInfo.color} ${phaseInfo.color.includes('animate-pulse') ? 'animate-pulse' : ''}`} 
+               style={phaseInfo.color.includes('grok-gradient') ? { 
+                 boxShadow: '0 0 10px hsla(147, 100%, 45%, 0.6)' 
+               } : {}} />
+          <p className="text-xs font-medium text-primary/90">{phaseInfo.subtitle}</p>
         </div>
 
         {/* Quick Stats */}
