@@ -189,7 +189,7 @@ export default function MobileMeals() {
                   Your Meal Plan
                 </div>
                 <Badge variant="secondary">
-                  {latestMealPlan.targetCalories} kcal
+                  {latestMealPlan.totalCalories} kcal
                 </Badge>
               </CardTitle>
             </CardHeader>

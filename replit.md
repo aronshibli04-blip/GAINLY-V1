@@ -29,6 +29,9 @@ GAINLY is a comprehensive mobile fitness application designed to help hardgainer
   - **Enhanced JSON Processing**: Improved OpenAI response parsing with truncation recovery and increased token limits
   - **Intelligent Fallback Logic**: Fallback system now dynamically respects dietary restrictions
   - **Consistent Performance**: Fixed repetitive meal generation issues with proper AI prompt engineering
+  - **Mobile Interface Fix**: Connected mobile meals page to actual OpenAI API instead of mock data
+  - **Calorie Display Fix**: Fixed totalCalories vs targetCalories field mismatch in meal plan display
+  - **Smart Meal Count Detection**: Added parsing for "three courses" requests to set maxMealsPerDay correctly
 - **Major App Enhancements (August 10, 2025)**: Implemented comprehensive feature expansion
   - **Body Measurements Tracking**: Complete measurements page with chest, waist, arms, thighs, shoulders, body fat tracking
   - **Advanced Statistics Dashboard**: Comprehensive analytics with weight/calorie charts, AI insights, performance metrics
