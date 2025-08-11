@@ -106,7 +106,7 @@ export default function MobileHome() {
       <div className="fixed top-4 right-4 z-50">
         <div 
           className={`
-            px-3 py-2 rounded-lg font-bold text-sm transition-all duration-500 
+            flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-sm transition-all duration-500 
             ${todayCalories === 0 ? 'bg-red-500/90 text-white border-red-400/50' :
               todayCalories >= 6000 ? 'bg-green-500/90 text-white border-green-400/50' :
               'bg-yellow-500/90 text-black border-yellow-400/50'} 
@@ -118,6 +118,7 @@ export default function MobileHome() {
                       '0 0 15px rgba(234, 179, 8, 0.6)'
           }}
         >
+          <Target className={`h-4 w-4 ${todayCalories >= 6000 ? 'text-white' : todayCalories === 0 ? 'text-white' : 'text-black'}`} />
           {todayCalories.toLocaleString()} kcal
         </div>
       </div>
