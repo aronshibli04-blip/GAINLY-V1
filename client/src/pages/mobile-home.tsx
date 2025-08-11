@@ -7,6 +7,7 @@ import { BottomNav } from "@/components/ui/bottom-nav";
 import { WeightLogger } from "@/components/ui/weight-logger";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { WeightChart } from "@/components/ui/weight-chart";
+import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { MotivationCard } from "@/components/ui/motivation-card";
 import { GoalWeightCard } from "@/components/ui/goal-weight-card";
 import { AchievementSystem } from "@/components/ui/achievement-system";
@@ -197,6 +198,14 @@ export default function MobileHome() {
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-white">Weight Progress</h3>
             <WeightChart />
+          </div>
+        )}
+
+        {/* Weekly Weight Analysis */}
+        {weightEntries.length >= 7 && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Weekly Analysis</h3>
+            <WeeklyWeightAnalysis />
           </div>
         )}
 

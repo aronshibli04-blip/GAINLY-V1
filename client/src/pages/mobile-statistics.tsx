@@ -18,6 +18,7 @@ import {
   Utensils
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar } from "recharts";
 
 export default function MobileStatistics() {
@@ -411,6 +412,19 @@ export default function MobileStatistics() {
                 </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Weekly Weight Analysis */}
+        <Card className="bg-slate-800/50 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-primary">
+              <Calendar className="h-5 w-5" />
+              Weekly Weight Breakdown
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <WeeklyWeightAnalysis />
           </CardContent>
         </Card>
       </div>
