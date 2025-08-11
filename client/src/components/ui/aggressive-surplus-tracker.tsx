@@ -35,27 +35,33 @@ export function AggressiveSurplusTracker() {
   const currentHour = new Date().getHours();
   const isComplete = caloriesRemaining === 0;
 
-  // Daily motivation quotes
+  // Daily motivation quotes in Norwegian
   const motivationQuotes = [
-    "Every calorie counts toward your transformation! 💪",
-    "You're building the stronger version of yourself!",
-    "Consistency beats perfection. Keep going!",
-    "Your future self will thank you for today's effort!",
-    "Progress is progress, no matter how small!",
-    "You're not just gaining weight, you're gaining confidence!",
-    "Each meal is a step closer to your goals!"
+    "Suksess er summen av små anstrengelser, gjentatt dag ut og dag inn.",
+    "Du blir ikke det du ønsker, du blir det du tror du fortjener.", 
+    "Kroppen din kan gjøre det. Det er sinnet ditt du må overbevise.",
+    "Champions blir ikke laget i gymsalene. Champions blir laget av noe dypt inne i dem.",
+    "Styrke kommer ikke fra det du kan gjøre. Den kommer fra å overvinne det du trodde du ikke kunne.",
+    "Framgang er umulig uten forandring, og de som ikke kan forandre tankene sine kan ikke forandre noe.",
+    "Hver ekspert var en gang en begynner. Hver proff var en gang en amatør."
   ];
 
   const todayMotivation = motivationQuotes[new Date().getDay()];
 
-  // Animate to motivation quote when completed
+  // Animate to motivation quote when completed - slow transition
   useEffect(() => {
     if (isComplete && !showMotivation) {
-      setAnimatingOut(true);
-      setTimeout(() => {
-        setShowMotivation(true);
-        setAnimatingOut(false);
-      }, 500);
+      // Wait 4 seconds before starting transition to give time to read progress
+      const delayTimer = setTimeout(() => {
+        setAnimatingOut(true);
+        // Then smooth transition takes 1 second
+        setTimeout(() => {
+          setShowMotivation(true);
+          setAnimatingOut(false);
+        }, 1000);
+      }, 4000);
+      
+      return () => clearTimeout(delayTimer);
     } else if (!isComplete && showMotivation) {
       setShowMotivation(false);
     }
@@ -101,17 +107,29 @@ export function AggressiveSurplusTracker() {
   // Show motivation quote when complete
   if (showMotivation) {
     return (
-      <Card className="border-green-500/60 bg-green-500/20 grok-glow-hover transition-all duration-500 ease-in-out">
-        <CardContent className="p-6 text-center">
-          <div className="animate-in slide-in-from-bottom-4 duration-500">
-            <Quote className="h-8 w-8 text-green-400 mx-auto mb-3 animate-pulse" />
-            <p className="text-lg font-medium text-white mb-2">{todayMotivation}</p>
-            <p className="text-sm text-green-300/80">
-              Target achieved! {todayCalories} calories logged today.
-            </p>
-            <div className="mt-4 inline-flex items-center text-xs text-green-400">
-              <Zap className="h-3 w-3 mr-1" />
-              1100kcal surplus complete
+      <Card className="border-primary/60 bg-primary/10 grok-glow-hover transition-all duration-1000 ease-in-out">
+        <CardContent className="p-6">
+          <div className="animate-in slide-in-from-bottom-4 duration-1000 ease-out">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                <Quote className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Dagens Motivasjon</h3>
+                <p className="text-xs text-muted-foreground">Mål nådd! {todayCalories} kcal logget</p>
+              </div>
+            </div>
+            
+            <blockquote className="text-white text-sm leading-relaxed mb-3 italic">
+              "{todayMotivation}"
+            </blockquote>
+            
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center text-primary">
+                <Zap className="h-3 w-3 mr-1" />
+                1100kcal surplus fullført
+              </div>
+              <span className="text-muted-foreground">— Robert Collier</span>
             </div>
           </div>
         </CardContent>
@@ -120,8 +138,8 @@ export function AggressiveSurplusTracker() {
   }
 
   return (
-    <Card className={`${urgencyColors[urgencyLevel]} grok-glow-hover transition-all duration-500 ease-in-out ${
-      animatingOut ? 'animate-out slide-out-to-top-4 opacity-0' : ''
+    <Card className={`${urgencyColors[urgencyLevel]} grok-glow-hover transition-all duration-1000 ease-in-out ${
+      animatingOut ? 'animate-out slide-out-to-top-4 opacity-0 duration-1000' : ''
     }`}>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center justify-between">
