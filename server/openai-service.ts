@@ -73,25 +73,27 @@ Key principles:
 - Account for low appetite with strategic meal timing
 - Emphasize liquid calories and healthy fats
 - Provide practical, time-efficient recipes
+- STRICTLY FOLLOW USER DIETARY PREFERENCES - if they say "no oatmeal", never include oatmeal
+- ENSURE ACCURATE CALORIE CALCULATIONS - ingredient calories must add up to meal total
 
-Always respond with valid JSON only, no markdown or additional text.`;
+CRITICAL: Always respond with valid JSON only, no markdown code blocks, no additional text.`;
 
     const userPrompt = `Create an optimized hardgainer meal plan for aggressive weight gain:
 
 Target: ${request.targetCalories} kcal (1100+ kcal surplus for 1kg/week gain)
-Dietary preferences: ${request.dietaryPreferences.join(', ') || 'None'}
+DIETARY PREFERENCES (MUST FOLLOW EXACTLY): ${request.dietaryPreferences.join(', ') || 'None'}
 Preferred foods: ${request.preferredFoods.join(', ') || 'Varied'}
 Max meals: ${request.maxMealsPerDay} per day
 Max prep time: ${request.maxPrepTime} minutes per meal
 Cooking experience: ${request.cookingExperience}
 
-HARDGAINER-SPECIFIC REQUIREMENTS:
-- Prioritize calorie-dense foods (nuts, oils, dried fruits, protein powders)
-- Include liquid calories (smoothies, protein shakes, milk-based drinks)
-- Minimize fiber-heavy foods that cause satiety
-- Focus on healthy fats (30-35% of total calories)
-- Strategic meal timing (every 2-3 hours)
-- Easy-to-digest options for low appetite periods
+MANDATORY REQUIREMENTS:
+1. STRICTLY AVOID any foods mentioned in dietary preferences (e.g., if "no oatmeal" is specified, NEVER include oatmeal)
+2. ACCURATE CALORIES: Each ingredient's calories must be realistic and the sum must equal the meal total
+3. Prioritize calorie-dense foods (nuts, oils, dried fruits, protein powders)
+4. Focus on healthy fats (30-35% of total calories)
+5. Strategic meal timing (every 2-3 hours)
+6. Easy-to-digest options for low appetite periods
 
 Respond with JSON in this exact format:
 {
@@ -174,9 +176,12 @@ CRITICAL REQUIREMENTS:
 - Include specific Norwegian ingredients when possible
 - Calories must add up precisely to target (±50 kcal tolerance)
 - Prioritize quick-prep options for busy schedules
-- Include at least 2 liquid calorie sources per day
 - Optimize for minimal food volume, maximum caloric density
-- Provide realistic portions and practical cooking instructions`;
+- Provide realistic portions and practical cooking instructions
+- DOUBLE-CHECK: Ingredient calories must sum to meal total exactly
+- NEVER include forbidden foods from dietary preferences
+
+Respond with raw JSON only (no markdown formatting):`;
 
     try {
       const response = await this.openai.chat.completions.create({
@@ -185,8 +190,9 @@ CRITICAL REQUIREMENTS:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        temperature: 0.3,
+        temperature: 0.2,
         max_tokens: 3000,
+        response_format: { type: "json_object" },
       });
 
       const content = response.choices[0].message.content;
@@ -194,8 +200,43 @@ CRITICAL REQUIREMENTS:
         throw new Error('No content received from OpenAI');
       }
 
+      // Clean the response by removing markdown code blocks if present
+      let cleanContent = content.trim();
+      
+      // Remove markdown code blocks more aggressively
+      if (cleanContent.includes('```json')) {
+        const startIndex = cleanContent.indexOf('```json') + 7;
+        const endIndex = cleanContent.lastIndexOf('```');
+        if (endIndex > startIndex) {
+          cleanContent = cleanContent.substring(startIndex, endIndex).trim();
+        }
+      } else if (cleanContent.includes('```')) {
+        const startIndex = cleanContent.indexOf('```') + 3;
+        const endIndex = cleanContent.lastIndexOf('```');
+        if (endIndex > startIndex) {
+          cleanContent = cleanContent.substring(startIndex, endIndex).trim();
+        }
+      }
+
+      // Log the raw response for debugging
+      console.log('OpenAI Raw Response Length:', content.length);
+      console.log('OpenAI Clean Content Preview:', cleanContent.substring(0, 500) + '...');
+      
+      // Additional JSON cleaning
+      cleanContent = cleanContent
+        .replace(/'/g, '"')  // Replace single quotes with double quotes
+        .replace(/,\s*}/g, '}')  // Remove trailing commas before closing braces
+        .replace(/,\s*]/g, ']'); // Remove trailing commas before closing brackets
+
       // Parse the JSON response
-      const mealPlanData = JSON.parse(content);
+      let mealPlanData;
+      try {
+        mealPlanData = JSON.parse(cleanContent);
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError);
+        console.error('Content around error position:', cleanContent.substring(Math.max(0, 10179-100), 10179+100));
+        throw new Error(`Invalid JSON response from OpenAI: ${jsonError.message}`);
+      }
       
       // Calculate totals
       const totalCalories = mealPlanData.meals.reduce((sum: number, meal: any) => sum + meal.calories, 0);

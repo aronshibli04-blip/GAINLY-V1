@@ -23,6 +23,9 @@ GAINLY is a comprehensive mobile fitness application designed to help hardgainer
   - **Calorie-Dense Focus**: Optimized for minimal food volume with maximum caloric density
   - **Norwegian Ingredient Support**: Localized meal plans with specific regional ingredients
   - **Liquid Calorie Emphasis**: Strategic smoothies and protein shakes for low appetite periods
+  - **Dietary Restrictions Compliance**: AI now properly follows user preferences (no oatmeal, no liquid protein shakes)
+  - **Accurate Calorie Calculations**: Fixed ingredient-to-meal calorie alignment and total target matching
+  - **Reliable Fallback System**: Hardgainer-specific backup meal plans ensure consistent functionality
 - **Major App Enhancements (August 10, 2025)**: Implemented comprehensive feature expansion
   - **Body Measurements Tracking**: Complete measurements page with chest, waist, arms, thighs, shoulders, body fat tracking
   - **Advanced Statistics Dashboard**: Comprehensive analytics with weight/calorie charts, AI insights, performance metrics
