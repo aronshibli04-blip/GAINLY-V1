@@ -191,7 +191,7 @@ Respond with raw JSON only (no markdown formatting):`;
           { role: 'user', content: userPrompt }
         ],
         temperature: 0.2,
-        max_tokens: 3000,
+        max_tokens: 6000,
         response_format: { type: "json_object" },
       });
 
@@ -228,14 +228,30 @@ Respond with raw JSON only (no markdown formatting):`;
         .replace(/,\s*}/g, '}')  // Remove trailing commas before closing braces
         .replace(/,\s*]/g, ']'); // Remove trailing commas before closing brackets
 
-      // Parse the JSON response
+      // Parse the JSON response with better error handling
       let mealPlanData;
       try {
         mealPlanData = JSON.parse(cleanContent);
-      } catch (jsonError) {
-        console.error('JSON Parse Error:', jsonError);
-        console.error('Content around error position:', cleanContent.substring(Math.max(0, 10179-100), 10179+100));
-        throw new Error(`Invalid JSON response from OpenAI: ${jsonError.message}`);
+      } catch (jsonError: any) {
+        // If JSON is truncated, try to find the last valid closing brace
+        const lastBraceIndex = cleanContent.lastIndexOf('}');
+        if (lastBraceIndex > 0) {
+          const truncatedContent = cleanContent.substring(0, lastBraceIndex + 1);
+          try {
+            mealPlanData = JSON.parse(truncatedContent);
+            console.log('Recovered from truncated JSON response');
+          } catch (secondError) {
+            console.error('JSON Parse Error:', jsonError);
+            const errorPos = jsonError.message.match(/\d+/)?.[0] || 0;
+            console.error('Content around error position:', cleanContent.substring(Math.max(0, errorPos - 50), errorPos + 50));
+            throw new Error(`Invalid JSON response from OpenAI: ${jsonError.message}`);
+          }
+        } else {
+          console.error('JSON Parse Error:', jsonError);
+          const errorPos = jsonError.message.match(/\d+/)?.[0] || 0;
+          console.error('Content around error position:', cleanContent.substring(Math.max(0, errorPos - 50), errorPos + 50));
+          throw new Error(`Invalid JSON response from OpenAI: ${jsonError.message}`);
+        }
       }
       
       // Calculate totals

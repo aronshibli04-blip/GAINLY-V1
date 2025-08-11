@@ -270,25 +270,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       meals: [
         {
           id: "breakfast",
-          name: "High-Calorie Breakfast Bowl",
+          name: avoidOatmeal ? "High-Calorie Breakfast Bowl" : "Hardgainer Breakfast",
           type: "breakfast",
           calories: targetPerMeal,
           protein: 45,
           carbs: 65,
           fat: 35,
-          ingredients: [
+          ingredients: avoidOatmeal ? [
             { id: "eggs", name: "Whole eggs", amount: 3, unit: "pieces", calories: 210 },
             { id: "bread", name: "Whole grain bread", amount: 2, unit: "slices", calories: 160 },
             { id: "butter", name: "Butter", amount: 20, unit: "g", calories: 144 },
             { id: "banana", name: "Banana", amount: 150, unit: "g", calories: 135 },
             { id: "nuts", name: "Mixed nuts", amount: 30, unit: "g", calories: 180 },
             { id: "milk", name: "Whole milk", amount: 200, unit: "ml", calories: 130 }
+          ] : [
+            { id: "oatmeal", name: "Oatmeal", amount: 120, unit: "g", calories: 450 },
+            { id: "banana", name: "Banana", amount: 2, unit: "medium", calories: 210 },
+            { id: "protein-powder", name: "Protein powder", amount: 40, unit: "g", calories: 160 },
+            { id: "peanut-butter", name: "Peanut butter", amount: 30, unit: "g", calories: 180 },
+            { id: "milk", name: "Whole milk", amount: 300, unit: "ml", calories: 200 }
           ],
-          instructions: [
+          instructions: avoidOatmeal ? [
             "Scramble eggs with butter in a pan",
             "Toast bread and spread remaining butter",
             "Slice banana and sprinkle nuts on top",
             "Serve with a glass of whole milk"
+          ] : [
+            "Mix oatmeal with protein powder and milk, add sliced bananas and peanut butter"
           ],
           prepTime: 8,
           cookTime: 5
