@@ -104,22 +104,9 @@ export default function MobileHome() {
       
       {/* Fixed Calorie Indicator - Top Right Corner */}
       <div className="fixed top-4 right-4 z-50">
-        <div 
-          className={`
-            flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-sm transition-all duration-500 
-            ${todayCalories === 0 ? 'bg-red-500/90 text-white border-red-400/50' :
-              todayCalories >= 6000 ? 'bg-green-500/90 text-white border-green-400/50' :
-              'bg-yellow-500/90 text-black border-yellow-400/50'} 
-            border backdrop-blur-sm shadow-lg
-          `}
-          style={{
-            boxShadow: todayCalories === 0 ? '0 0 15px rgba(239, 68, 68, 0.6)' :
-                      todayCalories >= 6000 ? '0 0 15px rgba(34, 197, 94, 0.6)' :
-                      '0 0 15px rgba(234, 179, 8, 0.6)'
-          }}
-        >
-          <Target className={`h-4 w-4 ${todayCalories >= 6000 ? 'text-white' : todayCalories === 0 ? 'text-white' : 'text-black'}`} />
-          {todayCalories.toLocaleString()} kcal
+        <div className="flex items-center gap-1 font-bold text-sm text-primary transition-all duration-300">
+          <Zap className="h-4 w-4" />
+          {todayCalories.toLocaleString()}
         </div>
       </div>
       
