@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
+import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar } from "recharts";
 
 export default function MobileStatistics() {
@@ -143,6 +144,17 @@ export default function MobileStatistics() {
           </h1>
           <p className="text-primary/70">Advanced progress analytics</p>
         </div>
+
+        {/* AI TDEE Analysis - Moved from Home Page */}
+        {stats.totalDaysTracked >= 7 && (
+          <div className="space-y-3 mb-8">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Brain className="h-5 w-5 text-primary" />
+              AI Analysis
+            </h3>
+            <TdeeAnalysisCard />
+          </div>
+        )}
 
         {/* Period Selection */}
         <div className="flex justify-center mb-8">
@@ -415,18 +427,20 @@ export default function MobileStatistics() {
           </CardContent>
         </Card>
 
-        {/* Weekly Weight Analysis */}
-        <Card className="bg-slate-800/50 border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
-              <Calendar className="h-5 w-5" />
-              Weekly Weight Breakdown
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <WeeklyWeightAnalysis />
-          </CardContent>
-        </Card>
+        {/* Weekly Weight Analysis - Moved from Home Page */}
+        {stats.totalDaysTracked >= 7 && (
+          <Card className="bg-slate-800/50 border-primary/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-primary">
+                <Calendar className="h-5 w-5" />
+                Weekly Weight Breakdown
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <WeeklyWeightAnalysis />
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <BottomNav />

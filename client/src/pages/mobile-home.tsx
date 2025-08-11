@@ -191,27 +191,11 @@ export default function MobileHome() {
           <WeightLogger />
         </div>
 
-        {/* AI Analysis - Always visible and updating */}
-        {totalDays >= 7 && (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">AI Analysis</h3>
-            <TdeeAnalysisCard />
-          </div>
-        )}
-
-        {/* Weight Progress Chart */}
+        {/* Weight Progress Chart - Keep this for quick overview */}
         {weightEntries.length >= 3 && (
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-white">Weight Progress</h3>
             <WeightChart />
-          </div>
-        )}
-
-        {/* Weekly Weight Analysis */}
-        {weightEntries.length >= 7 && (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Weekly Analysis</h3>
-            <WeeklyWeightAnalysis />
           </div>
         )}
 
