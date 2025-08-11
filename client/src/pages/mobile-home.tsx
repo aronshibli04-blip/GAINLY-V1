@@ -226,8 +226,12 @@ export default function MobileHome() {
             </Link>
           </div>
 
-          {/* Weight Logger below the summary */}
-          <WeightLogger />
+          {/* Weight Logging Section - Only show if not logged today */}
+          {!todayWeight && (
+            <div className="pt-2">
+              <WeightLogger />
+            </div>
+          )}
         </div>
 
         {/* Weight Progress Chart - Keep this for quick overview */}
