@@ -145,17 +145,6 @@ export default function MobileStatistics() {
           <p className="text-primary/70">Advanced progress analytics</p>
         </div>
 
-        {/* AI TDEE Analysis - Moved from Home Page */}
-        {stats.totalDaysTracked >= 7 && (
-          <div className="space-y-3 mb-8">
-            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Brain className="h-5 w-5 text-primary" />
-              AI Analysis
-            </h3>
-            <TdeeAnalysisCard />
-          </div>
-        )}
-
         {/* Period Selection */}
         <div className="flex justify-center mb-8">
           <div className="flex bg-slate-800/50 rounded-lg p-1 border border-primary/20">
@@ -376,6 +365,13 @@ export default function MobileStatistics() {
             )}
           </CardContent>
         </Card>
+
+        {/* AI TDEE Analysis - Moved from Home Page */}
+        {stats.totalDaysTracked >= 7 && (
+          <div className="mb-8">
+            <TdeeAnalysisCard />
+          </div>
+        )}
 
         {/* Weekly Summary */}
         <Card className="bg-slate-800/50 border-primary/20">
