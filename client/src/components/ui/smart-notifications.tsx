@@ -254,8 +254,8 @@ export function SmartNotifications() {
 
   return (
     <>
-      {/* Notification Bell */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Notification Bell - Moved to left side */}
+      <div className="fixed top-4 left-4 z-50">
         <Button
           onClick={() => setShowNotifications(!showNotifications)}
           variant="outline"
@@ -276,7 +276,7 @@ export function SmartNotifications() {
 
       {/* Notification Panel */}
       {showNotifications && (
-        <div className="fixed top-16 right-4 z-40 w-80 max-h-96 overflow-y-auto">
+        <div className="fixed top-16 left-4 z-40 w-80 max-h-96 overflow-y-auto">
           <Card className="bg-slate-900/95 border-primary/30 backdrop-blur-xl shadow-2xl">
             <CardContent className="p-0">
               <div className="sticky top-0 bg-slate-800/90 p-3 border-b border-primary/20 backdrop-blur-sm">
