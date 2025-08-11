@@ -36,7 +36,7 @@ export default function CalibrationMode() {
       
       const remaining = Math.max(0, 7 - dataEntryDays);
       setDaysRemaining(remaining);
-      setCalibrationProgress((dataEntryDays / 7) * 100);
+      setCalibrationProgress(Math.min((dataEntryDays / 7) * 100, 100));
 
       // Check if calibration is complete (7 days of data)
       if (dataEntryDays >= 7 && !user.hasCompletedCalibration) {
@@ -45,12 +45,35 @@ export default function CalibrationMode() {
           title: "🎉 AI Calibration Complete!",
           description: "Full neural network capabilities are now unlocked.",
         });
-        window.location.href = '/';
+        // Use a timeout to allow state to update before navigation
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
       }
     }
   }, [user, setUser, toast, weightEntries, calorieEntries]);
 
   const handleSkipDay = () => {
+    // Check if already completed
+    const uniqueWeightDays = new Set(weightEntries.map(w => w.date)).size;
+    const uniqueCalorieDays = new Set(calorieEntries.map(c => c.date)).size;
+    const dataEntryDays = Math.max(uniqueWeightDays, uniqueCalorieDays);
+    
+    if (dataEntryDays >= 7) {
+      // Complete calibration immediately
+      if (user && !user.hasCompletedCalibration) {
+        setUser({ ...user, hasCompletedCalibration: true });
+        toast({
+          title: "🎉 AI Calibration Complete!",
+          description: "Full neural network capabilities are now unlocked.",
+        });
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      }
+      return;
+    }
+    
     skipToNextDay();
     toast({
       title: "⏩ Day Skipped",
@@ -259,19 +282,43 @@ export default function CalibrationMode() {
               </span>
             </div>
 
-            {/* Developer Skip Day Button - Only show in development */}
+            {/* Developer Controls - Only show in development */}
             {process.env.NODE_ENV === 'development' && (
-              <div className="flex justify-center mt-4 pt-4 border-t border-primary/20">
-                <Button
-                  onClick={handleSkipDay}
-                  variant="outline"
-                  size="sm"
-                  className="bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/50 transition-all duration-200"
-                  data-testid="button-skip-day"
-                >
-                  <FastForward className="h-4 w-4 mr-2" />
-                  Skip Day (Dev)
-                </Button>
+              <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-primary/20">
+                {calibrationProgress >= 100 ? (
+                  <Button
+                    onClick={() => {
+                      if (user && !user.hasCompletedCalibration) {
+                        setUser({ ...user, hasCompletedCalibration: true });
+                        toast({
+                          title: "🎉 AI Calibration Complete!",
+                          description: "Full neural network capabilities are now unlocked.",
+                        });
+                        setTimeout(() => {
+                          window.location.href = '/';
+                        }, 1000);
+                      }
+                    }}
+                    variant="default"
+                    size="sm"
+                    className="neural-button"
+                    data-testid="button-complete-calibration"
+                  >
+                    <Brain className="h-4 w-4 mr-2" />
+                    Complete Calibration
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSkipDay}
+                    variant="outline"
+                    size="sm"
+                    className="bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/50 transition-all duration-200"
+                    data-testid="button-skip-day"
+                  >
+                    <FastForward className="h-4 w-4 mr-2" />
+                    Skip Day (Dev)
+                  </Button>
+                )}
               </div>
             )}
           </div>
