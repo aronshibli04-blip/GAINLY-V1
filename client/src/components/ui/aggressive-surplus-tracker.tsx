@@ -104,32 +104,34 @@ export function AggressiveSurplusTracker() {
     success: "border-green-500/60 bg-green-500/20"
   };
 
-  // Show motivation quote when complete
+  // Show motivation quote when complete - compact colorful style
   if (showMotivation) {
     return (
-      <Card className="border-primary/60 bg-primary/10 grok-glow-hover transition-all duration-1000 ease-in-out">
-        <CardContent className="p-6">
+      <Card className="bg-gradient-to-r from-primary/20 via-primary/10 to-transparent border-primary/30 overflow-hidden grok-glow-hover transition-all duration-1000 ease-in-out">
+        <CardContent className="p-4">
           <div className="animate-in slide-in-from-bottom-4 duration-1000 ease-out">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                <Quote className="h-6 w-6 text-primary" />
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-yellow-400 flex items-center justify-center">
+                  <Quote className="h-4 w-4 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Dagens Motivasjon</h3>
+                  <p className="text-xs text-primary/80">Målet nådd!</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Dagens Motivasjon</h3>
-                <p className="text-xs text-muted-foreground">Mål nådd! {todayCalories} kcal logget</p>
+              <div className="flex items-center text-xs text-primary">
+                <Zap className="h-3 w-3 mr-1" />
+                {todayCalories} kcal
               </div>
             </div>
             
-            <blockquote className="text-white text-sm leading-relaxed mb-3 italic">
+            <blockquote className="text-white text-sm leading-relaxed italic mb-2">
               "{todayMotivation}"
             </blockquote>
             
-            <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center text-primary">
-                <Zap className="h-3 w-3 mr-1" />
-                1100kcal surplus fullført
-              </div>
-              <span className="text-muted-foreground">— Robert Collier</span>
+            <div className="text-xs text-primary/60 text-right">
+              — Robert Collier
             </div>
           </div>
         </CardContent>
