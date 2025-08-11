@@ -122,7 +122,7 @@ export function AggressiveSurplusTracker() {
               </div>
               <div className="flex items-center text-xs text-primary">
                 <Zap className="h-3 w-3 mr-1" />
-                {todayCalories} kcal
+                Fullført
               </div>
             </div>
             

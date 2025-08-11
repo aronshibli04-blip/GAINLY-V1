@@ -107,7 +107,7 @@ export default function MobileHome() {
         {/* Aggressive 1kg/Week Surplus Tracker */}
         <AggressiveSurplusTracker />
         
-        {/* Header */}
+        {/* Header with Dynamic Calorie Indicator */}
         <div className="flex items-center justify-between pt-4">
           <div>
             <h1 className="text-2xl font-bold grok-text-gradient">
@@ -117,8 +117,23 @@ export default function MobileHome() {
               Your AI-powered bulk companion
             </p>
           </div>
-          <div className="w-12 h-12 rounded-full grok-gradient flex items-center justify-center">
-            <Zap className="h-6 w-6 text-black" />
+          
+          {/* Dynamic Color-Coded Calorie Indicator */}
+          <div 
+            className={`
+              px-3 py-2 rounded-lg font-bold text-sm transition-all duration-500 
+              ${todayCalories === 0 ? 'bg-red-500/80 text-white border-red-400/50' :
+                todayCalories >= 6000 ? 'bg-green-500/80 text-white border-green-400/50' :
+                'bg-yellow-500/80 text-black border-yellow-400/50'} 
+              border grok-glow-hover
+            `}
+            style={{
+              boxShadow: todayCalories === 0 ? '0 0 15px rgba(239, 68, 68, 0.4)' :
+                        todayCalories >= 6000 ? '0 0 15px rgba(34, 197, 94, 0.4)' :
+                        '0 0 15px rgba(234, 179, 8, 0.4)'
+            }}
+          >
+            {todayCalories.toLocaleString()} kcal
           </div>
         </div>
 
