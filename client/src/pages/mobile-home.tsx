@@ -11,6 +11,10 @@ import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { MotivationCard } from "@/components/ui/motivation-card";
 import { GoalWeightCard } from "@/components/ui/goal-weight-card";
 import { AchievementSystem } from "@/components/ui/achievement-system";
+import { MotivationBoost } from "@/components/ui/motivation-boost";
+import { ProgressStreaks } from "@/components/ui/progress-streaks";
+import { VictoryAnimations } from "@/components/ui/victory-animations";
+import { PowerUpSystem } from "@/components/ui/power-up-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 import { ProgressCelebration } from "@/components/ui/progress-celebration";
 import { useUserStore } from "@/store/userStore";
@@ -224,10 +228,22 @@ export default function MobileHome() {
           <AchievementSystem />
         </div>
 
-        {/* Daily Motivation */}
+        {/* Enhanced Motivation System */}
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Daily Motivation</h3>
-          <MotivationCard />
+          <h3 className="text-lg font-semibold text-white">Motivasjon & Fremgang</h3>
+          <MotivationBoost />
+        </div>
+
+        {/* Progress Streaks */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Din Streak</h3>
+          <ProgressStreaks />
+        </div>
+
+        {/* Power-up System */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Power-ups</h3>
+          <PowerUpSystem />
         </div>
 
         {/* Recent Activity */}
@@ -273,6 +289,9 @@ export default function MobileHome() {
         </div>
 
       </div>
+
+      {/* Victory Animations */}
+      <VictoryAnimations />
 
       <BottomNav />
     </div>
