@@ -113,8 +113,7 @@ export function GamificationSystem() {
       const level = newLevel === -1 ? levels.length : newLevel;
       
       if (level > currentLevel) {
-        // Show level up animation
-        setShowPointsAnimation(total - totalPoints);
+        // Level up tracked silently - no popup animation
       }
       
       setPointsBreakdown(breakdown);
@@ -151,14 +150,7 @@ export function GamificationSystem() {
 
   return (
     <div className="space-y-4">
-      {/* Points Animation */}
-      {showPointsAnimation !== null && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
-          <div className="bg-primary text-black px-4 py-2 rounded-full font-bold shadow-lg">
-            +{showPointsAnimation} poeng!
-          </div>
-        </div>
-      )}
+
 
       {/* Current Level & Progress */}
       <Card className={`bg-gradient-to-r from-slate-800/80 to-slate-700/80 border-2 ${currentLevelInfo.color.replace('text-', 'border-')}/50`}>

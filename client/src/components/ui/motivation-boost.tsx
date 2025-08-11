@@ -81,8 +81,7 @@ export function MotivationBoost() {
 
     if (newAchievements.length > 0) {
       setUnlockedAchievements(prev => [...prev, ...newAchievements]);
-      setShowCelebration(true);
-      setTimeout(() => setShowCelebration(false), 3000);
+      // Celebration popup removed - achievements tracked silently
     }
   }, [totalDays, totalGain, weeklyGain, unlockedAchievements]);
 
@@ -96,20 +95,7 @@ export function MotivationBoost() {
 
   return (
     <div className="space-y-4">
-      {/* Celebration Animation */}
-      {showCelebration && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <Card className="max-w-sm mx-4 border-2 border-primary animate-pulse">
-            <CardContent className="p-6 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-primary to-yellow-400 flex items-center justify-center">
-                <Trophy className="h-8 w-8 text-black" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-2">Nytt Achievement!</h3>
-              <p className="text-white">Du låser opp flere badges!</p>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+
 
       {/* Progress Motivation Card */}
       <Card className="bg-gradient-to-r from-primary/20 via-primary/10 to-transparent border-primary/30 overflow-hidden">
