@@ -126,41 +126,29 @@ export default function MobileStatistics() {
         ))}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
-            <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-spin" 
-                 style={{ animationDuration: '15s' }} />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-xl">
-              <BarChart3 className="h-8 w-8 text-black" />
-            </div>
-          </div>
-          
-          <h1 className="text-3xl font-black mb-2">
-            <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
-              STATISTICS
-            </span>
-          </h1>
-          <p className="text-primary/70">Advanced progress analytics</p>
+      <div className="relative z-10 container mx-auto px-4 py-6">
+        {/* Cleaner Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-white mb-1">Statistics</h1>
+          <p className="text-slate-400 text-sm">Your progress analytics</p>
         </div>
 
-        {/* Period Selection */}
-        <div className="flex justify-center mb-8">
-          <div className="flex bg-slate-800/50 rounded-lg p-1 border border-primary/20">
+        {/* Compact Period Selection */}
+        <div className="flex justify-center mb-6">
+          <div className="flex bg-slate-800/80 rounded-xl p-1 border border-slate-700">
             {[
-              { key: '7d', label: '7 Days' },
-              { key: '30d', label: '30 Days' },
-              { key: 'all', label: 'All Time' }
+              { key: '7d', label: '7D' },
+              { key: '30d', label: '30D' },
+              { key: 'all', label: 'All' }
             ].map((period) => (
               <Button
                 key={period.key}
                 onClick={() => setSelectedPeriod(period.key as any)}
-                variant={selectedPeriod === period.key ? "default" : "ghost"}
+                variant="ghost"
                 size="sm"
                 className={selectedPeriod === period.key 
-                  ? "bg-primary text-black" 
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-primary text-black hover:bg-primary/90 font-medium" 
+                  : "text-slate-400 hover:text-white hover:bg-slate-700/50"
                 }
                 data-testid={`button-period-${period.key}`}
               >
@@ -170,79 +158,83 @@ export default function MobileStatistics() {
           </div>
         </div>
 
-        {/* Key Metrics Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <Card className="bg-gradient-to-r from-primary/20 to-primary/10 border-primary/30">
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-primary/30 rounded-lg mx-auto mb-2">
-                <Scale className="h-5 w-5 text-primary" />
+        {/* Key Metrics Overview - Cleaner Design */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          {/* Weight Progress */}
+          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Scale className="h-4 w-4 text-primary" />
+                <span className="text-sm text-slate-300">Weight Gained</span>
               </div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-2xl font-bold text-white mb-1">
                 {stats.weightGained >= 0 ? '+' : ''}{stats.weightGained.toFixed(1)}kg
               </div>
-              <div className="text-sm text-slate-400">Total Gained</div>
-              <div className="text-xs text-primary/70 mt-1">
+              <div className="text-xs text-slate-400">
                 {stats.weightGainRate.toFixed(2)}kg/week
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-cyan-500/20 to-cyan-500/10 border-cyan-500/30">
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-cyan-500/30 rounded-lg mx-auto mb-2">
-                <Target className="h-5 w-5 text-cyan-400" />
+          {/* Goal Progress */}
+          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Target className="h-4 w-4 text-cyan-400" />
+                <span className="text-sm text-slate-300">Goal Progress</span>
               </div>
-              <div className="text-2xl font-bold text-cyan-400">
+              <div className="text-2xl font-bold text-white mb-1">
                 {stats.progressToGoal.toFixed(0)}%
               </div>
-              <div className="text-sm text-slate-400">Goal Progress</div>
-              <div className="text-xs text-cyan-400/70 mt-1">
-                {(stats.goalWeight - stats.currentWeight).toFixed(1)}kg to go
+              <div className="text-xs text-slate-400">
+                {(stats.goalWeight - stats.currentWeight).toFixed(1)}kg left
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-yellow-500/20 to-yellow-500/10 border-yellow-500/30">
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-yellow-500/30 rounded-lg mx-auto mb-2">
-                <Zap className="h-5 w-5 text-yellow-400" />
+          {/* Daily Surplus */}
+          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="h-4 w-4 text-yellow-400" />
+                <span className="text-sm text-slate-300">Avg Surplus</span>
               </div>
-              <div className="text-2xl font-bold text-yellow-400">
+              <div className="text-2xl font-bold text-white mb-1">
                 {stats.avgSurplus > 0 ? '+' : ''}{stats.avgSurplus}
               </div>
-              <div className="text-sm text-slate-400">Avg Surplus</div>
-              <div className="text-xs text-yellow-400/70 mt-1">
+              <div className="text-xs text-slate-400">
                 {stats.avgCaloriesPerDay} cal/day
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-purple-500/20 to-purple-500/10 border-purple-500/30">
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-purple-500/30 rounded-lg mx-auto mb-2">
-                <Activity className="h-5 w-5 text-purple-400" />
+          {/* Consistency */}
+          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Activity className="h-4 w-4 text-purple-400" />
+                <span className="text-sm text-slate-300">Consistency</span>
               </div>
-              <div className="text-2xl font-bold text-purple-400">
+              <div className="text-2xl font-bold text-white mb-1">
                 {stats.consistencyScore.toFixed(0)}%
               </div>
-              <div className="text-sm text-slate-400">Consistency</div>
-              <div className="text-xs text-purple-400/70 mt-1">
+              <div className="text-xs text-slate-400">
                 {stats.totalDaysTracked} days logged
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Weight Progress Chart */}
-        <Card className="mb-8 bg-slate-800/50 border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
-              <TrendingUp className="h-5 w-5" />
-              Weight Progress
+        {/* Weight Progress Chart - Simplified */}
+        <Card className="mb-6 bg-slate-800/60 border-slate-700">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-white text-lg">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Weight Trend
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 w-full">
+            <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData.weightData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -274,16 +266,16 @@ export default function MobileStatistics() {
           </CardContent>
         </Card>
 
-        {/* Calorie Intake Chart */}
-        <Card className="mb-8 bg-slate-800/50 border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
-              <Utensils className="h-5 w-5" />
-              Calorie Intake Pattern
+        {/* Calorie Intake Chart - Simplified */}
+        <Card className="mb-6 bg-slate-800/60 border-slate-700">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-white text-lg">
+              <Utensils className="h-5 w-5 text-primary" />
+              Calorie Intake
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 w-full">
+            <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData.calorieData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -307,11 +299,11 @@ export default function MobileStatistics() {
           </CardContent>
         </Card>
 
-        {/* Performance Insights */}
-        <Card className="mb-8 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border-blue-500/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-blue-400">
-              <Brain className="h-5 w-5" />
+        {/* AI Insights - Cleaner Design */}
+        <Card className="mb-6 bg-slate-800/60 border-slate-700">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-white text-lg">
+              <Brain className="h-5 w-5 text-primary" />
               AI Insights
             </CardTitle>
           </CardHeader>
@@ -373,11 +365,11 @@ export default function MobileStatistics() {
           </div>
         )}
 
-        {/* Weekly Summary */}
-        <Card className="bg-slate-800/50 border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
-              <Calendar className="h-5 w-5" />
+        {/* Weekly Summary - Simplified */}
+        <Card className="mb-6 bg-slate-800/60 border-slate-700">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-white text-lg">
+              <Calendar className="h-5 w-5 text-primary" />
               Weekly Summary
             </CardTitle>
           </CardHeader>
@@ -425,11 +417,11 @@ export default function MobileStatistics() {
 
         {/* Weekly Weight Analysis - Moved from Home Page */}
         {stats.totalDaysTracked >= 7 && (
-          <Card className="bg-slate-800/50 border-primary/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-primary">
-                <Calendar className="h-5 w-5" />
-                Weekly Weight Breakdown
+          <Card className="bg-slate-800/60 border-slate-700">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-white text-lg">
+                <Calendar className="h-5 w-5 text-primary" />
+                Weekly Breakdown
               </CardTitle>
             </CardHeader>
             <CardContent>
