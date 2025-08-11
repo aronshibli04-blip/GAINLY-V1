@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,12 +13,15 @@ import {
   Coffee,
   Cookie,
   Apple,
-  Plus
+  Plus,
+  Quote
 } from "lucide-react";
 
 export function AggressiveSurplusTracker() {
   const { toast } = useToast();
   const { calorieEntries, addCalorieEntry, currentTdeeAnalysis } = useUserStore();
+  const [showMotivation, setShowMotivation] = useState(false);
+  const [animatingOut, setAnimatingOut] = useState(false);
   
   const today = new Date().toISOString().split('T')[0];
   const todayCalories = calorieEntries
@@ -30,6 +33,33 @@ export function AggressiveSurplusTracker() {
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / requiredCalories) * 100);
   const currentHour = new Date().getHours();
+  const isComplete = caloriesRemaining === 0;
+
+  // Daily motivation quotes
+  const motivationQuotes = [
+    "Every calorie counts toward your transformation! 💪",
+    "You're building the stronger version of yourself!",
+    "Consistency beats perfection. Keep going!",
+    "Your future self will thank you for today's effort!",
+    "Progress is progress, no matter how small!",
+    "You're not just gaining weight, you're gaining confidence!",
+    "Each meal is a step closer to your goals!"
+  ];
+
+  const todayMotivation = motivationQuotes[new Date().getDay()];
+
+  // Animate to motivation quote when completed
+  useEffect(() => {
+    if (isComplete && !showMotivation) {
+      setAnimatingOut(true);
+      setTimeout(() => {
+        setShowMotivation(true);
+        setAnimatingOut(false);
+      }, 500);
+    } else if (!isComplete && showMotivation) {
+      setShowMotivation(false);
+    }
+  }, [isComplete, showMotivation]);
   
   // Quick calorie boost options for low appetite
   const quickFoods = [
@@ -68,8 +98,31 @@ export function AggressiveSurplusTracker() {
     success: "border-green-500/60 bg-green-500/20"
   };
 
+  // Show motivation quote when complete
+  if (showMotivation) {
+    return (
+      <Card className="border-green-500/60 bg-green-500/20 grok-glow-hover transition-all duration-500 ease-in-out">
+        <CardContent className="p-6 text-center">
+          <div className="animate-in slide-in-from-bottom-4 duration-500">
+            <Quote className="h-8 w-8 text-green-400 mx-auto mb-3 animate-pulse" />
+            <p className="text-lg font-medium text-white mb-2">{todayMotivation}</p>
+            <p className="text-sm text-green-300/80">
+              Target achieved! {todayCalories} calories logged today.
+            </p>
+            <div className="mt-4 inline-flex items-center text-xs text-green-400">
+              <Zap className="h-3 w-3 mr-1" />
+              1100kcal surplus complete
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <Card className={`${urgencyColors[urgencyLevel]} grok-glow-hover`}>
+    <Card className={`${urgencyColors[urgencyLevel]} grok-glow-hover transition-all duration-500 ease-in-out ${
+      animatingOut ? 'animate-out slide-out-to-top-4 opacity-0' : ''
+    }`}>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center justify-between">
           <div className="flex items-center">
@@ -151,8 +204,8 @@ export function AggressiveSurplusTracker() {
           </div>
         )}
 
-        {/* Success State */}
-        {caloriesRemaining === 0 && (
+        {/* Success State - This will be hidden when animating to motivation */}
+        {caloriesRemaining === 0 && !animatingOut && (
           <div className="bg-green-500/20 border border-green-500/40 p-3 rounded-lg text-center">
             <Zap className="h-6 w-6 text-green-400 mx-auto mb-2" />
             <p className="text-green-400 font-medium text-sm">Target Achieved!</p>
