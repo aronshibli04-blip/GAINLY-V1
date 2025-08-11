@@ -16,6 +16,7 @@ import { useUserStore } from "@/store/userStore";
 import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler } from "lucide-react";
 import { Link } from "wouter";
 import { SmartNotifications } from "@/components/ui/smart-notifications";
+import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
 
 export default function MobileHome() {
   const { 
@@ -97,6 +98,9 @@ export default function MobileHome() {
       <SmartNotifications />
       
       <div className="content-with-bottom-nav p-4 space-y-4 pb-28">
+
+        {/* Aggressive 1kg/Week Surplus Tracker */}
+        <AggressiveSurplusTracker />
         
         {/* Header */}
         <div className="flex items-center justify-between pt-4">

@@ -14,17 +14,19 @@ import {
   Award,
   Clock,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  Dumbbell,
+  AlertTriangle
 } from "lucide-react";
 
 interface SmartNotification {
   id: string;
-  type: 'reminder' | 'achievement' | 'insight' | 'warning' | 'celebration';
+  type: 'reminder' | 'achievement' | 'insight' | 'warning' | 'celebration' | 'urgent';
   title: string;
   message: string;
   icon: any;
   color: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high' | 'critical';
   createdAt: Date;
   dismissed?: boolean;
   actionLabel?: string;
@@ -33,7 +35,7 @@ interface SmartNotification {
 
 export function SmartNotifications() {
   const { toast } = useToast();
-  const { user, weightEntries, calorieEntries } = useUserStore();
+  const { user, weightEntries, calorieEntries, activityEntries, currentTdeeAnalysis } = useUserStore();
   const [notifications, setNotifications] = useState<SmartNotification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -119,22 +121,72 @@ export function SmartNotifications() {
       });
     }
 
-    // Check for low calorie days
-    const recentCalories = calorieEntries.slice(0, 3);
-    const avgRecentCalories = recentCalories.length > 0 
-      ? recentCalories.reduce((sum, entry) => sum + entry.calories, 0) / recentCalories.length 
-      : 0;
-
-    if (avgRecentCalories < 2200 && recentCalories.length >= 2) {
+    // AGGRESSIVE SURPLUS TRACKING - 1100kcal surplus for 1kg/week
+    const todayCalories = calorieEntries
+      .filter(c => c.date === today)
+      .reduce((sum, c) => sum + c.calories, 0);
+    
+    const targetTdee = currentTdeeAnalysis?.tdee || 2500;
+    const requiredCalories = targetTdee + 1100;
+    const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
+    const currentHour = new Date().getHours();
+    
+    // Critical evening deficit alert
+    if (currentHour >= 20 && caloriesRemaining > 500) {
       newNotifications.push({
-        id: `low-calories-${Date.now()}`,
+        id: `critical-deficit-${today}`,
+        type: 'urgent',
+        title: '🚨 CRITICAL DEFICIT ALERT',
+        message: `You need ${caloriesRemaining} calories to hit your 1kg/week target! Emergency protocol needed.`,
+        icon: AlertTriangle,
+        color: 'text-red-400',
+        priority: 'critical',
+        createdAt: now,
+        actionLabel: 'Emergency Foods',
+        actionCallback: () => {
+          window.location.href = '/meals';
+        }
+      });
+    }
+    
+    // Afternoon warning for insufficient calories
+    if (currentHour >= 15 && currentHour < 20 && caloriesRemaining > 800) {
+      newNotifications.push({
+        id: `afternoon-warning-${today}`,
         type: 'warning',
-        title: 'Calories Looking Low',
-        message: `Your recent average is ${Math.round(avgRecentCalories)} calories. Consider increasing your intake for better gains.`,
-        icon: AlertCircle,
+        title: 'Falling Behind Calorie Target',
+        message: `You need ${caloriesRemaining} more calories today. Start eating bigger portions now!`,
+        icon: Clock,
         color: 'text-orange-400',
-        priority: 'medium',
-        createdAt: now
+        priority: 'high',
+        createdAt: now,
+        actionLabel: 'Log Food',
+        actionCallback: () => {
+          window.location.href = '/meals';
+        }
+      });
+    }
+    
+    // Training reminder for weight gain
+    const lastTrainingEntry = activityEntries.find(a => a.description.toLowerCase().includes('training') || a.description.toLowerCase().includes('workout'));
+    const daysSinceTraining = lastTrainingEntry 
+      ? Math.floor((now.getTime() - new Date(lastTrainingEntry.date).getTime()) / (1000 * 60 * 60 * 24))
+      : 999;
+    
+    if (daysSinceTraining >= 2) {
+      newNotifications.push({
+        id: `training-reminder-${Date.now()}`,
+        type: 'reminder',
+        title: 'Training Required for Muscle Gain',
+        message: `No training logged for ${daysSinceTraining} days. Training is essential for quality weight gain!`,
+        icon: Dumbbell,
+        color: 'text-blue-400',
+        priority: 'high',
+        createdAt: now,
+        actionLabel: 'Log Training',
+        actionCallback: () => {
+          window.location.href = '/training';
+        }
       });
     }
 

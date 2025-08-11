@@ -67,12 +67,81 @@ export default function MobileTraining() {
     }
   };
 
+  // Calculate training frequency and impact on weight gain
+  const lastWeekTraining = activityEntries.filter(a => {
+    const entryDate = new Date(a.date);
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return entryDate >= weekAgo;
+  });
+
+  const trainingFrequency = lastWeekTraining.length;
+  const optimalFrequency = 3; // 3x per week for muscle gain
+  const trainingGap = Math.max(0, optimalFrequency - trainingFrequency);
+
+  const lastTrainingEntry = activityEntries[0];
+  const daysSinceLastTraining = lastTrainingEntry 
+    ? Math.floor((new Date().getTime() - new Date(lastTrainingEntry.date).getTime()) / (1000 * 60 * 60 * 24))
+    : 999;
+
   return (
     <div className="mobile-container">
       <div className="content-with-bottom-nav p-4 space-y-4">
+
+        {/* Training Impact on Weight Gain */}
+        <Card className={`${daysSinceLastTraining >= 3 ? 'border-red-500/40 bg-red-500/10' : trainingFrequency >= 3 ? 'border-green-500/40 bg-green-500/10' : 'border-yellow-500/40 bg-yellow-500/10'}`}>
+          <CardHeader className="pb-3">
+            <CardTitle className={`text-lg flex items-center justify-between ${daysSinceLastTraining >= 3 ? 'text-red-400' : trainingFrequency >= 3 ? 'text-green-400' : 'text-yellow-400'}`}>
+              <div className="flex items-center">
+                <Dumbbell className="h-5 w-5 mr-2" />
+                Training Impact on 1kg/Week Goal
+              </div>
+              <Badge variant="outline" className={`${daysSinceLastTraining >= 3 ? 'text-red-400 border-red-400' : trainingFrequency >= 3 ? 'text-green-400 border-green-400' : 'text-yellow-400 border-yellow-400'}`}>
+                {trainingFrequency}/3 this week
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Weekly Training Target</span>
+                <span className="font-semibold text-white">{trainingFrequency} / 3 sessions</span>
+              </div>
+              <Progress value={(trainingFrequency / 3) * 100} className="h-2" />
+            </div>
+
+            {daysSinceLastTraining >= 3 && (
+              <div className="bg-red-500/20 border border-red-500/40 p-3 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <AlertTriangle className="h-4 w-4 text-red-400 mr-2" />
+                  <span className="text-red-400 font-medium text-sm">MUSCLE LOSS RISK</span>
+                </div>
+                <p className="text-red-300 text-xs">
+                  {daysSinceLastTraining} days without training! Without resistance training, weight gain will be mostly fat instead of muscle.
+                </p>
+              </div>
+            )}
+
+            {trainingGap > 0 && daysSinceLastTraining < 3 && (
+              <div className="bg-yellow-500/20 border border-yellow-500/40 p-3 rounded-lg">
+                <p className="text-yellow-300 text-xs">
+                  Need {trainingGap} more training session{trainingGap > 1 ? 's' : ''} this week for optimal muscle gain from your 1100kcal surplus.
+                </p>
+              </div>
+            )}
+
+            {trainingFrequency >= 3 && (
+              <div className="bg-green-500/20 border border-green-500/40 p-3 rounded-lg">
+                <p className="text-green-300 text-xs">
+                  Perfect! Your training frequency ensures your 1100kcal surplus builds quality muscle mass.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
         
         {/* Header */}
-        <div className="pt-4">
+        <div className="pt-2">
           <h1 className="text-2xl font-bold text-white mb-1">Training Log</h1>
           <p className="text-sm text-muted-foreground">
             Track your workouts and activity
