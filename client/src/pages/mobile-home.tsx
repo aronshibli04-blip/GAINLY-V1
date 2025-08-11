@@ -15,6 +15,8 @@ import { MotivationBoost } from "@/components/ui/motivation-boost";
 import { ProgressStreaks } from "@/components/ui/progress-streaks";
 import { VictoryAnimations } from "@/components/ui/victory-animations";
 import { PowerUpSystem } from "@/components/ui/power-up-system";
+import { GamificationSystem } from "@/components/ui/gamification-system";
+import { PointsCelebration } from "@/components/ui/points-celebration";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 import { ProgressCelebration } from "@/components/ui/progress-celebration";
 import { useUserStore } from "@/store/userStore";
@@ -234,10 +236,22 @@ export default function MobileHome() {
           <MotivationBoost />
         </div>
 
+        {/* Gamification System */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Ditt Nivå & Poeng</h3>
+          <GamificationSystem />
+        </div>
+
         {/* Progress Streaks */}
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-white">Din Streak</h3>
           <ProgressStreaks />
+        </div>
+
+        {/* Power-up System */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white">Power-ups</h3>
+          <PowerUpSystem />
         </div>
 
         {/* Power-up System */}
@@ -292,6 +306,9 @@ export default function MobileHome() {
 
       {/* Victory Animations */}
       <VictoryAnimations />
+
+      {/* Points Celebration */}
+      <PointsCelebration />
 
       <BottomNav />
     </div>
