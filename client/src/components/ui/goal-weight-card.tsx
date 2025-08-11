@@ -76,19 +76,16 @@ export function GoalWeightCard() {
 
   return (
     <Card className="grok-glow-hover border-primary/20">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-white flex items-center">
-          <Target className="h-5 w-5 mr-2 text-primary" />
-          Goal Weight
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="p-4">
         {isEditing ? (
           <div className="space-y-3">
-            <div>
-              <Label htmlFor="goal-weight" className="text-sm text-muted-foreground">
-                Goal weight (kg)
+            <div className="flex items-center gap-2">
+              <Target className="h-4 w-4 text-primary" />
+              <Label htmlFor="goal-weight" className="text-sm font-medium text-white">
+                Set Goal Weight (kg)
               </Label>
+            </div>
+            <div className="flex gap-2">
               <Input
                 id="goal-weight"
                 type="number"
@@ -96,23 +93,20 @@ export function GoalWeightCard() {
                 value={goalInput}
                 onChange={(e) => setGoalInput(e.target.value)}
                 placeholder="e.g. 75"
-                className="grok-input mt-1"
+                className="grok-input flex-1"
                 data-testid="input-goal-weight"
               />
-            </div>
-            <div className="flex space-x-2">
               <Button
                 onClick={handleSaveGoal}
-                className="flex-1 grok-gradient h-10"
+                className="grok-gradient px-3"
                 data-testid="button-save-goal"
               >
-                <Check className="h-4 w-4 mr-2 text-black" />
-                Save Goal
+                <Check className="h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
                 onClick={handleCancel}
-                className="h-10"
+                className="px-3"
                 data-testid="button-cancel-goal"
               >
                 <X className="h-4 w-4" />
@@ -120,69 +114,70 @@ export function GoalWeightCard() {
             </div>
           </div>
         ) : hasGoal ? (
-          <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="p-3 rounded-lg bg-muted/20">
-                <p className="text-xs text-muted-foreground">Current</p>
-                <p className="text-lg font-bold text-white">
-                  {currentWeight}kg
-                </p>
+          <div className="space-y-3">
+            {/* Compact header row */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-white">Goal Weight</span>
               </div>
               <button
                 onClick={() => setIsEditing(true)}
-                className="p-3 rounded-lg bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+                className="text-xs text-primary hover:text-primary/80 transition-colors"
                 data-testid="button-edit-goal"
               >
-                <p className="text-xs text-muted-foreground">Goal (tap to edit)</p>
-                <p className="text-lg font-bold text-primary">
-                  {goalWeight}kg
-                </p>
+                Edit Goal
               </button>
-              <div className="p-3 rounded-lg bg-muted/20">
+            </div>
+
+            {/* Compact stats in single row */}
+            <div className="grid grid-cols-4 gap-2 text-center">
+              <div>
+                <p className="text-sm font-bold text-white">{currentWeight}kg</p>
+                <p className="text-xs text-muted-foreground">Current</p>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-primary">{goalWeight}kg</p>
+                <p className="text-xs text-muted-foreground">Goal</p>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-cyan-400">{Math.max(0, goalWeight - currentWeight).toFixed(1)}kg</p>
                 <p className="text-xs text-muted-foreground">To Go</p>
-                <p className="text-lg font-bold text-white">
-                  {Math.max(0, goalWeight - currentWeight).toFixed(1)}kg
-                </p>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-yellow-400">{weeksToGoal || 0}w</p>
+                <p className="text-xs text-muted-foreground">ETA</p>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+            {/* Minimal progress bar */}
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
                 <span className="text-muted-foreground">Progress</span>
-                <span className="text-primary font-medium">
-                  {progress.toFixed(1)}%
-                </span>
+                <span className="text-primary font-medium">{progress.toFixed(0)}%</span>
               </div>
-              <Progress value={progress} className="h-2" />
+              <Progress value={progress} className="h-1.5" />
             </div>
-
-            {weeksToGoal !== null && (
-              <div className="flex justify-between items-center p-3 rounded-lg bg-gradient-to-r from-primary/5 to-purple-500/5 border border-primary/20">
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-muted-foreground">Time to goal</span>
-                </div>
-                <span className="text-sm font-bold text-primary">
-                  {weeksToGoal === 0 ? "Goal reached! 🎉" : 
-                   weeksToGoal === 1 ? "1 week" : 
-                   `${weeksToGoal} weeks`}
-                </span>
-              </div>
-            )}
           </div>
         ) : (
-          <div className="text-center space-y-3">
-            <p className="text-sm text-muted-foreground">
-              Set a clear weight goal to track your hardgainer progress
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-white">Goal Weight</span>
+              </div>
+              <Button
+                onClick={() => setIsEditing(true)}
+                size="sm"
+                className="grok-gradient h-7 px-3 text-xs"
+                data-testid="button-set-goal"
+              >
+                Set Goal
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Set a weight goal to track your progress
             </p>
-            <Button
-              onClick={() => setIsEditing(true)}
-              className="w-full grok-gradient h-10"
-              data-testid="button-set-goal"
-            >
-              <Target className="h-4 w-4 mr-2 text-black" />
-              Set Goal Weight
-            </Button>
           </div>
         )}
       </CardContent>
