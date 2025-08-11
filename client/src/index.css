@@ -120,6 +120,36 @@
     border-color: hsl(147, 100%, 45%);
     box-shadow: 0 0 0 2px hsla(147, 100%, 45%, 0.2);
   }
+  
+  /* Neural interface styling */
+  .neural-input {
+    background: hsl(0, 0%, 6%);
+    border: 1px solid hsl(147, 100%, 45%, 0.3);
+    color: hsl(210, 40%, 98%);
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .neural-input:focus {
+    border-color: hsl(147, 100%, 45%);
+    box-shadow: 0 0 0 2px hsla(147, 100%, 45%, 0.3), 0 0 20px hsla(147, 100%, 45%, 0.2);
+  }
+  
+  .neural-button {
+    background: linear-gradient(135deg, hsl(147, 100%, 45%) 0%, hsl(270, 100%, 70%) 100%);
+    border: none;
+    color: hsl(0, 0%, 0%);
+    font-weight: 900;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .neural-button:hover {
+    box-shadow: 0 0 30px hsla(147, 100%, 45%, 0.5);
+    transform: translateY(-2px);
+  }
 }
 
 /* Futuristic Calibration Animations */
