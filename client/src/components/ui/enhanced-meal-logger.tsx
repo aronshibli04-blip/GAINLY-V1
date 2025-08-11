@@ -184,7 +184,7 @@ export function EnhancedMealLogger() {
           Enhanced Meal Logger
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         {/* Meal Type Selection */}
         <div>
           <Label className="text-primary mb-2 block">Meal Type</Label>

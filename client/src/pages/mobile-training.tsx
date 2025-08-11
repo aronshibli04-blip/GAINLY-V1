@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
-import { Dumbbell, Plus, Clock, Target } from "lucide-react";
+import { Dumbbell, Plus, Clock, Target, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 

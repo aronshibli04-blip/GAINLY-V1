@@ -103,6 +103,8 @@
   /* Bottom navigation safe area */
   .content-with-bottom-nav {
     padding-bottom: 80px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   /* Futuristic input styling */
