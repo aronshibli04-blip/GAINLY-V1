@@ -17,6 +17,12 @@ GAINLY is a comprehensive mobile fitness application designed to help hardgainer
 - **Text-Based Activity Descriptions**: Replaced dropdown with detailed text input for precise activity tracking
 - **Enhanced AI Capabilities Showcase**: Added 6-card grid highlighting neural network features
 - **Futuristic Calibration Interface**: Created dedicated calibration mode with progress tracking and sci-fi aesthetics
+- **AI Meal Plan Upgrade (August 11, 2025)**: Improved meal plan generation with GPT-4o integration
+  - **Server-Side OpenAI Integration**: Moved AI generation to backend with environment secret key management
+  - **Advanced Hardgainer Prompts**: Specialized nutrition expertise for aggressive weight gain goals
+  - **Calorie-Dense Focus**: Optimized for minimal food volume with maximum caloric density
+  - **Norwegian Ingredient Support**: Localized meal plans with specific regional ingredients
+  - **Liquid Calorie Emphasis**: Strategic smoothies and protein shakes for low appetite periods
 - **Major App Enhancements (August 10, 2025)**: Implemented comprehensive feature expansion
   - **Body Measurements Tracking**: Complete measurements page with chest, waist, arms, thighs, shoulders, body fat tracking
   - **Advanced Statistics Dashboard**: Comprehensive analytics with weight/calorie charts, AI insights, performance metrics
@@ -41,7 +47,7 @@ Motivation focus: User appreciates gamification elements and comprehensive motiv
 - **State Management**: Zustand for client-side state with localStorage persistence and TanStack Query for server caching
 - **Navigation**: Wouter for lightweight client-side routing
 - **Forms**: React Hook Form with Zod validation for type-safe form handling
-- **AI Integration**: OpenAI API (GPT-4o-mini) for intelligent meal plan generation with user-provided API keys
+- **AI Integration**: OpenAI API (GPT-4o) for intelligent meal plan generation with server-side secret key management
 - **Storage**: Browser localStorage for data persistence with Zustand persist middleware
 - **Charts**: Recharts for weight progress visualization and data trends
 

@@ -9,6 +9,7 @@ import {
   insertAiAnalysisSchema 
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
+import { OpenAIService } from "./openai-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User routes
@@ -207,6 +208,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(analysis || null);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  // AI Meal Plan Generation
+  app.post("/api/generate-meal-plan", async (req, res) => {
+    try {
+      const openAIService = new OpenAIService();
+      const mealPlanRequest = {
+        targetCalories: req.body.targetCalories || 6000,
+        dietaryPreferences: req.body.dietaryPreferences || [],
+        preferredFoods: req.body.preferredFoods || [],
+        maxMealsPerDay: req.body.maxMealsPerDay || 6,
+        maxPrepTime: req.body.maxPrepTime || 15,
+        cookingExperience: req.body.cookingExperience || 'Beginner',
+        userId: req.body.userId || 'user1'
+      };
+
+      const mealPlan = await openAIService.generateMealPlan(mealPlanRequest);
+      res.json(mealPlan);
+    } catch (error: any) {
+      console.error('Meal plan generation error:', error);
+      res.status(500).json({ 
+        message: `Failed to generate meal plan: ${error.message}`,
+        error: error.message 
+      });
     }
   });
 
