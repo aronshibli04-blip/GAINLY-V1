@@ -20,7 +20,7 @@ import {
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Tooltip } from "recharts";
 
 export default function MobileStatistics() {
   const { 
@@ -158,106 +158,106 @@ export default function MobileStatistics() {
           </div>
         </div>
 
-        {/* Key Metrics Overview - Cleaner Design */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {/* Weight Progress */}
-          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Scale className="h-4 w-4 text-primary" />
-                <span className="text-sm text-slate-300">Weight Gained</span>
-              </div>
-              <div className="text-2xl font-bold text-white mb-1">
+        {/* Progress Overview - Home Page Style */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Card className="grok-glow-hover">
+            <CardContent className="p-4 text-center">
+              <Scale className="h-6 w-6 text-primary mx-auto mb-2" />
+              <p className="text-xs text-muted-foreground">Weight Gained</p>
+              <p className="text-lg font-bold text-white">
                 {stats.weightGained >= 0 ? '+' : ''}{stats.weightGained.toFixed(1)}kg
-              </div>
-              <div className="text-xs text-slate-400">
+              </p>
+              <p className="text-xs text-primary/70 mt-1">
                 {stats.weightGainRate.toFixed(2)}kg/week
-              </div>
+              </p>
             </CardContent>
           </Card>
 
-          {/* Goal Progress */}
-          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Target className="h-4 w-4 text-cyan-400" />
-                <span className="text-sm text-slate-300">Goal Progress</span>
-              </div>
-              <div className="text-2xl font-bold text-white mb-1">
+          <Card className="grok-glow-hover">
+            <CardContent className="p-4 text-center">
+              <Target className="h-6 w-6 text-primary mx-auto mb-2" />
+              <p className="text-xs text-muted-foreground">Goal Progress</p>
+              <p className="text-lg font-bold text-white">
                 {stats.progressToGoal.toFixed(0)}%
-              </div>
-              <div className="text-xs text-slate-400">
+              </p>
+              <p className="text-xs text-primary/70 mt-1">
                 {(stats.goalWeight - stats.currentWeight).toFixed(1)}kg left
-              </div>
+              </p>
             </CardContent>
           </Card>
 
-          {/* Daily Surplus */}
-          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Zap className="h-4 w-4 text-yellow-400" />
-                <span className="text-sm text-slate-300">Avg Surplus</span>
-              </div>
-              <div className="text-2xl font-bold text-white mb-1">
+          <Card className="grok-glow-hover">
+            <CardContent className="p-4 text-center">
+              <Zap className="h-6 w-6 text-primary mx-auto mb-2" />
+              <p className="text-xs text-muted-foreground">Daily Surplus</p>
+              <p className="text-lg font-bold text-white">
                 {stats.avgSurplus > 0 ? '+' : ''}{stats.avgSurplus}
-              </div>
-              <div className="text-xs text-slate-400">
+              </p>
+              <p className="text-xs text-primary/70 mt-1">
                 {stats.avgCaloriesPerDay} cal/day
-              </div>
+              </p>
             </CardContent>
           </Card>
 
-          {/* Consistency */}
-          <Card className="bg-slate-800/60 border-slate-700 hover:bg-slate-800/80 transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Activity className="h-4 w-4 text-purple-400" />
-                <span className="text-sm text-slate-300">Consistency</span>
-              </div>
-              <div className="text-2xl font-bold text-white mb-1">
+          <Card className="grok-glow-hover">
+            <CardContent className="p-4 text-center">
+              <Activity className="h-6 w-6 text-primary mx-auto mb-2" />
+              <p className="text-xs text-muted-foreground">Consistency</p>
+              <p className="text-lg font-bold text-white">
                 {stats.consistencyScore.toFixed(0)}%
-              </div>
-              <div className="text-xs text-slate-400">
-                {stats.totalDaysTracked} days logged
-              </div>
+              </p>
+              <p className="text-xs text-primary/70 mt-1">
+                {stats.totalDaysTracked} days
+              </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Weight Progress Chart - Simplified */}
-        <Card className="mb-6 bg-slate-800/60 border-slate-700">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-white text-lg">
+        {/* Interactive Weight Chart - Home Page Style */}
+        <Card className="grok-glow-hover mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
               <TrendingUp className="h-5 w-5 text-primary" />
-              Weight Trend
+              Weight Progress
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-48 w-full">
+            <div className="h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData.weightData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
                   <XAxis 
                     dataKey="day" 
                     stroke="#9CA3AF"
-                    fontSize={12}
+                    fontSize={11}
+                    tickFormatter={(value) => `Day ${value}`}
                   />
                   <YAxis 
                     stroke="#9CA3AF"
-                    fontSize={12}
+                    fontSize={11}
+                    tickFormatter={(value) => `${value}kg`}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: '#1f2937',
+                      border: '1px solid #22c55e',
+                      borderRadius: '8px',
+                      color: '#ffffff'
+                    }}
+                    labelFormatter={(value) => `Day ${value}`}
+                    formatter={(value: any) => [`${value}kg`, 'Weight']}
                   />
                   <Area
                     type="monotone"
                     dataKey="weight"
                     stroke="#22c55e"
                     fill="url(#weightGradient)"
-                    strokeWidth={2}
+                    strokeWidth={3}
                   />
                   <defs>
                     <linearGradient id="weightGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0.05} />
+                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0.1} />
                     </linearGradient>
                   </defs>
                 </AreaChart>
@@ -266,32 +266,44 @@ export default function MobileStatistics() {
           </CardContent>
         </Card>
 
-        {/* Calorie Intake Chart - Simplified */}
-        <Card className="mb-6 bg-slate-800/60 border-slate-700">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-white text-lg">
+        {/* Interactive Calorie Chart - Home Page Style */}
+        <Card className="grok-glow-hover mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
               <Utensils className="h-5 w-5 text-primary" />
-              Calorie Intake
+              Calorie Intake Trends
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-48 w-full">
+            <div className="h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData.calorieData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
                   <XAxis 
                     dataKey="day" 
                     stroke="#9CA3AF"
-                    fontSize={12}
+                    fontSize={11}
+                    tickFormatter={(value) => `Day ${value}`}
                   />
                   <YAxis 
                     stroke="#9CA3AF"
-                    fontSize={12}
+                    fontSize={11}
+                    tickFormatter={(value) => `${value} cal`}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: '#1f2937',
+                      border: '1px solid #22c55e',
+                      borderRadius: '8px',
+                      color: '#ffffff'
+                    }}
+                    labelFormatter={(value) => `Day ${value}`}
+                    formatter={(value: any) => [`${value} calories`, 'Intake']}
                   />
                   <Bar 
                     dataKey="calories" 
                     fill="#22c55e"
-                    radius={[2, 2, 0, 0]}
+                    radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -299,12 +311,12 @@ export default function MobileStatistics() {
           </CardContent>
         </Card>
 
-        {/* AI Insights - Cleaner Design */}
-        <Card className="mb-6 bg-slate-800/60 border-slate-700">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-white text-lg">
+        {/* AI Performance Insights - Home Page Style */}
+        <Card className="grok-glow-hover mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
               <Brain className="h-5 w-5 text-primary" />
-              AI Insights
+              Performance Insights
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -358,77 +370,54 @@ export default function MobileStatistics() {
           </CardContent>
         </Card>
 
-        {/* AI TDEE Analysis - Moved from Home Page */}
+        {/* Combined AI Analysis & Weekly Data - Home Page Style */}
         {stats.totalDaysTracked >= 7 && (
-          <div className="mb-8">
-            <TdeeAnalysisCard />
-          </div>
+          <>
+            <div className="mb-6">
+              <TdeeAnalysisCard />
+            </div>
+            
+            <Card className="grok-glow-hover mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  Weekly Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WeeklyWeightAnalysis />
+              </CardContent>
+            </Card>
+          </>
         )}
 
-        {/* Weekly Summary - Simplified */}
-        <Card className="mb-6 bg-slate-800/60 border-slate-700">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-white text-lg">
-              <Calendar className="h-5 w-5 text-primary" />
-              Weekly Summary
+        {/* Quick Stats Summary - Home Page Style */}
+        <Card className="grok-glow-hover">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              Key Metrics
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="text-sm text-slate-400">Days Active</div>
-                <div className="flex items-center gap-2">
-                  <Progress value={(stats.totalDaysTracked % 7) / 7 * 100} className="flex-1 h-2" />
-                  <span className="text-sm font-semibold">{stats.totalDaysTracked % 7}/7</span>
-                </div>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="text-xl font-bold text-primary">{stats.currentTdee}</div>
+                <div className="text-xs text-muted-foreground">Current TDEE</div>
               </div>
-              
-              <div className="space-y-2">
-                <div className="text-sm text-slate-400">TDEE Accuracy</div>
-                <div className="flex items-center gap-2">
-                  <Progress value={stats.totalDaysTracked >= 7 ? 100 : (stats.totalDaysTracked / 7) * 100} className="flex-1 h-2" />
-                  <span className="text-sm font-semibold">
-                    {stats.totalDaysTracked >= 7 ? '100%' : `${Math.round((stats.totalDaysTracked / 7) * 100)}%`}
-                  </span>
-                </div>
+              <div>
+                <div className="text-xl font-bold text-primary">{stats.daysSinceStart}</div>
+                <div className="text-xs text-muted-foreground">Days Tracked</div>
               </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-700">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-primary">{stats.currentTdee}</div>
-                  <div className="text-xs text-slate-400">Current TDEE</div>
+              <div>
+                <div className="text-xl font-bold text-primary">
+                  {((stats.goalWeight - stats.currentWeight) / Math.max(0.1, stats.weightGainRate)).toFixed(0)}
                 </div>
-                <div>
-                  <div className="text-2xl font-bold text-cyan-400">{stats.daysSinceStart}</div>
-                  <div className="text-xs text-slate-400">Days Since Start</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-yellow-400">
-                    {((stats.goalWeight - stats.currentWeight) / Math.max(0.1, stats.weightGainRate)).toFixed(0)}
-                  </div>
-                  <div className="text-xs text-slate-400">Weeks to Goal</div>
-                </div>
+                <div className="text-xs text-muted-foreground">Weeks to Goal</div>
               </div>
             </div>
           </CardContent>
         </Card>
-
-        {/* Weekly Weight Analysis - Moved from Home Page */}
-        {stats.totalDaysTracked >= 7 && (
-          <Card className="bg-slate-800/60 border-slate-700">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-white text-lg">
-                <Calendar className="h-5 w-5 text-primary" />
-                Weekly Breakdown
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <WeeklyWeightAnalysis />
-            </CardContent>
-          </Card>
-        )}
       </div>
 
       <BottomNav />
