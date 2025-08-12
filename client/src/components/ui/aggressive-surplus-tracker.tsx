@@ -22,6 +22,7 @@ export function AggressiveSurplusTracker() {
   const { calorieEntries, addCalorieEntry, currentTdeeAnalysis } = useUserStore();
   const [showMotivation, setShowMotivation] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   
   const today = new Date().toISOString().split('T')[0];
   const todayCalories = calorieEntries
@@ -35,18 +36,26 @@ export function AggressiveSurplusTracker() {
   const currentHour = new Date().getHours();
   const isComplete = caloriesRemaining === 0;
 
-  // Daily motivation quotes in Norwegian
+  // Daily motivation quotes in Norwegian with authors
   const motivationQuotes = [
-    "Suksess er summen av små anstrengelser, gjentatt dag ut og dag inn.",
-    "Du blir ikke det du ønsker, du blir det du tror du fortjener.", 
-    "Kroppen din kan gjøre det. Det er sinnet ditt du må overbevise.",
-    "Champions blir ikke laget i gymsalene. Champions blir laget av noe dypt inne i dem.",
-    "Styrke kommer ikke fra det du kan gjøre. Den kommer fra å overvinne det du trodde du ikke kunne.",
-    "Framgang er umulig uten forandring, og de som ikke kan forandre tankene sine kan ikke forandre noe.",
-    "Hver ekspert var en gang en begynner. Hver proff var en gang en amatør."
+    { text: "Suksess er summen av små anstrengelser, gjentatt dag ut og dag inn.", author: "Robert Collier" },
+    { text: "Du blir ikke det du ønsker, du blir det du tror du fortjener.", author: "Unknown" }, 
+    { text: "Kroppen din kan gjøre det. Det er sinnet ditt du må overbevise.", author: "Unknown" },
+    { text: "Champions blir ikke laget i gymsalene. Champions blir laget av noe dypt inne i dem.", author: "Muhammad Ali" },
+    { text: "Styrke kommer ikke fra det du kan gjøre. Den kommer fra å overvinne det du trodde du ikke kunne.", author: "Rikki Rogers" },
+    { text: "Framgang er umulig uten forandring, og de som ikke kan forandre tankene sine kan ikke forandre noe.", author: "George Bernard Shaw" },
+    { text: "Hver ekspert var en gang en begynner. Hver proff var en gang en amatør.", author: "Robin Sharma" }
   ];
 
-  const todayMotivation = motivationQuotes[new Date().getDay()];
+  const currentQuote = motivationQuotes[currentQuoteIndex];
+
+  // Rotate quotes every 10 seconds like MotivationBoost component
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuoteIndex((prev) => (prev + 1) % motivationQuotes.length);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Animate to motivation quote when completed - slow transition
   useEffect(() => {
@@ -127,11 +136,11 @@ export function AggressiveSurplusTracker() {
             </div>
             
             <blockquote className="text-white text-sm leading-relaxed italic mb-2">
-              "{todayMotivation}"
+              "{currentQuote.text}"
             </blockquote>
             
             <div className="text-xs text-primary/60 text-right">
-              — Robert Collier
+              — {currentQuote.author}
             </div>
           </div>
         </CardContent>
