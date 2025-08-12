@@ -9,11 +9,14 @@ import {
   type InsertActivityLog,
   type AiAnalysis,
   type InsertAiAnalysis,
+  type FoodItem,
+  type InsertFoodItem,
   users,
   weightLogs,
   mealLogs,
   activityLogs,
-  aiAnalysis
+  aiAnalysis,
+  foodItems
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -52,6 +55,10 @@ export interface IStorage {
     activityLogs: number;
     totalDays: number;
   }>;
+
+  // Food search methods
+  searchFoodItems(query: string): Promise<FoodItem[]>;
+  getFoodItemById(id: string): Promise<FoodItem | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -234,6 +241,23 @@ export class DatabaseStorage implements IStorage {
       activityLogs: activityCount?.count || 0,
       totalDays,
     };
+  }
+
+  async searchFoodItems(query: string): Promise<FoodItem[]> {
+    if (!query.trim()) return [];
+    
+    const searchResults = await db
+      .select()
+      .from(foodItems)
+      .where(sql`LOWER(${foodItems.name}) LIKE LOWER(${'%' + query + '%'})`)
+      .limit(20);
+    
+    return searchResults;
+  }
+
+  async getFoodItemById(id: string): Promise<FoodItem | undefined> {
+    const [foodItem] = await db.select().from(foodItems).where(eq(foodItems.id, id));
+    return foodItem || undefined;
   }
 }
 

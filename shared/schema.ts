@@ -52,6 +52,19 @@ export const aiAnalysis = pgTable("ai_analysis", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const foodItems = pgTable("food_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  calories: integer("calories").notNull(), // per serving
+  protein: decimal("protein", { precision: 5, scale: 2 }).notNull(),
+  carbs: decimal("carbs", { precision: 5, scale: 2 }).notNull(),
+  fat: decimal("fat", { precision: 5, scale: 2 }).notNull(),
+  serving: text("serving").notNull(), // e.g., "100g", "1 medium", "1 cup"
+  barcode: text("barcode"), // optional for barcode scanning
+  category: text("category").notNull(), // e.g., "protein", "grain", "dairy", "fruit", "vegetable"
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   weightLogs: many(weightLogs),
@@ -114,6 +127,11 @@ export const insertAiAnalysisSchema = createInsertSchema(aiAnalysis).omit({
   createdAt: true,
 });
 
+export const insertFoodItemSchema = createInsertSchema(foodItems).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -125,3 +143,5 @@ export type InsertActivityLog = z.infer<typeof insertActivityLogSchema>;
 export type ActivityLog = typeof activityLogs.$inferSelect;
 export type InsertAiAnalysis = z.infer<typeof insertAiAnalysisSchema>;
 export type AiAnalysis = typeof aiAnalysis.$inferSelect;
+export type InsertFoodItem = z.infer<typeof insertFoodItemSchema>;
+export type FoodItem = typeof foodItems.$inferSelect;

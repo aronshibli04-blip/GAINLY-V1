@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useUserStore } from "@/store/userStore";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Camera, 
   Search, 
@@ -15,7 +16,8 @@ import {
   Zap,
   BarChart3,
   Target,
-  ScanLine
+  ScanLine,
+  X
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -41,17 +43,19 @@ interface MealEntry {
   timestamp: Date;
 }
 
-// Mock food database for demonstration
-const mockFoodDatabase: FoodItem[] = [
-  { id: '1', name: 'Chicken Breast', calories: 165, protein: 31, carbs: 0, fat: 3.6, serving: '100g' },
-  { id: '2', name: 'Brown Rice', calories: 112, protein: 2.6, carbs: 23, fat: 0.9, serving: '100g' },
-  { id: '3', name: 'Whole Milk', calories: 61, protein: 3.2, carbs: 4.8, fat: 3.3, serving: '100ml' },
-  { id: '4', name: 'Banana', calories: 89, protein: 1.1, carbs: 23, fat: 0.3, serving: '1 medium' },
-  { id: '5', name: 'Peanut Butter', calories: 588, protein: 25, carbs: 20, fat: 50, serving: '100g' },
-  { id: '6', name: 'Oats', calories: 389, protein: 16.9, carbs: 66, fat: 6.9, serving: '100g' },
-  { id: '7', name: 'Whey Protein', calories: 110, protein: 25, carbs: 2, fat: 1, serving: '1 scoop' },
-  { id: '8', name: 'Avocado', calories: 160, protein: 2, carbs: 9, fat: 15, serving: '1 medium' },
-];
+// Hook for food search
+const useFoodSearch = (query: string) => {
+  return useQuery({
+    queryKey: ['/api/foods/search', query],
+    queryFn: async () => {
+      if (!query.trim()) return [];
+      const response = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`);
+      if (!response.ok) throw new Error('Failed to search foods');
+      return response.json();
+    },
+    enabled: query.trim().length > 0,
+  });
+};
 
 export function EnhancedMealLogger() {
   const { toast } = useToast();
@@ -62,10 +66,17 @@ export function EnhancedMealLogger() {
   const [mealType, setMealType] = useState<'breakfast' | 'lunch' | 'dinner' | 'snack'>('breakfast');
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [showPhotoAnalyzer, setShowPhotoAnalyzer] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  const filteredFoods = mockFoodDatabase.filter(food => 
-    food.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Debounce search query to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const { data: filteredFoods = [], isLoading: isSearching } = useFoodSearch(debouncedQuery);
 
   const addFood = (food: FoodItem, quantity: number = 1) => {
     const existingIndex = selectedFoods.findIndex(item => item.item.id === food.id);
@@ -143,34 +154,22 @@ export function EnhancedMealLogger() {
   };
 
   const simulateBarcodeScanning = () => {
-    // Simulate finding a random food item
-    const randomFood = mockFoodDatabase[Math.floor(Math.random() * mockFoodDatabase.length)];
-    addFood(randomFood);
+    // Simulate barcode scanning - would integrate with real barcode scanner
     setShowBarcodeScanner(false);
     
     toast({
-      title: "Barcode scanned!",
-      description: `Found ${randomFood.name} in database`,
+      title: "Barcode Scanner",
+      description: "Barcode scanning feature coming soon!",
     });
   };
 
   const simulatePhotoAnalysis = () => {
-    // Simulate AI analyzing a photo and suggesting foods
-    const suggestedFoods = [
-      { food: mockFoodDatabase.find(f => f.name === 'Chicken Breast')!, quantity: 1.5 },
-      { food: mockFoodDatabase.find(f => f.name === 'Brown Rice')!, quantity: 1.2 },
-      { food: mockFoodDatabase.find(f => f.name === 'Avocado')!, quantity: 0.5 }
-    ];
-
-    suggestedFoods.forEach(({ food, quantity }) => {
-      if (food) addFood(food, quantity);
-    });
-
+    // Simulate photo analysis - would integrate with AI image recognition
     setShowPhotoAnalyzer(false);
     
     toast({
-      title: "Photo analyzed!",
-      description: "AI detected foods and estimated portions",
+      title: "Photo Analysis",
+      description: "AI photo analysis feature coming soon!",
     });
   };
 
@@ -287,24 +286,35 @@ export function EnhancedMealLogger() {
         {/* Food Results */}
         {searchQuery && (
           <div className="max-h-40 overflow-y-auto space-y-2">
-            {filteredFoods.map((food) => (
-              <div key={food.id} className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                <div>
-                  <div className="font-semibold text-white">{food.name}</div>
-                  <div className="text-sm text-slate-400">
-                    {food.calories} cal • {food.protein}g protein • {food.serving}
-                  </div>
-                </div>
-                <Button
-                  onClick={() => addFood(food)}
-                  size="sm"
-                  className="bg-primary text-black hover:bg-primary/90"
-                  data-testid={`button-add-${food.id}`}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
+            {isSearching ? (
+              <div className="flex items-center justify-center p-4 text-slate-400">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mr-2"></div>
+                Searching...
               </div>
-            ))}
+            ) : filteredFoods.length > 0 ? (
+              filteredFoods.map((food: FoodItem) => (
+                <div key={food.id} className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                  <div>
+                    <div className="font-semibold text-white">{food.name}</div>
+                    <div className="text-sm text-slate-400">
+                      {food.calories} cal • {food.protein}g protein • {food.serving}
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => addFood(food)}
+                    size="sm"
+                    className="bg-primary text-black hover:bg-primary/90"
+                    data-testid={`button-add-${food.id}`}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))
+            ) : (
+              <div className="text-center p-4 text-slate-400">
+                No foods found for "{searchQuery}"
+              </div>
+            )}
           </div>
         )}
 

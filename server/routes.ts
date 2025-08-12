@@ -211,6 +211,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Food search routes
+  app.get("/api/foods/search", async (req, res) => {
+    try {
+      const query = req.query.q as string || '';
+      const foods = await storage.searchFoodItems(query);
+      res.json(foods);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/foods/:id", async (req, res) => {
+    try {
+      const food = await storage.getFoodItemById(req.params.id);
+      res.json(food || null);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // AI Meal Plan Generation with fallback
   app.post("/api/generate-meal-plan", async (req, res) => {
     try {
