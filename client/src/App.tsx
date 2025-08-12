@@ -2,6 +2,8 @@ import { Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { useUserStore } from "@/store/userStore";
 import { useEffect } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";
@@ -28,35 +30,39 @@ function App() {
   // If no user profile, show setup
   if (!user || !isOnboarded) {
     return (
-      <div className="min-h-screen bg-background">
-        <HardgainerProfileSetup />
-        <Toaster />
-      </div>
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-background">
+          <HardgainerProfileSetup />
+          <Toaster />
+        </div>
+      </QueryClientProvider>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Switch>
-        <Route path="/" component={MobileHome} />
-        <Route path="/calibration" component={CalibrationMode} />
-        <Route path="/calories" component={MobileCalories} />
-        <Route path="/training" component={MobileTraining} />
-        <Route path="/ai-coach" component={MobileAICoach} />
-        <Route path="/meals" component={MobileMeals} />
-        <Route path="/profile" component={MobileProfile} />
-        <Route path="/statistics" component={MobileStatistics} />
-        <Route path="/measurements" component={MobileMeasurements} />
-        <Route path="/setup" component={HardgainerProfileSetup} />
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen bg-background">
+        <Switch>
+          <Route path="/" component={MobileHome} />
+          <Route path="/calibration" component={CalibrationMode} />
+          <Route path="/calories" component={MobileCalories} />
+          <Route path="/training" component={MobileTraining} />
+          <Route path="/ai-coach" component={MobileAICoach} />
+          <Route path="/meals" component={MobileMeals} />
+          <Route path="/profile" component={MobileProfile} />
+          <Route path="/statistics" component={MobileStatistics} />
+          <Route path="/measurements" component={MobileMeasurements} />
+          <Route path="/setup" component={HardgainerProfileSetup} />
+          
+          {/* Fallback */}
+          <Route>
+            <MobileHome />
+          </Route>
+        </Switch>
         
-        {/* Fallback */}
-        <Route>
-          <MobileHome />
-        </Route>
-      </Switch>
-      
-      <Toaster />
-    </div>
+        <Toaster />
+      </div>
+    </QueryClientProvider>
   );
 }
 
