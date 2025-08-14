@@ -33,10 +33,12 @@ GAINLY is a comprehensive mobile fitness application designed to help hardgainer
   - **Calorie Display Fix**: Fixed totalCalories vs targetCalories field mismatch in meal plan display
   - **Smart Meal Count Detection**: Added parsing for "three courses" requests to set maxMealsPerDay correctly
   - **Database-Backed Food Search (August 12, 2025)**: Implemented working meal logger with real PostgreSQL food database
-    - **Comprehensive Food Database**: Added 27 common foods including eggs, chicken, rice, oats, protein powder, etc.
+    - **Comprehensive Food Database**: Expanded from 27 to 268+ foods including fruits, vegetables, proteins, grains, nuts, dairy, international foods
+    - **Professional-Grade Database**: Added MyFitnessPal-level accuracy with proper serving sizes, macros, and categories
     - **Real-Time Search API**: Created `/api/foods/search` endpoint with debounced queries and loading states
     - **Enhanced Meal Logger**: Replaced mock data with live database search, supporting food search, selection, and logging
     - **Food Database Schema**: Added `food_items` table with calories, macros, serving sizes, and categories
+    - **International Food Support**: Added Asian vegetables, ethnic specialties, herbs, spices, and condiments
 - **Major App Enhancements (August 10, 2025)**: Implemented comprehensive feature expansion
   - **Body Measurements Tracking**: Complete measurements page with chest, waist, arms, thighs, shoulders, body fat tracking
   - **Advanced Statistics Dashboard**: Comprehensive analytics with weight/calorie charts, AI insights, performance metrics
