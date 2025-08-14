@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
-import { EnhancedMealLogger } from "@/components/ui/enhanced-meal-logger";
+import { QuickMealLogger } from "@/components/ui/quick-meal-logger";
 import { TodaysLoggedMeals } from "@/components/ui/todays-logged-meals";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
@@ -258,8 +258,8 @@ export default function MobileMeals() {
           </Card>
         )}
 
-        {/* Enhanced Meal Logger */}
-        <EnhancedMealLogger />
+        {/* Quick Meal Logger */}
+        <QuickMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
 
         {/* Today's Logged Meals */}
         <TodaysLoggedMeals />
