@@ -315,6 +315,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update meal log
+  app.patch("/api/meal-logs/:id", async (req, res) => {
+    try {
+      const mealId = req.params.id;
+      const updates = req.body;
+      const updatedMeal = await storage.updateMealLog(mealId, updates);
+      res.json(updatedMeal);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Delete meal log
+  app.delete("/api/meal-logs/:id", async (req, res) => {
+    try {
+      const mealId = req.params.id;
+      await storage.deleteMealLog(mealId);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   function generateHardgainerFallbackMealPlan(request: any) {
     const avoidOatmeal = request.dietaryPreferences.some((pref: string) => 
       pref.toLowerCase().includes('oat') || pref.toLowerCase().includes('oat meal')

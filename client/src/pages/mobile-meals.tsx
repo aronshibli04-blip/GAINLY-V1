@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { QuickMealLogger } from "@/components/ui/quick-meal-logger";
-import { TodaysLoggedMeals } from "@/components/ui/todays-logged-meals";
+import { EditableMealsList } from "@/components/ui/editable-meals-list";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
@@ -261,8 +261,8 @@ export default function MobileMeals() {
         {/* Quick Meal Logger */}
         <QuickMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
 
-        {/* Today's Logged Meals */}
-        <TodaysLoggedMeals />
+        {/* Today's Logged Meals - Editable */}
+        <EditableMealsList />
 
         {/* No Analysis Warning */}
         {!canGenerateMealPlan && (

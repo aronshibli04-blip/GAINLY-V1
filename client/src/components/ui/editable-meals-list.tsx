@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, Utensils, Zap, Trash2, Edit3, Check, X, GripVertical } from "lucide-react";
+import { Clock, Utensils, Zap, Trash2, Edit3, Check, X } from "lucide-react";
 
 interface MealLog {
   id: string;
@@ -19,10 +19,9 @@ interface MealLog {
   fat?: number;
 }
 
-export function TodaysLoggedMeals() {
+export function EditableMealsList() {
   const [editingMeal, setEditingMeal] = useState<string | null>(null);
   const [editValues, setEditValues] = useState({ description: '', calories: '' });
-  const [swipeStates, setSwipeStates] = useState<Record<string, 'idle' | 'swiping' | 'swiped'>>({});
   const today = new Date().toISOString().split('T')[0];
   const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
   const { toast } = useToast();
@@ -37,8 +36,8 @@ export function TodaysLoggedMeals() {
       }
       return response.json();
     },
-    refetchInterval: 10000, // Refresh every 10 seconds
-    staleTime: 5000, // Consider data stale after 5 seconds
+    refetchInterval: 10000,
+    staleTime: 5000,
   });
 
   // Delete meal mutation
@@ -137,14 +136,6 @@ export function TodaysLoggedMeals() {
     }
   };
 
-  const handleTouchStart = (mealId: string, e: React.TouchEvent) => {
-    setSwipeStates(prev => ({ ...prev, [mealId]: 'swiping' }));
-  };
-
-  const handleTouchEnd = (mealId: string, e: React.TouchEvent) => {
-    setSwipeStates(prev => ({ ...prev, [mealId]: 'idle' }));
-  };
-
   if (isLoading) {
     return (
       <Card className="bg-slate-800/50 border-primary/20">
@@ -172,6 +163,7 @@ export function TodaysLoggedMeals() {
           </Badge>
         </CardTitle>
       </CardHeader>
+      
       <CardContent className="space-y-3">
         {todaysMeals && todaysMeals.length > 0 ? (
           <>
@@ -181,8 +173,6 @@ export function TodaysLoggedMeals() {
                 className={`relative overflow-hidden bg-slate-700/30 rounded-lg transition-all ${
                   editingMeal === meal.id ? 'ring-2 ring-primary/50' : ''
                 }`}
-                onTouchStart={(e) => handleTouchStart(meal.id, e)}
-                onTouchEnd={(e) => handleTouchEnd(meal.id, e)}
               >
                 {editingMeal === meal.id ? (
                   // Edit Mode
@@ -230,24 +220,50 @@ export function TodaysLoggedMeals() {
                     </div>
                   </div>
                 ) : (
-                  // View Mode with Swipe Actions
-                  <div className="relative">
-                    {/* Main Content */}
-                    <div className="flex items-center justify-between p-3 group">
-                      <div className="flex-1">
-                        <div className="font-semibold text-white text-sm">
-                          {meal.description}
-                        </div>
-                        <div className="text-xs text-slate-400">
-                          {new Date(meal.createdAt).toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
+                  // View Mode with Action Buttons
+                  <div className="flex items-center justify-between p-3 group">
+                    <div className="flex-1">
+                      <div className="font-semibold text-white text-sm">
+                        {meal.description}
+                      </div>
+                      <div className="text-xs text-slate-400">
+                        {new Date(meal.createdAt).toLocaleTimeString([], { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </div>
+                    </div>
+                    
+                    {/* Calories Badge */}
+                    <Badge variant="outline" className="border-primary/30 text-primary text-xs">
+                      <Zap className="h-3 w-3 mr-1" />
+                      {meal.calories}
+                    </Badge>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex gap-1 ml-2">
+                      <Button
+                        onClick={() => startEdit(meal)}
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 text-slate-400 hover:text-primary hover:bg-primary/20"
+                        data-testid={`edit-meal-${meal.id}`}
+                      >
+                        <Edit3 className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        onClick={() => handleDelete(meal.id)}
+                        disabled={deleteMealMutation.isPending}
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 text-slate-400 hover:text-red-400 hover:bg-red-500/20"
+                        data-testid={`delete-meal-${meal.id}`}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-                  {meal.calories} cal
-                </Badge>
+                )}
               </div>
             ))}
             

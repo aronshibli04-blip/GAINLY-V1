@@ -59,6 +59,10 @@ export interface IStorage {
   // Food search methods
   searchFoodItems(query: string): Promise<FoodItem[]>;
   getFoodItemById(id: string): Promise<FoodItem | undefined>;
+
+  // Meal log edit methods
+  updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog>;
+  deleteMealLog(mealId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -258,6 +262,31 @@ export class DatabaseStorage implements IStorage {
   async getFoodItemById(id: string): Promise<FoodItem | undefined> {
     const [foodItem] = await db.select().from(foodItems).where(eq(foodItems.id, id));
     return foodItem || undefined;
+  }
+
+  async updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog> {
+    const [meal] = await db
+      .update(mealLogs)
+      .set(updates)
+      .where(eq(mealLogs.id, mealId))
+      .returning();
+    
+    if (!meal) {
+      throw new Error('Meal log not found');
+    }
+    
+    return meal;
+  }
+
+  async deleteMealLog(mealId: string): Promise<void> {
+    const result = await db
+      .delete(mealLogs)
+      .where(eq(mealLogs.id, mealId))
+      .returning();
+    
+    if (result.length === 0) {
+      throw new Error('Meal log not found');
+    }
   }
 }
 
