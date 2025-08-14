@@ -44,6 +44,11 @@ export function QuickMealLogger({ userId }: QuickMealLoggerProps) {
   // Quick food search with debounce
   const { data: foods = [], isLoading: isSearching } = useQuery({
     queryKey: ['/api/foods/search', searchQuery],
+    queryFn: async () => {
+      const response = await fetch(`/api/foods/search?q=${encodeURIComponent(searchQuery)}`);
+      if (!response.ok) throw new Error('Search failed');
+      return response.json();
+    },
     enabled: searchQuery.length > 2,
     staleTime: 5 * 60 * 1000, // 5 minutes cache
   });
@@ -51,12 +56,12 @@ export function QuickMealLogger({ userId }: QuickMealLoggerProps) {
   // Common foods for quick access
   const commonFoods = [
     { name: "Peanut Butter", calories: 188, search: "peanut butter" },
+    { name: "Whole Egg", calories: 70, search: "whole egg" },
     { name: "Banana", calories: 89, search: "banana" },
-    { name: "Whole Milk", calories: 150, search: "whole milk" },
-    { name: "White Rice", calories: 130, search: "white rice cooked" },
+    { name: "Protein Powder", calories: 120, search: "protein powder" },
     { name: "Chicken Breast", calories: 165, search: "chicken breast" },
     { name: "Olive Oil", calories: 884, search: "olive oil" },
-    { name: "Protein Powder", calories: 120, search: "protein powder" },
+    { name: "White Rice", calories: 130, search: "white rice cooked" },
     { name: "Oats", calories: 154, search: "oats" }
   ];
 

@@ -51,6 +51,9 @@ GAINLY is a comprehensive mobile fitness application designed to help hardgainer
   - **Mobile-Optimized Actions**: Edit/delete buttons always visible for better mobile UX
   - **Real-Time Updates**: Instant UI updates after meal modifications with optimistic loading states
   - **Input Validation**: Proper validation for calorie and description edits with user-friendly error messages
+  - **Fixed Food Search**: Resolved egg search issue by fixing API endpoint query parameters
+  - **Enhanced Food Database**: Added comprehensive egg varieties (whole, whites, yolks, scrambled, boiled)
+  - **Instant Egg Logging**: Added whole egg as instant log option for quick protein tracking
 - **Major App Enhancements (August 10, 2025)**: Implemented comprehensive feature expansion
   - **Body Measurements Tracking**: Complete measurements page with chest, waist, arms, thighs, shoulders, body fat tracking
   - **Advanced Statistics Dashboard**: Comprehensive analytics with weight/calorie charts, AI insights, performance metrics
