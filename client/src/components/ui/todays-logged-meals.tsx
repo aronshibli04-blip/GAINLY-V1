@@ -17,7 +17,7 @@ export function TodaysLoggedMeals() {
   const today = new Date().toISOString().split('T')[0];
   const userId = "974acc79-f202-4202-bdab-80c4ef55f534"; // Using the existing user
 
-  const { data: todaysMeals, isLoading } = useQuery({
+  const { data: todaysMeals, isLoading, refetch } = useQuery({
     queryKey: ['/api/meal-logs', userId, today],
     queryFn: async (): Promise<MealLog[]> => {
       const response = await fetch(`/api/meal-logs/${userId}/${today}`);
@@ -26,6 +26,8 @@ export function TodaysLoggedMeals() {
       }
       return response.json();
     },
+    refetchInterval: 3000, // Refresh every 3 seconds to show new meals
+    staleTime: 1000, // Consider data stale after 1 second
   });
 
   const totalCalories = todaysMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;

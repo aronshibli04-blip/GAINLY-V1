@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useUserStore } from "@/store/userStore";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   Camera, 
   Search, 
@@ -60,6 +60,7 @@ const useFoodSearch = (query: string) => {
 export function EnhancedMealLogger() {
   const { toast } = useToast();
   const { addCalorieEntry } = useUserStore();
+  const queryClient = useQueryClient();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFoods, setSelectedFoods] = useState<{ item: FoodItem; quantity: number }[]>([]);
@@ -168,6 +169,11 @@ export function EnhancedMealLogger() {
 
       setSelectedFoods([]);
       setSearchQuery('');
+
+      // Invalidate and refetch meal logs to show the new meal immediately
+      const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      const today = new Date().toISOString().split('T')[0];
+      queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
 
       toast({
         title: "Meal logged successfully!",
