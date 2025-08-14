@@ -211,22 +211,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Food search routes
+  // Food search routes - now using FatSecret API
   app.get("/api/foods/search", async (req, res) => {
     try {
       const query = req.query.q as string || '';
-      const foods = await storage.searchFoodItems(query);
-      res.json(foods);
+      
+      // Try FatSecret API first for comprehensive database
+      const { fatSecretService } = await import('./fatsecret-service');
+      const fatSecretFoods = await fatSecretService.searchFoods(query);
+      
+      if (fatSecretFoods.length > 0) {
+        res.json(fatSecretFoods);
+        return;
+      }
+      
+      // Fallback to local database if FatSecret has no results
+      const localFoods = await storage.searchFoodItems(query);
+      res.json(localFoods);
     } catch (error: any) {
-      res.status(500).json({ message: error.message });
+      console.error('Food search error:', error);
+      
+      // Fallback to local database on API error
+      try {
+        const localFoods = await storage.searchFoodItems(req.query.q as string || '');
+        res.json(localFoods);
+      } catch (fallbackError: any) {
+        res.status(500).json({ message: fallbackError.message });
+      }
     }
   });
 
   app.get("/api/foods/:id", async (req, res) => {
     try {
+      // Try FatSecret API first if ID looks like FatSecret format
+      if (req.params.id.match(/^\d+$/)) {
+        const { fatSecretService } = await import('./fatsecret-service');
+        const fatSecretFood = await fatSecretService.getFoodDetails(req.params.id);
+        if (fatSecretFood) {
+          res.json(fatSecretFood);
+          return;
+        }
+      }
+      
+      // Fallback to local database
       const food = await storage.getFoodItemById(req.params.id);
       res.json(food || null);
     } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Barcode search endpoint
+  app.get("/api/foods/barcode/:barcode", async (req, res) => {
+    try {
+      const { fatSecretService } = await import('./fatsecret-service');
+      const food = await fatSecretService.searchByBarcode(req.params.barcode);
+      res.json(food);
+    } catch (error: any) {
+      console.error('Barcode search error:', error);
       res.status(500).json({ message: error.message });
     }
   });
@@ -258,7 +300,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ]);
         
         console.log('Successfully generated meal plan with OpenAI GPT-4o');
-      } catch (openAIError) {
+      } catch (openAIError: any) {
         console.log('OpenAI failed, using hardgainer fallback:', openAIError.message);
         mealPlan = generateHardgainerFallbackMealPlan(mealPlanRequest);
       }

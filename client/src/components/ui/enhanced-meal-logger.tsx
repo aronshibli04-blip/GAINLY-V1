@@ -20,6 +20,7 @@ import {
   X
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { BarcodeScannerModal } from "./barcode-scanner-modal";
 
 interface FoodItem {
   id: string;
@@ -432,6 +433,13 @@ export function EnhancedMealLogger() {
           Log Meal ({Math.round(totals.calories)} calories)
         </Button>
       </CardContent>
+      
+      {/* Barcode Scanner Modal */}
+      <BarcodeScannerModal
+        isOpen={showBarcodeScanner}
+        onClose={() => setShowBarcodeScanner(false)}
+        onFoodFound={(food) => addFood(food, 1)}
+      />
     </Card>
   );
 }
