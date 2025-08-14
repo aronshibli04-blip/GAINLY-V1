@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { EnhancedMealLogger } from "@/components/ui/enhanced-meal-logger";
+import { TodaysLoggedMeals } from "@/components/ui/todays-logged-meals";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
@@ -259,6 +260,9 @@ export default function MobileMeals() {
 
         {/* Enhanced Meal Logger */}
         <EnhancedMealLogger />
+
+        {/* Today's Logged Meals */}
+        <TodaysLoggedMeals />
 
         {/* No Analysis Warning */}
         {!canGenerateMealPlan && (

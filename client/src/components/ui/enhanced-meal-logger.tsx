@@ -125,7 +125,7 @@ export function EnhancedMealLogger() {
     }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
   };
 
-  const logMeal = () => {
+  const logMeal = async () => {
     if (selectedFoods.length === 0) {
       toast({
         title: "No foods selected",
@@ -137,20 +137,49 @@ export function EnhancedMealLogger() {
 
     const totals = calculateTotals();
     
-    addCalorieEntry({
-      userId: "user-1",
-      calories: Math.round(totals.calories),
-      description: `${mealType}: ${selectedFoods.map(f => `${f.quantity}x ${f.item.name}`).join(', ')}`,
-      date: new Date().toISOString().split('T')[0]
-    });
+    try {
+      // Save to database via API
+      const response = await fetch('/api/meal-logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: "974acc79-f202-4202-bdab-80c4ef55f534",
+          calories: Math.round(totals.calories),
+          description: `${mealType}: ${selectedFoods.map(f => `${f.quantity}x ${f.item.name}`).join(', ')}`,
+          logDate: new Date().toISOString().split('T')[0]
+        }),
+      });
 
-    setSelectedFoods([]);
-    setSearchQuery('');
+      if (!response.ok) {
+        throw new Error('Failed to log meal');
+      }
 
-    toast({
-      title: "Meal logged successfully!",
-      description: `${Math.round(totals.calories)} calories added to your daily intake.`,
-    });
+      const loggedMeal = await response.json();
+
+      // Also update local store for UI consistency
+      addCalorieEntry({
+        userId: "974acc79-f202-4202-bdab-80c4ef55f534",
+        calories: Math.round(totals.calories),
+        description: `${mealType}: ${selectedFoods.map(f => `${f.quantity}x ${f.item.name}`).join(', ')}`,
+        date: new Date().toISOString().split('T')[0]
+      });
+
+      setSelectedFoods([]);
+      setSearchQuery('');
+
+      toast({
+        title: "Meal logged successfully!",
+        description: `${Math.round(totals.calories)} calories added to your daily intake.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error logging meal",
+        description: "Failed to save meal. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const simulateBarcodeScanning = () => {
