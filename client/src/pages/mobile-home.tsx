@@ -102,60 +102,77 @@ export default function MobileHome() {
   const phaseInfo = getPhaseInfo();
 
   return (
-    <div className="mobile-container">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Dashboard" 
         onOpenMenu={openMenu}
       />
 
-
+      {/* Animated Background Particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-emerald-400/20 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
+      </div>
       
-      <div className="content-with-bottom-nav pt-20 p-4 space-y-4 pb-28">
+      <div className="relative z-10 container mx-auto px-4 pt-20 py-6 space-y-6 pb-28">
+
+        {/* Header with GAINLY branding */}
+        <div className="text-center mb-8">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-spin" 
+                 style={{ animationDuration: '15s' }} />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 flex items-center justify-center shadow-xl">
+              <Zap className="h-8 w-8 text-black" />
+            </div>
+          </div>
+          
+          <h1 className="text-4xl font-black mb-2">
+            <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-400 bg-clip-text text-transparent">
+              GAINLY
+            </span>
+          </h1>
+          <p className="text-emerald-400/70">Your AI-powered bulk companion</p>
+        </div>
 
         {/* Aggressive 1kg/Week Surplus Tracker */}
         <AggressiveSurplusTracker />
-        
-        {/* Header */}
-        <div className="flex items-center justify-between pt-4">
-          <div>
-            <h1 className="text-2xl font-bold grok-text-gradient">
-              GAINLY
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Your AI-powered bulk companion
-            </p>
-          </div>
-          <div className="w-12 h-12 rounded-full grok-gradient flex items-center justify-center">
-            <Zap className="h-6 w-6 text-black" />
-          </div>
-        </div>
 
-        {/* Phase Status - Enhanced Grok-style indicator */}
-        <div className="flex items-center space-x-3 py-2">
-          <div className={`w-3 h-3 rounded-full ${phaseInfo.color.includes('grok-gradient') ? 'grok-gradient' : phaseInfo.color} ${phaseInfo.color.includes('animate-pulse') ? 'animate-pulse' : ''}`} 
+        {/* Phase Status - Enhanced style indicator */}
+        <div className="flex items-center justify-center space-x-3 py-3 bg-slate-800/30 rounded-xl border border-emerald-400/20 mb-6">
+          <div className={`w-3 h-3 rounded-full ${phaseInfo.color.includes('grok-gradient') ? 'bg-gradient-to-r from-emerald-400 to-green-400' : phaseInfo.color} ${phaseInfo.color.includes('animate-pulse') ? 'animate-pulse' : ''}`} 
                style={phaseInfo.color.includes('grok-gradient') ? { 
                  boxShadow: '0 0 10px hsla(147, 100%, 45%, 0.6)' 
                } : {}} />
-          <p className="text-xs font-medium text-primary/90">{phaseInfo.subtitle}</p>
+          <p className="text-sm font-medium text-emerald-400">{phaseInfo.subtitle}</p>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
-          <Card className="grok-glow-hover">
+          <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-emerald-400/20 hover:border-emerald-400/40 transition-all duration-300">
             <CardContent className="p-4 text-center">
-              <TrendingUp className="h-6 w-6 text-primary mx-auto mb-2" />
-              <p className="text-xs text-muted-foreground">Today's Weight</p>
+              <TrendingUp className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
+              <p className="text-xs text-slate-400">Today's Weight</p>
               <p className="text-lg font-bold text-white">
                 {todayWeight ? `${todayWeight.weight}kg` : "Not logged"}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="grok-glow-hover">
+          <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-orange-400/20 hover:border-orange-400/40 transition-all duration-300">
             <CardContent className="p-4 text-center">
               <Zap className="h-6 w-6 text-orange-400 mx-auto mb-2" />
-              <p className="text-xs text-muted-foreground">Today's Calories</p>
+              <p className="text-xs text-slate-400">Today's Calories</p>
               <p className="text-lg font-bold text-white">
                 {todayCalories > 0 ? `${todayCalories.toLocaleString()}` : "Not logged"}
               </p>
@@ -171,20 +188,20 @@ export default function MobileHome() {
         {/* Quick Action Cards */}
         <div className="grid grid-cols-2 gap-4">
           <Link href="/progress">
-            <Card className="grok-glow-hover cursor-pointer">
+            <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer">
               <CardContent className="p-4 text-center">
                 <Activity className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
-                <p className="text-xs text-muted-foreground">Advanced</p>
+                <p className="text-xs text-slate-400">Advanced</p>
                 <p className="text-sm font-semibold text-white">Progress</p>
               </CardContent>
             </Card>
           </Link>
 
           <Link href="/measurements">
-            <Card className="grok-glow-hover cursor-pointer">
+            <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer">
               <CardContent className="p-4 text-center">
                 <Ruler className="h-6 w-6 text-purple-400 mx-auto mb-2" />
-                <p className="text-xs text-muted-foreground">Body</p>
+                <p className="text-xs text-slate-400">Body</p>
                 <p className="text-sm font-semibold text-white">Measurements</p>
               </CardContent>
             </Card>
@@ -192,8 +209,11 @@ export default function MobileHome() {
         </div>
 
         {/* Micro Goals Overview */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Next Milestone</h3>
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <Target className="h-5 w-5 text-emerald-400" />
+            Next Milestone
+          </h3>
           <MicroGoalsOverview />
         </div>
 
