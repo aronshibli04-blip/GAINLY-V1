@@ -157,128 +157,137 @@ export default function MobileHome() {
           <p className="text-sm font-medium text-emerald-400">{phaseInfo.subtitle}</p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-emerald-400/20 hover:border-emerald-400/40 transition-all duration-300">
-            <CardContent className="p-4 text-center">
-              <TrendingUp className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-              <p className="text-xs text-slate-400">Today's Weight</p>
-              <p className="text-lg font-bold text-white">
-                {todayWeight ? `${todayWeight.weight}kg` : "Not logged"}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-orange-400/20 hover:border-orange-400/40 transition-all duration-300">
-            <CardContent className="p-4 text-center">
-              <Zap className="h-6 w-6 text-orange-400 mx-auto mb-2" />
-              <p className="text-xs text-slate-400">Today's Calories</p>
-              <p className="text-lg font-bold text-white">
-                {todayCalories > 0 ? `${todayCalories.toLocaleString()}` : "Not logged"}
-              </p>
-              {todayCalories > 0 && (
-                <p className="text-xs text-orange-400 font-semibold mt-1">
-                  +{(todayCalories - 2400).toLocaleString()} surplus
+        {/* Content area with darker background */}
+        <div className="bg-slate-950/60 rounded-xl p-4 space-y-6 border border-slate-800/50">
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="bg-gradient-to-r from-slate-800/80 to-slate-700/80 border-emerald-400/20 hover:border-emerald-400/40 transition-all duration-300">
+              <CardContent className="p-4 text-center">
+                <TrendingUp className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
+                <p className="text-xs text-slate-400">Today's Weight</p>
+                <p className="text-lg font-bold text-white">
+                  {todayWeight ? `${todayWeight.weight}kg` : "Not logged"}
                 </p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
 
-        {/* Quick Action Cards */}
-        <div className="grid grid-cols-2 gap-4">
-          <Link href="/progress">
-            <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer">
+            <Card className="bg-gradient-to-r from-slate-800/80 to-slate-700/80 border-orange-400/20 hover:border-orange-400/40 transition-all duration-300">
               <CardContent className="p-4 text-center">
-                <Activity className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
-                <p className="text-xs text-slate-400">Advanced</p>
-                <p className="text-sm font-semibold text-white">Progress</p>
+                <Zap className="h-6 w-6 text-orange-400 mx-auto mb-2" />
+                <p className="text-xs text-slate-400">Today's Calories</p>
+                <p className="text-lg font-bold text-white">
+                  {todayCalories > 0 ? `${todayCalories.toLocaleString()}` : "Not logged"}
+                </p>
+                {todayCalories > 0 && (
+                  <p className="text-xs text-orange-400 font-semibold mt-1">
+                    +{(todayCalories - 2400).toLocaleString()} surplus
+                  </p>
+                )}
               </CardContent>
             </Card>
-          </Link>
+          </div>
 
-          <Link href="/measurements">
-            <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer">
-              <CardContent className="p-4 text-center">
-                <Ruler className="h-6 w-6 text-purple-400 mx-auto mb-2" />
-                <p className="text-xs text-slate-400">Body</p>
-                <p className="text-sm font-semibold text-white">Measurements</p>
-              </CardContent>
-            </Card>
-          </Link>
+          {/* Quick Action Cards */}
+          <div className="grid grid-cols-2 gap-4">
+            <Link href="/progress">
+              <Card className="bg-gradient-to-r from-slate-800/80 to-slate-700/80 border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer">
+                <CardContent className="p-4 text-center">
+                  <Activity className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
+                  <p className="text-xs text-slate-400">Advanced</p>
+                  <p className="text-sm font-semibold text-white">Progress</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/measurements">
+              <Card className="bg-gradient-to-r from-slate-800/80 to-slate-700/80 border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer">
+                <CardContent className="p-4 text-center">
+                  <Ruler className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                  <p className="text-xs text-slate-400">Body</p>
+                  <p className="text-sm font-semibold text-white">Measurements</p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+
+          {/* Micro Goals Overview */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <Target className="h-5 w-5 text-emerald-400" />
+              Next Milestone
+            </h3>
+            <MicroGoalsOverview />
+          </div>
         </div>
 
-        {/* Micro Goals Overview */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <Target className="h-5 w-5 text-emerald-400" />
-            Next Milestone
-          </h3>
-          <MicroGoalsOverview />
+        {/* Additional Content Area */}
+        <div className="bg-slate-950/40 rounded-xl p-4 space-y-6 border border-slate-800/30">
+          {/* Weight Logging Section - Only show if not logged today */}
+          {!todayWeight && (
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-white">Log Weight</h3>
+              <WeightLogger />
+            </div>
+          )}
+
+          {/* Weight Progress Chart - Keep this for quick overview */}
+          {weightEntries.length >= 3 && (
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-white">Weight Progress</h3>
+              <WeightChart />
+            </div>
+          )}
         </div>
 
-        {/* Weight Logging Section - Only show if not logged today */}
-        {!todayWeight && (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Log Weight</h3>
-            <WeightLogger />
+
+
+
+
+
+
+        {/* Bottom Section */}
+        <div className="bg-slate-950/60 rounded-xl p-4 space-y-6 border border-slate-800/50">
+          {/* Recent Activity */}
+          {totalDays > 0 && (
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-white">Progress</h3>
+              <Card className="bg-gradient-to-r from-slate-800/80 to-slate-700/80 border-slate-600/40">
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-slate-400">Tracking Days</span>
+                    <Badge variant="secondary">{totalDays} days</Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400">Data Quality</span>
+                    <Badge 
+                      variant={totalDays >= 7 ? "default" : "outline"}
+                      className={totalDays >= 7 ? "bg-gradient-to-r from-emerald-400 to-green-400 text-black" : ""}
+                    >
+                      {totalDays >= 7 ? "Ready for AI" : "Building..."}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Development Reset Button */}
+          <div className="space-y-3 border-t border-slate-700/50 pt-4">
+            <Button
+              onClick={() => {
+                if (confirm('Reset all data and start fresh? This cannot be undone.')) {
+                  clearUserData();
+                  localStorage.clear();
+                  window.location.reload();
+                }
+              }}
+              variant="outline"
+              className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Reset App (Start Fresh)
+            </Button>
           </div>
-        )}
-
-        {/* Weight Progress Chart - Keep this for quick overview */}
-        {weightEntries.length >= 3 && (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Weight Progress</h3>
-            <WeightChart />
-          </div>
-        )}
-
-
-
-
-
-
-
-        {/* Recent Activity */}
-        {totalDays > 0 && (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Progress</h3>
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-muted-foreground">Tracking Days</span>
-                  <Badge variant="secondary">{totalDays} days</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Data Quality</span>
-                  <Badge 
-                    variant={totalDays >= 7 ? "default" : "outline"}
-                    className={totalDays >= 7 ? "grok-gradient text-black" : ""}
-                  >
-                    {totalDays >= 7 ? "Ready for AI" : "Building..."}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Development Reset Button */}
-        <div className="space-y-3 border-t border-primary/20 pt-4">
-          <Button
-            onClick={() => {
-              if (confirm('Reset all data and start fresh? This cannot be undone.')) {
-                clearUserData();
-                localStorage.clear();
-                window.location.reload();
-              }
-            }}
-            variant="outline"
-            className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset App (Start Fresh)
-          </Button>
         </div>
 
       </div>
