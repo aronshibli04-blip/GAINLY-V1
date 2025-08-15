@@ -149,24 +149,6 @@ export default function MobileHome() {
 
         {/* Enhanced Header with GAINLY branding */}
         <div className="text-center mb-8 relative">
-          <div className="relative inline-flex items-center justify-center w-24 h-24 mb-6">
-            {/* Multiple rotating rings */}
-            <div className="absolute inset-0 rounded-full border-2 border-emerald-400/40 animate-spin" 
-                 style={{ animationDuration: '20s' }} />
-            <div className="absolute inset-1 rounded-full border border-green-400/30 animate-spin" 
-                 style={{ animationDuration: '15s', animationDirection: 'reverse' }} />
-            <div className="absolute inset-2 rounded-full border border-emerald-300/20 animate-spin" 
-                 style={{ animationDuration: '25s' }} />
-            
-            {/* Central icon with enhanced glow */}
-            <div className="relative z-10 w-18 h-18 rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-emerald-600 flex items-center justify-center shadow-2xl" 
-                 style={{ 
-                   boxShadow: '0 0 40px rgba(16, 185, 129, 0.4), 0 0 80px rgba(16, 185, 129, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.2)' 
-                 }}>
-              <Zap className="h-10 w-10 text-black drop-shadow-sm" />
-            </div>
-          </div>
-          
           <h1 className="text-5xl font-black mb-3 tracking-tight">
             <span className="bg-gradient-to-r from-emerald-300 via-green-400 to-emerald-500 bg-clip-text text-transparent" 
                   style={{ 
