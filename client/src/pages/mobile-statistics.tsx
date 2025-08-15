@@ -112,7 +112,7 @@ export default function MobileStatistics() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Statistics" 
@@ -124,7 +124,7 @@ export default function MobileStatistics() {
         {[...Array(40)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-primary/20 rounded-full animate-pulse"
+            className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -136,10 +136,22 @@ export default function MobileStatistics() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
-        {/* Cleaner Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Statistics</h1>
-          <p className="text-slate-400 text-sm">Your progress analytics</p>
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-spin" 
+                 style={{ animationDuration: '13s' }} />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center shadow-xl">
+              <BarChart3 className="h-8 w-8 text-black" />
+            </div>
+          </div>
+          
+          <h1 className="text-3xl font-black mb-2">
+            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              STATISTICS
+            </span>
+          </h1>
+          <p className="text-blue-400/70">Advanced progress analytics & insights</p>
         </div>
 
         {/* Compact Period Selection */}

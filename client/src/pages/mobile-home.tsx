@@ -110,10 +110,10 @@ export default function MobileHome() {
       />
 
       {/* Status Bar - Removed duplicate notifications */}
-      <div className="fixed top-16 left-0 right-0 z-40 bg-slate-950/90 backdrop-blur-sm border-b border-slate-900/30">
+      <div className="fixed top-16 left-0 right-0 z-40 bg-slate-950/90 backdrop-blur-sm border-b border-emerald-500/20">
         <div className="flex items-center justify-center px-4 py-2">
           {/* Calorie Indicator - Centered */}
-          <div className="flex items-center gap-1 font-bold text-sm text-primary">
+          <div className="flex items-center gap-1 font-bold text-sm text-emerald-400">
             <Zap className="h-4 w-4" />
             {todayCalories.toLocaleString()}
           </div>

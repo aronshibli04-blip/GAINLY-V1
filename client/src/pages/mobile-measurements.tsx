@@ -152,7 +152,7 @@ export default function MobileMeasurements() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Measurements" 
@@ -164,7 +164,7 @@ export default function MobileMeasurements() {
         {[...Array(30)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-primary/20 rounded-full animate-pulse"
+            className="absolute w-1 h-1 bg-teal-400/20 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -179,19 +179,19 @@ export default function MobileMeasurements() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
-            <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-spin" 
+            <div className="absolute inset-0 rounded-full border-2 border-teal-400/30 animate-spin" 
                  style={{ animationDuration: '15s' }} />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-xl">
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-teal-400 to-emerald-400 flex items-center justify-center shadow-xl">
               <Ruler className="h-8 w-8 text-black" />
             </div>
           </div>
           
           <h1 className="text-3xl font-black mb-2">
-            <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">
               MEASUREMENTS
             </span>
           </h1>
-          <p className="text-primary/70">Track your body composition progress</p>
+          <p className="text-teal-400/70">Track your body composition progress</p>
         </div>
 
         {/* Quick Stats Grid */}

@@ -76,21 +76,47 @@ export default function MobileAICoach() {
   };
 
   return (
-    <div className="mobile-container">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="AI Coach" 
         onOpenMenu={openMenu}
       />
       
-      <div className="content-with-bottom-nav pt-16 p-4 space-y-4">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(45)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-purple-400/20 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
         
         {/* Header */}
-        <div className="pt-4">
-          <h1 className="text-2xl font-bold grok-text-gradient mb-1">AI Coach</h1>
-          <p className="text-sm text-muted-foreground">
-            Get personalized insights and recommendations
-          </p>
+        <div className="text-center mb-8">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-purple-400/30 animate-spin" 
+                 style={{ animationDuration: '15s' }} />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center shadow-xl">
+              <Brain className="h-8 w-8 text-black" />
+            </div>
+          </div>
+          
+          <h1 className="text-3xl font-black mb-2">
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+              AI COACH
+            </span>
+          </h1>
+          <p className="text-purple-400/70">Intelligent metabolic analysis & guidance</p>
         </div>
 
         {/* Data Status */}

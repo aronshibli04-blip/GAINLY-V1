@@ -90,14 +90,48 @@ export default function MobileTraining() {
     : 999;
 
   return (
-    <div className="mobile-container">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Training" 
         onOpenMenu={openMenu}
       />
       
-      <div className="content-with-bottom-nav pt-16 p-4 space-y-4">
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-red-400/20 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
+        
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-red-400/30 animate-spin" 
+                 style={{ animationDuration: '10s' }} />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-red-400 to-orange-400 flex items-center justify-center shadow-xl">
+              <Dumbbell className="h-8 w-8 text-black" />
+            </div>
+          </div>
+          
+          <h1 className="text-3xl font-black mb-2">
+            <span className="bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
+              TRAINING
+            </span>
+          </h1>
+          <p className="text-red-400/70">Log workouts & maximize muscle gains</p>
+        </div>
 
         {/* Training Impact on Weight Gain */}
         <Card className={`${daysSinceLastTraining >= 3 ? 'border-red-500/40 bg-red-500/10' : trainingFrequency >= 3 ? 'border-green-500/40 bg-green-500/10' : 'border-yellow-500/40 bg-yellow-500/10'}`}>
