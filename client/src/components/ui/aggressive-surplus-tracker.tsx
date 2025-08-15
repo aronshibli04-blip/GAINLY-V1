@@ -57,22 +57,33 @@ export function AggressiveSurplusTracker() {
     return () => clearInterval(interval);
   }, []);
 
-  // Animate to motivation quote when completed - slow transition
+  // Auto-transition to motivation after 5 seconds regardless of completion
   useEffect(() => {
-    if (isComplete && !showMotivation) {
-      // Wait 4 seconds before starting transition to give time to read progress
-      const delayTimer = setTimeout(() => {
+    const autoTransitionTimer = setTimeout(() => {
+      if (!showMotivation) {
         setAnimatingOut(true);
-        // Then smooth transition takes 1 second
         setTimeout(() => {
           setShowMotivation(true);
           setAnimatingOut(false);
         }, 1000);
-      }, 4000);
+      }
+    }, 5000); // Show progress for 5 seconds then transition
+    
+    return () => clearTimeout(autoTransitionTimer);
+  }, [showMotivation]);
+
+  // Also transition when completed for immediate feedback
+  useEffect(() => {
+    if (isComplete && !showMotivation) {
+      const delayTimer = setTimeout(() => {
+        setAnimatingOut(true);
+        setTimeout(() => {
+          setShowMotivation(true);
+          setAnimatingOut(false);
+        }, 1000);
+      }, 2000); // Shorter delay when complete
       
       return () => clearTimeout(delayTimer);
-    } else if (!isComplete && showMotivation) {
-      setShowMotivation(false);
     }
   }, [isComplete, showMotivation]);
   
@@ -116,23 +127,36 @@ export function AggressiveSurplusTracker() {
   // Show motivation quote when complete - compact colorful style
   if (showMotivation) {
     return (
-      <Card className="bg-gradient-to-r from-primary/20 via-primary/10 to-transparent border-primary/30 overflow-hidden grok-glow-hover transition-all duration-1000 ease-in-out">
+      <Card className={`bg-gradient-to-r from-primary/20 via-primary/10 to-transparent border-primary/30 overflow-hidden grok-glow-hover transition-all duration-1000 ease-in-out ${
+        animatingOut ? 'animate-out slide-out-to-right-4 opacity-0 duration-1000' : 'animate-in slide-in-from-left-4 duration-1000'
+      }`}>
         <CardContent className="p-4">
           <div className="animate-in slide-in-from-bottom-4 duration-1000 ease-out">
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-yellow-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-yellow-400 flex items-center justify-center shadow-lg">
                   <Quote className="h-4 w-4 text-black" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white">Dagens Motivasjon</h3>
-                  <p className="text-xs text-primary/80">Målet nådd!</p>
+                  <p className="text-xs text-primary/80">Inspirasjon for fremgang</p>
                 </div>
               </div>
-              <div className="flex items-center text-xs text-primary">
-                <Zap className="h-3 w-3 mr-1" />
-                Fullført
-              </div>
+              <Button
+                onClick={() => {
+                  setAnimatingOut(true);
+                  setTimeout(() => {
+                    setShowMotivation(false);
+                    setAnimatingOut(false);
+                  }, 1000);
+                }}
+                variant="ghost"
+                size="sm"
+                className="text-primary/70 hover:text-primary hover:bg-primary/10"
+                data-testid="button-back-to-progress"
+              >
+                <Target className="h-4 w-4" />
+              </Button>
             </div>
             
             <blockquote className="text-white text-sm leading-relaxed italic mb-2">
