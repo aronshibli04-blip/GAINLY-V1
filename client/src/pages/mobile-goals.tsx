@@ -25,65 +25,54 @@ export function MobileGoals() {
     setCustomRewards(prev => ({ ...prev, [goalWeight]: newReward }));
   };
 
-  // Micro goals with Norwegian rewards (now customizable)
-  const microGoals = [
-    {
-      weight: 72,
-      reward: customRewards[72] || "Flytende Kalk",
-      icon: <Star className="h-4 w-4" />,
-      description: "Calcium boost for stronger bones",
-      completed: currentWeight >= 72
-    },
-    {
-      weight: 74,
-      reward: customRewards[74] || "Selfie stick m Bluetooth",
-      icon: <Camera className="h-4 w-4" />,
-      description: "Document your progress in style",
-      completed: currentWeight >= 74
-    },
-    {
-      weight: 76,
-      reward: customRewards[76] || "Full body massage",
-      icon: <Heart className="h-4 w-4" />,
-      description: "Relax those growing muscles",
-      completed: currentWeight >= 76
-    },
-    {
-      weight: 78,
-      reward: customRewards[78] || "Middag eller noe m venner",
-      icon: <Coffee className="h-4 w-4" />,
-      description: "Celebrate with friends",
-      completed: currentWeight >= 78
-    },
-    {
-      weight: 80,
-      reward: customRewards[80] || "Progresjons-fotoshoot",
-      icon: <Camera className="h-4 w-4" />,
-      description: "Professional progress photos",
-      completed: currentWeight >= 80
-    },
-    {
-      weight: 82,
-      reward: customRewards[82] || "Liten helgetur eller spesiell opplevelse",
-      icon: <Gift className="h-4 w-4" />,
-      description: "Weekend getaway reward",
-      completed: currentWeight >= 82
-    },
-    {
-      weight: 84,
-      reward: customRewards[84] || "Kjøp noe du har ønsket deg lenge (f.eks. klokke)",
-      icon: <ShoppingBag className="h-4 w-4" />,
-      description: "That special purchase you've been wanting",
-      completed: currentWeight >= 84
-    },
-    {
-      weight: 85,
-      reward: customRewards[85] || "Storslått feiring: helgetur, coaching-pakke el. Noe stort",
-      icon: <Crown className="h-4 w-4" />,
-      description: "Grand celebration for reaching your goal!",
-      completed: currentWeight >= 85
+  // Generate dynamic micro goals based on current weight
+  const generateMicroGoals = () => {
+    const startWeight = Math.floor(currentWeight);
+    const endWeight = targetWeight;
+    const goals = [];
+    
+    // Create goals for every 1kg from current weight to target
+    for (let weight = startWeight + 1; weight <= endWeight; weight++) {
+      // Alternate between different reward themes and icons
+      const rewardThemes = [
+        { theme: "Supplement/Health", icon: <Star className="h-4 w-4" />, default: "Protein eller supplement" },
+        { theme: "Tech/Gadget", icon: <Camera className="h-4 w-4" />, default: "Tech-gadget eller tilbehør" },
+        { theme: "Wellness", icon: <Heart className="h-4 w-4" />, default: "Massage eller wellness" },
+        { theme: "Social", icon: <Coffee className="h-4 w-4" />, default: "Middag eller aktivitet med venner" },
+        { theme: "Experience", icon: <Gift className="h-4 w-4" />, default: "Ny opplevelse eller aktivitet" },
+        { theme: "Shopping", icon: <ShoppingBag className="h-4 w-4" />, default: "Noe du har ønsket deg" },
+        { theme: "Game/Fun", icon: <Gamepad2 className="h-4 w-4" />, default: "Spill eller hobby-utstyr" },
+        { theme: "Fashion", icon: <Crown className="h-4 w-4" />, default: "Nye klær eller tilbehør" }
+      ];
+      
+      const themeIndex = (weight - startWeight - 1) % rewardThemes.length;
+      const theme = rewardThemes[themeIndex];
+      
+      // Special rewards for major milestones (every 5kg or target weight)
+      let reward = theme.default;
+      let description = `${weight}kg milepæl belønning`;
+      
+      if (weight === endWeight) {
+        reward = "Storslått feiring: helgetur, coaching-pakke el. noe stort";
+        description = "Målvekt oppnådd - stor feiring!";
+      } else if ((weight - startWeight) % 5 === 0) {
+        reward = "Spesiell opplevelse eller større belønning";
+        description = `${weight - startWeight}kg fremgang - stor milepæl!`;
+      }
+      
+      goals.push({
+        weight,
+        reward: customRewards[weight] || reward,
+        icon: theme.icon,
+        description,
+        completed: currentWeight >= weight
+      });
     }
-  ];
+    
+    return goals;
+  };
+
+  const microGoals = generateMicroGoals();
 
   const nextGoal = microGoals.find(goal => !goal.completed);
   const completedGoals = microGoals.filter(goal => goal.completed).length;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Wand2, Heart, Gift, Trophy, Crown } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 
 interface RewardCustomizerProps {
   goalWeight: number;
@@ -72,6 +72,9 @@ export function RewardCustomizer({ goalWeight, currentReward, onRewardChange }: 
             <Sparkles className="h-5 w-5" />
             Tilpass din belønning - {goalWeight}kg
           </DialogTitle>
+          <DialogDescription className="text-slate-400">
+            Beskriv dine interesser så AI-en kan lage personlige belønninger som motiverer deg.
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4">
