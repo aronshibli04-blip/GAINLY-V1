@@ -9,7 +9,7 @@ import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { WeightChart } from "@/components/ui/weight-chart";
 import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { MotivationCard } from "@/components/ui/motivation-card";
-import { GoalWeightCard } from "@/components/ui/goal-weight-card";
+import { MicroGoalsOverview } from "@/components/ui/micro-goals-overview";
 import { AchievementSystem } from "@/components/ui/achievement-system";
 import { MotivationBoost } from "@/components/ui/motivation-boost";
 import { ProgressStreaks } from "@/components/ui/progress-streaks";
@@ -195,10 +195,10 @@ export default function MobileHome() {
           </Link>
         </div>
 
-        {/* Goal Weight Tracking */}
+        {/* Micro Goals Overview */}
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Weight Goal</h3>
-          <GoalWeightCard />
+          <h3 className="text-lg font-semibold text-white">Next Milestone</h3>
+          <MicroGoalsOverview />
         </div>
 
         {/* Today's Summary - Weight & Calories */}
