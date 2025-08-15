@@ -64,7 +64,7 @@ export default function MobileAICoach() {
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return "text-green-400";
+    if (confidence >= 0.8) return "text-purple-400";
     if (confidence >= 0.6) return "text-yellow-400";
     return "text-red-400";
   };
@@ -144,7 +144,7 @@ export default function MobileAICoach() {
           <Card className="ai-coach-glow-hover">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center">
-                <Brain className="h-5 w-5 mr-2 text-primary" />
+                <Brain className="h-5 w-5 mr-2 text-purple-400" />
                 AI Analysis
               </CardTitle>
             </CardHeader>
@@ -164,13 +164,13 @@ export default function MobileAICoach() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-3 rounded-lg bg-muted/20">
                       <p className="text-xs text-muted-foreground">Calculated TDEE</p>
-                      <p className="text-xl font-bold text-primary">
+                      <p className="text-xl font-bold text-purple-400">
                         {currentTdeeAnalysis.tdee} kcal
                       </p>
                     </div>
                     <div className="text-center p-3 rounded-lg bg-muted/20">
                       <p className="text-xs text-muted-foreground">Target Calories</p>
-                      <p className="text-xl font-bold text-primary">
+                      <p className="text-xl font-bold text-purple-400">
                         {currentTdeeAnalysis.targetCalories} kcal
                       </p>
                     </div>
@@ -207,7 +207,7 @@ export default function MobileAICoach() {
         <Card className="ai-coach-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
-              <TrendingUp className="h-5 w-5 mr-2 text-primary" />
+              <TrendingUp className="h-5 w-5 mr-2 text-purple-400" />
               Progress Insights
             </CardTitle>
           </CardHeader>
@@ -264,7 +264,7 @@ export default function MobileAICoach() {
         <Card className="ai-coach-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
-              <Target className="h-5 w-5 mr-2 text-primary" />
+              <Target className="h-5 w-5 mr-2 text-purple-400" />
               Recommendations
             </CardTitle>
           </CardHeader>
@@ -277,8 +277,8 @@ export default function MobileAICoach() {
                 </p>
               </div>
             ) : (
-              <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                <p className="text-sm text-green-400 font-medium">Ready for Meal Planning</p>
+              <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <p className="text-sm text-purple-400 font-medium">Ready for Meal Planning</p>
                 <p className="text-xs text-muted-foreground">
                   Generate personalized meal plans based on your TDEE
                 </p>

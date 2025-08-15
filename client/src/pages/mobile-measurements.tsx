@@ -122,7 +122,7 @@ export default function MobileMeasurements() {
       current: latestMeasurement?.chest || 0,
       change: getChange(latestMeasurement?.chest || 0, previousMeasurement?.chest),
       icon: Target,
-      color: "text-primary"
+      color: "text-teal-400"
     },
     {
       label: "Arms", 
@@ -197,9 +197,9 @@ export default function MobileMeasurements() {
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           {progressMetrics.map((metric) => (
-            <Card key={metric.label} className="bg-slate-800/50 border-primary/20">
+            <Card key={metric.label} className="bg-slate-800/50 border-teal-400/20">
               <CardContent className="p-4 text-center">
-                <div className={`flex items-center justify-center w-10 h-10 bg-primary/20 rounded-lg mx-auto mb-2`}>
+                <div className={`flex items-center justify-center w-10 h-10 bg-teal-400/20 rounded-lg mx-auto mb-2`}>
                   <metric.icon className={`h-5 w-5 ${metric.color}`} />
                 </div>
                 <div className={`text-2xl font-bold ${metric.color}`}>
@@ -207,7 +207,7 @@ export default function MobileMeasurements() {
                 </div>
                 <div className="text-sm text-slate-400">{metric.label}</div>
                 {metric.change.value !== 0 && (
-                  <div className={`text-xs mt-1 ${metric.change.value > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  <div className={`text-xs mt-1 ${metric.change.value > 0 ? 'text-teal-400' : 'text-red-400'}`}>
                     {metric.change.value > 0 ? '+' : ''}{metric.change.value.toFixed(1)}cm
                   </div>
                 )}
@@ -218,9 +218,9 @@ export default function MobileMeasurements() {
 
         {/* Body Fat Progress */}
         {latestMeasurement?.bodyFat && (
-          <Card className="mb-8 bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-primary/20">
+          <Card className="mb-8 bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-teal-400/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-primary">
+              <CardTitle className="flex items-center gap-2 text-teal-400">
                 <Target className="h-5 w-5" />
                 Body Composition
               </CardTitle>
@@ -229,7 +229,7 @@ export default function MobileMeasurements() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-slate-300">Body Fat Percentage</span>
-                  <span className="text-2xl font-bold text-primary">{latestMeasurement.bodyFat}%</span>
+                  <span className="text-2xl font-bold text-teal-400">{latestMeasurement.bodyFat}%</span>
                 </div>
                 <Progress 
                   value={100 - latestMeasurement.bodyFat} 
@@ -244,9 +244,9 @@ export default function MobileMeasurements() {
         )}
 
         {/* Add New Measurement */}
-        <Card className="mb-8 bg-slate-800/50 border-primary/20">
+        <Card className="mb-8 bg-slate-800/50 border-teal-400/20">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-primary">
+            <CardTitle className="flex items-center gap-2 text-teal-400">
               <Plus className="h-5 w-5" />
               Add Measurements
             </CardTitle>
@@ -254,7 +254,7 @@ export default function MobileMeasurements() {
               onClick={() => setShowAddForm(!showAddForm)}
               variant="outline"
               size="sm"
-              className="border-primary/30 text-primary hover:bg-primary/20"
+              className="border-teal-400/30 text-teal-400 hover:bg-teal-400/20"
               data-testid="button-toggle-measurement-form"
             >
               {showAddForm ? 'Cancel' : 'Add New'}
@@ -266,7 +266,7 @@ export default function MobileMeasurements() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="chest" className="text-primary">Chest (cm)*</Label>
+                    <Label htmlFor="chest" className="text-teal-400">Chest (cm)*</Label>
                     <Input
                       id="chest"
                       type="number"
@@ -279,7 +279,7 @@ export default function MobileMeasurements() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="waist" className="text-primary">Waist (cm)*</Label>
+                    <Label htmlFor="waist" className="text-teal-400">Waist (cm)*</Label>
                     <Input
                       id="waist"
                       type="number"
@@ -295,7 +295,7 @@ export default function MobileMeasurements() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="arms" className="text-primary">Arms (cm)*</Label>
+                    <Label htmlFor="arms" className="text-teal-400">Arms (cm)*</Label>
                     <Input
                       id="arms"
                       type="number"
@@ -308,7 +308,7 @@ export default function MobileMeasurements() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="thighs" className="text-primary">Thighs (cm)</Label>
+                    <Label htmlFor="thighs" className="text-teal-400">Thighs (cm)</Label>
                     <Input
                       id="thighs"
                       type="number"
@@ -324,7 +324,7 @@ export default function MobileMeasurements() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="shoulders" className="text-primary">Shoulders (cm)</Label>
+                    <Label htmlFor="shoulders" className="text-teal-400">Shoulders (cm)</Label>
                     <Input
                       id="shoulders"
                       type="number"
@@ -337,7 +337,7 @@ export default function MobileMeasurements() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="bodyFat" className="text-primary">Body Fat (%)</Label>
+                    <Label htmlFor="bodyFat" className="text-teal-400">Body Fat (%)</Label>
                     <Input
                       id="bodyFat"
                       type="number"
@@ -353,7 +353,7 @@ export default function MobileMeasurements() {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-primary text-black hover:bg-primary/90"
+                  className="w-full bg-teal-400 text-black hover:bg-teal-400/90"
                   data-testid="button-submit-measurements"
                 >
                   Add Measurements
@@ -390,9 +390,9 @@ export default function MobileMeasurements() {
         </Card>
 
         {/* Measurement History */}
-        <Card className="bg-slate-800/50 border-primary/20">
+        <Card className="bg-slate-800/50 border-teal-400/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
+            <CardTitle className="flex items-center gap-2 text-teal-400">
               <Calendar className="h-5 w-5" />
               Measurement History
             </CardTitle>
@@ -402,11 +402,11 @@ export default function MobileMeasurements() {
               {measurements.map((measurement, index) => (
                 <div key={measurement.id} className="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
                   <div className="flex justify-between items-center mb-3">
-                    <span className="text-primary font-semibold">
+                    <span className="text-teal-400 font-semibold">
                       {new Date(measurement.date).toLocaleDateString()}
                     </span>
                     {index === 0 && (
-                      <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded">
+                      <span className="text-xs bg-teal-400/20 text-teal-400 px-2 py-1 rounded">
                         Latest
                       </span>
                     )}

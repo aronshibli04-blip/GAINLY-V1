@@ -134,14 +134,14 @@ export default function MobileTraining() {
         </div>
 
         {/* Training Impact on Weight Gain */}
-        <Card className={`${daysSinceLastTraining >= 3 ? 'border-red-500/40 bg-red-500/10' : trainingFrequency >= 3 ? 'border-green-500/40 bg-green-500/10' : 'border-yellow-500/40 bg-yellow-500/10'}`}>
+        <Card className={`${daysSinceLastTraining >= 3 ? 'border-red-500/40 bg-red-500/10' : trainingFrequency >= 3 ? 'border-red-500/40 bg-red-500/10' : 'border-yellow-500/40 bg-yellow-500/10'}`}>
           <CardHeader className="pb-3">
-            <CardTitle className={`text-lg flex items-center justify-between ${daysSinceLastTraining >= 3 ? 'text-red-400' : trainingFrequency >= 3 ? 'text-green-400' : 'text-yellow-400'}`}>
+            <CardTitle className={`text-lg flex items-center justify-between ${daysSinceLastTraining >= 3 ? 'text-red-400' : trainingFrequency >= 3 ? 'text-red-400' : 'text-yellow-400'}`}>
               <div className="flex items-center">
                 <Dumbbell className="h-5 w-5 mr-2" />
                 Training Impact on 1kg/Week Goal
               </div>
-              <Badge variant="outline" className={`${daysSinceLastTraining >= 3 ? 'text-red-400 border-red-400' : trainingFrequency >= 3 ? 'text-green-400 border-green-400' : 'text-yellow-400 border-yellow-400'}`}>
+              <Badge variant="outline" className={`${daysSinceLastTraining >= 3 ? 'text-red-400 border-red-400' : trainingFrequency >= 3 ? 'text-red-400 border-red-400' : 'text-yellow-400 border-yellow-400'}`}>
                 {trainingFrequency}/3 this week
               </Badge>
             </CardTitle>
@@ -176,8 +176,8 @@ export default function MobileTraining() {
             )}
 
             {trainingFrequency >= 3 && (
-              <div className="bg-green-500/20 border border-green-500/40 p-3 rounded-lg">
-                <p className="text-green-300 text-xs">
+              <div className="bg-red-500/20 border border-red-500/40 p-3 rounded-lg">
+                <p className="text-red-300 text-xs">
                   Perfect! Your training frequency ensures your 1100kcal surplus builds quality muscle mass.
                 </p>
               </div>
@@ -196,7 +196,7 @@ export default function MobileTraining() {
         {/* Today's Summary */}
         <Card className="training-glow-hover">
           <CardContent className="p-4 text-center">
-            <Dumbbell className="h-6 w-6 text-primary mx-auto mb-2" />
+            <Dumbbell className="h-6 w-6 text-red-400 mx-auto mb-2" />
             <p className="text-xs text-muted-foreground">Today's Training</p>
             <p className="text-lg font-bold text-white">
               {todayActivities.length > 0 
@@ -210,7 +210,7 @@ export default function MobileTraining() {
         <Card className="training-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
-              <Dumbbell className="h-5 w-5 mr-2 text-primary" />
+              <Dumbbell className="h-5 w-5 mr-2 text-red-400" />
               Log Workout
             </CardTitle>
           </CardHeader>
@@ -276,7 +276,7 @@ export default function MobileTraining() {
         <Card className="training-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
-              <Target className="h-5 w-5 mr-2 text-primary" />
+              <Target className="h-5 w-5 mr-2 text-red-400" />
               Quick Log
             </CardTitle>
           </CardHeader>
@@ -316,7 +316,7 @@ export default function MobileTraining() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center">
-                <Clock className="h-5 w-5 mr-2 text-primary" />
+                <Clock className="h-5 w-5 mr-2 text-red-400" />
                 Today's Workouts
               </CardTitle>
             </CardHeader>

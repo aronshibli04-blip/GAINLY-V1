@@ -168,7 +168,7 @@ export default function MobileStatistics() {
                 variant="ghost"
                 size="sm"
                 className={selectedPeriod === period.key 
-                  ? "bg-primary text-black hover:bg-primary/90 font-medium" 
+                  ? "bg-blue-400 text-black hover:bg-blue-400/90 font-medium" 
                   : "text-slate-400 hover:text-white hover:bg-slate-700/50"
                 }
                 data-testid={`button-period-${period.key}`}
@@ -183,12 +183,12 @@ export default function MobileStatistics() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
-              <Scale className="h-6 w-6 text-primary mx-auto mb-2" />
+              <Scale className="h-6 w-6 text-blue-400 mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Weight Gained</p>
               <p className="text-lg font-bold text-white">
                 {stats.weightGained >= 0 ? '+' : ''}{stats.weightGained.toFixed(1)}kg
               </p>
-              <p className="text-xs text-primary/70 mt-1">
+              <p className="text-xs text-blue-400/70 mt-1">
                 {stats.weightGainRate.toFixed(2)}kg/week
               </p>
             </CardContent>
@@ -196,12 +196,12 @@ export default function MobileStatistics() {
 
           <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
-              <Target className="h-6 w-6 text-primary mx-auto mb-2" />
+              <Target className="h-6 w-6 text-blue-400 mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Goal Progress</p>
               <p className="text-lg font-bold text-white">
                 {stats.progressToGoal.toFixed(0)}%
               </p>
-              <p className="text-xs text-primary/70 mt-1">
+              <p className="text-xs text-blue-400/70 mt-1">
                 {(stats.goalWeight - stats.currentWeight).toFixed(1)}kg left
               </p>
             </CardContent>
@@ -209,12 +209,12 @@ export default function MobileStatistics() {
 
           <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
-              <Zap className="h-6 w-6 text-primary mx-auto mb-2" />
+              <Zap className="h-6 w-6 text-blue-400 mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Daily Surplus</p>
               <p className="text-lg font-bold text-white">
                 {stats.avgSurplus > 0 ? '+' : ''}{stats.avgSurplus}
               </p>
-              <p className="text-xs text-primary/70 mt-1">
+              <p className="text-xs text-blue-400/70 mt-1">
                 {stats.avgCaloriesPerDay} cal/day
               </p>
             </CardContent>
@@ -222,12 +222,12 @@ export default function MobileStatistics() {
 
           <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
-              <Activity className="h-6 w-6 text-primary mx-auto mb-2" />
+              <Activity className="h-6 w-6 text-blue-400 mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Consistency</p>
               <p className="text-lg font-bold text-white">
                 {stats.consistencyScore.toFixed(0)}%
               </p>
-              <p className="text-xs text-primary/70 mt-1">
+              <p className="text-xs text-blue-400/70 mt-1">
                 {stats.totalDaysTracked} days
               </p>
             </CardContent>
@@ -238,7 +238,7 @@ export default function MobileStatistics() {
         <Card className="statistics-glow-hover mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <TrendingUp className="h-5 w-5 text-primary" />
+              <TrendingUp className="h-5 w-5 text-blue-400" />
               Weight Progress
             </CardTitle>
           </CardHeader>
@@ -291,7 +291,7 @@ export default function MobileStatistics() {
         <Card className="statistics-glow-hover mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Utensils className="h-5 w-5 text-primary" />
+              <Utensils className="h-5 w-5 text-blue-400" />
               Calorie Intake Trends
             </CardTitle>
           </CardHeader>
@@ -336,18 +336,18 @@ export default function MobileStatistics() {
         <Card className="statistics-glow-hover mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Brain className="h-5 w-5 text-primary" />
+              <Brain className="h-5 w-5 text-blue-400" />
               Performance Insights
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {stats.weightGainRate > 0.7 && (
-              <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                <div className="flex items-center gap-2 text-green-400 font-semibold mb-1">
+              <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-400 font-semibold mb-1">
                   <Award className="h-4 w-4" />
                   Excellent Progress
                 </div>
-                <p className="text-sm text-green-300/80">
+                <p className="text-sm text-blue-300/80">
                   You're gaining weight at an optimal rate of {stats.weightGainRate.toFixed(2)}kg/week. This indicates your calorie surplus is well-balanced for lean mass gain.
                 </p>
               </div>
@@ -401,7 +401,7 @@ export default function MobileStatistics() {
             <Card className="statistics-glow-hover mb-6">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
-                  <Calendar className="h-5 w-5 text-primary" />
+                  <Calendar className="h-5 w-5 text-blue-400" />
                   Weekly Analysis
                 </CardTitle>
               </CardHeader>
@@ -416,22 +416,22 @@ export default function MobileStatistics() {
         <Card className="statistics-glow-hover">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <BarChart3 className="h-5 w-5 text-primary" />
+              <BarChart3 className="h-5 w-5 text-blue-400" />
               Key Metrics
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-xl font-bold text-primary">{stats.currentTdee}</div>
+                <div className="text-xl font-bold text-blue-400">{stats.currentTdee}</div>
                 <div className="text-xs text-muted-foreground">Current TDEE</div>
               </div>
               <div>
-                <div className="text-xl font-bold text-primary">{stats.daysSinceStart}</div>
+                <div className="text-xl font-bold text-blue-400">{stats.daysSinceStart}</div>
                 <div className="text-xs text-muted-foreground">Days Tracked</div>
               </div>
               <div>
-                <div className="text-xl font-bold text-primary">
+                <div className="text-xl font-bold text-blue-400">
                   {((stats.goalWeight - stats.currentWeight) / Math.max(0.1, stats.weightGainRate)).toFixed(0)}
                 </div>
                 <div className="text-xs text-muted-foreground">Weeks to Goal</div>

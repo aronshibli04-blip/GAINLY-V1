@@ -162,7 +162,7 @@ export default function MobileMeals() {
           <Card className="meals-glow-hover">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center">
-                <Sparkles className="h-5 w-5 mr-2 text-primary" />
+                <Sparkles className="h-5 w-5 mr-2 text-orange-400" />
                 Generate Hardgainer Meal Plan
               </CardTitle>
             </CardHeader>
@@ -199,9 +199,9 @@ export default function MobileMeals() {
                       {currentTdeeAnalysis.tdee} kcal
                     </p>
                   </div>
-                  <div className="text-center p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <div className="text-center p-3 rounded-lg bg-orange-400/10 border border-orange-400/20">
                     <p className="text-xs text-muted-foreground">Target (+1100)</p>
-                    <p className="text-lg font-bold text-primary">
+                    <p className="text-lg font-bold text-orange-400">
                       {currentTdeeAnalysis.tdee + 1100} kcal
                     </p>
                   </div>
@@ -221,7 +221,7 @@ export default function MobileMeals() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center justify-between">
                 <div className="flex items-center">
-                  <Utensils className="h-5 w-5 mr-2 text-primary" />
+                  <Utensils className="h-5 w-5 mr-2 text-orange-400" />
                   Your Meal Plan
                 </div>
                 <Badge variant="secondary">

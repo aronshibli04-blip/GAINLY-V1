@@ -258,7 +258,7 @@ export default function MobileProfile() {
               }}
               variant="outline"
               size="sm"
-              className="border-primary/30 text-primary hover:bg-primary/20"
+              className="border-indigo-400/30 text-indigo-400 hover:bg-indigo-400/20"
               data-testid={isEditing ? "button-save-profile" : "button-edit-profile"}
             >
               {isEditing ? <Save className="h-4 w-4 mr-2" /> : <Settings className="h-4 w-4 mr-2" />}
@@ -269,7 +269,7 @@ export default function MobileProfile() {
             {isEditing ? (
               <>
                 <div>
-                  <Label htmlFor="edit-name" className="text-primary">First Name</Label>
+                  <Label htmlFor="edit-name" className="text-indigo-400">First Name</Label>
                   <Input
                     id="edit-name"
                     value={editData.firstName}
@@ -280,7 +280,7 @@ export default function MobileProfile() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="edit-age" className="text-primary">Age</Label>
+                    <Label htmlFor="edit-age" className="text-indigo-400">Age</Label>
                     <Input
                       id="edit-age"
                       type="number"
@@ -291,7 +291,7 @@ export default function MobileProfile() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-height" className="text-primary">Height (cm)</Label>
+                    <Label htmlFor="edit-height" className="text-indigo-400">Height (cm)</Label>
                     <Input
                       id="edit-height"
                       type="number"
@@ -304,7 +304,7 @@ export default function MobileProfile() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="edit-weight" className="text-primary">Current Weight (kg)</Label>
+                    <Label htmlFor="edit-weight" className="text-indigo-400">Current Weight (kg)</Label>
                     <Input
                       id="edit-weight"
                       type="number"
@@ -316,7 +316,7 @@ export default function MobileProfile() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-goal-weight" className="text-primary">Goal Weight (kg)</Label>
+                    <Label htmlFor="edit-goal-weight" className="text-indigo-400">Goal Weight (kg)</Label>
                     <Input
                       id="edit-goal-weight"
                       type="number"
@@ -329,7 +329,7 @@ export default function MobileProfile() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="edit-activity" className="text-primary">Activity Level</Label>
+                  <Label htmlFor="edit-activity" className="text-indigo-400">Activity Level</Label>
                   <select
                     id="edit-activity"
                     value={editData.activityLevel}
@@ -391,13 +391,13 @@ export default function MobileProfile() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               {totalDaysTracked >= 7 && (
-                <Badge className="bg-primary/20 text-primary border-primary/40 p-3 flex flex-col items-center">
+                <Badge className="bg-indigo-400/20 text-indigo-400 border-indigo-400/40 p-3 flex flex-col items-center">
                   <Calendar className="h-6 w-6 mb-1" />
                   <span className="text-xs">7 Day Streak</span>
                 </Badge>
               )}
               {weightGained >= 1 && (
-                <Badge className="bg-green-500/20 text-green-400 border-green-500/40 p-3 flex flex-col items-center">
+                <Badge className="bg-indigo-500/20 text-indigo-400 border-indigo-500/40 p-3 flex flex-col items-center">
                   <TrendingUp className="h-6 w-6 mb-1" />
                   <span className="text-xs">First Kg</span>
                 </Badge>
