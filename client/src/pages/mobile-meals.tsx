@@ -137,25 +137,7 @@ export default function MobileMeals() {
           <p className="text-orange-400/70">AI-generated nutrition for hardgainers</p>
         </div>
 
-        {/* Requirements Check */}
-        <Card className="meals-glow-hover">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-white">Requirements</h3>
-                <p className="text-sm text-muted-foreground">
-                  {canGenerateMealPlan ? "Ready to generate meal plans" : "Complete setup first"}
-                </p>
-              </div>
-              <Badge 
-                variant={canGenerateMealPlan ? "default" : "outline"}
-                className={canGenerateMealPlan ? "grok-gradient text-black" : ""}
-              >
-                {canGenerateMealPlan ? "Ready" : "Setup"}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
+
 
         {/* Meal Plan Generation */}
         {canGenerateMealPlan && (
