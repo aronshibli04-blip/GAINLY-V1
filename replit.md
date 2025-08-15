@@ -1,100 +1,6 @@
 # Overview
 
-GAINLY is a comprehensive mobile fitness application designed to help hardgainers gain weight through intelligent TDEE calculation and AI-powered meal plan generation. The app uses 7-28 days of tracked data to calculate actual TDEE, then leverages OpenAI API to generate personalized meal plans. It features a React Native frontend with cross-platform mobile capabilities, utilizing local storage and optional Firebase integration for data persistence.
-
-## Recent Changes (August 2025)
-- **Complete GAINLY Implementation**: Built comprehensive mobile-first weight gain tracking app
-- **Goal Weight Feature**: Added goal weight setting with progress tracking and time-to-goal calculations
-- **Real-Time TDEE Calibration**: AI continuously recalibrates TDEE with each data entry for maximum accuracy
-- **Subtle UI Updates**: Replaced prominent "AI Analysis Ready" status with discrete real-time calibration indicators
-- **Mobile-First Design**: Dark theme with Grok-inspired green accents and bottom navigation tabs
-- **1kg/Week Focus**: All meal plans use aggressive 1100 calorie surplus targeting rapid hardgainer gains
-- **Live Weight Logging**: Front-page weight entry with immediate TDEE updates and progress visualization
-- **Comprehensive Motivation System**: Added achievements, daily challenges, progress celebrations, and points system
-- **Gamification Elements**: Badge system with rarity levels, milestone celebrations, and visual progress indicators
-- **User Interface Refinement**: Clickable goal weight numbers instead of pencil icons for better UX
-- **7-Day AI Calibration Period**: Implemented mandatory 7-day data collection before full app access
-- **Text-Based Activity Descriptions**: Replaced dropdown with detailed text input for precise activity tracking
-- **Enhanced AI Capabilities Showcase**: Added 6-card grid highlighting neural network features
-- **Futuristic Calibration Interface**: Created dedicated calibration mode with progress tracking and sci-fi aesthetics
-- **AI Meal Plan Upgrade (August 11, 2025)**: Improved meal plan generation with GPT-4o integration
-  - **Server-Side OpenAI Integration**: Moved AI generation to backend with environment secret key management
-  - **Advanced Hardgainer Prompts**: Specialized nutrition expertise for aggressive weight gain goals
-  - **Calorie-Dense Focus**: Optimized for minimal food volume with maximum caloric density
-  - **Norwegian Ingredient Support**: Localized meal plans with specific regional ingredients
-  - **Liquid Calorie Emphasis**: Strategic smoothies and protein shakes for low appetite periods
-  - **Dietary Restrictions Compliance**: AI now properly follows user preferences (no oatmeal, no liquid protein shakes)
-  - **Accurate Calorie Calculations**: Fixed ingredient-to-meal calorie alignment and total target matching
-  - **Reliable Fallback System**: Hardgainer-specific backup meal plans ensure consistent functionality
-  - **Enhanced JSON Processing**: Improved OpenAI response parsing with truncation recovery and increased token limits
-  - **Intelligent Fallback Logic**: Fallback system now dynamically respects dietary restrictions
-  - **Consistent Performance**: Fixed repetitive meal generation issues with proper AI prompt engineering
-  - **Mobile Interface Fix**: Connected mobile meals page to actual OpenAI API instead of mock data
-  - **Calorie Display Fix**: Fixed totalCalories vs targetCalories field mismatch in meal plan display
-  - **Smart Meal Count Detection**: Added parsing for "three courses" requests to set maxMealsPerDay correctly
-  - **Database-Backed Food Search (August 12, 2025)**: Implemented working meal logger with real PostgreSQL food database
-    - **Comprehensive Food Database**: Expanded from 27 to 268+ foods including fruits, vegetables, proteins, grains, nuts, dairy, international foods
-    - **Professional-Grade Database**: Added MyFitnessPal-level accuracy with proper serving sizes, macros, and categories
-    - **Real-Time Search API**: Created `/api/foods/search` endpoint with debounced queries and loading states
-    - **Enhanced Meal Logger**: Replaced mock data with live database search, supporting food search, selection, and logging
-    - **Food Database Schema**: Added `food_items` table with calories, macros, serving sizes, and categories
-    - **International Food Support**: Added Asian vegetables, ethnic specialties, herbs, spices, and condiments
-- **Practical Meal Logger Redesign (August 14, 2025)**: Complete UX overhaul for maximum practicality
-  - **Instant 1-Click Logging**: Replaced complex multi-step process with instant calorie logging
-  - **Smart Quick Actions**: Common foods can be logged instantly without search or basket workflow
-  - **Reduced Cognitive Load**: Eliminated unnecessary steps and popups for streamlined experience
-  - **Practical Food Selection**: Pre-loaded with hardgainer-friendly high-calorie foods
-  - **Optimized Performance**: Reduced auto-refresh frequency from 4 to 10 seconds to prevent UI lag
-  - **Dual Logging Modes**: Instant log for speed, advanced search for precision when needed
-  - **Enhanced UX Flow**: Clean separation between instant logging and detailed food tracking
-  - **Complete Meal Editing System**: Added edit and delete functionality for all logged meals
-  - **Mobile-Optimized Actions**: Edit/delete buttons always visible for better mobile UX
-  - **Real-Time Updates**: Instant UI updates after meal modifications with optimistic loading states
-  - **Input Validation**: Proper validation for calorie and description edits with user-friendly error messages
-  - **Fixed Food Search**: Resolved egg search issue by fixing API endpoint query parameters
-  - **Enhanced Food Database**: Added comprehensive egg varieties (whole, whites, yolks, scrambled, boiled)
-  - **Instant Egg Logging**: Added whole egg as instant log option for quick protein tracking
-- **Side Menu Navigation System (August 15, 2025)**: Implemented comprehensive side navigation menu
-  - **Modern Slide-Out Design**: Futuristic dark theme with backdrop blur and smooth animations
-  - **Organized Menu Structure**: Grouped into Main, Analytics, Tools, and Account sections
-  - **Smart Navigation**: Shows current page, badges for AI features, and contextual descriptions
-  - **Mobile-First Integration**: Connected to all mobile pages with proper header components
-  - **Context-Based State**: Uses React Context for global menu state management across pages
-  - **Professional Feature Set**: Includes Dashboard, Meals, Progress, Statistics, AI Coach, Measurements, Goals, Training, Photos, Achievements, Profile, and Settings
-- **Modern Fullscreen Design Update (August 15, 2025)**: Enhanced visual consistency across all pages
-  - **Consistent Fullscreen Layout**: All pages now use the modern fullscreen design pattern like Profile page
-  - **Color Theme Variety**: Reduced green dominance with page-specific color schemes
-    - **Dashboard**: Classic emerald/green theme for main interface
-    - **Meals**: Orange/amber theme for nutrition and food planning
-    - **Training**: Red/orange theme for workout intensity and motivation
-    - **AI Coach**: Purple/pink theme for intelligence and analysis
-    - **Statistics**: Blue/cyan theme for data visualization and analytics
-    - **Measurements**: Teal/emerald theme for body tracking and progress
-    - **Profile**: Indigo/violet/pink theme for personal settings and achievements
-  - **Animated Backgrounds**: Each page features unique animated particle effects matching theme colors
-  - **Professional Headers**: Large centered icons with spinning borders and gradient backgrounds
-  - **Futuristic Typography**: Bold gradient text headers with theme-appropriate color schemes
-  - **Complete Color Consistency**: Replaced all green/primary elements with theme-specific colors for visual harmony
-    - **Themed Glow Effects**: Page-specific hover glows matching each theme (orange, red, purple, blue, teal, indigo)
-    - **Icon Color Coordination**: All icons, badges, and UI elements now use page-appropriate colors
-    - **Eliminated Color Discord**: Fixed jarring visual inconsistencies between glow effects and UI elements
-- **Home Page Decluttering (August 15, 2025)**: Streamlined the main dashboard interface
-  - **Removed Excessive Gamification**: Eliminated levels, points, streaks, powerups, daily challenges systems
-  - **Simplified Layout**: Consolidated multiple motivation sections into single Progress Summary
-  - **Cleaner Interface**: Focused on essential tracking features rather than gamification overload
-  - **Better User Experience**: Reduced visual noise and cognitive load on the main page
-  - **Dedicated Achievements Page**: Moved all gamification elements to separate "/achievements" page
-    - **Preserved Fun Elements**: Levels, points, streaks, powerups, daily challenges now in dedicated space
-    - **Side Menu Access**: Added "Achievements" option to Tools section with "Fun" badge
-    - **Yellow Theme**: New achievements page uses golden/amber color scheme for trophy/reward feel
-- **Major App Enhancements (August 10, 2025)**: Implemented comprehensive feature expansion
-  - **Body Measurements Tracking**: Complete measurements page with chest, waist, arms, thighs, shoulders, body fat tracking
-  - **Advanced Statistics Dashboard**: Comprehensive analytics with weight/calorie charts, AI insights, performance metrics
-  - **Smart Notifications System**: Intelligent reminders, achievement alerts, progress milestones, consistency tracking
-  - **Enhanced Meal Logger**: Barcode scanning simulation, photo analysis, detailed nutrition tracking, macro breakdown
-  - **Comprehensive Profile Management**: Full user profile with editable info, achievements, progress visualization
-  - **Expanded Navigation**: Added Statistics and Measurements pages to bottom navigation
-  - **Progress Photos Integration**: Framework for transformation photos and visual progress tracking
+GAINLY is a mobile fitness application designed to help hardgainers gain weight by accurately calculating their Total Daily Energy Expenditure (TDEE) and generating AI-powered, personalized meal plans. The app utilizes 7-28 days of tracked data for TDEE calibration and leverages the OpenAI API for meal plan generation. It features a React Native frontend for cross-platform mobile capabilities, supported by local storage and Firebase (optional) for data persistence. The core vision is to provide a comprehensive, engaging, and highly personalized solution for aggressive weight gain, specifically targeting the hardgainer demographic.
 
 # User Preferences
 
@@ -104,83 +10,55 @@ Motivation focus: User appreciates gamification elements and comprehensive motiv
 
 # System Architecture
 
-## Frontend Architecture
-- **Framework**: React with TypeScript and Vite for fast web development
-- **UI Library**: Radix UI primitives with shadcn/ui components and Tailwind CSS
-- **Styling**: Tailwind CSS with dark theme support and responsive design
-- **State Management**: Zustand for client-side state with localStorage persistence and TanStack Query for server caching
-- **Navigation**: Wouter for lightweight client-side routing
-- **Forms**: React Hook Form with Zod validation for type-safe form handling
-- **AI Integration**: OpenAI API (GPT-4o) for intelligent meal plan generation with server-side secret key management
-- **Storage**: Browser localStorage for data persistence with Zustand persist middleware
-- **Charts**: Recharts for weight progress visualization and data trends
+## Core Principles
+The application adopts a mobile-first design approach with a dark theme accented by Grok-inspired green, featuring bottom navigation tabs. It emphasizes real-time TDEE recalibration and progress visualization. A key design decision is the 1kg/week focus, with all meal plans targeting an aggressive 1100 calorie surplus. The system includes a comprehensive motivation system with gamification elements like badges and milestone celebrations, though the primary dashboard is streamlined for essential tracking. A 7-day data collection period is mandatory before full app access to ensure accurate AI calibration.
 
-The web app follows a component-based architecture with clean separation between UI, state management, and business logic layers.
+## Frontend Architecture
+- **Framework**: React with TypeScript and Vite
+- **UI/UX**: Radix UI primitives, shadcn/ui components, and Tailwind CSS for styling (dark theme, responsive design). All pages adhere to a consistent fullscreen layout with unique, animated particle backgrounds and color themes (e.g., Dashboard: emerald/green, Meals: orange/amber, AI Coach: purple/pink). Headers feature large centered icons with spinning borders and gradient backgrounds, complemented by futuristic typography and themed glow effects.
+- **State Management**: Zustand for client-side state (with `localStorage` persistence) and TanStack Query for server caching.
+- **Navigation**: Wouter for lightweight client-side routing, augmented by a modern slide-out side navigation menu structured into Main, Analytics, Tools, and Account sections.
+- **Forms**: React Hook Form with Zod validation.
+- **Charts**: Recharts for data visualization.
+- **Key Features**: Live weight logging, comprehensive meal logging with instant 1-click logging and smart quick actions, full meal editing system, body measurements tracking, advanced statistics dashboard, smart notifications, and a dedicated achievements page for gamification elements.
 
 ## Backend Architecture
-- **Runtime**: Node.js with Express.js framework
+- **Runtime**: Node.js with Express.js
 - **Language**: TypeScript with ES modules
-- **Database ORM**: Drizzle ORM with type-safe schema definitions
-- **API Design**: RESTful API with dedicated route handlers
-- **Data Layer**: Storage abstraction layer separating business logic from database operations
-- **AI Analysis**: Custom TDEE (Total Daily Energy Expenditure) calculation algorithm
-
-The backend implements a layered architecture with clear separation of concerns:
-- Routes layer for HTTP request handling
-- Storage layer for data access abstraction  
-- Business logic layer for AI analysis and calculations
+- **Database ORM**: Drizzle ORM for type-safe schema definitions.
+- **API Design**: RESTful API with dedicated route handlers.
+- **Layered Architecture**: Clear separation of concerns with distinct routes, storage, and business logic layers.
+- **AI Analysis Engine**: Custom TDEE calculation algorithm that analyzes weight trends and calorie intake, provides personalized calorie surplus recommendations, and generates confidence scores. AI meal plan generation (GPT-4o) is server-side, utilizing advanced hardgainer prompts, focusing on calorie-dense and liquid calorie options, respecting dietary restrictions, and ensuring accurate calorie calculations. Robust JSON processing and intelligent fallback logic are implemented for AI responses.
 
 ## Database Schema
-The application uses PostgreSQL with the following core entities:
-- **Users**: Profile information including physical stats and activity levels
-- **Weight Logs**: Daily weight tracking entries
-- **Meal Logs**: Calorie intake tracking with descriptions
-- **Activity Logs**: Daily activity type logging (training, work, rest)
-- **AI Analysis**: Calculated TDEE and calorie recommendations
-
-All tables use UUID primary keys and include proper foreign key relationships and timestamps.
+The application uses PostgreSQL, storing core entities: Users, Weight Logs, Meal Logs, Activity Logs, and AI Analysis results. All tables use UUID primary keys with proper foreign key relationships and timestamps. The `food_items` table is comprehensive, including calories, macros, serving sizes, and categories, supporting international foods.
 
 ## Authentication & Session Management
-The application uses a simple localStorage-based user identification system for demonstration purposes. Session management is handled through connect-pg-simple for production deployment readiness.
-
-## Data Flow & State Management
-- Client-side state is managed through TanStack Query for server synchronization
-- Form state uses React Hook Form with Zod schema validation
-- UI state is handled through React's built-in state management
-- Toast notifications provide user feedback for actions
-
-## AI Analysis Engine
-The application includes a custom AI analysis system that:
-- Calculates TDEE based on weight trends and calorie intake
-- Provides personalized calorie surplus recommendations
-- Analyzes weight gain progress and suggests adjustments
-- Generates confidence scores for recommendations
+A localStorage-based user identification system is used for demonstration, with `connect-pg-simple` prepared for production session management.
 
 # External Dependencies
 
 ## Database & Infrastructure
-- **Neon Database**: Serverless PostgreSQL database hosting
-- **Connection Pooling**: @neondatabase/serverless for efficient database connections
+- **Neon Database**: Serverless PostgreSQL database hosting.
+- **@neondatabase/serverless**: For efficient database connections.
+
+## AI Integration
+- **OpenAI API**: Specifically GPT-4o for advanced AI meal plan generation.
 
 ## UI & Design System
-- **Radix UI**: Comprehensive set of accessible React components
-- **Tailwind CSS**: Utility-first CSS framework
-- **Lucide React**: Icon library for consistent iconography
-- **Recharts**: Chart library for data visualization
+- **Radix UI**: Accessible React components.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **Lucide React**: Icon library.
+- **Recharts**: Charting library.
 
 ## Development & Build Tools
-- **Vite**: Fast build tool and development server
-- **TypeScript**: Type safety and enhanced developer experience
-- **ESBuild**: Fast JavaScript bundler for production builds
-- **Drizzle Kit**: Database migration and schema management tools
+- **Vite**: Fast build tool and development server.
+- **TypeScript**: For type safety.
+- **Drizzle Kit**: Database migration and schema management.
+- **PostCSS**: CSS processing.
 
 ## Data & Form Management
-- **TanStack Query**: Server state management and caching
-- **React Hook Form**: Form handling with validation
-- **Zod**: Runtime schema validation
-- **Date-fns**: Date manipulation and formatting utilities
-
-## Deployment & Development
-- **Replit Integration**: Development environment with specialized plugins
-- **PostCSS**: CSS processing with Tailwind integration
-- **WebSocket Support**: Real-time capabilities through ws library
+- **TanStack Query**: Server state management and caching.
+- **React Hook Form**: Form handling.
+- **Zod**: Runtime schema validation.
+- **Date-fns**: Date manipulation.
