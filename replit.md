@@ -9,6 +9,7 @@ UX preferences: Clickable numbers for editing rather than small icon buttons - m
 Motivation focus: User appreciates gamification elements and comprehensive motivational features to increase engagement.
 **Dynamic Weight Milestones (August 15, 2025)**: User prefers weight milestones that are dynamic based on current weight (every 1-2kg) rather than fixed values. Each user should have personalized milestone progression from their starting weight to goal weight.
 **Dashboard Micro Goals Integration (August 15, 2025)**: User requested a micro goals overview on the dashboard showing next milestone progress and estimated achievement dates based on 1kg/week progress rate. Replaced the standard "Weight Goal" section with a compact milestone tracker.
+**Dashboard Cleanup (August 15, 2025)**: Removed redundant "Today's Summary" section that duplicated weight and calorie information already shown in the top quick stats area. Streamlined dashboard for better user experience.
 
 # System Architecture
 

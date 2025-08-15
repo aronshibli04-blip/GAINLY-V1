@@ -201,56 +201,13 @@ export default function MobileHome() {
           <MicroGoalsOverview />
         </div>
 
-        {/* Today's Summary - Weight & Calories */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Today's Summary</h3>
-          
-          {/* Weight and Calories Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            {/* Today's Weight */}
-            <Card className="grok-glow-hover border-primary/20">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <TrendingUp className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white">
-                      {todayWeight ? `${todayWeight.weight}kg` : 'Not logged'}
-                    </p>
-                    <p className="text-xs text-muted-foreground truncate">Today's weight</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Today's Calories - Clickable to Meals */}
-            <Link href="/meals">
-              <Card className="grok-glow-hover border-primary/20 cursor-pointer">
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center">
-                      <Zap className="h-5 w-5 text-orange-400" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white">
-                        {todayCalories > 0 ? `${todayCalories} kcal` : 'Log food'}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">Today's calories</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+        {/* Weight Logging Section - Only show if not logged today */}
+        {!todayWeight && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Log Weight</h3>
+            <WeightLogger />
           </div>
-
-          {/* Weight Logging Section - Only show if not logged today */}
-          {!todayWeight && (
-            <div className="pt-2">
-              <WeightLogger />
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Weight Progress Chart - Keep this for quick overview */}
         {weightEntries.length >= 3 && (
