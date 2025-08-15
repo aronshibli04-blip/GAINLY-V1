@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, Bell, Zap } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface MobileHeaderProps {
   title: string;
@@ -8,6 +10,18 @@ interface MobileHeaderProps {
 }
 
 export function MobileHeader({ title, onOpenMenu, showNotifications = true }: MobileHeaderProps) {
+  const { toast } = useToast();
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
+
+  const handleNotificationClick = () => {
+    setHasUnreadNotifications(false);
+    toast({
+      title: "Notifications",
+      description: "You have 2 new milestones available! Great progress on your weight gain journey.",
+      duration: 3000,
+    });
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-xl border-b border-primary/20 px-4 py-3">
       <div className="flex items-center justify-between">
@@ -34,12 +48,16 @@ export function MobileHeader({ title, onOpenMenu, showNotifications = true }: Mo
           <Button 
             variant="ghost" 
             size="sm"
+            onClick={handleNotificationClick}
             className="text-gray-400 hover:text-white hover:bg-primary/20 p-2 relative"
+            data-testid="button-notifications"
           >
             <Bell className="h-5 w-5" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full flex items-center justify-center">
-              <div className="w-1.5 h-1.5 bg-black rounded-full" />
-            </div>
+            {hasUnreadNotifications && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full flex items-center justify-center animate-pulse">
+                <div className="w-1.5 h-1.5 bg-black rounded-full" />
+              </div>
+            )}
           </Button>
         )}
       </div>
