@@ -87,11 +87,18 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       section: "Tools",
       items: [
         { 
+          icon: Target, 
+          label: "Progress", 
+          path: "/progress", 
+          description: "Charts, photos & detailed tracking",
+          badge: "New"
+        },
+        { 
           icon: Calendar, 
           label: "Training", 
           path: "/training", 
           description: "Workout planning & logging",
-          badge: "New"
+          badge: null
         },
         { 
           icon: Trophy, 
