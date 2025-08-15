@@ -109,18 +109,9 @@ export default function MobileHome() {
         onOpenMenu={openMenu}
       />
 
-      {/* Status Bar - Removed duplicate notifications */}
-      <div className="fixed top-16 left-0 right-0 z-40 bg-slate-950/90 backdrop-blur-sm border-b border-emerald-500/20">
-        <div className="flex items-center justify-center px-4 py-2">
-          {/* Calorie Indicator - Centered */}
-          <div className="flex items-center gap-1 font-bold text-sm text-emerald-400">
-            <Zap className="h-4 w-4" />
-            {todayCalories.toLocaleString()}
-          </div>
-        </div>
-      </div>
+
       
-      <div className="content-with-bottom-nav pt-24 p-4 space-y-4 pb-28">
+      <div className="content-with-bottom-nav pt-20 p-4 space-y-4 pb-28">
 
         {/* Aggressive 1kg/Week Surplus Tracker */}
         <AggressiveSurplusTracker />
@@ -163,11 +154,16 @@ export default function MobileHome() {
 
           <Card className="grok-glow-hover">
             <CardContent className="p-4 text-center">
-              <Target className="h-6 w-6 text-primary mx-auto mb-2" />
+              <Zap className="h-6 w-6 text-orange-400 mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Today's Calories</p>
               <p className="text-lg font-bold text-white">
-                {todayCalories > 0 ? `${todayCalories}` : "Not logged"}
+                {todayCalories > 0 ? `${todayCalories.toLocaleString()}` : "Not logged"}
               </p>
+              {todayCalories > 0 && (
+                <p className="text-xs text-orange-400 font-semibold mt-1">
+                  +{(todayCalories - 2400).toLocaleString()} surplus
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>

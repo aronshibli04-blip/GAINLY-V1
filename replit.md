@@ -14,6 +14,7 @@ Motivation focus: User appreciates gamification elements and comprehensive motiv
 **Progress Page Implementation (August 15, 2025)**: Created comprehensive Progress page (/progress) with tabbed interface showing overview statistics, weight/calorie charts, and progress photos section. Re-added Progress menu item to Tools section. Consolidated progress tracking features into one unified experience.
 **Statistics & Progress Merge (August 15, 2025)**: Merged Statistics and Progress pages into a single comprehensive "Fremgang" (Progress) page with 4 tabs: Overview, Charts, Analytics, and Photos. Removed duplicate Statistics menu item from Analytics section. Enhanced Analytics tab with advanced insights, AI recommendations, and weekly analysis. Eliminated duplicate functionality and menu items.
 **Side Menu Organization (August 15, 2025)**: Reorganized side menu order to prioritize user workflow: Main (Dashboard, Meals, Goals), Tools (Progress, Training, Achievements), Analytics (AI Coach, Measurements), Account (Profile, Settings). Improved navigation hierarchy.
+**Dashboard Calorie Display Fix (August 15, 2025)**: Moved calorie count from top status bar to Quick Stats card with better formatting, surplus calculation, and orange theme. Removed redundant top status bar and improved visual hierarchy.
 
 # System Architecture
 
