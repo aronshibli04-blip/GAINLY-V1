@@ -298,12 +298,6 @@ export default function MobileHome() {
           <PowerUpSystem />
         </div>
 
-        {/* Power-up System */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Power-ups</h3>
-          <PowerUpSystem />
-        </div>
-
         {/* Recent Activity */}
         {totalDays > 0 && (
           <div className="space-y-3">
