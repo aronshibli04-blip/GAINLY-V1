@@ -24,6 +24,7 @@ import { SmartNotifications } from "@/components/ui/smart-notifications";
 import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
+import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
 export default function MobileHome() {
   const { 
@@ -36,6 +37,17 @@ export default function MobileHome() {
   } = useUserStore();
   
   const { openMenu } = useMenu();
+
+  // Clear old test data on component mount
+  useEffect(() => {
+    // Clear old test data if detected
+    if (isTestData()) {
+      console.warn('Detected test data from August - clearing for fresh start');
+      clearOldTestData();
+      clearUserData();
+      window.location.reload();
+    }
+  }, []);
 
   // Redirect to calibration mode if user hasn't completed calibration
   useEffect(() => {
