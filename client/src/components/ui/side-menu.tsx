@@ -58,25 +58,6 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       ]
     },
     {
-      section: "Analytics",
-      items: [
-        { 
-          icon: Brain, 
-          label: "AI Coach", 
-          path: "/ai-coach", 
-          description: "Personal nutrition guidance",
-          badge: "GPT-4o"
-        },
-        { 
-          icon: Ruler, 
-          label: "Measurements", 
-          path: "/measurements", 
-          description: "Body measurements tracking",
-          badge: null
-        }
-      ]
-    },
-    {
       section: "Tools",
       items: [
         { 
@@ -99,6 +80,25 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
           path: "/achievements", 
           description: "Gamification & rewards",
           badge: "Fun"
+        }
+      ]
+    },
+    {
+      section: "Analytics",
+      items: [
+        { 
+          icon: Brain, 
+          label: "AI Coach", 
+          path: "/ai-coach", 
+          description: "Personal nutrition guidance",
+          badge: "GPT-4o"
+        },
+        { 
+          icon: Ruler, 
+          label: "Measurements", 
+          path: "/measurements", 
+          description: "Body measurements tracking",
+          badge: null
         }
       ]
     },
