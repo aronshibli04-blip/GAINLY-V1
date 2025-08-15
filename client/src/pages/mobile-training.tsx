@@ -194,7 +194,7 @@ export default function MobileTraining() {
         </div>
 
         {/* Today's Summary */}
-        <Card className="grok-glow-hover">
+        <Card className="training-glow-hover">
           <CardContent className="p-4 text-center">
             <Dumbbell className="h-6 w-6 text-primary mx-auto mb-2" />
             <p className="text-xs text-muted-foreground">Today's Training</p>
@@ -207,7 +207,7 @@ export default function MobileTraining() {
         </Card>
 
         {/* Activity Logging */}
-        <Card className="grok-glow-hover">
+        <Card className="training-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
               <Dumbbell className="h-5 w-5 mr-2 text-primary" />
@@ -273,7 +273,7 @@ export default function MobileTraining() {
         </Card>
 
         {/* Quick Activity Buttons */}
-        <Card className="grok-glow-hover">
+        <Card className="training-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
               <Target className="h-5 w-5 mr-2 text-primary" />
@@ -284,7 +284,7 @@ export default function MobileTraining() {
             <div className="grid grid-cols-2 gap-3">
               <Button
                 variant="outline"
-                className="h-16 flex flex-col space-y-1 grok-glow-hover"
+                className="h-16 flex flex-col space-y-1 training-glow-hover"
                 onClick={() => {
                   setActivityType("moderate");
                   setDuration("1");
@@ -297,7 +297,7 @@ export default function MobileTraining() {
 
               <Button
                 variant="outline"
-                className="h-16 flex flex-col space-y-1 grok-glow-hover"
+                className="h-16 flex flex-col space-y-1 training-glow-hover"
                 onClick={() => {
                   setActivityType("heavy");
                   setDuration("1.5");

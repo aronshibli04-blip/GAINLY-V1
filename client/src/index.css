@@ -77,6 +77,49 @@
     transform: translateY(-1px);
     transition: all 0.2s ease;
   }
+
+  /* Page-specific glow effects */
+  .meals-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(39, 100%, 50%, 0.5);
+    border-color: hsla(39, 100%, 50%, 0.4);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  .training-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(4, 90%, 58%, 0.5);
+    border-color: hsla(4, 90%, 58%, 0.4);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  .ai-coach-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(300, 70%, 70%, 0.5);
+    border-color: hsla(300, 70%, 70%, 0.4);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  .statistics-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(200, 90%, 60%, 0.5);
+    border-color: hsla(200, 90%, 60%, 0.4);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  .measurements-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(175, 70%, 55%, 0.5);
+    border-color: hsla(175, 70%, 55%, 0.4);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  .profile-glow-hover:hover {
+    box-shadow: 0 0 30px hsla(260, 70%, 65%, 0.5);
+    border-color: hsla(260, 70%, 65%, 0.4);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
   
   .grok-gradient {
     background: linear-gradient(135deg, hsl(147, 100%, 45%) 0%, hsl(270, 100%, 70%) 100%);

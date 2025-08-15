@@ -181,7 +181,7 @@ export default function MobileStatistics() {
 
         {/* Progress Overview - Home Page Style */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <Card className="grok-glow-hover">
+          <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
               <Scale className="h-6 w-6 text-primary mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Weight Gained</p>
@@ -194,7 +194,7 @@ export default function MobileStatistics() {
             </CardContent>
           </Card>
 
-          <Card className="grok-glow-hover">
+          <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
               <Target className="h-6 w-6 text-primary mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Goal Progress</p>
@@ -207,7 +207,7 @@ export default function MobileStatistics() {
             </CardContent>
           </Card>
 
-          <Card className="grok-glow-hover">
+          <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
               <Zap className="h-6 w-6 text-primary mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Daily Surplus</p>
@@ -220,7 +220,7 @@ export default function MobileStatistics() {
             </CardContent>
           </Card>
 
-          <Card className="grok-glow-hover">
+          <Card className="statistics-glow-hover">
             <CardContent className="p-4 text-center">
               <Activity className="h-6 w-6 text-primary mx-auto mb-2" />
               <p className="text-xs text-muted-foreground">Consistency</p>
@@ -235,7 +235,7 @@ export default function MobileStatistics() {
         </div>
 
         {/* Interactive Weight Chart - Home Page Style */}
-        <Card className="grok-glow-hover mb-6">
+        <Card className="statistics-glow-hover mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <TrendingUp className="h-5 w-5 text-primary" />
@@ -288,7 +288,7 @@ export default function MobileStatistics() {
         </Card>
 
         {/* Interactive Calorie Chart - Home Page Style */}
-        <Card className="grok-glow-hover mb-6">
+        <Card className="statistics-glow-hover mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Utensils className="h-5 w-5 text-primary" />
@@ -333,7 +333,7 @@ export default function MobileStatistics() {
         </Card>
 
         {/* AI Performance Insights - Home Page Style */}
-        <Card className="grok-glow-hover mb-6">
+        <Card className="statistics-glow-hover mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Brain className="h-5 w-5 text-primary" />
@@ -398,7 +398,7 @@ export default function MobileStatistics() {
               <TdeeAnalysisCard />
             </div>
             
-            <Card className="grok-glow-hover mb-6">
+            <Card className="statistics-glow-hover mb-6">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
                   <Calendar className="h-5 w-5 text-primary" />
@@ -413,7 +413,7 @@ export default function MobileStatistics() {
         )}
 
         {/* Quick Stats Summary - Home Page Style */}
-        <Card className="grok-glow-hover">
+        <Card className="statistics-glow-hover">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <BarChart3 className="h-5 w-5 text-primary" />

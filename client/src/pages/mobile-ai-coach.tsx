@@ -120,7 +120,7 @@ export default function MobileAICoach() {
         </div>
 
         {/* Data Status */}
-        <Card className="grok-glow-hover">
+        <Card className="ai-coach-glow-hover">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -141,7 +141,7 @@ export default function MobileAICoach() {
 
         {/* Analysis Section */}
         {totalDays >= 7 && (
-          <Card className="grok-glow-hover">
+          <Card className="ai-coach-glow-hover">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center">
                 <Brain className="h-5 w-5 mr-2 text-primary" />
@@ -204,7 +204,7 @@ export default function MobileAICoach() {
         )}
 
         {/* Progress Insights */}
-        <Card className="grok-glow-hover">
+        <Card className="ai-coach-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
               <TrendingUp className="h-5 w-5 mr-2 text-primary" />
@@ -261,7 +261,7 @@ export default function MobileAICoach() {
         </Card>
 
         {/* Action Recommendations */}
-        <Card className="grok-glow-hover">
+        <Card className="ai-coach-glow-hover">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
               <Target className="h-5 w-5 mr-2 text-primary" />

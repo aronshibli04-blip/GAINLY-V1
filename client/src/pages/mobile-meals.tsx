@@ -138,7 +138,7 @@ export default function MobileMeals() {
         </div>
 
         {/* Requirements Check */}
-        <Card className="grok-glow-hover">
+        <Card className="meals-glow-hover">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -159,7 +159,7 @@ export default function MobileMeals() {
 
         {/* Meal Plan Generation */}
         {canGenerateMealPlan && (
-          <Card className="grok-glow-hover">
+          <Card className="meals-glow-hover">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center">
                 <Sparkles className="h-5 w-5 mr-2 text-primary" />
@@ -217,7 +217,7 @@ export default function MobileMeals() {
 
         {/* Latest Meal Plan */}
         {latestMealPlan && (
-          <Card className="grok-glow-hover">
+          <Card className="meals-glow-hover">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center justify-between">
                 <div className="flex items-center">
