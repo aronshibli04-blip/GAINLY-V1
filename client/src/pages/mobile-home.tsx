@@ -102,82 +102,128 @@ export default function MobileHome() {
   const phaseInfo = getPhaseInfo();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-emerald-950/10 to-slate-950 text-white pb-24 relative overflow-hidden">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Dashboard" 
         onOpenMenu={openMenu}
       />
 
-      {/* Animated Background Particles */}
+      {/* Enhanced Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {/* Larger floating particles */}
+        {[...Array(30)].map((_, i) => (
           <div
-            key={i}
-            className="absolute w-1 h-1 bg-emerald-400/20 rounded-full animate-pulse"
+            key={`large-${i}`}
+            className="absolute w-2 h-2 bg-emerald-400/30 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${3 + Math.random() * 4}s`,
+              filter: 'blur(0.5px)'
+            }}
+          />
+        ))}
+        {/* Smaller particles */}
+        {[...Array(80)].map((_, i) => (
+          <div
+            key={`small-${i}`}
+            className="absolute w-1 h-1 bg-emerald-300/20 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
+              animationDuration: `${2 + Math.random() * 3}s`
             }}
           />
         ))}
+        {/* Gradient orbs */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl animate-pulse" 
+             style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 bg-green-500/5 rounded-full blur-3xl animate-pulse" 
+             style={{ animationDuration: '12s', animationDelay: '4s' }} />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 pt-20 py-6 space-y-6 pb-28">
 
-        {/* Header with GAINLY branding */}
-        <div className="text-center mb-8">
-          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
-            <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-spin" 
-                 style={{ animationDuration: '15s' }} />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 flex items-center justify-center shadow-xl">
-              <Zap className="h-8 w-8 text-black" />
+        {/* Enhanced Header with GAINLY branding */}
+        <div className="text-center mb-8 relative">
+          <div className="relative inline-flex items-center justify-center w-24 h-24 mb-6">
+            {/* Multiple rotating rings */}
+            <div className="absolute inset-0 rounded-full border-2 border-emerald-400/40 animate-spin" 
+                 style={{ animationDuration: '20s' }} />
+            <div className="absolute inset-1 rounded-full border border-green-400/30 animate-spin" 
+                 style={{ animationDuration: '15s', animationDirection: 'reverse' }} />
+            <div className="absolute inset-2 rounded-full border border-emerald-300/20 animate-spin" 
+                 style={{ animationDuration: '25s' }} />
+            
+            {/* Central icon with enhanced glow */}
+            <div className="relative z-10 w-18 h-18 rounded-full bg-gradient-to-br from-emerald-400 via-green-400 to-emerald-600 flex items-center justify-center shadow-2xl" 
+                 style={{ 
+                   boxShadow: '0 0 40px rgba(16, 185, 129, 0.4), 0 0 80px rgba(16, 185, 129, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.2)' 
+                 }}>
+              <Zap className="h-10 w-10 text-black drop-shadow-sm" />
             </div>
           </div>
           
-          <h1 className="text-4xl font-black mb-2">
-            <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-black mb-3 tracking-tight">
+            <span className="bg-gradient-to-r from-emerald-300 via-green-400 to-emerald-500 bg-clip-text text-transparent" 
+                  style={{ 
+                    filter: 'drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3))' 
+                  }}>
               GAINLY
             </span>
           </h1>
-          <p className="text-emerald-400/70">Your AI-powered bulk companion</p>
+          <p className="text-emerald-400/80 text-lg font-medium tracking-wide">Your AI-powered bulk companion</p>
         </div>
 
         {/* Aggressive 1kg/Week Surplus Tracker */}
         <AggressiveSurplusTracker />
 
-        {/* Phase Status - Enhanced style indicator */}
-        <div className="flex items-center justify-center space-x-3 py-3 bg-slate-800/30 rounded-xl border border-emerald-400/20 mb-6">
-          <div className={`w-3 h-3 rounded-full ${phaseInfo.color.includes('grok-gradient') ? 'bg-gradient-to-r from-emerald-400 to-green-400' : phaseInfo.color} ${phaseInfo.color.includes('animate-pulse') ? 'animate-pulse' : ''}`} 
+        {/* Enhanced Phase Status */}
+        <div className="flex items-center justify-center space-x-4 py-4 px-6 bg-gradient-to-r from-slate-800/40 via-slate-700/40 to-slate-800/40 rounded-2xl border border-emerald-400/30 mb-8 backdrop-blur-sm" 
+             style={{ 
+               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+             }}>
+          <div className={`w-4 h-4 rounded-full ${phaseInfo.color.includes('grok-gradient') ? 'bg-gradient-to-r from-emerald-400 to-green-400' : phaseInfo.color} ${phaseInfo.color.includes('animate-pulse') ? 'animate-pulse' : ''}`} 
                style={phaseInfo.color.includes('grok-gradient') ? { 
-                 boxShadow: '0 0 10px hsla(147, 100%, 45%, 0.6)' 
+                 boxShadow: '0 0 16px hsla(147, 100%, 45%, 0.8), 0 0 32px hsla(147, 100%, 45%, 0.4)' 
                } : {}} />
-          <p className="text-sm font-medium text-emerald-400">{phaseInfo.subtitle}</p>
+          <p className="text-sm font-semibold text-emerald-300 tracking-wide">{phaseInfo.subtitle}</p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="bg-gradient-to-r from-slate-800/90 to-slate-700/90 border-emerald-400/20 hover:border-emerald-400/40 transition-all duration-300">
-            <CardContent className="p-4 text-center">
-              <TrendingUp className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-              <p className="text-xs text-slate-400">Today's Weight</p>
-              <p className="text-lg font-bold text-white">
+        {/* Enhanced Quick Stats */}
+        <div className="grid grid-cols-2 gap-6">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-emerald-400/30 hover:border-emerald-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/20 backdrop-blur-sm" 
+                style={{ 
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+                }}>
+            <CardContent className="p-5 text-center">
+              <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-emerald-400/20">
+                <TrendingUp className="h-6 w-6 text-emerald-400 drop-shadow-lg" />
+              </div>
+              <p className="text-xs text-slate-300 font-medium tracking-wide uppercase">Today's Weight</p>
+              <p className="text-xl font-black text-white mt-1 tracking-tight">
                 {todayWeight ? `${todayWeight.weight}kg` : "Not logged"}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-slate-800/90 to-slate-700/90 border-orange-400/20 hover:border-orange-400/40 transition-all duration-300">
-            <CardContent className="p-4 text-center">
-              <Zap className="h-6 w-6 text-orange-400 mx-auto mb-2" />
-              <p className="text-xs text-slate-400">Today's Calories</p>
-              <p className="text-lg font-bold text-white">
+          <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-orange-400/30 hover:border-orange-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20 backdrop-blur-sm" 
+                style={{ 
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+                }}>
+            <CardContent className="p-5 text-center">
+              <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-orange-400/20">
+                <Zap className="h-6 w-6 text-orange-400 drop-shadow-lg" />
+              </div>
+              <p className="text-xs text-slate-300 font-medium tracking-wide uppercase">Today's Calories</p>
+              <p className="text-xl font-black text-white mt-1 tracking-tight">
                 {todayCalories > 0 ? `${todayCalories.toLocaleString()}` : "Not logged"}
               </p>
               {todayCalories > 0 && (
-                <p className="text-xs text-orange-400 font-semibold mt-1">
+                <p className="text-xs text-orange-400 font-bold mt-2 tracking-wide">
                   +{(todayCalories - 2400).toLocaleString()} surplus
                 </p>
               )}
@@ -185,34 +231,51 @@ export default function MobileHome() {
           </Card>
         </div>
 
-        {/* Quick Action Cards */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* Enhanced Quick Action Cards */}
+        <div className="grid grid-cols-2 gap-6">
           <Link href="/progress">
-            <Card className="bg-gradient-to-r from-slate-800/90 to-slate-700/90 border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer">
-              <CardContent className="p-4 text-center">
-                <Activity className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
-                <p className="text-xs text-slate-400">Advanced</p>
-                <p className="text-sm font-semibold text-white">Progress</p>
+            <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-cyan-400/30 hover:border-cyan-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 cursor-pointer backdrop-blur-sm" 
+                  style={{ 
+                    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+                  }}>
+              <CardContent className="p-5 text-center">
+                <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-cyan-400/20">
+                  <Activity className="h-6 w-6 text-cyan-400 drop-shadow-lg" />
+                </div>
+                <p className="text-xs text-slate-300 font-medium tracking-wide uppercase">Advanced</p>
+                <p className="text-sm font-bold text-white tracking-tight">Progress</p>
               </CardContent>
             </Card>
           </Link>
 
           <Link href="/measurements">
-            <Card className="bg-gradient-to-r from-slate-800/90 to-slate-700/90 border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 cursor-pointer">
-              <CardContent className="p-4 text-center">
-                <Ruler className="h-6 w-6 text-purple-400 mx-auto mb-2" />
-                <p className="text-xs text-slate-400">Body</p>
-                <p className="text-sm font-semibold text-white">Measurements</p>
+            <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-purple-400/30 hover:border-purple-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer backdrop-blur-sm" 
+                  style={{ 
+                    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+                  }}>
+              <CardContent className="p-5 text-center">
+                <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-purple-400/20">
+                  <Ruler className="h-6 w-6 text-purple-400 drop-shadow-lg" />
+                </div>
+                <p className="text-xs text-slate-300 font-medium tracking-wide uppercase">Body</p>
+                <p className="text-sm font-bold text-white tracking-tight">Measurements</p>
               </CardContent>
             </Card>
           </Link>
         </div>
 
-        {/* Micro Goals Overview */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <Target className="h-5 w-5 text-emerald-400" />
-            Next Milestone
+        {/* Enhanced Micro Goals Overview */}
+        <div className="space-y-5">
+          <h3 className="text-2xl font-black text-white flex items-center gap-3 tracking-tight">
+            <div className="relative">
+              <Target className="h-6 w-6 text-emerald-400 drop-shadow-lg" />
+              <div className="absolute inset-0 animate-ping">
+                <Target className="h-6 w-6 text-emerald-400/40" />
+              </div>
+            </div>
+            <span className="bg-gradient-to-r from-emerald-300 to-green-400 bg-clip-text text-transparent">
+              Next Milestone
+            </span>
           </h3>
           <MicroGoalsOverview />
         </div>
