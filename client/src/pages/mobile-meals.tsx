@@ -137,7 +137,23 @@ export default function MobileMeals() {
           <p className="text-orange-400/70">AI-generated nutrition for hardgainers</p>
         </div>
 
-
+        {/* No Analysis Warning - Moved to Top */}
+        {!canGenerateMealPlan && (
+          <Card className="border-yellow-500/20 bg-yellow-500/5 mb-6">
+            <CardContent className="p-4 text-center">
+              <Sparkles className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
+              <p className="text-sm text-yellow-400 font-medium mb-1">
+                Complete Setup Required
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {totalDays < 7 
+                  ? `Track for ${7 - totalDays} more days, then generate TDEE analysis to unlock meal plans`
+                  : "Generate your TDEE analysis in AI Coach to unlock meal plans"
+                }
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Meal Plan Generation */}
         {canGenerateMealPlan && (
@@ -281,23 +297,7 @@ export default function MobileMeals() {
         {/* Today's Logged Meals - Editable */}
         <EditableMealsList />
 
-        {/* No Analysis Warning */}
-        {!canGenerateMealPlan && (
-          <Card className="border-yellow-500/20 bg-yellow-500/5">
-            <CardContent className="p-4 text-center">
-              <Sparkles className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-              <p className="text-sm text-yellow-400 font-medium mb-1">
-                Complete Setup Required
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {totalDays < 7 
-                  ? `Track for ${7 - totalDays} more days, then generate TDEE analysis to unlock meal plans`
-                  : "Generate your TDEE analysis in AI Coach to unlock meal plans"
-                }
-              </p>
-            </CardContent>
-          </Card>
-        )}
+
 
       </div>
 
