@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { MobileHeader } from "@/components/ui/mobile-header";
+import { useMenu } from "@/components/ui/menu-context";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { Brain, Zap, TrendingUp, Target, Activity } from "lucide-react";
@@ -10,6 +12,7 @@ import { calculateTdee } from "@/utils/tdee";
 
 export default function MobileAICoach() {
   const { toast } = useToast();
+  const { openMenu } = useMenu();
   const [isGenerating, setIsGenerating] = useState(false);
   const { 
     weightEntries, 
@@ -74,7 +77,13 @@ export default function MobileAICoach() {
 
   return (
     <div className="mobile-container">
-      <div className="content-with-bottom-nav p-4 space-y-4">
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="AI Coach" 
+        onOpenMenu={openMenu}
+      />
+      
+      <div className="content-with-bottom-nav pt-16 p-4 space-y-4">
         
         {/* Header */}
         <div className="pt-4">

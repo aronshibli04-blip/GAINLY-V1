@@ -123,6 +123,12 @@ export default function MobileProfile() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-24">
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="Profile" 
+        onOpenMenu={openMenu}
+      />
+      
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(50)].map((_, i) => (
@@ -139,7 +145,7 @@ export default function MobileProfile() {
         ))}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-8">
+      <div className="relative z-10 container mx-auto px-4 pt-20 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">

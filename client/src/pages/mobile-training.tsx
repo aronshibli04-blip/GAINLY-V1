@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { MobileHeader } from "@/components/ui/mobile-header";
+import { useMenu } from "@/components/ui/menu-context";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserStore } from "@/store/userStore";
@@ -14,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function MobileTraining() {
   const { toast } = useToast();
+  const { openMenu } = useMenu();
   const { addActivityEntry, activityEntries } = useUserStore();
 
   const [activityType, setActivityType] = useState<string>("");
@@ -88,7 +91,13 @@ export default function MobileTraining() {
 
   return (
     <div className="mobile-container">
-      <div className="content-with-bottom-nav p-4 space-y-4">
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="Training" 
+        onOpenMenu={openMenu}
+      />
+      
+      <div className="content-with-bottom-nav pt-16 p-4 space-y-4">
 
         {/* Training Impact on Weight Gain */}
         <Card className={`${daysSinceLastTraining >= 3 ? 'border-red-500/40 bg-red-500/10' : trainingFrequency >= 3 ? 'border-green-500/40 bg-green-500/10' : 'border-yellow-500/40 bg-yellow-500/10'}`}>
