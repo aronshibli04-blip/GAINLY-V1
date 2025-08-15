@@ -111,8 +111,8 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
           icon: Trophy, 
           label: "Achievements", 
           path: "/achievements", 
-          description: "Badges & milestones",
-          badge: null
+          description: "Gamification & rewards",
+          badge: "Fun"
         }
       ]
     },
