@@ -61,13 +61,6 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       section: "Analytics",
       items: [
         { 
-          icon: BarChart3, 
-          label: "Statistics", 
-          path: "/progress", 
-          description: "Detailed analytics & insights",
-          badge: "Pro"
-        },
-        { 
           icon: Brain, 
           label: "AI Coach", 
           path: "/ai-coach", 
