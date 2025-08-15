@@ -262,40 +262,12 @@ export default function MobileHome() {
 
 
 
-        {/* Daily Challenges */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Daily Challenges</h3>
-          <DailyChallenges />
-        </div>
 
-        {/* Achievements */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Achievements</h3>
-          <AchievementSystem />
-        </div>
 
-        {/* Enhanced Motivation System */}
+        {/* Simplified Progress Summary */}
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Motivasjon & Fremgang</h3>
+          <h3 className="text-lg font-semibold text-white">Progress Summary</h3>
           <MotivationBoost />
-        </div>
-
-        {/* Gamification System */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Ditt Nivå & Poeng</h3>
-          <GamificationSystem />
-        </div>
-
-        {/* Progress Streaks */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Din Streak</h3>
-          <ProgressStreaks />
-        </div>
-
-        {/* Power-up System */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Power-ups</h3>
-          <PowerUpSystem />
         </div>
 
         {/* Recent Activity */}
