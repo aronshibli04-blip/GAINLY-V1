@@ -1,8 +1,8 @@
 /**
- * Utility function to clear old test data that might be lingering in localStorage
+ * Utility function to clear old test data from both localStorage and database
  * This should be called when the app starts to ensure clean state for new users
  */
-export function clearOldTestData() {
+export async function clearOldTestData() {
   const keysToRemove: string[] = [];
   
   // Find all localStorage keys that might contain old test data
@@ -18,11 +18,27 @@ export function clearOldTestData() {
     }
   }
   
-  // Remove old keys
+  // Remove old keys from localStorage
   keysToRemove.forEach(key => {
     localStorage.removeItem(key);
-    console.log(`Cleared old test data: ${key}`);
+    console.log(`Cleared old test data from localStorage: ${key}`);
   });
+  
+  // Also clear old test data from database
+  try {
+    const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
+    const response = await fetch('/api/clear-test-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
+    });
+    
+    if (response.ok) {
+      console.log('Cleared old test data from database');
+    }
+  } catch (error) {
+    console.warn('Could not clear test data from database:', error);
+  }
   
   if (keysToRemove.length > 0) {
     console.log(`Cleared ${keysToRemove.length} old test data entries from localStorage`);

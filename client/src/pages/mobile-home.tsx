@@ -43,9 +43,10 @@ export default function MobileHome() {
     // Clear old test data if detected
     if (isTestData()) {
       console.warn('Detected test data from August - clearing for fresh start');
-      clearOldTestData();
-      clearUserData();
-      window.location.reload();
+      clearOldTestData().then(() => {
+        clearUserData();
+        window.location.reload();
+      });
     }
   }, []);
 

@@ -63,6 +63,8 @@ export interface IStorage {
   // Meal log edit methods
   updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog>;
   deleteMealLog(mealId: string): Promise<void>;
+  deleteMealLogsByDescription(userId: string, description: string): Promise<void>;
+  deleteWeightLogsByDateRange(userId: string, startDate: string, endDate: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -287,6 +289,23 @@ export class DatabaseStorage implements IStorage {
     if (result.length === 0) {
       throw new Error('Meal log not found');
     }
+  }
+
+  async deleteMealLogsByDescription(userId: string, description: string): Promise<void> {
+    await db.delete(mealLogs)
+      .where(and(
+        eq(mealLogs.userId, userId),
+        sql`${mealLogs.description} LIKE ${'%' + description + '%'}`
+      ));
+  }
+
+  async deleteWeightLogsByDateRange(userId: string, startDate: string, endDate: string): Promise<void> {
+    await db.delete(weightLogs)
+      .where(and(
+        eq(weightLogs.userId, userId),
+        gte(weightLogs.logDate, startDate),
+        sql`${weightLogs.logDate} <= ${endDate}`
+      ));
   }
 }
 

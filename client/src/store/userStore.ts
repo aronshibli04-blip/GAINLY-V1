@@ -290,41 +290,7 @@ export const useUserStore = create<UserState>()(
         mealPlans: state.mealPlans,
         currentPhase: state.currentPhase,
       }),
-      // Create user-specific storage key when user is set
-      storage: {
-        getItem: (name) => {
-          const state = JSON.parse(localStorage.getItem(name) || '{}');
-          // If there's a user ID, use user-specific storage
-          if (state.state?.user?.id) {
-            const userSpecificKey = `${name}-${state.state.user.id}`;
-            return localStorage.getItem(userSpecificKey);
-          }
-          return localStorage.getItem(name);
-        },
-        setItem: (name, value) => {
-          const state = JSON.parse(value);
-          // If there's a user ID, use user-specific storage
-          if (state.state?.user?.id) {
-            const userSpecificKey = `${name}-${state.state.user.id}`;
-            localStorage.setItem(userSpecificKey, value);
-            // Also clear the old general storage to avoid conflicts
-            localStorage.removeItem(name);
-          } else {
-            localStorage.setItem(name, value);
-          }
-        },
-        removeItem: (name) => {
-          // Remove both general and user-specific storages
-          localStorage.removeItem(name);
-          // Try to remove user-specific ones if they exist
-          for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key?.startsWith(`${name}-`)) {
-              localStorage.removeItem(key);
-            }
-          }
-        },
-      },
+
     }
   )
 );

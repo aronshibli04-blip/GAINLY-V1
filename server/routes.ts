@@ -338,6 +338,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Clear test data from database
+  app.post("/api/clear-test-data", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+
+      // Clear old meal logs with test data patterns
+      const testDescriptions = ['Dates', 'Whole Egg', 'Medjool'];
+      for (const desc of testDescriptions) {
+        await storage.deleteMealLogsByDescription(userId, desc);
+      }
+      
+      // Clear old weight logs from August test period
+      await storage.deleteWeightLogsByDateRange(userId, '2025-08-01', '2025-08-31');
+      
+      res.json({ message: "Test data cleared successfully" });
+    } catch (error: any) {
+      console.error("Error clearing test data:", error);
+      res.status(500).json({ 
+        message: "Failed to clear test data", 
+        error: error.message 
+      });
+    }
+  });
+
   function generateHardgainerFallbackMealPlan(request: any) {
     const avoidOatmeal = request.dietaryPreferences.some((pref: string) => 
       pref.toLowerCase().includes('oat') || pref.toLowerCase().includes('oat meal')
