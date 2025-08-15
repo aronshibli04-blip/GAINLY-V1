@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import { Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { useUserStore } from "@/store/userStore";
-import { useEffect } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
+import { SideMenu } from "@/components/ui/side-menu";
+import { MenuProvider, useMenu } from "@/components/ui/menu-context";
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";
@@ -41,28 +43,59 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background">
-        <Switch>
-          <Route path="/" component={MobileHome} />
-          <Route path="/calibration" component={CalibrationMode} />
-          <Route path="/calories" component={MobileCalories} />
-          <Route path="/training" component={MobileTraining} />
-          <Route path="/ai-coach" component={MobileAICoach} />
-          <Route path="/meals" component={MobileMeals} />
-          <Route path="/profile" component={MobileProfile} />
-          <Route path="/statistics" component={MobileStatistics} />
-          <Route path="/measurements" component={MobileMeasurements} />
-          <Route path="/setup" component={HardgainerProfileSetup} />
-          
-          {/* Fallback */}
-          <Route>
-            <MobileHome />
-          </Route>
-        </Switch>
-        
+      <MenuProvider>
+        <AppContent />
         <Toaster />
-      </div>
+      </MenuProvider>
     </QueryClientProvider>
+  );
+}
+
+function AppContent() {
+  const { user, isOnboarded } = useUserStore();
+  const { isMenuOpen, openMenu, closeMenu } = useMenu();
+
+  // Force dark theme for Grok-inspired design
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
+  // If no user profile, show setup
+  if (!user || !isOnboarded) {
+    return (
+      <div className="min-h-screen bg-background">
+        <HardgainerProfileSetup />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background relative">
+      {/* Global Side Menu */}
+      <SideMenu 
+        isOpen={isMenuOpen} 
+        onClose={closeMenu}
+        onOpenMenu={openMenu}
+      />
+      
+      <Switch>
+        <Route path="/" component={MobileHome} />
+        <Route path="/calibration" component={CalibrationMode} />
+        <Route path="/calories" component={MobileCalories} />
+        <Route path="/training" component={MobileTraining} />
+        <Route path="/ai-coach" component={MobileAICoach} />
+        <Route path="/meals" component={MobileMeals} />
+        <Route path="/profile" component={MobileProfile} />
+        <Route path="/statistics" component={MobileStatistics} />
+        <Route path="/measurements" component={MobileMeasurements} />
+        <Route path="/setup" component={HardgainerProfileSetup} />
+        
+        {/* Fallback */}
+        <Route>
+          <MobileHome />
+        </Route>
+      </Switch>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,8 @@ import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler } from "lucide-reac
 import { Link } from "wouter";
 import { SmartNotifications } from "@/components/ui/smart-notifications";
 import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
+import { MobileHeader } from "@/components/ui/mobile-header";
+import { useMenu } from "@/components/ui/menu-context";
 
 export default function MobileHome() {
   const { 
@@ -32,6 +34,8 @@ export default function MobileHome() {
     user,
     clearUserData
   } = useUserStore();
+  
+  const { openMenu } = useMenu();
 
   // Redirect to calibration mode if user hasn't completed calibration
   useEffect(() => {
@@ -99,8 +103,14 @@ export default function MobileHome() {
 
   return (
     <div className="mobile-container">
-      {/* Top Status Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950/90 backdrop-blur-sm border-b border-slate-900/30">
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="Dashboard" 
+        onOpenMenu={openMenu}
+      />
+
+      {/* Status Bar */}
+      <div className="fixed top-16 left-0 right-0 z-40 bg-slate-950/90 backdrop-blur-sm border-b border-slate-900/30">
         <div className="flex items-center justify-between px-4 py-2">
           {/* Smart Notifications */}
           <SmartNotifications />
@@ -113,7 +123,7 @@ export default function MobileHome() {
         </div>
       </div>
       
-      <div className="content-with-bottom-nav pt-12 p-4 space-y-4 pb-28">
+      <div className="content-with-bottom-nav pt-24 p-4 space-y-4 pb-28">
 
         {/* Aggressive 1kg/Week Surplus Tracker */}
         <AggressiveSurplusTracker />

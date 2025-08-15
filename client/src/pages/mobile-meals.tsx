@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { QuickMealLogger } from "@/components/ui/quick-meal-logger";
 import { EditableMealsList } from "@/components/ui/editable-meals-list";
+import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
+import { useMenu } from "@/components/ui/menu-context";
 import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +15,7 @@ import { Label } from "@/components/ui/label";
 
 export default function MobileMeals() {
   const { toast } = useToast();
+  const { openMenu } = useMenu();
   const [isGenerating, setIsGenerating] = useState(false);
   const [preferences, setPreferences] = useState("");
   const { 
