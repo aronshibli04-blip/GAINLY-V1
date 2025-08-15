@@ -3,11 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Target, Trophy, Gift, Star, Zap, Crown, Heart, Coffee, Camera, ShoppingBag, Gamepad2, Wand2, Sparkles } from "lucide-react";
+import { Target, Trophy, Gift, Star, Zap, Crown, Heart, Coffee, Camera, ShoppingBag, Gamepad2, Wand2, Sparkles, Flame } from "lucide-react";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { useUserStore } from "@/store/userStore";
 import { RewardCustomizer } from "@/components/reward-customizer";
+import { MicroCelebration } from "@/components/ui/micro-celebration";
 
 export function MobileGoals() {
   const { openMenu } = useMenu();
@@ -25,39 +26,43 @@ export function MobileGoals() {
     setCustomRewards(prev => ({ ...prev, [goalWeight]: newReward }));
   };
 
-  // Generate dynamic micro goals based on current weight
+  // Generate dynamic micro goals based on current weight (Hybrid model: 2kg for big rewards)
   const generateMicroGoals = () => {
     const startWeight = Math.floor(currentWeight);
     const endWeight = targetWeight;
     const goals = [];
     
-    // Create goals for every 1kg from current weight to target
-    for (let weight = startWeight + 1; weight <= endWeight; weight++) {
+    // Create major milestone goals for every 2kg + target weight
+    for (let weight = startWeight + 2; weight <= endWeight; weight += 2) {
+      // If we overshoot the target, adjust to target weight
+      if (weight > endWeight) weight = endWeight;
+      
       // Alternate between different reward themes and icons
       const rewardThemes = [
-        { theme: "Supplement/Health", icon: <Star className="h-4 w-4" />, default: "Protein eller supplement" },
-        { theme: "Tech/Gadget", icon: <Camera className="h-4 w-4" />, default: "Tech-gadget eller tilbehør" },
-        { theme: "Wellness", icon: <Heart className="h-4 w-4" />, default: "Massage eller wellness" },
-        { theme: "Social", icon: <Coffee className="h-4 w-4" />, default: "Middag eller aktivitet med venner" },
-        { theme: "Experience", icon: <Gift className="h-4 w-4" />, default: "Ny opplevelse eller aktivitet" },
-        { theme: "Shopping", icon: <ShoppingBag className="h-4 w-4" />, default: "Noe du har ønsket deg" },
-        { theme: "Game/Fun", icon: <Gamepad2 className="h-4 w-4" />, default: "Spill eller hobby-utstyr" },
-        { theme: "Fashion", icon: <Crown className="h-4 w-4" />, default: "Nye klær eller tilbehør" }
+        { theme: "Supplement/Health", icon: <Star className="h-4 w-4" />, default: "Protein, creatine eller supplement" },
+        { theme: "Tech/Gadget", icon: <Camera className="h-4 w-4" />, default: "Tech-gadget eller elektronikk" },
+        { theme: "Wellness", icon: <Heart className="h-4 w-4" />, default: "Massage, spa eller wellness" },
+        { theme: "Social", icon: <Coffee className="h-4 w-4" />, default: "Restaurant eller aktivitet med venner" },
+        { theme: "Experience", icon: <Gift className="h-4 w-4" />, default: "Ny opplevelse eller event" },
+        { theme: "Shopping", icon: <ShoppingBag className="h-4 w-4" />, default: "Noe du har ønsket deg lenge" },
+        { theme: "Game/Fun", icon: <Gamepad2 className="h-4 w-4" />, default: "Spill, hobby eller utstyr" },
+        { theme: "Fashion", icon: <Crown className="h-4 w-4" />, default: "Nye klær eller stil-oppgradering" }
       ];
       
-      const themeIndex = (weight - startWeight - 1) % rewardThemes.length;
-      const theme = rewardThemes[themeIndex];
+      const milestonesCompleted = Math.floor((weight - startWeight) / 2) - 1;
+      const themeIndex = milestonesCompleted % rewardThemes.length;
+      const theme = rewardThemes[Math.max(0, themeIndex)];
       
-      // Special rewards for major milestones (every 5kg or target weight)
+      // Special rewards for major milestones
       let reward = theme.default;
-      let description = `${weight}kg milepæl belønning`;
+      let description = `${weight}kg - ${weight - startWeight}kg fremgang!`;
       
       if (weight === endWeight) {
-        reward = "Storslått feiring: helgetur, coaching-pakke el. noe stort";
-        description = "Målvekt oppnådd - stor feiring!";
-      } else if ((weight - startWeight) % 5 === 0) {
-        reward = "Spesiell opplevelse eller større belønning";
-        description = `${weight - startWeight}kg fremgang - stor milepæl!`;
+        reward = "MÅLVEKT OPPNÅDD! Storslått feiring: helgetur, coaching-pakke eller noe stort";
+        description = "🎉 Målvekt oppnådd - tid for stor feiring!";
+      } else if ((weight - startWeight) >= 10) {
+        reward = "Stor belønning for utrolig fremgang!";
+        description = `${weight - startWeight}kg fremgang - du er en legende!`;
       }
       
       goals.push({
@@ -65,7 +70,8 @@ export function MobileGoals() {
         reward: customRewards[weight] || reward,
         icon: theme.icon,
         description,
-        completed: currentWeight >= weight
+        completed: currentWeight >= weight,
+        isMajorMilestone: true
       });
     }
     
@@ -105,8 +111,11 @@ export function MobileGoals() {
       
       <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
         
+        {/* Micro Celebrations & Progress */}
+        <MicroCelebration />
+        
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 mt-8">
           <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
             <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-spin" 
                  style={{ animationDuration: '8s' }} />
@@ -188,9 +197,15 @@ export function MobileGoals() {
           </Card>
         )}
 
-        {/* Goals List */}
+        {/* Major Milestones (2kg intervals) */}
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white mb-4">Vektmål & Belønning</h3>
+          <div className="flex items-center gap-2 mb-4">
+            <Trophy className="h-5 w-5 text-blue-400" />
+            <h3 className="text-lg font-semibold text-blue-400">Store Milepæler (hver 2kg)</h3>
+            <Badge variant="outline" className="text-yellow-400 border-yellow-400/40 text-xs">
+              Store belønninger
+            </Badge>
+          </div>
           
           {microGoals.map((goal, index) => (
             <Card 
@@ -265,8 +280,36 @@ export function MobileGoals() {
           ))}
         </div>
 
+        {/* Dopamin Psychology Info */}
+        <Card className="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border-yellow-400/20 mt-6">
+          <CardContent className="p-6 text-center">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Zap className="h-5 w-5 text-yellow-400" />
+              <h3 className="text-lg font-semibold text-yellow-400">Psykologi-Basert Motivasjon</h3>
+            </div>
+            <p className="text-slate-300 text-sm mb-4">
+              Systemet bruker forskningsbaserte dopamin-teknikker: micro-rewards (0.5kg), daglige streaks, 
+              og store milepæler (2kg) for optimal motivasjon.
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              <Badge variant="outline" className="text-yellow-400 border-yellow-400/40 text-xs">
+                <Flame className="h-3 w-3 mr-1" />
+                Daglige streaks
+              </Badge>
+              <Badge variant="outline" className="text-orange-400 border-orange-400/40 text-xs">
+                <Zap className="h-3 w-3 mr-1" />
+                Micro-seire (0.5kg)
+              </Badge>
+              <Badge variant="outline" className="text-blue-400 border-blue-400/40 text-xs">
+                <Trophy className="h-3 w-3 mr-1" />
+                Store milepæler (2kg)
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* AI-Powered Personalization Info */}
-        <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-400/20 mt-6">
+        <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-400/20 mt-4">
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Wand2 className="h-5 w-5 text-purple-400" />
