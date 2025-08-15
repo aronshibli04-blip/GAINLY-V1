@@ -199,8 +199,8 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
           </Button>
         </div>
 
-        {/* Navigation */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        {/* Navigation - Fixed scrolling */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-6" style={{ maxHeight: 'calc(100vh - 160px)' }}>
           {menuItems.map((section, sectionIndex) => (
             <div key={sectionIndex}>
               <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">

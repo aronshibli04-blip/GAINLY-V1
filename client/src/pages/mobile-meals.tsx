@@ -95,7 +95,13 @@ export default function MobileMeals() {
 
   return (
     <div className="mobile-container">
-      <div className="content-with-bottom-nav p-4 space-y-4 pb-24 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 80px)' }}>
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="Meals" 
+        onOpenMenu={openMenu}
+      />
+      
+      <div className="content-with-bottom-nav pt-16 p-4 space-y-4 pb-24 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 80px)' }}>
         
         {/* Header */}
         <div className="pt-4">

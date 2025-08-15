@@ -18,6 +18,8 @@ import {
   Utensils
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { MobileHeader } from "@/components/ui/mobile-header";
+import { useMenu } from "@/components/ui/menu-context";
 import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Tooltip } from "recharts";
@@ -30,6 +32,7 @@ export default function MobileStatistics() {
     currentTdeeAnalysis 
   } = useUserStore();
   
+  const { openMenu } = useMenu();
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | 'all'>('30d');
 
   // Calculate comprehensive statistics
@@ -110,6 +113,12 @@ export default function MobileStatistics() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-24">
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="Statistics" 
+        onOpenMenu={openMenu}
+      />
+      
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(40)].map((_, i) => (
@@ -126,7 +135,7 @@ export default function MobileStatistics() {
         ))}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-6">
+      <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
         {/* Cleaner Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-white mb-1">Statistics</h1>

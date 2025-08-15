@@ -24,9 +24,12 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BottomNav } from "@/components/ui/bottom-nav";
+import { MobileHeader } from "@/components/ui/mobile-header";
+import { useMenu } from "@/components/ui/menu-context";
 
 export default function MobileProfile() {
   const { toast } = useToast();
+  const { openMenu } = useMenu();
   const { 
     user, 
     setUser, 
