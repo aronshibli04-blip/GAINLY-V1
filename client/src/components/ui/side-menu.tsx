@@ -50,10 +50,10 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         },
         { 
           icon: TrendingUp, 
-          label: "Goals", 
+          label: "Mikro Mål", 
           path: "/goals", 
-          description: "Set & track fitness goals",
-          badge: null
+          description: "Weight milestones & rewards",
+          badge: "Rewards"
         }
       ]
     },
