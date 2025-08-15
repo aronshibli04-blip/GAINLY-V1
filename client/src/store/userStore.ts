@@ -40,7 +40,7 @@ interface UserState {
   updatePhase: (phase: UserPhase) => void;
   clearUserData: () => void;
   setLoading: (loading: boolean) => void;
-  skipToNextDay: () => void;
+  // skipToNextDay removed - was generating fake test data
 }
 
 export const useUserStore = create<UserState>()(
@@ -179,104 +179,7 @@ export const useUserStore = create<UserState>()(
         });
       },
 
-      skipToNextDay: () => {
-        const state = get();
-        if (!state.user) return;
-
-        // Get the latest date that has data, or today if no data
-        const allDates = [
-          ...state.weightEntries.map(e => e.date),
-          ...state.calorieEntries.map(e => e.date),
-          ...state.activityEntries.map(e => e.date)
-        ];
-        
-        const latestDate = allDates.length > 0 
-          ? new Date(Math.max(...allDates.map(d => new Date(d).getTime())))
-          : new Date();
-        
-        // Calculate next day
-        const nextDay = new Date(latestDate);
-        nextDay.setDate(nextDay.getDate() + 1);
-        const nextDateString = nextDay.toISOString().split('T')[0];
-
-        // Generate realistic test data for the next day
-        const baseWeight = state.user.weight;
-        const weightVariation = (Math.random() - 0.5) * 0.6; // ±0.3kg variation
-        const simulatedWeight = baseWeight + weightVariation;
-
-        const baseCalories = 2800; // Typical bulking calories
-        const calorieVariation = Math.floor((Math.random() - 0.5) * 600); // ±300 calorie variation
-        const simulatedCalories = baseCalories + calorieVariation;
-
-        // Add simulated weight entry
-        const weightEntry: WeightEntry = {
-          id: `sim-weight-${Date.now()}`,
-          userId: state.user.id,
-          weight: Math.round(simulatedWeight * 10) / 10, // Round to 1 decimal
-          date: nextDateString,
-          createdAt: nextDay.toISOString(),
-        };
-
-        // Add simulated calorie entries (breakfast, lunch, dinner)
-        const mealCalories = [
-          Math.floor(simulatedCalories * 0.25), // Breakfast ~25%
-          Math.floor(simulatedCalories * 0.35), // Lunch ~35%  
-          Math.floor(simulatedCalories * 0.4),  // Dinner ~40%
-        ];
-
-        const mealDescriptions = [
-          'Oatmeal with banana and peanut butter',
-          'Chicken rice bowl with vegetables',
-          'Beef pasta with olive oil and cheese'
-        ];
-
-        const calorieEntries: CalorieEntry[] = mealCalories.map((calories, index) => ({
-          id: `sim-calories-${Date.now()}-${index}`,
-          userId: state.user!.id,
-          calories,
-          description: mealDescriptions[index],
-          date: nextDateString,
-          createdAt: nextDay.toISOString(),
-        }));
-
-        // Add simulated activity entry
-        const activityTypes: ('light' | 'moderate' | 'heavy')[] = ['light', 'moderate', 'heavy'];
-        const randomActivity = activityTypes[Math.floor(Math.random() * activityTypes.length)];
-        const activityValue = randomActivity === 'light' ? 1 : randomActivity === 'moderate' ? 1.5 : 2;
-
-        const activityEntry: ActivityEntry = {
-          id: `sim-activity-${Date.now()}`,
-          userId: state.user.id,
-          type: randomActivity,
-          value: activityValue,
-          date: nextDateString,
-          createdAt: nextDay.toISOString(),
-        };
-
-        // Update state with simulated data
-        set(state => ({
-          weightEntries: [...state.weightEntries, weightEntry].sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          ),
-          calorieEntries: [...state.calorieEntries, ...calorieEntries].sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          ),
-          activityEntries: [...state.activityEntries, activityEntry].sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          )
-        }));
-
-        // Check if we should transition to next phase
-        const updatedState = get();
-        if (updatedState.currentPhase === 'calibration') {
-          const uniqueWeightDays = new Set(updatedState.weightEntries.map(e => e.date)).size;
-          const uniqueCalorieDays = new Set(updatedState.calorieEntries.map(e => e.date)).size;
-          
-          if (uniqueWeightDays >= 7 && uniqueCalorieDays >= 7) {
-            set({ currentPhase: 'meal_planning' });
-          }
-        }
-      },
+      // Removed skipToNextDay - was generating fake test data
     }),
     {
       name: 'gainly-user-storage',

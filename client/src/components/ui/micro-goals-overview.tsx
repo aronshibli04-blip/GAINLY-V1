@@ -11,11 +11,26 @@ export function MicroGoalsOverview() {
   // Get current weight from latest entry
   const currentWeight = weightEntries.length > 0 
     ? weightEntries[weightEntries.length - 1].weight 
-    : 70;
+    : null;
     
-  const targetWeight = user?.goalWeight || 85;
-  const startWeight = 70; // Should come from user's initial weight
+  const targetWeight = user?.goalWeight;
+  const startWeight = weightEntries.length > 0 
+    ? weightEntries[0].weight 
+    : null;
   
+  // Don't show if no weight data
+  if (!currentWeight || !targetWeight || !startWeight) {
+    return (
+      <Card className="border-slate-600/40 bg-slate-800/40">
+        <CardContent className="p-4 text-center">
+          <Target className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+          <p className="text-sm text-slate-400 mb-1">No milestone data yet</p>
+          <p className="text-xs text-slate-500">Log your weight and set goals to see progress</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Generate next major milestone (every 2kg)
   const nextMajorMilestone = Math.ceil(currentWeight / 2) * 2;
   const nextMilestoneAdjusted = nextMajorMilestone <= currentWeight 
