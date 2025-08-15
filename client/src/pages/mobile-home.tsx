@@ -11,7 +11,7 @@ import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { MotivationCard } from "@/components/ui/motivation-card";
 import { MicroGoalsOverview } from "@/components/ui/micro-goals-overview";
 import { AchievementSystem } from "@/components/ui/achievement-system";
-import { MotivationBoost } from "@/components/ui/motivation-boost";
+
 import { ProgressStreaks } from "@/components/ui/progress-streaks";
 import { PowerUpSystem } from "@/components/ui/power-up-system";
 import { GamificationSystem } from "@/components/ui/gamification-system";
@@ -217,11 +217,7 @@ export default function MobileHome() {
 
 
 
-        {/* Simplified Progress Summary */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-white">Progress Summary</h3>
-          <MotivationBoost />
-        </div>
+
 
         {/* Recent Activity */}
         {totalDays > 0 && (
