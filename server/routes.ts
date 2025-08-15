@@ -503,6 +503,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
   }
 
+  // AI Reward Generation route
+  app.post("/api/generate-rewards", async (req, res) => {
+    try {
+      const { goalWeight, userPreferences, currentReward } = req.body;
+      
+      if (!goalWeight || !userPreferences) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      
+      const { generatePersonalizedRewards } = await import('./reward-generator');
+      const rewards = await generatePersonalizedRewards(goalWeight, userPreferences, currentReward);
+      res.json({ rewards });
+    } catch (error: any) {
+      console.error("Reward generation error:", error);
+      res.status(500).json({ message: "Failed to generate rewards" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
