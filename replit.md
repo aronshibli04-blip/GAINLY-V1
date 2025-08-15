@@ -70,6 +70,7 @@ GAINLY is a comprehensive mobile fitness application designed to help hardgainer
     - **AI Coach**: Purple/pink theme for intelligence and analysis
     - **Statistics**: Blue/cyan theme for data visualization and analytics
     - **Measurements**: Teal/emerald theme for body tracking and progress
+    - **Profile**: Indigo/violet/pink theme for personal settings and achievements
   - **Animated Backgrounds**: Each page features unique animated particle effects matching theme colors
   - **Professional Headers**: Large centered icons with spinning borders and gradient backgrounds
   - **Futuristic Typography**: Bold gradient text headers with theme-appropriate color schemes

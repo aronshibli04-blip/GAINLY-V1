@@ -122,7 +122,7 @@ export default function MobileProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Profile" 
@@ -131,10 +131,10 @@ export default function MobileProfile() {
       
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(60)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-primary/20 rounded-full animate-pulse"
+            className="absolute w-1 h-1 bg-indigo-400/20 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -149,68 +149,68 @@ export default function MobileProfile() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
-            <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-spin" 
+            <div className="absolute inset-0 rounded-full border-2 border-indigo-400/30 animate-spin" 
                  style={{ animationDuration: '15s' }} />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-xl">
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-indigo-400 to-violet-400 flex items-center justify-center shadow-xl">
               <User className="h-8 w-8 text-black" />
             </div>
           </div>
           
           <h1 className="text-3xl font-black mb-2">
-            <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-indigo-400 bg-clip-text text-transparent">
               PROFILE
             </span>
           </h1>
-          <p className="text-primary/70">Manage your account & view progress</p>
+          <p className="text-indigo-400/70">Personal settings & achievement dashboard</p>
         </div>
 
         {/* Profile Stats Grid */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <Card className="bg-slate-800/50 border-primary/20">
+          <Card className="bg-slate-800/50 border-indigo-400/20 hover:border-indigo-400/40 transition-colors">
             <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-primary/20 rounded-lg mx-auto mb-2">
-                <Scale className="h-5 w-5 text-primary" />
+              <div className="flex items-center justify-center w-10 h-10 bg-indigo-400/20 rounded-lg mx-auto mb-2">
+                <Scale className="h-5 w-5 text-indigo-400" />
               </div>
-              <div className="text-2xl font-bold text-primary">{weightGained >= 0 ? '+' : ''}{weightGained.toFixed(1)}kg</div>
+              <div className="text-2xl font-bold text-indigo-400">{weightGained >= 0 ? '+' : ''}{weightGained.toFixed(1)}kg</div>
               <div className="text-sm text-slate-400">Weight Gained</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-primary/20">
+          <Card className="bg-slate-800/50 border-violet-400/20 hover:border-violet-400/40 transition-colors">
             <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-cyan-500/20 rounded-lg mx-auto mb-2">
-                <Calendar className="h-5 w-5 text-cyan-400" />
+              <div className="flex items-center justify-center w-10 h-10 bg-violet-400/20 rounded-lg mx-auto mb-2">
+                <Calendar className="h-5 w-5 text-violet-400" />
               </div>
-              <div className="text-2xl font-bold text-cyan-400">{totalDaysTracked}</div>
+              <div className="text-2xl font-bold text-violet-400">{totalDaysTracked}</div>
               <div className="text-sm text-slate-400">Days Tracked</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-primary/20">
+          <Card className="bg-slate-800/50 border-purple-400/20 hover:border-purple-400/40 transition-colors">
             <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-yellow-500/20 rounded-lg mx-auto mb-2">
-                <Zap className="h-5 w-5 text-yellow-400" />
+              <div className="flex items-center justify-center w-10 h-10 bg-purple-400/20 rounded-lg mx-auto mb-2">
+                <Zap className="h-5 w-5 text-purple-400" />
               </div>
-              <div className="text-2xl font-bold text-yellow-400">{avgCaloriesPerDay}</div>
+              <div className="text-2xl font-bold text-purple-400">{avgCaloriesPerDay}</div>
               <div className="text-sm text-slate-400">Avg Calories</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-primary/20">
+          <Card className="bg-slate-800/50 border-pink-400/20 hover:border-pink-400/40 transition-colors">
             <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center w-10 h-10 bg-purple-500/20 rounded-lg mx-auto mb-2">
-                <BarChart3 className="h-5 w-5 text-purple-400" />
+              <div className="flex items-center justify-center w-10 h-10 bg-pink-400/20 rounded-lg mx-auto mb-2">
+                <BarChart3 className="h-5 w-5 text-pink-400" />
               </div>
-              <div className="text-2xl font-bold text-purple-400">{currentTdee}</div>
+              <div className="text-2xl font-bold text-pink-400">{currentTdee}</div>
               <div className="text-sm text-slate-400">Current TDEE</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Goal Progress */}
-        <Card className="mb-8 bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-primary/20">
+        <Card className="mb-8 bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-indigo-400/20 hover:border-indigo-400/40 transition-colors">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
+            <CardTitle className="flex items-center gap-2 text-indigo-400">
               <Target className="h-5 w-5" />
               Goal Progress
             </CardTitle>
@@ -234,9 +234,9 @@ export default function MobileProfile() {
         </Card>
 
         {/* Profile Information */}
-        <Card className="mb-8 bg-slate-800/50 border-primary/20">
+        <Card className="mb-8 bg-slate-800/50 border-indigo-400/20 hover:border-indigo-400/40 transition-colors">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-primary">
+            <CardTitle className="flex items-center gap-2 text-indigo-400">
               <Settings className="h-5 w-5" />
               Profile Information
             </CardTitle>
