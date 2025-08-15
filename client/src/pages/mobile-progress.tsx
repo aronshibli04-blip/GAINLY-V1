@@ -180,9 +180,10 @@ export default function MobileProgress() {
 
         {/* Progress Tabs */}
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid grid-cols-3 w-full bg-slate-800/50">
+          <TabsList className="grid grid-cols-4 w-full bg-slate-800/50">
             <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
             <TabsTrigger value="charts" className="text-xs">Charts</TabsTrigger>
+            <TabsTrigger value="analytics" className="text-xs">Analytics</TabsTrigger>
             <TabsTrigger value="photos" className="text-xs">Photos</TabsTrigger>
           </TabsList>
           
@@ -348,6 +349,109 @@ export default function MobileProgress() {
                       />
                     </BarChart>
                   </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="analytics" className="space-y-4">
+            {/* Advanced Analytics from Statistics page */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-blue-400/20">
+                <CardContent className="p-4 text-center">
+                  <Activity className="h-6 w-6 text-blue-400 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-white">{stats.totalDaysTracked}</p>
+                  <p className="text-xs text-slate-400">Days Tracked</p>
+                  <p className="text-xs text-blue-400 font-semibold">
+                    {Math.round(((stats.totalDaysTracked / Math.max(stats.totalDaysTracked, 30)) * 100))}% consistency
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-purple-400/20">
+                <CardContent className="p-4 text-center">
+                  <Target className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-white">{stats.currentTdee}</p>
+                  <p className="text-xs text-slate-400">Current TDEE</p>
+                  <Badge variant="outline" className="text-purple-400 border-purple-400/40 text-xs mt-1">
+                    AI Calculated
+                  </Badge>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Weekly Analysis */}
+            <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-emerald-400/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-emerald-400">
+                  <Calendar className="h-5 w-5" />
+                  Weekly Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-2xl font-bold text-white">
+                      {stats.weightGainRate > 0 ? '+' : ''}{stats.weightGainRate.toFixed(2)}
+                    </p>
+                    <p className="text-xs text-slate-400">kg/week rate</p>
+                    <Badge variant="outline" className={
+                      Math.abs(stats.weightGainRate - 1.0) < 0.3 
+                        ? 'text-emerald-400 border-emerald-400/40' 
+                        : 'text-yellow-400 border-yellow-400/40'
+                    }>
+                      {Math.abs(stats.weightGainRate - 1.0) < 0.3 ? 'Perfect' : 'Adjust'}
+                    </Badge>
+                  </div>
+                  
+                  <div>
+                    <p className="text-2xl font-bold text-white">
+                      {stats.avgSurplus > 0 ? '+' : ''}{Math.round(stats.avgSurplus)}
+                    </p>
+                    <p className="text-xs text-slate-400">Daily surplus</p>
+                    <Badge variant="outline" className={
+                      Math.abs(stats.avgSurplus - 1100) < 200 
+                        ? 'text-emerald-400 border-emerald-400/40' 
+                        : 'text-orange-400 border-orange-400/40'
+                    }>
+                      {Math.abs(stats.avgSurplus - 1100) < 200 ? 'Optimal' : 'Review'}
+                    </Badge>
+                  </div>
+                  
+                  <div>
+                    <p className="text-2xl font-bold text-white">
+                      {Math.round(stats.progressToGoal)}%
+                    </p>
+                    <p className="text-xs text-slate-400">Goal progress</p>
+                    <Progress value={Math.min(stats.progressToGoal, 100)} className="h-2 mt-1" />
+                  </div>
+                </div>
+                
+                {/* Recommendations */}
+                <div className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/50">
+                  <h4 className="font-semibold text-white mb-2 flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-yellow-400" />
+                    AI Recommendations
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    {Math.abs(stats.weightGainRate - 1.0) >= 0.3 && (
+                      <p className="text-slate-300">
+                        • {stats.weightGainRate < 0.7 
+                          ? `Increase daily intake by ${Math.round((1.0 - stats.weightGainRate) * 1100)} calories` 
+                          : `Reduce daily intake by ${Math.round((stats.weightGainRate - 1.0) * 1100)} calories`}
+                      </p>
+                    )}
+                    {stats.totalDaysTracked < 14 && (
+                      <p className="text-slate-300">
+                        • Track consistently for {14 - stats.totalDaysTracked} more days for better AI accuracy
+                      </p>
+                    )}
+                    {stats.avgCaloriesPerDay > 0 && Math.abs(stats.avgSurplus - 1100) >= 200 && (
+                      <p className="text-slate-300">
+                        • Target {stats.currentTdee + 1100} calories daily for optimal 1kg/week gain
+                      </p>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

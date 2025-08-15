@@ -89,7 +89,7 @@ function AppContent() {
         <Route path="/ai-coach" component={MobileAICoach} />
         <Route path="/meals" component={MobileMeals} />
         <Route path="/profile" component={MobileProfile} />
-        <Route path="/statistics" component={MobileStatistics} />
+        <Route path="/statistics" component={MobileProgress} />
         <Route path="/measurements" component={MobileMeasurements} />
         <Route path="/achievements" component={MobileAchievements} />
         <Route path="/goals" component={MobileGoals} />

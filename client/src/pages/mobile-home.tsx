@@ -174,12 +174,12 @@ export default function MobileHome() {
 
         {/* Quick Action Cards */}
         <div className="grid grid-cols-2 gap-4">
-          <Link href="/statistics">
+          <Link href="/progress">
             <Card className="grok-glow-hover cursor-pointer">
               <CardContent className="p-4 text-center">
                 <Activity className="h-6 w-6 text-cyan-400 mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground">Advanced</p>
-                <p className="text-sm font-semibold text-white">Statistics</p>
+                <p className="text-sm font-semibold text-white">Progress</p>
               </CardContent>
             </Card>
           </Link>

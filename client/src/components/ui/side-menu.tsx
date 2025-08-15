@@ -63,7 +63,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         { 
           icon: BarChart3, 
           label: "Statistics", 
-          path: "/statistics", 
+          path: "/progress", 
           description: "Detailed analytics & insights",
           badge: "Pro"
         },
