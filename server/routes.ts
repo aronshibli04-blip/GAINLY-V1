@@ -211,6 +211,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Coach Chat endpoint
+  app.post("/api/ai-coach/chat", async (req, res) => {
+    try {
+      const { message, userId, userData } = req.body;
+      
+      if (!message || !userId) {
+        return res.status(400).json({ message: "Message and userId are required" });
+      }
+
+      const { AICoachService } = await import('./ai-coach-service');
+      const response = await AICoachService.getPersonalizedResponse(message, userData);
+      
+      res.json({ response });
+    } catch (error: any) {
+      console.error('AI Coach chat error:', error);
+      res.status(500).json({ message: "Failed to get AI response" });
+    }
+  });
+
   // Food search routes - now using FatSecret API
   app.get("/api/foods/search", async (req, res) => {
     try {

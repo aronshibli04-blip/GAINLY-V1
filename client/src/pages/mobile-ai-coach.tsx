@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
+import { InteractiveAIChat } from "@/components/ui/interactive-ai-chat";
 import { useMenu } from "@/components/ui/menu-context";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
@@ -259,6 +260,17 @@ export default function MobileAICoach() {
             )}
           </CardContent>
         </Card>
+
+        {/* Interactive AI Chat */}
+        <InteractiveAIChat 
+          currentTdeeAnalysis={currentTdeeAnalysis}
+          userProgress={{
+            totalDays,
+            weightEntries,
+            calorieEntries,
+            activityEntries
+          }}
+        />
 
         {/* Action Recommendations */}
         <Card className="ai-coach-glow-hover">
