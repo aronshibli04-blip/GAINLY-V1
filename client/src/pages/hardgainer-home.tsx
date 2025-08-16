@@ -322,20 +322,24 @@ export default function HardgainerHome() {
                 <div className="flex flex-col items-end">
                   <Button 
                     onClick={() => {
-                      toast({ 
-                        title: "Skip Day Disabled", 
-                        description: "Use real data for accurate TDEE calculation",
-                        variant: "destructive"
-                      });
+                      if (user && !user.hasCompletedCalibration) {
+                        setUser({ ...user, hasCompletedCalibration: true });
+                        toast({ 
+                          title: "Calibration Skipped", 
+                          description: "Jumping to main app for testing"
+                        });
+                        setTimeout(() => {
+                          window.location.href = '/';
+                        }, 1000);
+                      }
                     }}
                     variant="outline" 
                     size="sm"
-                    className="mb-2 opacity-50 cursor-not-allowed"
-                    data-testid="button-skip-day"
-                    disabled
+                    className="mb-2 bg-orange-500/20 border-orange-500/40 text-orange-400 hover:bg-orange-500/30"
+                    data-testid="button-skip-calibration"
                   >
                     <FastForward className="h-4 w-4 mr-2" />
-                    Skip Day (Disabled)
+                    Skip to Main App (Testing)
                   </Button>
                   <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
                     Testing feature

@@ -53,32 +53,17 @@ export default function CalibrationMode() {
     }
   }, [user, setUser, toast, weightEntries, calorieEntries]);
 
-  const handleSkipDay = () => {
-    // Check if already completed
-    const uniqueWeightDays = new Set(weightEntries.map(w => w.date)).size;
-    const uniqueCalorieDays = new Set(calorieEntries.map(c => c.date)).size;
-    const dataEntryDays = Math.max(uniqueWeightDays, uniqueCalorieDays);
-    
-    if (dataEntryDays >= 7) {
-      // Complete calibration immediately
-      if (user && !user.hasCompletedCalibration) {
-        setUser({ ...user, hasCompletedCalibration: true });
-        toast({
-          title: "🎉 AI Calibration Complete!",
-          description: "Full neural network capabilities are now unlocked.",
-        });
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1000);
-      }
-      return;
+  const handleSkipCalibration = () => {
+    if (user && !user.hasCompletedCalibration) {
+      setUser({ ...user, hasCompletedCalibration: true });
+      toast({
+        title: "Calibration Skipped",
+        description: "Jumping to main app for testing.",
+      });
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     }
-    
-    toast({
-      title: "Skip Day Disabled",
-      description: "Use real data for accurate TDEE calculation.",
-      variant: "destructive"
-    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -309,14 +294,14 @@ export default function CalibrationMode() {
                   </Button>
                 ) : (
                   <Button
-                    onClick={handleSkipDay}
+                    onClick={handleSkipCalibration}
                     variant="outline"
                     size="sm"
-                    className="bg-yellow-500/10 border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/20 hover:border-yellow-500/50 transition-all duration-200"
-                    data-testid="button-skip-day"
+                    className="bg-orange-500/10 border-orange-500/30 text-orange-400 hover:bg-orange-500/20 hover:border-orange-500/50 transition-all duration-200"
+                    data-testid="button-skip-calibration"
                   >
                     <FastForward className="h-4 w-4 mr-2" />
-                    Skip Day (Dev)
+                    Skip Calibration (Testing)
                   </Button>
                 )}
               </div>
