@@ -12,7 +12,7 @@ import { useUserStore } from "@/store/userStore";
 
 export default function CalibrationMode() {
   const { toast } = useToast();
-  const { user, setUser, addWeightEntry, addCalorieEntry, addActivityEntry, weightEntries, calorieEntries, clearUserData, skipToNextDay } = useUserStore();
+  const { user, setUser, addWeightEntry, addCalorieEntry, addActivityEntry, weightEntries, calorieEntries, clearUserData } = useUserStore();
   
   const [formData, setFormData] = useState({
     weight: '',
@@ -74,10 +74,10 @@ export default function CalibrationMode() {
       return;
     }
     
-    skipToNextDay();
     toast({
-      title: "⏩ Day Skipped",
-      description: "Generated realistic test data for the next day.",
+      title: "Skip Day Disabled",
+      description: "Use real data for accurate TDEE calculation.",
+      variant: "destructive"
     });
   };
 

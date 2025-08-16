@@ -33,7 +33,7 @@ export default function HardgainerHome() {
     setTdeeAnalysis,
     addMealPlan,
     updatePhase,
-    skipToNextDay,
+
   } = useUserStore();
 
   const progress = useUserProgress();
@@ -322,19 +322,20 @@ export default function HardgainerHome() {
                 <div className="flex flex-col items-end">
                   <Button 
                     onClick={() => {
-                      skipToNextDay();
                       toast({ 
-                        title: "Day Skipped!", 
-                        description: "Added simulated data for testing purposes" 
+                        title: "Skip Day Disabled", 
+                        description: "Use real data for accurate TDEE calculation",
+                        variant: "destructive"
                       });
                     }}
                     variant="outline" 
                     size="sm"
-                    className="mb-2"
+                    className="mb-2 opacity-50 cursor-not-allowed"
                     data-testid="button-skip-day"
+                    disabled
                   >
                     <FastForward className="h-4 w-4 mr-2" />
-                    Skip to Next Day
+                    Skip Day (Disabled)
                   </Button>
                   <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
                     Testing feature
