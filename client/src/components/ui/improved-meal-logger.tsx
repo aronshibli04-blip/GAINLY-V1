@@ -82,18 +82,12 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
     mutationFn: async () => {
       const today = new Date().toISOString().split('T')[0];
       
-      // Create individual meal logs for each food
+      // Create individual meal logs for each food  
       const mealLogs = selectedFoods.map(({ item, quantity }) => ({
         userId,
-        date: today,
-        mealType,
-        foodId: item.id,
-        foodName: item.name,
-        quantity,
+        logDate: today,
         calories: Math.round((item.calories || 0) * quantity),
-        protein: Math.round((item.protein || 0) * quantity),
-        carbs: Math.round((item.carbs || 0) * quantity),
-        fat: Math.round((item.fat || 0) * quantity)
+        description: `${item.name} (${quantity}x) - ${mealType}`
       }));
 
       // Save all at once
