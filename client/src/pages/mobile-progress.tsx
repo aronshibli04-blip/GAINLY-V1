@@ -104,21 +104,21 @@ export default function MobileProgress() {
   if (!user || !stats) return null;
 
   return (
-    <div className="mobile-container">
+    <div className="mobile-page">
       {/* Mobile Header */}
       <MobileHeader 
         title="Progress" 
         onOpenMenu={openMenu}
       />
 
-      {/* Futuristic Background Effect */}
-      <div className="fixed inset-0 bg-slate-950">
+      {/* Fullscreen Background Effect */}
+      <div className="mobile-background">
         <div className="absolute inset-0 bg-gradient-to-br from-green-950/20 via-slate-950 to-emerald-950/30" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-green-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
       
-      <div className="relative z-10 content-with-bottom-nav p-4 space-y-6 pb-28">
+      <div className="mobile-content space-y-6">
         
         {/* Header */}
         <div className="text-center pt-4">
