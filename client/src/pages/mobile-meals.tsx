@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
-import { ImprovedMealLogger } from "@/components/ui/improved-meal-logger";
+import { GramMealLogger } from "@/components/ui/gram-meal-logger";
 import { EditableMealsList } from "@/components/ui/editable-meals-list";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
@@ -292,7 +292,7 @@ export default function MobileMeals() {
         )}
 
         {/* Improved Meal Logger */}
-        <ImprovedMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
+        <GramMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
 
         {/* Today's Logged Meals - Editable */}
         <EditableMealsList />

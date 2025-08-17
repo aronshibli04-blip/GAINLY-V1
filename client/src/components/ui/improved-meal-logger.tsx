@@ -23,6 +23,8 @@ interface SelectedFood {
   item: FoodItem;
   quantity: number;
   servingSize?: string;
+  customGrams?: number;
+  measurementType?: 'serving' | 'grams';
 }
 
 interface ImprovedMealLoggerProps {
@@ -69,13 +71,22 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Calculate totals
-  const totals = selectedFoods.reduce((acc, { item, quantity }) => ({
-    calories: acc.calories + ((item.calories || 0) * quantity),
-    protein: acc.protein + ((item.protein || 0) * quantity),
-    carbs: acc.carbs + ((item.carbs || 0) * quantity),
-    fat: acc.fat + ((item.fat || 0) * quantity)
-  }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  // Calculate totals with gram-based adjustments
+  const totals = selectedFoods.reduce((acc, { item, quantity, customGrams, measurementType }) => {
+    let multiplier = quantity;
+    
+    // If using grams, calculate multiplier based on per-100g values
+    if (measurementType === 'grams' && customGrams) {
+      multiplier = customGrams / 100;
+    }
+    
+    return {
+      calories: acc.calories + (Number(item.calories || 0) * multiplier),
+      protein: acc.protein + (Number(item.protein || 0) * multiplier),
+      carbs: acc.carbs + (Number(item.carbs || 0) * multiplier),
+      fat: acc.fat + (Number(item.fat || 0) * multiplier)
+    };
+  }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
 
   // Save meal mutation
   const saveMealMutation = useMutation({
@@ -126,7 +137,7 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
   });
 
   // Add food to cart
-  const addFood = (food: FoodItem, quantity: number = 1) => {
+  const addFood = (food: FoodItem, quantity: number = 1, measurementType: 'serving' | 'grams' = 'serving') => {
     setSelectedFoods(prev => {
       const existing = prev.find(f => f.item.id === food.id);
       if (existing) {
@@ -136,7 +147,7 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
             : f
         );
       }
-      return [...prev, { item: food, quantity }];
+      return [...prev, { item: food, quantity, measurementType }];
     });
   };
 
@@ -145,10 +156,10 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
     const foodItem: FoodItem = {
       id: `quick-${Date.now()}`,
       name: quickFood.name,
-      calories: quickFood.calories,
-      protein: quickFood.protein,
-      carbs: 0,
-      fat: 0,
+      calories: quickFood.calories.toString(),
+      protein: quickFood.protein.toString(),
+      carbs: "0",
+      fat: "0",
       servingSize: quickFood.portion,
       category: 'common'
     };
@@ -162,6 +173,30 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
     }
     setSelectedFoods(prev =>
       prev.map(f => f.item.id === foodId ? { ...f, quantity: newQuantity } : f)
+    );
+  };
+
+  const updateGrams = (foodId: string, grams: number) => {
+    setSelectedFoods(prev =>
+      prev.map(f => 
+        f.item.id === foodId 
+          ? { ...f, customGrams: grams, measurementType: 'grams' as const }
+          : f
+      )
+    );
+  };
+
+  const toggleMeasurementType = (foodId: string) => {
+    setSelectedFoods(prev =>
+      prev.map(f => 
+        f.item.id === foodId 
+          ? { 
+              ...f, 
+              measurementType: f.measurementType === 'grams' ? 'serving' as const : 'grams' as const,
+              customGrams: f.measurementType === 'serving' ? 100 : undefined
+            }
+          : f
+      )
     );
   };
 
