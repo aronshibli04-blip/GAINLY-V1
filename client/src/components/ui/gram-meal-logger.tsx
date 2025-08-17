@@ -18,7 +18,8 @@ import type { FoodItem, MealLog } from "@shared/schema";
 
 interface SelectedFood {
   item: FoodItem;
-  grams: number;
+  quantity: number;
+  unit: 'grams' | 'pieces';
 }
 
 interface GramMealLoggerProps {
@@ -45,9 +46,28 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Calculate totals based on grams (per 100g values)
-  const totals = selectedFoods.reduce((acc, { item, grams }) => {
-    const multiplier = grams / 100;
+  // Get appropriate unit for food type
+  const getUnitForFood = (foodName: string): 'grams' | 'pieces' => {
+    const name = foodName.toLowerCase();
+    const pieceItems = [
+      'egg', 'eggs', 'banana', 'apple', 'orange', 'slice', 'piece', 'whole',
+      'medium', 'large', 'small', 'toast', 'bread', 'cookie', 'biscuit'
+    ];
+    return pieceItems.some(item => name.includes(item)) ? 'pieces' : 'grams';
+  };
+
+  // Calculate totals based on unit type
+  const totals = selectedFoods.reduce((acc, { item, quantity, unit }) => {
+    let multiplier: number;
+    
+    if (unit === 'pieces') {
+      // For pieces, assume nutrition values are per piece
+      multiplier = quantity;
+    } else {
+      // For grams, assume nutrition values are per 100g
+      multiplier = quantity / 100;
+    }
+    
     return {
       calories: acc.calories + (Number(item.calories || 0) * multiplier),
       protein: acc.protein + (Number(item.protein || 0) * multiplier),
@@ -61,13 +81,23 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
     mutationFn: async () => {
       const today = new Date().toISOString().split('T')[0];
       
-      const mealLogs = selectedFoods.map(({ item, grams }) => {
-        const multiplier = grams / 100;
+      const mealLogs = selectedFoods.map(({ item, quantity, unit }) => {
+        let multiplier: number;
+        let description: string;
+        
+        if (unit === 'pieces') {
+          multiplier = quantity;
+          description = `${item.name} (${quantity} ${quantity === 1 ? 'piece' : 'pieces'}) - ${mealType}`;
+        } else {
+          multiplier = quantity / 100;
+          description = `${item.name} (${quantity}g) - ${mealType}`;
+        }
+        
         return {
           userId,
           logDate: today,
           calories: Math.round(Number(item.calories || 0) * multiplier),
-          description: `${item.name} (${grams}g) - ${mealType}`
+          description
         };
       });
 
@@ -105,29 +135,32 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
     }
   });
 
-  const addFood = (food: FoodItem, grams: number = 100) => {
+  const addFood = (food: FoodItem) => {
+    const unit = getUnitForFood(food.name);
+    const defaultQuantity = unit === 'pieces' ? 1 : 100;
+    
     setSelectedFoods(prev => {
       const existing = prev.find(f => f.item.id === food.id);
       if (existing) {
         return prev.map(f => 
           f.item.id === food.id 
-            ? { ...f, grams: f.grams + grams }
+            ? { ...f, quantity: f.quantity + defaultQuantity }
             : f
         );
       }
-      return [...prev, { item: food, grams }];
+      return [...prev, { item: food, quantity: defaultQuantity, unit }];
     });
   };
 
-  const updateGrams = (foodId: string, grams: number) => {
-    if (grams <= 0) {
+  const updateQuantity = (foodId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
       removeFood(foodId);
       return;
     }
     setSelectedFoods(prev =>
       prev.map(f => 
         f.item.id === foodId 
-          ? { ...f, grams }
+          ? { ...f, quantity: newQuantity }
           : f
       )
     );
@@ -205,7 +238,8 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
                     <div className="flex-1">
                       <h4 className="font-medium text-white text-sm">{food.name}</h4>
                       <p className="text-xs text-muted-foreground">
-                        {food.calories} cal • {food.protein}g protein (per 100g)
+                        {food.calories} cal • {food.protein}g protein 
+                        {getUnitForFood(food.name) === 'pieces' ? ' (per piece)' : ' (per 100g)'}
                       </p>
                     </div>
                     <Button
@@ -247,7 +281,10 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
             </CardHeader>
             <CardContent className="space-y-3">
               {selectedFoods.map((selectedFood) => {
-                const multiplier = selectedFood.grams / 100;
+                const multiplier = selectedFood.unit === 'pieces' ? selectedFood.quantity : selectedFood.quantity / 100;
+                const stepSize = selectedFood.unit === 'pieces' ? 1 : 25;
+                const minValue = selectedFood.unit === 'pieces' ? 1 : 10;
+                
                 return (
                   <div
                     key={selectedFood.item.id}
@@ -274,10 +311,10 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
                       </Button>
                     </div>
                     
-                    {/* Gram Input */}
+                    {/* Quantity Input */}
                     <div className="flex items-center gap-2">
                       <Button
-                        onClick={() => updateGrams(selectedFood.item.id, Math.max(10, selectedFood.grams - 25))}
+                        onClick={() => updateQuantity(selectedFood.item.id, Math.max(minValue, selectedFood.quantity - stepSize))}
                         variant="outline"
                         size="sm"
                         className="h-7 w-7 p-0 border-orange-400/30 text-orange-400 hover:bg-orange-400/10"
@@ -287,16 +324,18 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
                       </Button>
                       <Input
                         type="number"
-                        value={selectedFood.grams}
-                        onChange={(e) => updateGrams(selectedFood.item.id, Number(e.target.value))}
+                        value={selectedFood.quantity}
+                        onChange={(e) => updateQuantity(selectedFood.item.id, Number(e.target.value))}
                         className="h-7 w-20 text-xs text-center font-mono"
-                        min="1"
-                        max="2000"
-                        data-testid={`input-grams-${selectedFood.item.id}`}
+                        min={minValue}
+                        max={selectedFood.unit === 'pieces' ? 20 : 2000}
+                        data-testid={`input-quantity-${selectedFood.item.id}`}
                       />
-                      <span className="text-xs text-muted-foreground">grams</span>
+                      <span className="text-xs text-muted-foreground">
+                        {selectedFood.unit === 'pieces' ? (selectedFood.quantity === 1 ? 'piece' : 'pieces') : 'grams'}
+                      </span>
                       <Button
-                        onClick={() => updateGrams(selectedFood.item.id, selectedFood.grams + 25)}
+                        onClick={() => updateQuantity(selectedFood.item.id, selectedFood.quantity + stepSize)}
                         variant="outline"
                         size="sm"
                         className="h-7 w-7 p-0 border-orange-400/30 text-orange-400 hover:bg-orange-400/10"
