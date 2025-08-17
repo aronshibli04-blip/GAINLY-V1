@@ -149,8 +149,8 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
   };
 
   return (
-    <Card className="ai-coach-glow-hover h-[600px] flex flex-col">
-      <CardHeader className="pb-3">
+    <Card className="ai-coach-glow-hover h-[600px] flex flex-col overflow-hidden">
+      <CardHeader className="pb-3 flex-shrink-0">
         <CardTitle className="text-lg text-white flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-purple-400" />
@@ -163,7 +163,7 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="flex-1 flex flex-col p-4 space-y-4">
+      <CardContent className="flex-1 flex flex-col p-4 space-y-4 overflow-hidden min-h-0">
         {/* Quick Actions */}
         {messages.length <= 1 && (
           <div className="grid grid-cols-1 gap-2">
@@ -184,8 +184,8 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
         )}
 
         {/* Chat Messages */}
-        <ScrollArea ref={scrollAreaRef} className="flex-1 pr-2">
-          <div className="space-y-4 px-1">
+        <ScrollArea ref={scrollAreaRef} className="flex-1 pr-1 overflow-hidden">
+          <div className="space-y-3 pr-2">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -205,13 +205,13 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
                   )}
                 </div>
                 
-                <div className={`max-w-[70%] rounded-lg p-3 break-words ${
+                <div className={`max-w-[65%] rounded-lg p-2 break-words overflow-hidden ${
                   message.type === 'user'
                     ? 'bg-orange-400/10 border border-orange-400/20 text-white'
                     : 'bg-purple-400/10 border border-purple-400/20 text-white'
                 }`}>
-                  <p className="text-sm leading-relaxed">{message.content}</p>
-                  <p className="text-xs text-muted-foreground mt-2">
+                  <p className="text-sm leading-relaxed break-all">{message.content}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -219,11 +219,11 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
             ))}
             
             {isTyping && (
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-purple-400/20 border border-purple-400/40 flex items-center justify-center">
-                  <Bot className="h-4 w-4 text-purple-400" />
+              <div className="flex items-start gap-2">
+                <div className="w-7 h-7 rounded-full bg-purple-400/20 border border-purple-400/40 flex items-center justify-center flex-shrink-0">
+                  <Bot className="h-3 w-3 text-purple-400" />
                 </div>
-                <div className="bg-purple-400/10 border border-purple-400/20 rounded-lg p-3">
+                <div className="bg-purple-400/10 border border-purple-400/20 rounded-lg p-2 max-w-[65%]">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" />
                     <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
@@ -236,7 +236,7 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
         </ScrollArea>
 
         {/* Chat Input */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-shrink-0">
           <Input
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
