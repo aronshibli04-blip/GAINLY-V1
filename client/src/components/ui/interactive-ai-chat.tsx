@@ -184,28 +184,28 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
         )}
 
         {/* Chat Messages */}
-        <ScrollArea ref={scrollAreaRef} className="flex-1 pr-4">
-          <div className="space-y-4">
+        <ScrollArea ref={scrollAreaRef} className="flex-1 pr-2">
+          <div className="space-y-4 px-1">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex items-start gap-3 ${
+                className={`flex items-start gap-2 w-full ${
                   message.type === 'user' ? 'flex-row-reverse' : ''
                 }`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
                   message.type === 'user' 
                     ? 'bg-orange-400/20 border border-orange-400/40' 
                     : 'bg-purple-400/20 border border-purple-400/40'
                 }`}>
                   {message.type === 'user' ? (
-                    <User className="h-4 w-4 text-orange-400" />
+                    <User className="h-3 w-3 text-orange-400" />
                   ) : (
-                    <Bot className="h-4 w-4 text-purple-400" />
+                    <Bot className="h-3 w-3 text-purple-400" />
                   )}
                 </div>
                 
-                <div className={`max-w-[80%] rounded-lg p-3 ${
+                <div className={`max-w-[70%] rounded-lg p-3 break-words ${
                   message.type === 'user'
                     ? 'bg-orange-400/10 border border-orange-400/20 text-white'
                     : 'bg-purple-400/10 border border-purple-400/20 text-white'
