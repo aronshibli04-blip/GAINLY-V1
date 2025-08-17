@@ -12,7 +12,7 @@ import {
   X, 
   ShoppingCart, 
   Utensils,
-  Scale
+  ChefHat
 } from "lucide-react";
 import type { FoodItem, MealLog } from "@shared/schema";
 
@@ -22,11 +22,11 @@ interface SelectedFood {
   unit: 'grams' | 'pieces';
 }
 
-interface GramMealLoggerProps {
+interface SmartMealLoggerProps {
   userId: string;
 }
 
-export function GramMealLogger({ userId }: GramMealLoggerProps) {
+export function SmartMealLogger({ userId }: SmartMealLoggerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
   const [mealType, setMealType] = useState<'breakfast' | 'lunch' | 'dinner' | 'snack'>('lunch');
@@ -175,8 +175,8 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Scale className="h-5 w-5 text-orange-400" />
-            <span className="text-orange-400">Gram-Based Meal Logger</span>
+            <ChefHat className="h-5 w-5 text-orange-400" />
+            <span className="text-orange-400">Smart Meal Logger</span>
           </div>
           {selectedFoods.length > 0 && (
             <Badge variant="secondary" className="bg-orange-400/20 text-orange-400">
@@ -210,7 +210,7 @@ export function GramMealLogger({ userId }: GramMealLoggerProps) {
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for foods (rice, chicken, etc.)"
+            placeholder="Search for foods (rice, chicken, eggs, etc.)"
             className="pl-10 grok-input"
             data-testid="input-food-search"
           />
