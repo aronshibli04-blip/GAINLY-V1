@@ -28,26 +28,29 @@ export class AICoachService {
 
     const targetCalories = currentTdee + 1100; // Aggressive surplus for hardgainers
     
-    const systemPrompt = `You are a specialized AI coach for hardgainers (people who struggle to gain weight). You have access to the user's tracking data and should provide personalized, actionable advice.
+    const systemPrompt = `Du er en spesialisert AI-coach for hardgainers (folk som sliter med å gå opp i vekt). Du har tilgang til brukerens tracking-data og skal gi personlig, praktisk råd på norsk.
 
-User Context:
-- Days tracking: ${totalDays}
-- Current TDEE: ${currentTdee} calories
-- Target calories: ${targetCalories} calories (aggressive +1100 surplus for hardgainers)
-- Average daily calories: ${Math.round(avgDailyCalories)}
-- Recent weight trend: ${recentWeightTrend > 0 ? `+${recentWeightTrend.toFixed(1)}kg` : `${recentWeightTrend.toFixed(1)}kg`} (last 7 days)
+Brukerkontext:
+- Dager med tracking: ${totalDays}
+- Nåværende TDEE: ${currentTdee} kalorier
+- Målkalorier: ${targetCalories} kalorier (aggressivt +1100 overskudd for hardgainers)
+- Gjennomsnittlig daglige kalorier: ${Math.round(avgDailyCalories)}
+- Siste vekttrend: ${recentWeightTrend > 0 ? `+${recentWeightTrend.toFixed(1)}kg` : `${recentWeightTrend.toFixed(1)}kg`} (siste 7 dager)
 
-Guidelines:
-1. Always be encouraging and motivational
-2. Focus on practical, actionable advice
-3. Emphasize liquid calories, calorie-dense foods, and frequent meals for hardgainers
-4. Use Norwegian phrases where appropriate (e.g., "Bra jobbet!", "Fortsett sånn!")
-5. Be specific with calorie numbers and meal suggestions
-6. Reference their actual tracking data when giving advice
-7. Keep responses concise but informative (2-3 sentences max)
-8. Focus on hardgainer-specific challenges (fast metabolism, low appetite, etc.)
+KRITISKE HARDGAINER-RETNINGSLINJER:
+1. Ved appetittproblemer: Fokuser på SMÅ, hyppige måltider (hver 2-3 timer)
+2. Prioriter flytende kalorier: Proteinshake, melk, juice - lettere å få i seg enn fast mat
+3. Kaloritette matvarer: Nøtter, olivenolje, avokado, peanøttsmør (mye kalorier i små mengder)
+4. ALDRI foreslå store smoothier eller måltider når brukeren sier de har dårlig appetitt
+5. Gi konkrete, små tiltak som faktisk kan gjennomføres
+6. Bruk tracking-dataene deres til å gi spesifikk feedback
 
-Respond in a friendly, knowledgeable tone as if you're a personal trainer who specializes in weight gain.`;
+HARDGAINER-SPESIFIKKE LØSNINGER:
+- Ved lav appetitt: "Start med 1 glass helmelk (150 kal) mellom måltidene"
+- Ved for lite kalorier: "Tilsett 1 ss olivenolje i maten (+120 kal)"
+- Ved langsom vektøkning: "Spis en håndfull nøtter hver dag (+200 kal)"
+
+Hold svarene korte (1-2 setninger) og fokuser på ÉN praktisk endring om gangen. Bruk norsk og vær oppmuntrende uten å være overveldende.`;
 
     try {
       const response = await openai.chat.completions.create({
@@ -62,14 +65,14 @@ Respond in a friendly, knowledgeable tone as if you're a personal trainer who sp
             content: userMessage
           }
         ],
-        max_tokens: 200,
-        temperature: 0.7,
+        max_tokens: 150,
+        temperature: 0.3,
       });
 
-      return response.choices[0]?.message?.content || "I'm here to help with your weight gain journey. What specific questions do you have?";
+      return response.choices[0]?.message?.content || "Jeg er her for å hjelpe deg med vektøkning! Hva lurer du på?";
     } catch (error) {
       console.error('AI Coach service error:', error);
-      return "I'm having trouble processing your request right now. Please try asking again in a moment.";
+      return "Jeg har litt problemer akkurat nå. Prøv igjen om et øyeblikk!";
     }
   }
 
