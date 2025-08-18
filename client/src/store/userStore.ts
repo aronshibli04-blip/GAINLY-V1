@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+// Frontend types for compatibility with existing UI
 import { 
   User, 
   WeightEntry, 

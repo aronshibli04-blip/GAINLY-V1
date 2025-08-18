@@ -55,22 +55,12 @@ function App() {
 }
 
 function AppContent() {
-  const { user, isOnboarded } = useUserStore();
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
 
   // Force dark theme for Grok-inspired design
   useEffect(() => {
     document.documentElement.classList.add('dark');
   }, []);
-
-  // If no user profile, show setup
-  if (!user || !isOnboarded) {
-    return (
-      <div className="min-h-screen bg-background">
-        <HardgainerProfileSetup />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -89,7 +79,6 @@ function AppContent() {
         <Route path="/ai-coach" component={MobileAICoach} />
         <Route path="/meals" component={MobileMeals} />
         <Route path="/profile" component={MobileProfile} />
-        <Route path="/statistics" component={MobileProgress} />
         <Route path="/measurements" component={MobileMeasurements} />
         <Route path="/achievements" component={MobileAchievements} />
         <Route path="/goals" component={MobileGoals} />

@@ -10,8 +10,8 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   firstName: text("first_name").notNull(),
   age: integer("age").notNull(),
-  height: decimal("height", { precision: 5, scale: 2 }).notNull(), // in inches
-  goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }).notNull(), // in lbs
+  height: decimal("height", { precision: 5, scale: 2 }).notNull(), // in cm
+  goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }).notNull(), // in kg
   activityLevel: text("activity_level").notNull(), // sedentary, lightly_active, moderately_active, very_active
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -19,7 +19,7 @@ export const users = pgTable("users", {
 export const weightLogs = pgTable("weight_logs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").references(() => users.id).notNull(),
-  weight: decimal("weight", { precision: 5, scale: 1 }).notNull(), // in lbs
+  weight: decimal("weight", { precision: 5, scale: 1 }).notNull(), // in kg
   logDate: date("log_date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

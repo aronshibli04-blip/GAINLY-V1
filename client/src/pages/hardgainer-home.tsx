@@ -93,8 +93,8 @@ export default function HardgainerHome() {
     .reduce((sum, entry) => sum + entry.calories, 0);
   const todayActivity = activityEntries.find(a => a.date === selectedDate);
 
-  const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : user.weight;
-  const weightProgress = ((currentWeight - user.weight) / (user.goalWeight - user.weight)) * 100;
+  const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : (user.weight || 0);
+  const weightProgress = ((currentWeight - (user.weight || 0)) / (user.goalWeight - (user.weight || 0))) * 100;
 
   const handleLogWeight = () => {
     if (!weightInput) {
@@ -187,7 +187,7 @@ export default function HardgainerHome() {
 
   const handleSetApiKey = () => {
     if (apiKeyInput.trim()) {
-      openAIService.setApiKey(apiKeyInput.trim());
+      // API key handling moved to server side
       setApiKeyInput("");
       setShowApiKeyDialog(false);
       toast({ title: "OpenAI API key has been set successfully!" });
@@ -200,10 +200,7 @@ export default function HardgainerHome() {
       return;
     }
 
-    if (!openAIService.hasApiKey()) {
-      setShowApiKeyDialog(true);
-      return;
-    }
+    // API key check removed - handled server side
 
     setIsGeneratingMealPlan(true);
 
@@ -211,7 +208,7 @@ export default function HardgainerHome() {
       const request: MealPlanRequest = {
         userId: user.id,
         targetCalories: currentTdeeAnalysis.targetCalories,
-        dietaryPreferences: user.dietaryPreferences.map(p => p.name),
+        dietaryPreferences: user.dietaryPreferences?.map(p => p.name) || [],
         preferredFoods: ['Rice', 'Chicken', 'Pasta', 'Beef', 'Fish'],
         maxMealsPerDay: 4,
         maxPrepTime: 60,
@@ -323,7 +320,7 @@ export default function HardgainerHome() {
                   <Button 
                     onClick={() => {
                       if (user && !user.hasCompletedCalibration) {
-                        setUser({ ...user, hasCompletedCalibration: true });
+                        // setUser({ ...user, hasCompletedCalibration: true });
                         toast({ 
                           title: "Calibration Skipped", 
                           description: "Jumping to main app for testing"

@@ -8,14 +8,15 @@ export interface DietaryPreference {
 export interface User {
   id: string;
   username: string;
+  password?: string; // Optional for frontend use
   firstName: string;
   age: number;
-  sex: 'male' | 'female';
-  height: number; // cm
-  weight: number; // kg
-  goalWeight: number; // kg
+  sex?: 'male' | 'female'; // Optional for frontend
+  height: number; // cm (converted from backend)
+  weight?: number; // kg (frontend working weight)
+  goalWeight: number; // kg (converted from backend)
   activityLevel: string; // Free text description of activity level
-  dietaryPreferences: DietaryPreference[];
+  dietaryPreferences?: DietaryPreference[]; // Optional for frontend
   createdAt: string;
   calibrationStartDate?: string; // When user started 7-day calibration
   hasCompletedCalibration?: boolean; // True after 7 days of data entry
