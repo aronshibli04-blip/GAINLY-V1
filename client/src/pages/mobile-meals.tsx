@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { SmartMealLogger } from "@/components/ui/smart-meal-logger";
+import { UltraFastLogger } from "@/components/ui/ultra-fast-logger";
 import { EditableMealsList } from "@/components/ui/editable-meals-list";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
@@ -18,12 +19,14 @@ export default function MobileMeals() {
   const { openMenu } = useMenu();
   const [isGenerating, setIsGenerating] = useState(false);
   const [preferences, setPreferences] = useState("");
+  const [useUltraFast, setUseUltraFast] = useState(true); // Default to ultra-fast logger
   const { 
     currentTdeeAnalysis,
     mealPlans,
     addMealPlan,
     weightEntries,
-    calorieEntries
+    calorieEntries,
+    addCalorieEntry
   } = useUserStore();
 
   const totalDays = Math.max(
@@ -91,6 +94,17 @@ export default function MobileMeals() {
         variant: "destructive"
       });
     }
+  };
+
+  const handleMealLogged = (calories: number) => {
+    // Update today's calorie count in the store
+    const today = new Date().toISOString().split('T')[0];
+    addCalorieEntry({
+      userId: 'user1',
+      calories,
+      description: `Ultra-fast logged meal`,
+      date: today
+    });
   };
 
   return (
@@ -291,8 +305,44 @@ export default function MobileMeals() {
           </Card>
         )}
 
-        {/* Smart Meal Logger */}
-        <SmartMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
+        {/* Logger Toggle */}
+        <Card className="meals-glow-hover mb-6">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-white">Food Logger Mode</h3>
+                <p className="text-sm text-muted-foreground">
+                  {useUltraFast ? "⚡ Ultra-Fast (3 taps)" : "🔧 Advanced (10+ taps)"}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setUseUltraFast(true)}
+                  variant={useUltraFast ? "default" : "outline"}
+                  size="sm"
+                  className={useUltraFast ? "bg-green-500 text-black" : "border-green-500/50 text-green-400"}
+                >
+                  ⚡ Ultra-Fast
+                </Button>
+                <Button
+                  onClick={() => setUseUltraFast(false)}
+                  variant={!useUltraFast ? "default" : "outline"}
+                  size="sm"
+                  className={!useUltraFast ? "bg-orange-400 text-black" : "border-orange-400/50 text-orange-400"}
+                >
+                  🔧 Advanced
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Conditional Logger */}
+        {useUltraFast ? (
+          <UltraFastLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" onMealLogged={handleMealLogged} />
+        ) : (
+          <SmartMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
+        )}
 
         {/* Today's Logged Meals - Editable */}
         <EditableMealsList />
