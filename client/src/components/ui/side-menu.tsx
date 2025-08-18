@@ -88,11 +88,11 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       section: "Analytics",
       items: [
         { 
-          icon: Apple, 
-          label: "Nutrition", 
-          path: "/nutrition", 
-          description: "Hardgainer meal strategies",
-          badge: "Tips"
+          icon: Brain, 
+          label: "AI Coach", 
+          path: "/ai-coach", 
+          description: "Smart nutrition guidance",
+          badge: "Enhanced"
         },
         { 
           icon: Ruler, 
