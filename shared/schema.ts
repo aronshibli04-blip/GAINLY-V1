@@ -65,12 +65,47 @@ export const foodItems = pgTable("food_items", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const dailyRoutines = pgTable("daily_routines", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  points: integer("points").notNull().default(25),
+  category: text("category").notNull(), // health, fitness, productivity, nutrition
+  isActive: boolean("is_active").notNull().default(true),
+  order: integer("order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const dailyRoutineCompletions = pgTable("daily_routine_completions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  routineId: varchar("routine_id").references(() => dailyRoutines.id).notNull(),
+  completedDate: date("completed_date").notNull(),
+  pointsEarned: integer("points_earned").notNull(),
+  completedAt: timestamp("completed_at").defaultNow().notNull(),
+});
+
+export const userStats = pgTable("user_stats", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull().unique(),
+  totalPoints: integer("total_points").notNull().default(0),
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  lastCompletionDate: date("last_completion_date"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Relations
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   weightLogs: many(weightLogs),
   mealLogs: many(mealLogs),
   activityLogs: many(activityLogs),
   aiAnalysis: many(aiAnalysis),
+  dailyRoutines: many(dailyRoutines),
+  routineCompletions: many(dailyRoutineCompletions),
+  userStats: one(userStats),
 }));
 
 export const weightLogsRelations = relations(weightLogs, ({ one }) => ({
@@ -97,6 +132,32 @@ export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 export const aiAnalysisRelations = relations(aiAnalysis, ({ one }) => ({
   user: one(users, {
     fields: [aiAnalysis.userId],
+    references: [users.id],
+  }),
+}));
+
+export const dailyRoutinesRelations = relations(dailyRoutines, ({ one, many }) => ({
+  user: one(users, {
+    fields: [dailyRoutines.userId],
+    references: [users.id],
+  }),
+  completions: many(dailyRoutineCompletions),
+}));
+
+export const dailyRoutineCompletionsRelations = relations(dailyRoutineCompletions, ({ one }) => ({
+  user: one(users, {
+    fields: [dailyRoutineCompletions.userId],
+    references: [users.id],
+  }),
+  routine: one(dailyRoutines, {
+    fields: [dailyRoutineCompletions.routineId],
+    references: [dailyRoutines.id],
+  }),
+}));
+
+export const userStatsRelations = relations(userStats, ({ one }) => ({
+  user: one(users, {
+    fields: [userStats.userId],
     references: [users.id],
   }),
 }));
@@ -132,6 +193,21 @@ export const insertFoodItemSchema = createInsertSchema(foodItems).omit({
   createdAt: true,
 });
 
+export const insertDailyRoutineSchema = createInsertSchema(dailyRoutines).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertDailyRoutineCompletionSchema = createInsertSchema(dailyRoutineCompletions).omit({
+  id: true,
+  completedAt: true,
+});
+
+export const insertUserStatsSchema = createInsertSchema(userStats).omit({
+  id: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -145,3 +221,9 @@ export type InsertAiAnalysis = z.infer<typeof insertAiAnalysisSchema>;
 export type AiAnalysis = typeof aiAnalysis.$inferSelect;
 export type InsertFoodItem = z.infer<typeof insertFoodItemSchema>;
 export type FoodItem = typeof foodItems.$inferSelect;
+export type InsertDailyRoutine = z.infer<typeof insertDailyRoutineSchema>;
+export type DailyRoutine = typeof dailyRoutines.$inferSelect;
+export type InsertDailyRoutineCompletion = z.infer<typeof insertDailyRoutineCompletionSchema>;
+export type DailyRoutineCompletion = typeof dailyRoutineCompletions.$inferSelect;
+export type InsertUserStats = z.infer<typeof insertUserStatsSchema>;
+export type UserStats = typeof userStats.$inferSelect;
