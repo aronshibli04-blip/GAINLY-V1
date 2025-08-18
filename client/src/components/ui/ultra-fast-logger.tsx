@@ -186,11 +186,9 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
         body: JSON.stringify({
           userId,
           calories: Math.round(totals.calories),
-          protein: Math.round(totals.protein),
           description: `${mealType}: ${currentMeal.map(({food, multiplier}) => 
             `${multiplier}x ${food.name}`).join(', ')}`,
-          date: new Date().toISOString().split('T')[0],
-          mealType
+          logDate: new Date().toISOString().split('T')[0]
         }),
       });
       
@@ -208,10 +206,11 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
       setSearchQuery("");
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error('Meal save error:', error);
       toast({
-        title: "Save failed",
-        description: "Please try again",
+        title: "⚠️ Save failed",
+        description: "Please try again or switch to Advanced mode",
         variant: "destructive"
       });
     }
