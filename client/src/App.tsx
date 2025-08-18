@@ -11,7 +11,7 @@ import { MenuProvider, useMenu } from "@/components/ui/menu-context";
 import MobileHome from "@/pages/mobile-home";
 import MobileCalories from "@/pages/mobile-calories";
 import MobileTraining from "@/pages/mobile-training";
-import MobileAICoach from "@/pages/mobile-ai-coach";
+import MobileNutrition from "@/pages/mobile-nutrition";
 import MobileMeals from "@/pages/mobile-meals";
 import MobileProfile from "@/pages/mobile-profile";
 import MobileStatistics from "@/pages/mobile-statistics";
@@ -76,7 +76,7 @@ function AppContent() {
         <Route path="/calibration" component={CalibrationMode} />
         <Route path="/calories" component={MobileCalories} />
         <Route path="/training" component={MobileTraining} />
-        <Route path="/ai-coach" component={MobileAICoach} />
+        <Route path="/nutrition" component={MobileNutrition} />
         <Route path="/meals" component={MobileMeals} />
         <Route path="/profile" component={MobileProfile} />
         <Route path="/measurements" component={MobileMeasurements} />

@@ -18,7 +18,8 @@ import {
   Settings,
   Trophy,
   Calendar,
-  Camera
+  Camera,
+  Apple
 } from "lucide-react";
 
 interface SideMenuProps {
@@ -87,11 +88,11 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       section: "Analytics",
       items: [
         { 
-          icon: Brain, 
-          label: "AI Coach", 
-          path: "/ai-coach", 
-          description: "Personal nutrition guidance",
-          badge: "GPT-4o"
+          icon: Apple, 
+          label: "Nutrition", 
+          path: "/nutrition", 
+          description: "Hardgainer meal strategies",
+          badge: "Tips"
         },
         { 
           icon: Ruler, 
