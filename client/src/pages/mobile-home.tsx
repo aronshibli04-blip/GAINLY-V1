@@ -422,15 +422,6 @@ function DailyRoutinesQuickChecker() {
             {showAllRoutines ? <EyeOff className="h-4 w-4 mr-1" /> : <Eye className="h-4 w-4 mr-1" />}
             {showAllRoutines ? "Show Less" : "Show All"}
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowQuickSetupDialog(true)}
-            className="text-emerald-400 hover:text-emerald-300 h-8 px-2"
-          >
-            <Sparkles className="h-4 w-4 mr-1" />
-            Quick Setup
-          </Button>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
@@ -685,11 +676,11 @@ function DailyRoutinesQuickChecker() {
           <CardContent className="p-4 text-center">
             <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
             <p className="text-emerald-300/70 text-sm mb-3">No routines yet!</p>
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex gap-2">
               <Button 
                 onClick={() => setShowCreateDialog(true)}
                 size="sm" 
-                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 w-full"
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0"
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Create Routine
@@ -698,7 +689,7 @@ function DailyRoutinesQuickChecker() {
                 onClick={() => setShowQuickSetupDialog(true)}
                 variant="outline"
                 size="sm"
-                className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 w-full"
+                className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
               >
                 <Sparkles className="h-4 w-4 mr-1" />
                 Quick Setup
