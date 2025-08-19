@@ -268,42 +268,29 @@ export default function CalibrationMode() {
             </div>
 
             {/* Developer Controls - Only show in development */}
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === 'development' && calibrationProgress >= 100 && (
               <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-primary/20">
-                {calibrationProgress >= 100 ? (
-                  <Button
-                    onClick={() => {
-                      if (user && !user.hasCompletedCalibration) {
-                        setUser({ ...user, hasCompletedCalibration: true });
-                        toast({
-                          title: "🎉 AI Calibration Complete!",
-                          description: "Full neural network capabilities are now unlocked.",
-                        });
-                        setTimeout(() => {
-                          window.location.href = '/';
-                        }, 1000);
-                      }
-                    }}
-                    variant="default"
-                    size="sm"
-                    className="neural-button"
-                    data-testid="button-complete-calibration"
-                  >
-                    <Brain className="h-4 w-4 mr-2" />
-                    Complete Calibration
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleSkipCalibration}
-                    variant="outline"
-                    size="sm"
-                    className="bg-orange-500/10 border-orange-500/30 text-orange-400 hover:bg-orange-500/20 hover:border-orange-500/50 transition-all duration-200"
-                    data-testid="button-skip-calibration"
-                  >
-                    <FastForward className="h-4 w-4 mr-2" />
-                    Skip Calibration (Testing)
-                  </Button>
-                )}
+                <Button
+                  onClick={() => {
+                    if (user && !user.hasCompletedCalibration) {
+                      setUser({ ...user, hasCompletedCalibration: true });
+                      toast({
+                        title: "🎉 AI Calibration Complete!",
+                        description: "Full neural network capabilities are now unlocked.",
+                      });
+                      setTimeout(() => {
+                        window.location.href = '/';
+                      }, 1000);
+                    }
+                  }}
+                  variant="default"
+                  size="sm"
+                  className="neural-button"
+                  data-testid="button-complete-calibration"
+                >
+                  <Brain className="h-4 w-4 mr-2" />
+                  Complete Calibration
+                </Button>
               </div>
             )}
           </div>

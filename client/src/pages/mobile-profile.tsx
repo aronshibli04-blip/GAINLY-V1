@@ -589,58 +589,6 @@ export default function MobileProfile() {
             )}
           </CardContent>
         </Card>
-
-
-
-        {/* Danger Zone */}
-        <Card className="bg-red-500/10 border-red-500/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-400">
-              <Trash2 className="h-5 w-5" />
-              Faresone
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-red-300/80 text-sm mb-4">
-              Dette vil permanent slette all dataen din inkludert vektoppføringer, kalorilogger og fremdriftshistorikk.
-            </p>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="destructive" 
-                  size="sm"
-                  className="bg-red-500/20 text-red-400 border-red-500/50 hover:bg-red-500/30"
-                  data-testid="button-clear-data-trigger"
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Slett all data
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-slate-800 border-red-500/50">
-                <DialogHeader>
-                  <DialogTitle className="text-red-400">Er du helt sikker?</DialogTitle>
-                  <DialogDescription className="text-slate-300">
-                    Denne handlingen kan ikke angres. Dette vil permanent slette all dataen og fremdriften din.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex justify-end space-x-2 mt-4">
-                  <Button variant="outline" size="sm" className="border-slate-600 text-slate-300">
-                    Avbryt
-                  </Button>
-                  <Button 
-                    onClick={handleClearData}
-                    variant="destructive" 
-                    size="sm"
-                    className="bg-red-500 text-white hover:bg-red-600"
-                    data-testid="button-confirm-clear-data"
-                  >
-                    Ja, slett alt
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </CardContent>
-        </Card>
       </div>
 
       <BottomNav />
