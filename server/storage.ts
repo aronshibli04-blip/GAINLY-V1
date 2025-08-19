@@ -67,6 +67,21 @@ export interface IStorage {
   // Food search methods
   searchFoodItems(query: string): Promise<FoodItem[]>;
   getFoodItemById(id: string): Promise<FoodItem | undefined>;
+  createFoodItem(foodData: InsertFoodItem): Promise<FoodItem>;
+
+  // Daily routine methods
+  createDailyRoutine(routineData: InsertDailyRoutine): Promise<DailyRoutine>;
+  getDailyRoutinesByUser(userId: string): Promise<DailyRoutine[]>;
+  updateDailyRoutine(routineId: string, updates: Partial<InsertDailyRoutine>): Promise<DailyRoutine>;
+  deleteDailyRoutine(routineId: string): Promise<void>;
+
+  // Daily routine completion methods
+  createDailyRoutineCompletion(completionData: InsertDailyRoutineCompletion): Promise<DailyRoutineCompletion>;
+  getDailyRoutineCompletionsByDate(userId: string, date: string): Promise<DailyRoutineCompletion[]>;
+
+  // User stats methods
+  getUserStats(userId: string): Promise<UserStats | null>;
+  updateUserStats(userId: string, pointsEarned: number): Promise<UserStats>;
 
   // Meal log edit methods
   updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog>;
@@ -289,6 +304,21 @@ export class DatabaseStorage implements IStorage {
       .from(dailyRoutines)
       .where(and(eq(dailyRoutines.userId, userId), eq(dailyRoutines.isActive, true)))
       .orderBy(dailyRoutines.order, dailyRoutines.createdAt);
+  }
+
+  async updateDailyRoutine(routineId: string, updates: Partial<InsertDailyRoutine>): Promise<DailyRoutine> {
+    const [routine] = await db
+      .update(dailyRoutines)
+      .set(updates)
+      .where(eq(dailyRoutines.id, routineId))
+      .returning();
+    return routine;
+  }
+
+  async deleteDailyRoutine(routineId: string): Promise<void> {
+    await db
+      .delete(dailyRoutines)
+      .where(eq(dailyRoutines.id, routineId));
   }
 
   async createDailyRoutineCompletion(completionData: InsertDailyRoutineCompletion): Promise<DailyRoutineCompletion> {

@@ -273,6 +273,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/daily-routines/:id", async (req, res) => {
+    try {
+      const routineId = req.params.id;
+      const updates = req.body;
+      
+      const updatedRoutine = await storage.updateDailyRoutine(routineId, updates);
+      res.json(updatedRoutine);
+    } catch (error: any) {
+      console.error('Daily routine update error:', error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/daily-routines/:id", async (req, res) => {
+    try {
+      const routineId = req.params.id;
+      
+      await storage.deleteDailyRoutine(routineId);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Daily routine delete error:', error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   // Daily routine completions routes
   app.post("/api/daily-routine-completions", async (req, res) => {
     try {

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -22,7 +24,7 @@ import { GamificationSystem } from "@/components/ui/gamification-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 
 import { useUserStore } from "@/store/userStore";
-import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler, CheckCircle2, Plus, Flame, Trophy, Star, Settings, Sparkles, Edit } from "lucide-react";
+import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler, CheckCircle2, Plus, Flame, Trophy, Star, Settings, Sparkles, Edit, MoreVertical, Trash2, Eye, EyeOff } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
@@ -132,6 +134,11 @@ function DailyRoutinesQuickChecker() {
   const [routineSlideKey, setRoutineSlideKey] = useState(0);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showQuickSetupDialog, setShowQuickSetupDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [editingRoutine, setEditingRoutine] = useState<DailyRoutine | null>(null);
+  const [deletingRoutine, setDeletingRoutine] = useState<DailyRoutine | null>(null);
+  const [showAllRoutines, setShowAllRoutines] = useState(false);
   const [newRoutine, setNewRoutine] = useState({
     title: "",
     description: "",
@@ -168,6 +175,46 @@ function DailyRoutinesQuickChecker() {
       toast({
         title: "Success!",
         description: "New routine created successfully!"
+      });
+    }
+  });
+
+  // Edit routine mutation
+  const editRoutineMutation = useMutation({
+    mutationFn: async (routineData: { id: string } & Partial<typeof newRoutine>) => {
+      const response = await fetch(`/api/daily-routines/${routineData.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(routineData)
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
+      setShowEditDialog(false);
+      setEditingRoutine(null);
+      toast({
+        title: "Success!",
+        description: "Routine updated successfully!"
+      });
+    }
+  });
+
+  // Delete routine mutation
+  const deleteRoutineMutation = useMutation({
+    mutationFn: async (routineId: string) => {
+      const response = await fetch(`/api/daily-routines/${routineId}`, {
+        method: 'DELETE'
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
+      setShowDeleteAlert(false);
+      setDeletingRoutine(null);
+      toast({
+        title: "Success!",
+        description: "Routine deleted successfully!"
       });
     }
   });
@@ -232,6 +279,29 @@ function DailyRoutinesQuickChecker() {
     }
   });
 
+  // Helper functions for routine management
+  const handleEditRoutine = (routine: DailyRoutine) => {
+    setEditingRoutine(routine);
+    setNewRoutine({
+      title: routine.title,
+      description: routine.description || "",
+      category: routine.category as "health" | "fitness" | "nutrition" | "productivity",
+      points: routine.points
+    });
+    setShowEditDialog(true);
+  };
+
+  const handleDeleteRoutine = (routine: DailyRoutine) => {
+    setDeletingRoutine(routine);
+    setShowDeleteAlert(true);
+  };
+
+  const confirmDelete = () => {
+    if (deletingRoutine) {
+      deleteRoutineMutation.mutate(deletingRoutine.id);
+    }
+  };
+
   const toggleCompletion = (routine: DailyRoutine, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -278,28 +348,32 @@ function DailyRoutinesQuickChecker() {
     productivity: "from-yellow-500/20 to-orange-500/20 border-yellow-400/30"
   } as const;
 
-  // Smart routine display logic - show next uncompleted tasks
+  // Smart routine display logic - show next uncompleted tasks or all routines
   useEffect(() => {
     if (routines.length === 0) return;
     
-    const completed = routines.filter(r => completions.some(c => c.routineId === r.id));
-    const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
-    
-    // Show mix of completed and uncompleted, prioritizing uncompleted
-    const newDisplayed = [
-      ...completed.slice(0, 2), // Show up to 2 completed for satisfaction
-      ...uncompleted.slice(0, 4 - Math.min(completed.length, 2)) // Fill rest with uncompleted
-    ].slice(0, 4);
-    
-    // Only update if different to prevent infinite loops
-    const currentIds = displayedRoutines.map(r => r.id).sort();
-    const newIds = newDisplayed.map(r => r.id).sort();
-    
-    if (JSON.stringify(currentIds) !== JSON.stringify(newIds)) {
-      setRoutineSlideKey(prev => prev + 1);
-      setDisplayedRoutines(newDisplayed);
+    if (showAllRoutines) {
+      setDisplayedRoutines(routines);
+    } else {
+      const completed = routines.filter(r => completions.some(c => c.routineId === r.id));
+      const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
+      
+      // Show mix of completed and uncompleted, prioritizing uncompleted
+      const newDisplayed = [
+        ...completed.slice(0, 2), // Show up to 2 completed for satisfaction
+        ...uncompleted.slice(0, 4 - Math.min(completed.length, 2)) // Fill rest with uncompleted
+      ].slice(0, 4);
+      
+      // Only update if different to prevent infinite loops
+      const currentIds = displayedRoutines.map(r => r.id).sort();
+      const newIds = newDisplayed.map(r => r.id).sort();
+      
+      if (JSON.stringify(currentIds) !== JSON.stringify(newIds)) {
+        setRoutineSlideKey(prev => prev + 1);
+        setDisplayedRoutines(newDisplayed);
+      }
     }
-  }, [routines, completions]);
+  }, [routines, completions, showAllRoutines]);
 
   const completedCount = displayedRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
 
@@ -339,6 +413,15 @@ function DailyRoutinesQuickChecker() {
           )}
         </h3>
         <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowAllRoutines(!showAllRoutines)}
+            className="text-emerald-400 hover:text-emerald-300 h-8 px-2"
+          >
+            {showAllRoutines ? <EyeOff className="h-4 w-4 mr-1" /> : <Eye className="h-4 w-4 mr-1" />}
+            {showAllRoutines ? "Show Less" : "Show All"}
+          </Button>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
@@ -471,6 +554,121 @@ function DailyRoutinesQuickChecker() {
             </DialogContent>
           </Dialog>
         </div>
+        
+        {/* Edit Routine Dialog */}
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <DialogContent className="bg-gradient-to-br from-emerald-950/95 to-teal-950/95 border-emerald-400/30 backdrop-blur-lg max-w-sm mx-auto">
+            <DialogHeader>
+              <DialogTitle className="text-emerald-400 text-lg">Edit Routine</DialogTitle>
+              <DialogDescription className="text-emerald-300/70">
+                Update your daily routine details
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-3">
+              <div>
+                <label className="text-emerald-300 text-xs font-medium mb-1 block">Title</label>
+                <Input
+                  value={newRoutine.title}
+                  onChange={(e) => setNewRoutine(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="e.g., Morning protein shake"
+                  className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm"
+                  data-testid="input-edit-routine-title"
+                />
+              </div>
+              
+              <div>
+                <label className="text-emerald-300 text-xs font-medium mb-1 block">Description (Optional)</label>
+                <Textarea
+                  value={newRoutine.description}
+                  onChange={(e) => setNewRoutine(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Brief description..."
+                  className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm h-16"
+                  data-testid="input-edit-routine-description"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-emerald-300 text-xs font-medium mb-1 block">Category</label>
+                  <Select
+                    value={newRoutine.category}
+                    onValueChange={(value: "health" | "fitness" | "nutrition" | "productivity") => 
+                      setNewRoutine(prev => ({ ...prev, category: value }))}
+                  >
+                    <SelectTrigger className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-emerald-900/95 border-emerald-400/30">
+                      <SelectItem value="health">Health</SelectItem>
+                      <SelectItem value="fitness">Fitness</SelectItem>
+                      <SelectItem value="nutrition">Nutrition</SelectItem>
+                      <SelectItem value="productivity">Productivity</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-emerald-300 text-xs font-medium mb-1 block">Points</label>
+                  <Input
+                    type="number"
+                    min="5"
+                    max="100"
+                    step="5"
+                    value={newRoutine.points}
+                    onChange={(e) => setNewRoutine(prev => ({ ...prev, points: parseInt(e.target.value) || 25 }))}
+                    className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm"
+                    data-testid="input-edit-routine-points"
+                  />
+                </div>
+              </div>
+              
+              <Button
+                onClick={() => {
+                  if (editingRoutine) {
+                    editRoutineMutation.mutate({ 
+                      id: editingRoutine.id,
+                      ...newRoutine 
+                    });
+                  }
+                }}
+                disabled={!newRoutine.title.trim() || editRoutineMutation.isPending}
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 text-sm"
+                data-testid="button-update-routine"
+              >
+                {editRoutineMutation.isPending ? "Updating..." : "Update Routine"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
+          <AlertDialogContent className="bg-gradient-to-br from-red-950/95 to-red-900/95 border-red-400/30 backdrop-blur-lg max-w-sm mx-auto">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-red-400 text-lg">Delete Routine</AlertDialogTitle>
+              <AlertDialogDescription className="text-red-300/70">
+                Are you sure you want to delete "{deletingRoutine?.title}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel 
+                className="bg-transparent border-slate-600 text-slate-300 hover:bg-slate-700"
+                data-testid="button-cancel-delete"
+              >
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDelete}
+                disabled={deleteRoutineMutation.isPending}
+                className="bg-red-600 hover:bg-red-700 text-white border-0"
+                data-testid="button-confirm-delete"
+              >
+                {deleteRoutineMutation.isPending ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       {displayedRoutines.length === 0 ? (
@@ -500,7 +698,7 @@ function DailyRoutinesQuickChecker() {
           </CardContent>
         </Card>
       ) : (
-        <div key={routineSlideKey} className="space-y-2">
+        <div key={routineSlideKey} className={`space-y-2 ${showAllRoutines ? 'max-h-96 overflow-y-auto' : ''}`}>
           {displayedRoutines.map((routine, index) => {
             const isCompleted = completions.some(c => c.routineId === routine.id);
             const categoryColor = categoryColors[routine.category as keyof typeof categoryColors];
@@ -514,7 +712,13 @@ function DailyRoutinesQuickChecker() {
                   animationDelay: `${index * 100}ms`,
                   animationFillMode: 'both'
                 }}
-                onClick={(e) => toggleCompletion(routine, e)}
+                onClick={(e) => {
+                  // Only trigger completion if clicked outside of menu
+                  const target = e.target as HTMLElement;
+                  if (!target.closest('[data-radix-popper-content-wrapper]')) {
+                    toggleCompletion(routine, e);
+                  }
+                }}
               >
                 <CardContent className="p-3">
                   <div className="flex items-center justify-between">
@@ -542,11 +746,62 @@ function DailyRoutinesQuickChecker() {
                         </div>
                       )}
                       
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 relative ${
-                        isCompleted 
-                          ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse' 
-                          : `border-gray-400 hover:border-emerald-400 hover:shadow-md ${completingRoutineId === routine.id ? 'animate-spin' : ''}`
-                      }`}>
+                      {/* Routine Management Menu */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 text-gray-400 hover:text-white opacity-60 hover:opacity-100"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <MoreVertical className="h-3 w-3" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent 
+                          align="end" 
+                          className="bg-slate-800/95 border-slate-600/30 backdrop-blur-lg"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                        >
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleEditRoutine(routine);
+                            }}
+                            className="text-slate-300 hover:text-white hover:bg-slate-700/50 cursor-pointer"
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit Routine
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDeleteRoutine(routine);
+                            }}
+                            className="text-red-400 hover:text-red-300 hover:bg-red-900/20 cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Routine
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      
+                      <div 
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 relative cursor-pointer ${
+                          isCompleted 
+                            ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse' 
+                            : `border-gray-400 hover:border-emerald-400 hover:shadow-md ${completingRoutineId === routine.id ? 'animate-spin' : ''}`
+                        }`}
+                        onClick={(e) => toggleCompletion(routine, e)}
+                      >
                         {isCompleted && (
                           <CheckCircle2 className="h-4 w-4 text-white animate-bounce" />
                         )}
