@@ -39,28 +39,30 @@ export default function MobileProgress() {
   const stats = useMemo(() => {
     if (!user) return null;
 
-    const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : user.weight;
-    const startWeight = weightEntries.length > 0 ? weightEntries[weightEntries.length - 1].weight : user.weight;
-    const weightGained = currentWeight - startWeight;
-    const goalWeight = user.goalWeight || currentWeight + 10;
+    const currentWeight = weightEntries?.length > 0 ? weightEntries[0]?.weight || user.weight : user.weight;
+    const startWeight = weightEntries?.length > 0 ? weightEntries[weightEntries.length - 1]?.weight || user.weight : user.weight;
+    const weightGained = (currentWeight || 0) - (startWeight || 0);
+    const goalWeight = user.goalWeight || (currentWeight || 0) + 10;
     
     const totalDaysTracked = new Set([
       ...weightEntries.map(w => w.date),
       ...calorieEntries.map(c => c.date)
     ]).size;
 
-    const avgCaloriesPerDay = calorieEntries.length > 0 
-      ? Math.round(calorieEntries.reduce((sum, entry) => sum + entry.calories, 0) / calorieEntries.length)
+    const avgCaloriesPerDay = calorieEntries?.length > 0 
+      ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
       : 0;
 
     const currentTdee = currentTdeeAnalysis?.tdee || 2400;
-    const avgSurplus = avgCaloriesPerDay - currentTdee;
+    const avgSurplus = avgCaloriesPerDay > 0 ? avgCaloriesPerDay - currentTdee : 0;
     
     // Weight gain rate (kg per week)
     const weightGainRate = totalDaysTracked > 0 ? (weightGained / totalDaysTracked) * 7 : 0;
     
     // Progress to goal
-    const progressToGoal = ((currentWeight - startWeight) / (goalWeight - startWeight)) * 100;
+    const progressToGoal = goalWeight > startWeight && currentWeight > startWeight 
+      ? (((currentWeight || 0) - (startWeight || 0)) / ((goalWeight || 0) - (startWeight || 0))) * 100
+      : 0;
     
     return {
       currentWeight,
@@ -143,10 +145,10 @@ export default function MobileProgress() {
           <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-emerald-400/20">
             <CardContent className="p-4 text-center">
               <Scale className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-white">{stats.currentWeight}kg</p>
+              <p className="text-2xl font-bold text-white">{(stats.currentWeight || 0).toFixed(1)}kg</p>
               <p className="text-xs text-slate-400">Current Weight</p>
               <p className="text-xs text-emerald-400 font-semibold">
-                +{stats.weightGained.toFixed(1)}kg gained
+                +{(stats.weightGained || 0).toFixed(1)}kg gained
               </p>
             </CardContent>
           </Card>
@@ -154,9 +156,9 @@ export default function MobileProgress() {
           <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-emerald-400/20">
             <CardContent className="p-4 text-center">
               <Target className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-white">{Math.round(stats.progressToGoal)}%</p>
+              <p className="text-2xl font-bold text-white">{Math.round(stats.progressToGoal || 0)}%</p>
               <p className="text-xs text-slate-400">Progress to Goal</p>
-              <Progress value={Math.min(stats.progressToGoal, 100)} className="h-2 mt-2" />
+              <Progress value={Math.min(stats.progressToGoal || 0, 100)} className="h-2 mt-2" />
             </CardContent>
           </Card>
         </div>
@@ -201,18 +203,18 @@ export default function MobileProgress() {
                   <div>
                     <p className="text-sm text-slate-400">Weekly Gain Rate</p>
                     <p className="text-lg font-semibold text-white">
-                      {stats.weightGainRate > 0 ? '+' : ''}{stats.weightGainRate.toFixed(2)}kg/week
+                      {(stats.weightGainRate || 0) > 0 ? '+' : ''}{(stats.weightGainRate || 0).toFixed(2)}kg/week
                     </p>
                     <Badge variant="outline" className={
-                      Math.abs(stats.weightGainRate - 1.0) < 0.3 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
+                      Math.abs((stats.weightGainRate || 0) - 1.0) < 0.3 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
                     }>
-                      {Math.abs(stats.weightGainRate - 1.0) < 0.3 ? 'On Target' : 'Adjust Intake'}
+                      {Math.abs((stats.weightGainRate || 0) - 1.0) < 0.3 ? 'On Target' : 'Adjust Intake'}
                     </Badge>
                   </div>
                   
                   <div>
                     <p className="text-sm text-slate-400">Days Tracked</p>
-                    <p className="text-lg font-semibold text-white">{stats.totalDaysTracked} days</p>
+                    <p className="text-lg font-semibold text-white">{stats.totalDaysTracked || 0} days</p>
                     <Badge variant="outline" className="text-blue-400 border-blue-400/40">
                       {stats.totalDaysTracked >= 30 ? 'Excellent' : 'Building Data'}
                     </Badge>
@@ -222,19 +224,19 @@ export default function MobileProgress() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-slate-400">Avg Daily Calories</p>
-                    <p className="text-lg font-semibold text-white">{stats.avgCaloriesPerDay.toLocaleString()}</p>
-                    <p className="text-xs text-slate-400">TDEE: {stats.currentTdee}</p>
+                    <p className="text-lg font-semibold text-white">{(stats.avgCaloriesPerDay || 0).toLocaleString()}</p>
+                    <p className="text-xs text-slate-400">TDEE: {stats.currentTdee || 0}</p>
                   </div>
                   
                   <div>
                     <p className="text-sm text-slate-400">Daily Surplus</p>
                     <p className="text-lg font-semibold text-white">
-                      {stats.avgSurplus > 0 ? '+' : ''}{stats.avgSurplus.toLocaleString()}
+                      {(stats.avgSurplus || 0) > 0 ? '+' : ''}{(stats.avgSurplus || 0).toLocaleString()}
                     </p>
                     <Badge variant="outline" className={
-                      Math.abs(stats.avgSurplus - 1100) < 200 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
+                      Math.abs((stats.avgSurplus || 0) - 1100) < 200 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
                     }>
-                      {Math.abs(stats.avgSurplus - 1100) < 200 ? 'Perfect' : 'Needs Adjustment'}
+                      {Math.abs((stats.avgSurplus || 0) - 1100) < 200 ? 'Perfect' : 'Needs Adjustment'}
                     </Badge>
                   </div>
                 </div>

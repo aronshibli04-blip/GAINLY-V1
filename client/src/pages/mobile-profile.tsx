@@ -66,8 +66,8 @@ export default function MobileProfile() {
     ...calorieEntries.map(c => c.date)
   ]).size;
 
-  const avgCaloriesPerDay = calorieEntries.length > 0 
-    ? Math.round(calorieEntries.reduce((sum, entry) => sum + entry.calories, 0) / calorieEntries.length)
+  const avgCaloriesPerDay = calorieEntries?.length > 0 
+    ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
     : 0;
 
   const currentTdee = currentTdeeAnalysis?.tdee || 2400;
