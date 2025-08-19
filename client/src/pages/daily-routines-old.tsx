@@ -13,6 +13,7 @@ import { toast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
+
 import { 
   Target, 
   Plus, 
@@ -96,45 +97,44 @@ export default function DailyRoutines() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(routineData)
       });
+      if (!response.ok) throw new Error('Failed to create routine');
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
       setShowAddDialog(false);
       setNewRoutine({ title: "", description: "", category: "health", points: 25 });
-      toast({
-        title: "Success!",
-        description: "New routine created successfully!"
-      });
+      toast({ title: "Success", description: "Daily routine created!" });
     }
   });
 
   // Complete routine mutation
   const completeRoutineMutation = useMutation({
-    mutationFn: async ({ routineId, points }: { routineId: string; points: number }) => {
+    mutationFn: async ({ routineId, points }: { routineId: string, points: number }) => {
       const response = await fetch('/api/daily-routine-completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
           routineId,
-          pointsEarned: points,
-          completedAt: new Date().toISOString(),
-          completedDate: today
+          completedDate: today,
+          pointsEarned: points
         })
       });
+      if (!response.ok) throw new Error('Failed to complete routine');
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
-      toast({
-        title: "🎉 Routine Completed!",
-        description: "Great job staying consistent with your habits!"
+      toast({ 
+        title: "🎉 Routine Completed!", 
+        description: "Great job! You earned points and boosted your streak!" 
       });
     }
   });
 
+  // Toggle routine completion
   const toggleCompletion = (routine: DailyRoutine) => {
     const isCompleted = completions.some(c => c.routineId === routine.id);
     
@@ -155,7 +155,6 @@ export default function DailyRoutines() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-gray-900 to-teal-950 relative">
         <ParticleBackground />
-        <MobileHeader title="Daily Routines" onOpenMenu={openMenu} />
         <div className="relative z-10 container mx-auto p-4 pt-20">
           <div className="animate-pulse space-y-6">
             <div className="h-32 bg-emerald-900/30 rounded-xl"></div>
@@ -256,47 +255,65 @@ export default function DailyRoutines() {
           </CardContent>
         </Card>
 
-        {/* Create Routine Section */}
+        {/* Routines List */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-xl sm:text-2xl font-bold text-emerald-400">Your Routines</h2>
           
-          <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0">
-                <Plus className="h-5 w-5 mr-2" />
-                Add Routine
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-gradient-to-br from-emerald-950/95 to-teal-950/95 border-emerald-400/30 backdrop-blur-lg">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <Button
+              onClick={async () => {
+                // Add all default routines sequentially to avoid race conditions
+                for (const routine of defaultRoutines) {
+                  await createRoutineMutation.mutateAsync({ ...routine, userId });
+                }
+                toast({
+                  title: "Success!",
+                  description: "Added 10 hardgainer-optimized routines for you!"
+                });
+              }}
+              variant="outline"
+              className="border-emerald-400/50 text-emerald-400 hover:bg-emerald-400/10 text-sm sm:text-base"
+              disabled={createRoutineMutation.isPending}
+              data-testid="button-quick-setup"
+            >
+              <Zap className="h-4 w-4 mr-1 sm:mr-2" />
+              {createRoutineMutation.isPending ? "Adding..." : "Quick Setup"}
+            </Button>
+            
+            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+              <DialogTrigger asChild>
+                <Button 
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 text-sm sm:text-base"
+                  data-testid="button-add-routine"
+                >
+                  <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                  Add Custom
+                </Button>
+              </DialogTrigger>
+            <DialogContent className="bg-gradient-to-br from-emerald-900/95 to-teal-900/95 border-emerald-400/30 backdrop-blur-md">
               <DialogHeader>
-                <DialogTitle className="text-emerald-400 text-xl">Create New Daily Routine</DialogTitle>
+                <DialogTitle className="text-emerald-400 text-xl">Create New Routine</DialogTitle>
                 <DialogDescription className="text-emerald-300/70">
-                  Build a habit that aligns with your bigger goals
+                  Add a new daily routine aligned with your weight gain goals
                 </DialogDescription>
               </DialogHeader>
               
               <div className="space-y-4">
-                <div>
-                  <label className="text-emerald-300 text-sm font-medium mb-2 block">Routine Title</label>
-                  <Input
-                    value={newRoutine.title}
-                    onChange={(e) => setNewRoutine(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="e.g., Morning protein shake"
-                    className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100"
-                    data-testid="input-routine-title"
-                  />
-                </div>
+                <Input
+                  placeholder="Routine title (e.g., Morning protein shake)"
+                  value={newRoutine.title}
+                  onChange={(e) => setNewRoutine(prev => ({ ...prev, title: e.target.value }))}
+                  className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100"
+                  data-testid="input-routine-title"
+                />
                 
-                <div>
-                  <label className="text-emerald-300 text-sm font-medium mb-2 block">Description (Optional)</label>
-                  <Textarea
-                    value={newRoutine.description}
-                    onChange={(e) => setNewRoutine(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Brief description of your routine..."
-                    className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100"
-                    data-testid="input-routine-description"
-                  />
-                </div>
+                <Textarea
+                  placeholder="Description (optional)"
+                  value={newRoutine.description}
+                  onChange={(e) => setNewRoutine(prev => ({ ...prev, description: e.target.value }))}
+                  className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100"
+                  data-testid="input-routine-description"
+                />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -395,25 +412,45 @@ export default function DailyRoutines() {
                   key={routine.id}
                   className={`bg-gradient-to-br ${gradientClass} border-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${isCompleted ? 'ring-2 ring-emerald-400/50' : ''}`}
                 >
-                  <CardContent className="p-4">
+                  <CardContent className="p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className={`p-2 rounded-xl bg-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-500/20`}>
-                          <IconComponent className={`h-6 w-6 text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400`} />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-white">{routine.title}</h3>
-                          {routine.description && (
-                            <p className="text-gray-300/70 text-sm">{routine.description}</p>
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isCompleted ? 'bg-emerald-500/20 border border-emerald-400/50' : `bg-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-500/20`}`}>
+                          {isCompleted ? (
+                            <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+                          ) : (
+                            <IconComponent className={`h-6 w-6 text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400`} />
                           )}
-                          <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="secondary" className={`bg-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-500/20 text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400 text-xs`}>
-                              +{routine.points} XP
+                        </div>
+                        
+                        <div className="flex-1">
+                          <h3 className={`font-semibold text-lg ${isCompleted ? 'text-emerald-400' : `text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400`}`}>
+                            {routine.title}
+                          </h3>
+                          {routine.description && (
+                            <p className={`text-sm ${isCompleted ? 'text-emerald-300/70' : `text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-300/70`} mt-1`}>
+                              {routine.description}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2 mt-2">
+                            <Badge variant="outline" className={`text-xs ${isCompleted ? 'border-emerald-400/50 text-emerald-400' : `border-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400/50 text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400`}`}>
+                              {routine.category}
+                            </Badge>
+                            <Badge variant="outline" className={`text-xs ${isCompleted ? 'border-emerald-400/50 text-emerald-400' : `border-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400/50 text-${routine.category === 'health' ? 'red' : routine.category === 'fitness' ? 'blue' : routine.category === 'nutrition' ? 'green' : 'yellow'}-400`}`}>
+                              +{routine.points} points
                             </Badge>
                           </div>
                         </div>
                       </div>
+                      
                       <div className="flex items-center gap-3">
+                        {isCompleted && (
+                          <div className="flex items-center gap-1 text-emerald-400">
+                            <Star className="h-4 w-4 fill-current" />
+                            <span className="text-sm font-semibold">Done!</span>
+                          </div>
+                        )}
+                        
                         <Checkbox
                           checked={isCompleted}
                           onCheckedChange={() => toggleCompletion(routine)}
