@@ -346,7 +346,7 @@ export default function MobileMeals() {
         )}
 
         {/* AI Photo Nutrition Scanner */}
-        <PhotoNutritionScanner onFoodCreated={handleMealLogged} />
+        <PhotoNutritionScanner onFoodCreated={() => {}} />
 
         {/* Today's Logged Meals - Premium Design */}
         <PremiumLoggedMeals />

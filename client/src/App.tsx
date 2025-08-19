@@ -6,6 +6,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { SideMenu } from "@/components/ui/side-menu";
 import { MenuProvider, useMenu } from "@/components/ui/menu-context";
+import { OnboardingFlow } from "@/components/ui/onboarding-flow";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";
@@ -72,26 +74,28 @@ function AppContent() {
         onOpenMenu={openMenu}
       />
       
-      <Switch>
-        <Route path="/" component={MobileHome} />
-        <Route path="/calibration" component={CalibrationMode} />
-        <Route path="/calories" component={MobileCalories} />
-        <Route path="/training" component={MobileTraining} />
-        <Route path="/ai-coach" component={MobileAICoach} />
-        <Route path="/meals" component={MobileMeals} />
-        <Route path="/profile" component={MobileProfile} />
-        <Route path="/measurements" component={MobileMeasurements} />
-        <Route path="/achievements" component={MobileAchievements} />
-        <Route path="/goals" component={MobileGoals} />
-        <Route path="/progress" component={MobileProgress} />
+      <ErrorBoundary>
+        <Switch>
+          <Route path="/" component={MobileHome} />
+          <Route path="/calibration" component={CalibrationMode} />
+          <Route path="/calories" component={MobileCalories} />
+          <Route path="/training" component={MobileTraining} />
+          <Route path="/ai-coach" component={MobileAICoach} />
+          <Route path="/meals" component={MobileMeals} />
+          <Route path="/profile" component={MobileProfile} />
+          <Route path="/measurements" component={MobileMeasurements} />
+          <Route path="/achievements" component={MobileAchievements} />
+          <Route path="/goals" component={MobileGoals} />
+          <Route path="/progress" component={MobileProgress} />
 
-        <Route path="/setup" component={HardgainerProfileSetup} />
-        
-        {/* Fallback */}
-        <Route>
-          <MobileHome />
-        </Route>
-      </Switch>
+          <Route path="/setup" component={HardgainerProfileSetup} />
+          
+          {/* Fallback */}
+          <Route>
+            <MobileHome />
+          </Route>
+        </Switch>
+      </ErrorBoundary>
     </div>
   );
 }
