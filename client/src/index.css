@@ -339,3 +339,38 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(147, 100%, 45%);
 }
+
+/* Satisfying routine completion animations */
+@keyframes celebration-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes success-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 30px rgba(34, 197, 94, 0.4); }
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-celebration-pop {
+  animation: celebration-pop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-success-glow {
+  animation: success-glow 2s ease-in-out infinite;
+}
+
+.animate-particle-float {
+  animation: particle-float 2s ease-out forwards;
+}

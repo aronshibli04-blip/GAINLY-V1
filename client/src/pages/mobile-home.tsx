@@ -30,10 +30,42 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
+// Celebration Particles Component
+function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete: () => void }) {
+  if (!show) return null;
+  
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
+      <div className="relative">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-emerald-400 rounded-full animate-ping"
+            style={{
+              top: Math.random() * 200 - 100,
+              left: Math.random() * 200 - 100,
+              animationDelay: `${i * 100}ms`,
+              animationDuration: '1s',
+            }}
+          />
+        ))}
+        <div 
+          className="text-4xl animate-bounce"
+          onAnimationEnd={() => setTimeout(onComplete, 500)}
+        >
+          🎉
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Daily Routines Quick Checker Component
 function DailyRoutinesQuickChecker() {
   const userId = localStorage.getItem("userId") || "user1";
   const today = new Date().toISOString().split('T')[0];
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [completingRoutineId, setCompletingRoutineId] = useState<string | null>(null);
 
   // Fetch user routines (limit to 4 for home page)
   const { data: routines = [], isLoading: routinesLoading } = useQuery<DailyRoutine[]>({
@@ -62,21 +94,73 @@ function DailyRoutinesQuickChecker() {
       });
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
-      // Add fun celebration effect
+      
+      // Enhanced celebration effect with emojis and points
+      const routine = routines.find(r => r.id === variables.routineId);
+      const categoryEmojis = {
+        health: "❤️💪",
+        fitness: "🏋️‍♂️💪", 
+        nutrition: "🍎🥗",
+        productivity: "🧠⚡"
+      };
+      
+      const celebrationEmojis = ["🎉", "✨", "🌟", "🎯", "🚀"];
+      const randomEmoji = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
+      const categoryEmoji = categoryEmojis[routine?.category as keyof typeof categoryEmojis] || "✨";
+      
       toast({
-        title: "🎉 Routine Completed!",
-        description: "Great job staying consistent with your habits!"
+        title: `${randomEmoji} Routine Completed! +${variables.points} points`,
+        description: `${categoryEmoji} Great job staying consistent with your habits!`,
+        duration: 3000,
       });
+      
+      // Add haptic feedback simulation with multiple celebration toasts
+      setTimeout(() => {
+        const streakMessages = [
+          "🔥 Building your streak!",
+          "💪 Consistency is key!",
+          "⚡ You're on fire!",
+          "🎯 Target hit!",
+          "🚀 Progress unlocked!"
+        ];
+        const randomMessage = streakMessages[Math.floor(Math.random() * streakMessages.length)];
+        
+        toast({
+          description: randomMessage,
+          duration: 2000,
+        });
+      }, 1000);
     }
   });
 
-  const toggleCompletion = (routine: DailyRoutine) => {
+  const toggleCompletion = (routine: DailyRoutine, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
     const isCompleted = completions.some(c => c.routineId === routine.id);
     
-    if (!isCompleted) {
+    if (!isCompleted && !completeRoutineMutation.isPending) {
+      setCompletingRoutineId(routine.id);
+      
+      // Add immediate visual feedback with satisfying animations
+      const element = event.currentTarget as HTMLElement;
+      element.style.transform = 'scale(0.95)';
+      element.style.transition = 'transform 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+      
+      // Trigger particle celebration
+      setShowCelebration(true);
+      
+      setTimeout(() => {
+        element.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+          element.style.transform = '';
+          setCompletingRoutineId(null);
+        }, 200);
+      }, 150);
+      
       completeRoutineMutation.mutate({ 
         routineId: routine.id, 
         points: routine.points 
@@ -118,9 +202,15 @@ function DailyRoutinesQuickChecker() {
   const completedCount = displayRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+    <>
+      <CelebrationParticles 
+        show={showCelebration} 
+        onComplete={() => setShowCelebration(false)} 
+      />
+      
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
           Daily Routines
           {displayRoutines.length > 0 && (
@@ -161,8 +251,12 @@ function DailyRoutinesQuickChecker() {
             return (
               <Card
                 key={routine.id}
-                className={`bg-gradient-to-br ${categoryColor} backdrop-blur-sm transition-all duration-300 ${isCompleted ? 'ring-1 ring-emerald-400/50 scale-[0.98]' : 'hover:scale-[1.01]'} cursor-pointer`}
-                onClick={() => toggleCompletion(routine)}
+                className={`bg-gradient-to-br ${categoryColor} backdrop-blur-sm transition-all duration-300 ${isCompleted ? 'ring-2 ring-emerald-400/70 shadow-lg shadow-emerald-400/20' : 'hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer'} ${completeRoutineMutation.isPending ? 'animate-pulse' : ''}`}
+                onClick={(e) => toggleCompletion(routine, e)}
+                style={{
+                  animationDuration: isCompleted ? '0.6s' : undefined,
+                  animationName: isCompleted ? 'bounce' : undefined,
+                }}
               >
                 <CardContent className="p-3">
                   <div className="flex items-center justify-between">
@@ -178,18 +272,29 @@ function DailyRoutinesQuickChecker() {
                     
                     <div className="flex items-center gap-2">
                       {isCompleted && (
-                        <div className="flex items-center gap-1 text-emerald-400">
-                          <Star className="h-4 w-4 fill-current" />
+                        <div className="flex items-center gap-1 text-emerald-400 animate-fadeIn">
+                          <Star className="h-4 w-4 fill-current animate-pulse" />
                           <span className="text-xs font-semibold">Done!</span>
                         </div>
                       )}
+                      {completingRoutineId === routine.id && !isCompleted && (
+                        <div className="flex items-center gap-1 text-yellow-400">
+                          <Zap className="h-4 w-4 animate-bounce" />
+                          <span className="text-xs font-semibold">Completing...</span>
+                        </div>
+                      )}
                       
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 relative ${
                         isCompleted 
-                          ? 'bg-emerald-500 border-emerald-400' 
-                          : `border-gray-400 hover:border-emerald-400 ${completeRoutineMutation.isPending ? 'animate-pulse' : ''}`
+                          ? 'bg-emerald-500 border-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse' 
+                          : `border-gray-400 hover:border-emerald-400 hover:shadow-md ${completingRoutineId === routine.id ? 'animate-spin' : ''}`
                       }`}>
-                        {isCompleted && <CheckCircle2 className="h-4 w-4 text-white" />}
+                        {isCompleted && (
+                          <CheckCircle2 className="h-4 w-4 text-white animate-bounce" />
+                        )}
+                        {completingRoutineId === routine.id && !isCompleted && (
+                          <div className="absolute inset-0 rounded-full bg-emerald-400/20 animate-ping"></div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -210,7 +315,8 @@ function DailyRoutinesQuickChecker() {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 
