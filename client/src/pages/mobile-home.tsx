@@ -244,22 +244,6 @@ function DailyRoutinesQuickChecker() {
     productivity: "from-yellow-500/20 to-orange-500/20 border-yellow-400/30"
   } as const;
 
-  if (routinesLoading || completionsLoading) {
-    return (
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-          Daily Routines
-        </h3>
-        <div className="animate-pulse space-y-2">
-          {[1,2,3].map(i => (
-            <div key={i} className="h-16 bg-slate-800/50 rounded-xl"></div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   // Smart routine display logic - show next uncompleted tasks
   useEffect(() => {
     if (routines.length === 0) return;
@@ -284,6 +268,23 @@ function DailyRoutinesQuickChecker() {
   }, [routines, completions]);
 
   const completedCount = displayedRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
+
+  // Show loading state
+  if (routinesLoading || completionsLoading) {
+    return (
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+          Daily Routines
+        </h3>
+        <div className="animate-pulse space-y-2">
+          {[1,2,3].map(i => (
+            <div key={i} className="h-16 bg-slate-800/50 rounded-xl"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
