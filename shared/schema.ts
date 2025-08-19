@@ -191,6 +191,10 @@ export const insertAiAnalysisSchema = createInsertSchema(aiAnalysis).omit({
 export const insertFoodItemSchema = createInsertSchema(foodItems).omit({
   id: true,
   createdAt: true,
+}).extend({
+  protein: z.union([z.string(), z.number()]).transform(val => String(val)),
+  carbs: z.union([z.string(), z.number()]).transform(val => String(val)),
+  fat: z.union([z.string(), z.number()]).transform(val => String(val)),
 });
 
 export const insertDailyRoutineSchema = createInsertSchema(dailyRoutines).omit({
