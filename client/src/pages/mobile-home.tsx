@@ -362,7 +362,7 @@ function DailyRoutinesQuickChecker() {
 
   // Smart routine display logic - show next uncompleted tasks or all routines
   useEffect(() => {
-    if (routines.length === 0) return;
+    if (!routines || routines.length === 0) return;
     
     if (showAllRoutines) {
       setDisplayedRoutines(routines);
@@ -387,7 +387,7 @@ function DailyRoutinesQuickChecker() {
     }
   }, [routines, completions, showAllRoutines]);
 
-  const completedCount = displayedRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
+  const completedCount = displayedRoutines?.filter(r => completions?.some(c => c.routineId === r.id)).length || 0;
 
   // Show loading state
   if (routinesLoading || completionsLoading) {
@@ -418,7 +418,7 @@ function DailyRoutinesQuickChecker() {
           <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
             <CheckCircle2 className="h-5 w-5 text-emerald-400" />
             Daily Routines
-            {displayedRoutines.length > 0 && (
+            {displayedRoutines && displayedRoutines.length > 0 && (
               <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
                 {completedCount}/{displayedRoutines.length}
               </Badge>
@@ -683,7 +683,7 @@ function DailyRoutinesQuickChecker() {
         </AlertDialog>
       </div>
 
-      {displayedRoutines.length === 0 ? (
+      {!displayedRoutines || displayedRoutines.length === 0 ? (
         <Card className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-400/20 backdrop-blur-sm">
           <CardContent className="p-4 text-center">
             <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
@@ -711,8 +711,8 @@ function DailyRoutinesQuickChecker() {
         </Card>
       ) : (
         <div key={routineSlideKey} className={`space-y-2 ${showAllRoutines ? 'max-h-96 overflow-y-auto' : ''}`}>
-          {displayedRoutines.map((routine, index) => {
-            const isCompleted = completions.some(c => c.routineId === routine.id);
+          {displayedRoutines?.map((routine, index) => {
+            const isCompleted = completions?.some(c => c.routineId === routine.id);
             const categoryColor = categoryColors[routine.category as keyof typeof categoryColors];
             const categoryIcon = categoryIcons[routine.category as keyof typeof categoryIcons];
             
