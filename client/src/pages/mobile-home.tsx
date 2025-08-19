@@ -18,13 +18,201 @@ import { GamificationSystem } from "@/components/ui/gamification-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 
 import { useUserStore } from "@/store/userStore";
-import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler } from "lucide-react";
+import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler, CheckCircle2, Plus, Flame, Trophy, Star } from "lucide-react";
 import { Link } from "wouter";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import { toast } from "@/hooks/use-toast";
+import type { DailyRoutine, DailyRoutineCompletion } from "@shared/schema";
 import { SmartNotifications } from "@/components/ui/smart-notifications";
 import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
+
+// Daily Routines Quick Checker Component
+function DailyRoutinesQuickChecker() {
+  const userId = localStorage.getItem("userId") || "user1";
+  const today = new Date().toISOString().split('T')[0];
+
+  // Fetch user routines (limit to 4 for home page)
+  const { data: routines = [], isLoading: routinesLoading } = useQuery<DailyRoutine[]>({
+    queryKey: ['/api/daily-routines', userId],
+    queryFn: () => fetch(`/api/daily-routines/${userId}`).then(res => res.json())
+  });
+
+  // Fetch today's completions
+  const { data: completions = [], isLoading: completionsLoading } = useQuery<DailyRoutineCompletion[]>({
+    queryKey: ['/api/daily-routine-completions', userId, today],
+    queryFn: () => fetch(`/api/daily-routine-completions/${userId}/${today}`).then(res => res.json())
+  });
+
+  // Complete routine mutation
+  const completeRoutineMutation = useMutation({
+    mutationFn: async ({ routineId, points }: { routineId: string; points: number }) => {
+      const response = await fetch('/api/daily-routine-completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          routineId,
+          pointsEarned: points,
+          completedAt: new Date().toISOString()
+        })
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
+      // Add fun celebration effect
+      toast({
+        title: "🎉 Routine Completed!",
+        description: "Great job staying consistent with your habits!"
+      });
+    }
+  });
+
+  const toggleCompletion = (routine: DailyRoutine) => {
+    const isCompleted = completions.some(c => c.routineId === routine.id);
+    
+    if (!isCompleted) {
+      completeRoutineMutation.mutate({ 
+        routineId: routine.id, 
+        points: routine.points 
+      });
+    }
+  };
+
+  const categoryIcons = {
+    health: "❤️",
+    fitness: "💪", 
+    nutrition: "🍎",
+    productivity: "🧠"
+  } as const;
+
+  const categoryColors = {
+    health: "from-red-500/20 to-pink-500/20 border-red-400/30",
+    fitness: "from-blue-500/20 to-purple-500/20 border-blue-400/30",
+    nutrition: "from-green-500/20 to-emerald-500/20 border-green-400/30", 
+    productivity: "from-yellow-500/20 to-orange-500/20 border-yellow-400/30"
+  } as const;
+
+  if (routinesLoading || completionsLoading) {
+    return (
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+          Daily Routines
+        </h3>
+        <div className="animate-pulse space-y-2">
+          {[1,2,3].map(i => (
+            <div key={i} className="h-16 bg-slate-800/50 rounded-xl"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const displayRoutines = routines.slice(0, 4); // Show max 4 on home page
+  const completedCount = displayRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+          Daily Routines
+          {displayRoutines.length > 0 && (
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs">
+              {completedCount}/{displayRoutines.length}
+            </Badge>
+          )}
+        </h3>
+        {routines.length > 4 && (
+          <Link href="/daily-routines">
+            <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
+              View All
+            </Button>
+          </Link>
+        )}
+      </div>
+
+      {displayRoutines.length === 0 ? (
+        <Card className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-400/20 backdrop-blur-sm">
+          <CardContent className="p-4 text-center">
+            <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
+            <p className="text-emerald-300/70 text-sm mb-3">No routines yet!</p>
+            <Link href="/daily-routines">
+              <Button size="sm" className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0">
+                <Plus className="h-4 w-4 mr-1" />
+                Create Routines
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {displayRoutines.map((routine) => {
+            const isCompleted = completions.some(c => c.routineId === routine.id);
+            const categoryColor = categoryColors[routine.category as keyof typeof categoryColors];
+            const categoryIcon = categoryIcons[routine.category as keyof typeof categoryIcons];
+            
+            return (
+              <Card
+                key={routine.id}
+                className={`bg-gradient-to-br ${categoryColor} backdrop-blur-sm transition-all duration-300 ${isCompleted ? 'ring-1 ring-emerald-400/50 scale-[0.98]' : 'hover:scale-[1.01]'} cursor-pointer`}
+                onClick={() => toggleCompletion(routine)}
+              >
+                <CardContent className="p-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="text-lg">{categoryIcon}</div>
+                      <div className="flex-1">
+                        <h4 className={`font-medium text-sm ${isCompleted ? 'text-emerald-400 line-through' : 'text-white'}`}>
+                          {routine.title}
+                        </h4>
+                        <p className="text-xs text-slate-400">+{routine.points} points</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {isCompleted && (
+                        <div className="flex items-center gap-1 text-emerald-400">
+                          <Star className="h-4 w-4 fill-current" />
+                          <span className="text-xs font-semibold">Done!</span>
+                        </div>
+                      )}
+                      
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        isCompleted 
+                          ? 'bg-emerald-500 border-emerald-400' 
+                          : `border-gray-400 hover:border-emerald-400 ${completeRoutineMutation.isPending ? 'animate-pulse' : ''}`
+                      }`}>
+                        {isCompleted && <CheckCircle2 className="h-4 w-4 text-white" />}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+          
+          {completedCount === displayRoutines.length && displayRoutines.length > 0 && (
+            <Card className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-400/50 backdrop-blur-sm">
+              <CardContent className="p-3 text-center">
+                <div className="flex items-center justify-center gap-2 text-emerald-400">
+                  <Trophy className="h-5 w-5" />
+                  <span className="text-sm font-semibold">All routines completed! 🎉</span>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function MobileHome() {
   const { 
@@ -258,6 +446,9 @@ export default function MobileHome() {
             </Card>
           </Link>
         </div>
+
+        {/* Daily Routines Quick Checker */}
+        <DailyRoutinesQuickChecker />
 
         {/* Enhanced Micro Goals Overview */}
         <div className="space-y-5">
