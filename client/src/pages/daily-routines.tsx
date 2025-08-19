@@ -171,16 +171,16 @@ export default function DailyRoutines() {
       
       {/* Header */}
       <div className="relative z-10 border-b border-emerald-800/30 bg-emerald-950/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-2xl flex items-center justify-center border border-emerald-400/30 animate-spin-slow">
-              <Target className="h-8 w-8 text-emerald-400" />
+        <div className="w-full max-w-full px-4 py-4 sm:py-6">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-2xl flex items-center justify-center border border-emerald-400/30 animate-spin-slow">
+              <Target className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                 Daily Routines
               </h1>
-              <p className="text-emerald-300/70 text-lg">
+              <p className="text-emerald-300/70 text-sm sm:text-lg">
                 Build habits aligned with your bigger goals
               </p>
             </div>
@@ -188,17 +188,17 @@ export default function DailyRoutines() {
         </div>
       </div>
 
-      <div className="relative z-10 container mx-auto p-4 space-y-6">
+      <div className="relative z-10 w-full max-w-full px-4 mx-auto space-y-6">
         
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <Card className="bg-gradient-to-br from-emerald-900/40 to-teal-900/40 border-emerald-400/30 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-8 w-8 text-emerald-400" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <CheckCircle2 className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-400" />
                 <div>
-                  <p className="text-emerald-300/70 text-sm">Today's Progress</p>
-                  <p className="text-2xl font-bold text-emerald-400">
+                  <p className="text-emerald-300/70 text-xs sm:text-sm">Today's Progress</p>
+                  <p className="text-lg sm:text-2xl font-bold text-emerald-400">
                     {completedToday}/{totalRoutines}
                   </p>
                 </div>
@@ -207,12 +207,12 @@ export default function DailyRoutines() {
           </Card>
 
           <Card className="bg-gradient-to-br from-orange-900/40 to-red-900/40 border-orange-400/30 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <Flame className="h-8 w-8 text-orange-400" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-orange-400" />
                 <div>
-                  <p className="text-orange-300/70 text-sm">Current Streak</p>
-                  <p className="text-2xl font-bold text-orange-400">
+                  <p className="text-orange-300/70 text-xs sm:text-sm">Current Streak</p>
+                  <p className="text-lg sm:text-2xl font-bold text-orange-400">
                     {userStats?.currentStreak || 0} days
                   </p>
                 </div>
@@ -221,12 +221,12 @@ export default function DailyRoutines() {
           </Card>
 
           <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-purple-400/30 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <Zap className="h-8 w-8 text-purple-400" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-purple-400" />
                 <div>
-                  <p className="text-purple-300/70 text-sm">Points Today</p>
-                  <p className="text-2xl font-bold text-purple-400">
+                  <p className="text-purple-300/70 text-xs sm:text-sm">Points Today</p>
+                  <p className="text-lg sm:text-2xl font-bold text-purple-400">
                     {totalPointsToday}
                   </p>
                 </div>
@@ -235,12 +235,12 @@ export default function DailyRoutines() {
           </Card>
 
           <Card className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border-blue-400/30 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <Trophy className="h-8 w-8 text-blue-400" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400" />
                 <div>
-                  <p className="text-blue-300/70 text-sm">Level</p>
-                  <p className="text-2xl font-bold text-blue-400">
+                  <p className="text-blue-300/70 text-xs sm:text-sm">Level</p>
+                  <p className="text-lg sm:text-2xl font-bold text-blue-400">
                     {userStats?.level || 1}
                   </p>
                 </div>
@@ -267,10 +267,10 @@ export default function DailyRoutines() {
         </Card>
 
         {/* Routines List */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-emerald-400">Your Routines</h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-emerald-400">Your Routines</h2>
           
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button
               onClick={async () => {
                 // Add all default routines sequentially to avoid race conditions
@@ -283,21 +283,21 @@ export default function DailyRoutines() {
                 });
               }}
               variant="outline"
-              className="border-emerald-400/50 text-emerald-400 hover:bg-emerald-400/10"
+              className="border-emerald-400/50 text-emerald-400 hover:bg-emerald-400/10 text-sm sm:text-base"
               disabled={createRoutineMutation.isPending}
               data-testid="button-quick-setup"
             >
-              <Zap className="h-5 w-5 mr-2" />
+              <Zap className="h-4 w-4 mr-1 sm:mr-2" />
               {createRoutineMutation.isPending ? "Adding..." : "Quick Setup"}
             </Button>
             
             <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
               <DialogTrigger asChild>
                 <Button 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 text-sm sm:text-base"
                   data-testid="button-add-routine"
                 >
-                  <Plus className="h-5 w-5 mr-2" />
+                  <Plus className="h-4 w-4 mr-1 sm:mr-2" />
                   Add Custom
                 </Button>
               </DialogTrigger>
