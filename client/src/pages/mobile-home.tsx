@@ -720,15 +720,15 @@ function DailyRoutinesQuickChecker() {
                   }
                 }}
               >
-                <CardContent className="p-3">
-                  <div className="flex items-center justify-between">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between min-h-[3rem]">
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="text-lg">{categoryIcon}</div>
-                      <div className="flex-1">
-                        <h4 className={`font-medium text-sm ${isCompleted ? 'text-emerald-400 line-through' : 'text-white'}`}>
+                      <div className="text-lg flex-shrink-0">{categoryIcon}</div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`font-medium text-sm leading-5 ${isCompleted ? 'text-emerald-400 line-through' : 'text-white'}`}>
                           {routine.title}
                         </h4>
-                        <p className="text-xs text-slate-400">+{routine.points} points</p>
+                        <p className="text-xs text-slate-400 mt-1">+{routine.points} points</p>
                       </div>
                     </div>
                     
