@@ -30,76 +30,6 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
-// Next Milestone Card Component
-function NextMilestoneCard() {
-  const [showAnimation, setShowAnimation] = useState(false);
-  
-  useEffect(() => {
-    setShowAnimation(true);
-  }, []);
-
-  const nextTasks = [
-    { icon: "🍽️", task: "Log 3 meals today", points: "+75 XP", type: "nutrition" },
-    { icon: "💪", task: "Complete workout", points: "+100 XP", type: "fitness" },
-    { icon: "⚖️", task: "Log weight", points: "+25 XP", type: "tracking" },
-    { icon: "🎯", task: "Set weekly goal", points: "+50 XP", type: "planning" }
-  ];
-
-  return (
-    <div className={`space-y-3 transition-all duration-1000 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-      <Card className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-400/50 backdrop-blur-sm animate-celebration-pop">
-        <CardContent className="p-4 text-center">
-          <div className="flex items-center justify-center gap-2 text-emerald-400 mb-3">
-            <Trophy className="h-6 w-6 animate-bounce" />
-            <span className="text-lg font-bold">All Daily Routines Complete!</span>
-          </div>
-          <div className="text-emerald-300/80 text-sm">
-            Amazing consistency! Ready for your next challenge?
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-purple-400/30 backdrop-blur-sm">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Target className="h-5 w-5 text-purple-400" />
-            <span className="text-white font-semibold">Next Milestones</span>
-          </div>
-          
-          <div className="space-y-2">
-            {nextTasks.map((task, index) => (
-              <div 
-                key={index}
-                className={`flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700/50 hover:border-purple-400/50 transition-all duration-300 cursor-pointer hover:scale-[1.02] animate-fadeIn`}
-                style={{ animationDelay: `${index * 200}ms` }}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">{task.icon}</span>
-                  <span className="text-white text-sm font-medium">{task.task}</span>
-                </div>
-                <div className="text-purple-400 text-xs font-semibold bg-purple-400/10 px-2 py-1 rounded-full">
-                  {task.points}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 text-center">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white border-none hover:scale-105 transition-all duration-300"
-            >
-              <Zap className="h-4 w-4 mr-2" />
-              Continue Journey
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
 // Level Progress Card Component
 function LevelProgressCard() {
   const userId = localStorage.getItem("userId") || "user1";
@@ -434,7 +364,14 @@ function DailyRoutinesQuickChecker() {
           })}
           
           {completedCount === displayRoutines.length && displayRoutines.length > 0 && (
-            <NextMilestoneCard />
+            <Card className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-400/50 backdrop-blur-sm">
+              <CardContent className="p-3 text-center">
+                <div className="flex items-center justify-center gap-2 text-emerald-400">
+                  <Trophy className="h-5 w-5" />
+                  <span className="text-sm font-semibold">All routines completed! 🎉</span>
+                </div>
+              </CardContent>
+            </Card>
           )}
           
           {/* Level Progress Indicator */}
