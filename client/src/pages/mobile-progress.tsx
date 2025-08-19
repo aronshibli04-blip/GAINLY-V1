@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserStore } from "@/store/userStore";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Target, 
   TrendingUp, 
@@ -16,7 +17,9 @@ import {
   Trophy,
   Zap,
   ChevronRight,
-  Plus
+  Plus,
+  Upload,
+  Image as ImageIcon
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
@@ -33,7 +36,39 @@ export default function MobileProgress() {
   } = useUserStore();
   
   const { openMenu } = useMenu();
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | 'all'>('30d');
+  const [progressPhotos, setProgressPhotos] = useState<string[]>([]);
+
+  // Handle photo capture/upload
+  const handleTakePhoto = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setProgressPhotos(prev => [...prev, result]);
+          toast({
+            title: "Bilde lagt til!",
+            description: "Fremgangsbildet ditt er lagret.",
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        toast({
+          title: "Ugyldig fil",
+          description: "Velg en bildefil.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
 
   // Calculate comprehensive statistics
   const stats = useMemo(() => {
@@ -469,28 +504,70 @@ export default function MobileProgress() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="text-center py-8">
-                  <Camera className="h-16 w-16 text-slate-600 mx-auto mb-4" />
-                  <p className="text-lg font-semibold text-slate-400 mb-2">No Progress Photos Yet</p>
-                  <p className="text-sm text-slate-500 mb-6">
-                    Visual progress tracking is powerful for motivation. Take photos weekly to see your transformation.
-                  </p>
+                {progressPhotos.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Camera className="h-16 w-16 text-slate-600 mx-auto mb-4" />
+                    <p className="text-lg font-semibold text-slate-400 mb-2">Ingen fremgangsbilder ennå</p>
+                    <p className="text-sm text-slate-500 mb-6">
+                      Visuell fremgangssporing er kraftig for motivasjon. Ta bilder ukentlig for å se forandringen.
+                    </p>
                   
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                  <Button 
+                    onClick={handleTakePhoto}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    data-testid="button-take-photo"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
-                    Take First Photo
+                    Ta første bilde
                   </Button>
-                </div>
+                  
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    capture="environment"
+                  />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-semibold text-white">Fremgangsbilder ({progressPhotos.length})</h4>
+                      <Button 
+                        onClick={handleTakePhoto}
+                        size="sm" 
+                        className="bg-purple-600 hover:bg-purple-700"
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Legg til
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      {progressPhotos.map((photo, index) => (
+                        <div key={index} className="aspect-square rounded-lg overflow-hidden bg-slate-700">
+                          <img 
+                            src={photo} 
+                            alt={`Fremgangsbilde ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 {/* Photo Guidelines */}
                 <div className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/50">
-                  <h4 className="font-semibold text-white mb-2">Tips for Great Progress Photos</h4>
+                  <h4 className="font-semibold text-white mb-2">Tips for gode fremgangsbilder</h4>
                   <ul className="text-sm text-slate-400 space-y-1">
-                    <li>• Same lighting and location each time</li>
-                    <li>• Take photos at the same time of day</li>
-                    <li>• Wear the same clothes or minimal clothing</li>
-                    <li>• Front, side, and back angles</li>
-                    <li>• Weekly consistency is key</li>
+                    <li>• Samme lys og sted hver gang</li>
+                    <li>• Ta bilder på samme tid på dagen</li>
+                    <li>• Bruk samme klær eller minimalt</li>
+                    <li>• Front-, side- og bakvinkel</li>
+                    <li>• Ukentlig konsistens er nøkkelen</li>
                   </ul>
                 </div>
               </CardContent>
