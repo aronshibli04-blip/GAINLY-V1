@@ -7,7 +7,9 @@ import {
   insertMealLogSchema, 
   insertActivityLogSchema,
   insertAiAnalysisSchema,
-  insertFoodItemSchema
+  insertFoodItemSchema,
+  insertDailyRoutineSchema,
+  insertDailyRoutineCompletionSchema
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
 import { OpenAIService } from "./openai-service";
@@ -240,6 +242,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('Food item creation error:', error);
       res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Daily routines routes
+  app.post("/api/daily-routines", async (req, res) => {
+    try {
+      const routineData = insertDailyRoutineSchema.parse(req.body);
+      const routine = await storage.createDailyRoutine(routineData);
+      res.json(routine);
+    } catch (error: any) {
+      console.error('Daily routine creation error:', error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/daily-routines/:userId", async (req, res) => {
+    try {
+      const routines = await storage.getDailyRoutinesByUser(req.params.userId);
+      res.json(routines);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Daily routine completions routes
+  app.post("/api/daily-routine-completions", async (req, res) => {
+    try {
+      const completionData = insertDailyRoutineCompletionSchema.parse(req.body);
+      const completion = await storage.createDailyRoutineCompletion(completionData);
+      
+      // Update user stats
+      await storage.updateUserStats(completionData.userId, completionData.pointsEarned);
+      
+      res.json(completion);
+    } catch (error: any) {
+      console.error('Daily routine completion error:', error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/daily-routine-completions/:userId/:date", async (req, res) => {
+    try {
+      const completions = await storage.getDailyRoutineCompletionsByDate(req.params.userId, req.params.date);
+      res.json(completions);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // User stats route
+  app.get("/api/user-stats/:userId", async (req, res) => {
+    try {
+      const stats = await storage.getUserStats(req.params.userId);
+      res.json(stats);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   });
 

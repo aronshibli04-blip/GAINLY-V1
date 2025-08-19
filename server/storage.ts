@@ -11,12 +11,20 @@ import {
   type InsertAiAnalysis,
   type FoodItem,
   type InsertFoodItem,
+  type DailyRoutine,
+  type InsertDailyRoutine,
+  type DailyRoutineCompletion,
+  type InsertDailyRoutineCompletion,
+  type UserStats,
   users,
   weightLogs,
   mealLogs,
   activityLogs,
   aiAnalysis,
-  foodItems
+  foodItems,
+  dailyRoutines,
+  dailyRoutineCompletions,
+  userStats
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -269,6 +277,93 @@ export class DatabaseStorage implements IStorage {
   async createFoodItem(foodData: InsertFoodItem): Promise<FoodItem> {
     const [foodItem] = await db.insert(foodItems).values(foodData).returning();
     return foodItem;
+  }
+
+  async createDailyRoutine(routineData: InsertDailyRoutine): Promise<DailyRoutine> {
+    const [routine] = await db.insert(dailyRoutines).values(routineData).returning();
+    return routine;
+  }
+
+  async getDailyRoutinesByUser(userId: string): Promise<DailyRoutine[]> {
+    return db.select()
+      .from(dailyRoutines)
+      .where(and(eq(dailyRoutines.userId, userId), eq(dailyRoutines.isActive, true)))
+      .orderBy(dailyRoutines.order, dailyRoutines.createdAt);
+  }
+
+  async createDailyRoutineCompletion(completionData: InsertDailyRoutineCompletion): Promise<DailyRoutineCompletion> {
+    const [completion] = await db.insert(dailyRoutineCompletions).values(completionData).returning();
+    return completion;
+  }
+
+  async getDailyRoutineCompletionsByDate(userId: string, date: string): Promise<DailyRoutineCompletion[]> {
+    return db.select()
+      .from(dailyRoutineCompletions)
+      .where(and(
+        eq(dailyRoutineCompletions.userId, userId),
+        eq(dailyRoutineCompletions.completedDate, date)
+      ));
+  }
+
+  async getUserStats(userId: string): Promise<UserStats | null> {
+    const [stats] = await db.select()
+      .from(userStats)
+      .where(eq(userStats.userId, userId));
+    
+    if (!stats) {
+      // Create initial user stats
+      const [newStats] = await db.insert(userStats).values({ userId }).returning();
+      return newStats;
+    }
+    
+    return stats;
+  }
+
+  async updateUserStats(userId: string, pointsEarned: number): Promise<void> {
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Get or create user stats
+    let stats = await this.getUserStats(userId);
+    if (!stats) return;
+
+    // Calculate new values
+    const newTotalPoints = stats.totalPoints + pointsEarned;
+    const newLevel = Math.floor(newTotalPoints / 1000) + 1;
+    
+    // Check if this is a new completion day for streak calculation
+    let newCurrentStreak = stats.currentStreak;
+    let newLongestStreak = stats.longestStreak;
+    
+    if (stats.lastCompletionDate) {
+      const lastDate = new Date(stats.lastCompletionDate);
+      const todayDate = new Date(today);
+      const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      if (daysDiff === 1) {
+        // Consecutive day
+        newCurrentStreak += 1;
+      } else if (daysDiff > 1) {
+        // Streak broken
+        newCurrentStreak = 1;
+      }
+      // If daysDiff === 0, it's the same day, keep current streak
+    } else {
+      // First completion ever
+      newCurrentStreak = 1;
+    }
+    
+    newLongestStreak = Math.max(newLongestStreak, newCurrentStreak);
+
+    await db.update(userStats)
+      .set({
+        totalPoints: newTotalPoints,
+        level: newLevel,
+        currentStreak: newCurrentStreak,
+        longestStreak: newLongestStreak,
+        lastCompletionDate: today,
+        updatedAt: new Date()
+      })
+      .where(eq(userStats.userId, userId));
   }
 
   async updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog> {
