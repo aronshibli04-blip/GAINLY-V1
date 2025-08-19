@@ -270,16 +270,37 @@ export default function DailyRoutines() {
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-emerald-400">Your Routines</h2>
           
-          <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-            <DialogTrigger asChild>
-              <Button 
-                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0"
-                data-testid="button-add-routine"
-              >
-                <Plus className="h-5 w-5 mr-2" />
-                Add Routine
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-3">
+            <Button
+              onClick={async () => {
+                // Add all default routines sequentially to avoid race conditions
+                for (const routine of defaultRoutines) {
+                  await createRoutineMutation.mutateAsync({ ...routine, userId });
+                }
+                toast({
+                  title: "Success!",
+                  description: "Added 10 hardgainer-optimized routines for you!"
+                });
+              }}
+              variant="outline"
+              className="border-emerald-400/50 text-emerald-400 hover:bg-emerald-400/10"
+              disabled={createRoutineMutation.isPending}
+              data-testid="button-quick-setup"
+            >
+              <Zap className="h-5 w-5 mr-2" />
+              {createRoutineMutation.isPending ? "Adding..." : "Quick Setup"}
+            </Button>
+            
+            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+              <DialogTrigger asChild>
+                <Button 
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0"
+                  data-testid="button-add-routine"
+                >
+                  <Plus className="h-5 w-5 mr-2" />
+                  Add Custom
+                </Button>
+              </DialogTrigger>
             <DialogContent className="bg-gradient-to-br from-emerald-900/95 to-teal-900/95 border-emerald-400/30 backdrop-blur-md">
               <DialogHeader>
                 <DialogTitle className="text-emerald-400 text-xl">Create New Routine</DialogTitle>
