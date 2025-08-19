@@ -450,23 +450,7 @@ export default function CalibrationMode() {
               </CardContent>
             </Card>
 
-            {/* Reset Button for Testing */}
-            <div className="mt-8 pt-6 border-t border-primary/20">
-              <Button
-                onClick={() => {
-                  if (confirm('Reset all data and start fresh? This cannot be undone.')) {
-                    clearUserData();
-                    localStorage.clear();
-                    window.location.reload();
-                  }
-                }}
-                variant="outline"
-                className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
-              >
-                <RotateCcw className="h-4 w-4 mr-2" />
-                Reset & Start Over
-              </Button>
-            </div>
+
           </div>
         </div>
       </div>
