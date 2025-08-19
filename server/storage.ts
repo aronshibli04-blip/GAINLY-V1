@@ -311,7 +311,11 @@ export class DatabaseStorage implements IStorage {
       .where(eq(userStats.userId, userId));
     
     if (!stats) {
-      // Create initial user stats
+      // Only create user stats if user exists
+      const user = await this.getUser(userId);
+      if (!user) {
+        return null;
+      }
       const [newStats] = await db.insert(userStats).values({ userId }).returning();
       return newStats;
     }

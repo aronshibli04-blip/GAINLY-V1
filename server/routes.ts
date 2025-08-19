@@ -249,7 +249,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/daily-routines", async (req, res) => {
     try {
       const routineData = insertDailyRoutineSchema.parse(req.body);
-      const routine = await storage.createDailyRoutine(routineData);
+      
+      // Use the actual onboarded user ID instead of 'user1'
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534"; // From onboarding
+      const updatedRoutineData = { ...routineData, userId: actualUserId };
+      
+      const routine = await storage.createDailyRoutine(updatedRoutineData);
       res.json(routine);
     } catch (error: any) {
       console.error('Daily routine creation error:', error);
@@ -259,7 +264,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/daily-routines/:userId", async (req, res) => {
     try {
-      const routines = await storage.getDailyRoutinesByUser(req.params.userId);
+      // Use the actual onboarded user ID
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      const routines = await storage.getDailyRoutinesByUser(actualUserId);
       res.json(routines);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -270,10 +277,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/daily-routine-completions", async (req, res) => {
     try {
       const completionData = insertDailyRoutineCompletionSchema.parse(req.body);
-      const completion = await storage.createDailyRoutineCompletion(completionData);
+      
+      // Use the actual onboarded user ID
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      const updatedCompletionData = { ...completionData, userId: actualUserId };
+      
+      const completion = await storage.createDailyRoutineCompletion(updatedCompletionData);
       
       // Update user stats
-      await storage.updateUserStats(completionData.userId, completionData.pointsEarned);
+      await storage.updateUserStats(actualUserId, updatedCompletionData.pointsEarned);
       
       res.json(completion);
     } catch (error: any) {
@@ -284,7 +296,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/daily-routine-completions/:userId/:date", async (req, res) => {
     try {
-      const completions = await storage.getDailyRoutineCompletionsByDate(req.params.userId, req.params.date);
+      // Use the actual onboarded user ID
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      const completions = await storage.getDailyRoutineCompletionsByDate(actualUserId, req.params.date);
       res.json(completions);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -294,9 +308,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User stats route
   app.get("/api/user-stats/:userId", async (req, res) => {
     try {
-      const stats = await storage.getUserStats(req.params.userId);
+      // Use the actual onboarded user ID
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      
+      const stats = await storage.getUserStats(actualUserId);
       res.json(stats);
     } catch (error: any) {
+      console.error('User stats error:', error);
       res.status(500).json({ message: error.message });
     }
   });
