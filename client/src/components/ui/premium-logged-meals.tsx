@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, Zap, Trash2, Edit3, Check, X, Target, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useUserStore } from "@/store/userStore";
+import { calculateTdee } from "@/utils/tdee";
 
 interface MealLog {
   id: string;
@@ -36,6 +38,9 @@ export function PremiumLoggedMeals() {
   const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  
+  // Get user's actual calorie target from store
+  const { currentTdeeAnalysis, user, weightEntries, calorieEntries } = useUserStore();
 
   const { data: todaysMeals, isLoading } = useQuery({
     queryKey: ['/api/meal-logs', userId, today],
@@ -106,7 +111,18 @@ export function PremiumLoggedMeals() {
   });
 
   const totalCalories = todaysMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
-  const targetCalories = 6000;
+  
+  // Calculate actual target calories from TDEE analysis or user data
+  let targetCalories = 6000; // fallback
+  
+  if (currentTdeeAnalysis?.targetCalories) {
+    targetCalories = currentTdeeAnalysis.targetCalories;
+  } else if (weightEntries.length > 0 && calorieEntries.length > 0) {
+    // Calculate TDEE if we have user data but no analysis yet
+    const calculation = calculateTdee(weightEntries, calorieEntries, userId);
+    targetCalories = calculation.tdee + 1100; // Add surplus for weight gain
+  }
+  
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);
 
   // Swipe handlers
