@@ -29,18 +29,52 @@ export function PhotoNutritionScanner({ onFoodCreated }: PhotoNutritionScannerPr
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Convert image to base64
+  // Convert image to base64 with compression
   const convertToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64 = reader.result as string;
+      // Create a canvas to compress the image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions (max 1024px width/height)
+        const maxSize = 1024;
+        let { width, height } = img;
+        
+        if (width > height) {
+          if (width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx?.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        
         // Remove data:image/jpeg;base64, prefix to get just the base64 data
-        const base64Data = base64.split(',')[1];
+        const base64Data = compressedDataUrl.split(',')[1];
         resolve(base64Data);
       };
-      reader.onerror = error => reject(error);
+      
+      img.onerror = reject;
+      
+      // Convert file to data URL for the image element
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
   };
 
