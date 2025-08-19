@@ -30,6 +30,57 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
+// Level Progress Card Component
+function LevelProgressCard() {
+  const userId = localStorage.getItem("userId") || "user1";
+  
+  const { data: userStats } = useQuery({
+    queryKey: ['/api/user-stats', userId],
+    queryFn: () => fetch(`/api/user-stats/${userId}`).then(res => res.json())
+  });
+
+  if (!userStats) return null;
+
+  const level = userStats.level || 1;
+  const currentXP = userStats.totalPoints || 0;
+  const xpForNextLevel = level * 100; // 100 XP per level
+  const xpProgress = currentXP % 100; // Progress within current level
+  const progressPercent = (xpProgress / 100) * 100;
+
+  return (
+    <Card className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-purple-400/30 backdrop-blur-sm">
+      <CardContent className="p-3">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-purple-400" />
+            <span className="text-white font-semibold">Level {level}</span>
+          </div>
+          <div className="text-purple-300 text-sm font-medium">
+            {currentXP} XP
+          </div>
+        </div>
+        
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-purple-300/70">
+            <span>{xpProgress} / 100 XP</span>
+            <span>Next Level</span>
+          </div>
+          <Progress 
+            value={progressPercent} 
+            className="h-2 bg-purple-900/50"
+          />
+        </div>
+        
+        {currentXP > 0 && (
+          <p className="text-xs text-purple-300/70 mt-2">
+            🎯 Keep completing routines to level up!
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 // Celebration Particles Component
 function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete: () => void }) {
   if (!show) return null;
@@ -45,13 +96,16 @@ function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete:
               top: Math.random() * 200 - 100,
               left: Math.random() * 200 - 100,
               animationDelay: `${i * 100}ms`,
-              animationDuration: '1s',
+              animationDuration: '1.5s',
+            }}
+            onAnimationEnd={() => {
+              if (i === 7) onComplete(); // Last particle triggers completion
             }}
           />
         ))}
         <div 
           className="text-4xl animate-bounce"
-          onAnimationEnd={() => setTimeout(onComplete, 500)}
+          onAnimationEnd={() => setTimeout(onComplete, 1500)}
         >
           🎉
         </div>
@@ -89,7 +143,8 @@ function DailyRoutinesQuickChecker() {
           userId,
           routineId,
           pointsEarned: points,
-          completedAt: new Date().toISOString()
+          completedAt: new Date().toISOString(),
+          completedDate: new Date().toISOString().split('T')[0]
         })
       });
       return response.json();
@@ -111,28 +166,30 @@ function DailyRoutinesQuickChecker() {
       const randomEmoji = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
       const categoryEmoji = categoryEmojis[routine?.category as keyof typeof categoryEmojis] || "✨";
       
+      // Get updated stats to show level progress
+      queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
+      
       toast({
-        title: `${randomEmoji} Routine Completed! +${variables.points} points`,
+        title: `${randomEmoji} Routine Completed! +${variables.points} XP`,
         description: `${categoryEmoji} Great job staying consistent with your habits!`,
-        duration: 3000,
+        duration: 4000,
       });
       
-      // Add haptic feedback simulation with multiple celebration toasts
+      // Show level progress after a delay
       setTimeout(() => {
-        const streakMessages = [
-          "🔥 Building your streak!",
-          "💪 Consistency is key!",
-          "⚡ You're on fire!",
-          "🎯 Target hit!",
-          "🚀 Progress unlocked!"
+        const levelUpMessages = [
+          "⚡ XP gained! Check your level progress below!",
+          "🎯 Points added to your experience!",
+          "🚀 Getting closer to the next level!",
+          "💪 Building your fitness journey!"
         ];
-        const randomMessage = streakMessages[Math.floor(Math.random() * streakMessages.length)];
+        const randomMessage = levelUpMessages[Math.floor(Math.random() * levelUpMessages.length)];
         
         toast({
           description: randomMessage,
-          duration: 2000,
+          duration: 3000,
         });
-      }, 1000);
+      }, 1500);
     }
   });
 
@@ -313,6 +370,9 @@ function DailyRoutinesQuickChecker() {
               </CardContent>
             </Card>
           )}
+          
+          {/* Level Progress Indicator */}
+          <LevelProgressCard />
         </div>
       )}
       </div>
