@@ -404,30 +404,31 @@ function DailyRoutinesQuickChecker() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-            Daily Routines
-            {displayedRoutines.length > 0 && (
-              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
-                {completedCount}/{displayedRoutines.length}
-              </Badge>
-            )}
-          </h3>
-          <div className="flex gap-1 items-center">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowAllRoutines(!showAllRoutines)}
-              className="text-emerald-400 hover:text-emerald-300 h-7 px-2 text-xs"
-            >
-              {showAllRoutines ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-            </Button>
-            <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-7 px-2 text-xs">
-                  <Plus className="h-3 w-3 mr-1" />
-                  New
-                </Button>
-              </DialogTrigger>
+          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+          Daily Routines
+          {displayedRoutines.length > 0 && (
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
+              {completedCount}/{displayedRoutines.length}
+            </Badge>
+          )}
+        </h3>
+        <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowAllRoutines(!showAllRoutines)}
+            className="text-emerald-400 hover:text-emerald-300 h-8 px-2"
+          >
+            {showAllRoutines ? <EyeOff className="h-4 w-4 mr-1" /> : <Eye className="h-4 w-4 mr-1" />}
+            {showAllRoutines ? "Show Less" : "Show All"}
+          </Button>
+          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
+                <Plus className="h-4 w-4 mr-1" />
+                New
+              </Button>
+            </DialogTrigger>
             <DialogContent className="bg-gradient-to-br from-emerald-950/95 to-teal-950/95 border-emerald-400/30 backdrop-blur-lg max-w-sm mx-auto">
               <DialogHeader>
                 <DialogTitle className="text-emerald-400 text-lg">Create New Routine</DialogTitle>
