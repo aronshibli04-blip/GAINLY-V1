@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, Zap, Trash2, Edit3, Check, X, Target, TrendingUp } from "lucide-react";
+import { Clock, Zap, Trash2, Edit3, Check, X, Target, TrendingUp, Utensils } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserStore } from "@/store/userStore";
 import { calculateTdee } from "@/utils/tdee";
@@ -225,11 +225,11 @@ export function PremiumLoggedMeals() {
 
   if (isLoading) {
     return (
-      <Card className="meals-glow-hover bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 border-green-500/20">
+      <Card className="bg-gradient-to-br from-orange-950/30 via-amber-900/20 to-orange-950/30 border-orange-500/20">
         <CardContent className="p-6">
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-slate-700/30 rounded-xl animate-pulse" />
+              <div key={i} className="h-16 bg-orange-800/20 rounded-xl animate-pulse" />
             ))}
           </div>
         </CardContent>
@@ -238,24 +238,24 @@ export function PremiumLoggedMeals() {
   }
 
   return (
-    <Card className="meals-glow-hover bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 border-green-500/20 backdrop-blur-sm">
+    <Card className="bg-gradient-to-br from-orange-950/30 via-amber-900/20 to-orange-950/30 border-orange-500/20 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-lg flex items-center justify-center">
-                <Clock className="h-4 w-4 text-black" />
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <Utensils className="h-6 w-6 text-black" />
               </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-400 rounded-full animate-pulse" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Today's Fuel</h3>
-              <p className="text-xs text-green-400/80">Logged meals</p>
+              <h3 className="text-xl font-bold text-white">Today's Fuel</h3>
+              <p className="text-sm text-orange-400/80">Logged meals</p>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-green-400">{totalCalories}</div>
-            <div className="text-xs text-green-400/60">calories</div>
+            <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">{totalCalories}</div>
+            <div className="text-sm text-orange-400/60">calories</div>
           </div>
         </CardTitle>
       </CardHeader>
@@ -263,19 +263,19 @@ export function PremiumLoggedMeals() {
       <CardContent className="space-y-3">
         {/* Progress Bar */}
         <div className="relative">
-          <div className="h-2 bg-slate-700/50 rounded-full overflow-hidden">
+          <div className="h-3 bg-slate-800/50 rounded-full overflow-hidden border border-orange-500/20">
             <motion.div 
-              className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"
+              className="h-full bg-gradient-to-r from-orange-400 to-amber-500 rounded-full shadow-lg"
               initial={{ width: 0 }}
               animate={{ width: `${progressPercentage}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
           </div>
-          <div className="flex justify-between items-center mt-2 text-xs">
-            <span className="text-slate-400">Progress</span>
-            <div className="flex items-center gap-1 text-green-400">
-              <Target className="h-3 w-3" />
-              <span>{Math.round(progressPercentage)}% of {targetCalories}</span>
+          <div className="flex justify-between items-center mt-3 text-sm">
+            <span className="text-orange-400/80 font-medium">Daily Progress</span>
+            <div className="flex items-center gap-2 text-orange-400">
+              <Target className="h-4 w-4" />
+              <span className="font-bold">{Math.round(progressPercentage)}% of {targetCalories}</span>
             </div>
           </div>
         </div>
@@ -303,7 +303,7 @@ export function PremiumLoggedMeals() {
                   {/* Main meal card */}
                   <div
                     className={`relative bg-gradient-to-r from-slate-800/60 to-slate-700/40 backdrop-blur-sm rounded-xl border border-slate-600/30 transition-all duration-200 ${
-                      editingMeal === meal.id ? 'ring-2 ring-green-400/50 shadow-lg shadow-green-400/20' : 'hover:border-slate-500/50'
+                      editingMeal === meal.id ? 'ring-2 ring-orange-400/50 shadow-lg shadow-orange-400/20' : 'hover:border-slate-500/50'
                     }`}
                     style={{ transform: getTransform(meal.id) }}
                     onTouchStart={(e) => handleTouchStart(meal.id, e)}
@@ -314,18 +314,18 @@ export function PremiumLoggedMeals() {
                       // Edit Mode - Simple Fun Portion Editor 
                       <div className="p-4 space-y-4">
                         <div className="text-center">
-                          <div className="text-lg font-bold text-green-400 mb-1">🍽️ Edit Portion</div>
+                          <div className="text-lg font-bold text-orange-400 mb-1">🍽️ Edit Portion</div>
                           <div className="text-xs text-slate-400">{meal.description.replace(/^\d+(?:\.\d+)?\s*x?\s*/, '')}</div>
                         </div>
                         
                         {/* Fun Portion Input */}
-                        <div className="bg-gradient-to-r from-slate-800/80 to-slate-700/60 rounded-2xl p-4 border border-green-400/30">
+                        <div className="bg-gradient-to-r from-orange-950/50 to-amber-900/40 rounded-2xl p-4 border border-orange-400/30">
                           <div className="flex items-center justify-center gap-3">
                             <Button
                               onClick={() => setEditPortions(String(Math.max(0.5, parseFloat(editPortions || "1") - 0.5)))}
                               size="sm"
                               variant="outline"
-                              className="w-10 h-10 rounded-full border-green-400/50 text-green-400 hover:bg-green-400/10 font-bold text-lg"
+                              className="w-10 h-10 rounded-full border-orange-400/50 text-orange-400 hover:bg-orange-400/10 font-bold text-lg"
                             >
                               −
                             </Button>
@@ -338,7 +338,7 @@ export function PremiumLoggedMeals() {
                                 max="20"
                                 value={editPortions}
                                 onChange={(e) => setEditPortions(e.target.value)}
-                                className="w-20 h-12 text-center text-2xl font-bold bg-transparent border-none text-green-400 focus:ring-0 focus:border-none"
+                                className="w-20 h-12 text-center text-2xl font-bold bg-transparent border-none text-orange-400 focus:ring-0 focus:border-none"
                                 data-testid={`edit-portions-${meal.id}`}
                               />
                               <div className="text-xs text-slate-400 mt-1">portions</div>
@@ -348,7 +348,7 @@ export function PremiumLoggedMeals() {
                               onClick={() => setEditPortions(String(parseFloat(editPortions || "1") + 0.5))}
                               size="sm"
                               variant="outline"
-                              className="w-10 h-10 rounded-full border-green-400/50 text-green-400 hover:bg-green-400/10 font-bold text-lg"
+                              className="w-10 h-10 rounded-full border-orange-400/50 text-orange-400 hover:bg-orange-400/10 font-bold text-lg"
                             >
                               +
                             </Button>
@@ -357,7 +357,7 @@ export function PremiumLoggedMeals() {
                           {/* Calorie Preview */}
                           <div className="text-center mt-3 p-2 bg-slate-900/50 rounded-lg">
                             <div className="text-sm text-slate-400">New calories</div>
-                            <div className="text-lg font-bold text-green-400">
+                            <div className="text-lg font-bold text-orange-400">
                               {(() => {
                                 const portions = parseFloat(editPortions || "1");
                                 const currentPortionMatch = meal.description.match(/^(\d+(?:\.\d+)?)\s*x?\s*/);
@@ -374,7 +374,7 @@ export function PremiumLoggedMeals() {
                             onClick={saveEdit}
                             disabled={updateMealMutation.isPending}
                             size="sm"
-                            className="flex-1 bg-gradient-to-r from-green-400 to-emerald-500 text-black font-medium hover:from-green-500 hover:to-emerald-600 transition-all duration-200 h-12"
+                            className="flex-1 bg-gradient-to-r from-orange-400 to-amber-500 text-black font-medium hover:from-orange-500 hover:to-amber-600 transition-all duration-200 h-12"
                             data-testid={`save-edit-${meal.id}`}
                           >
                             <Check className="h-4 w-4 mr-1" />
@@ -402,7 +402,7 @@ export function PremiumLoggedMeals() {
                               </div>
                               <Badge 
                                 variant="outline" 
-                                className="border-green-400/30 text-green-400 bg-green-400/5 text-xs font-medium shrink-0"
+                                className="border-orange-400/30 text-orange-400 bg-orange-400/5 text-xs font-medium shrink-0"
                               >
                                 <Zap className="h-3 w-3 mr-1" />
                                 {meal.calories}
@@ -425,7 +425,7 @@ export function PremiumLoggedMeals() {
                             onClick={() => startEdit(meal)}
                             size="sm"
                             variant="ghost"
-                            className="text-slate-400 hover:text-green-400 hover:bg-green-400/10 ml-2 shrink-0"
+                            className="text-slate-400 hover:text-orange-400 hover:bg-orange-400/10 ml-2 shrink-0"
                             data-testid={`edit-meal-${meal.id}`}
                           >
                             <Edit3 className="h-4 w-4" />
@@ -439,11 +439,11 @@ export function PremiumLoggedMeals() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-slate-700/30 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-slate-500" />
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-400/20 to-amber-400/20 rounded-xl flex items-center justify-center mx-auto mb-4 border border-orange-400/30">
+                <Utensils className="h-8 w-8 text-orange-400/60" />
               </div>
-              <p className="text-slate-400 text-sm">No meals logged yet today</p>
-              <p className="text-slate-500 text-xs mt-1">Start by using the Ultra-Fast Logger above</p>
+              <p className="text-white text-sm">No meals logged yet today</p>
+              <p className="text-orange-400/60 text-xs mt-1">Start by using the Ultra-Fast Logger above</p>
             </div>
           )}
         </AnimatePresence>
