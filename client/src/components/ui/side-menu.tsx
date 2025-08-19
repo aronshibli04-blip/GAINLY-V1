@@ -81,13 +81,6 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
           path: "/achievements", 
           description: "Gamification & rewards",
           badge: "Fun"
-        },
-        { 
-          icon: Target, 
-          label: "Daily Routines", 
-          path: "/daily-routines", 
-          description: "Goal-aligned habits",
-          badge: "New"
         }
       ]
     },

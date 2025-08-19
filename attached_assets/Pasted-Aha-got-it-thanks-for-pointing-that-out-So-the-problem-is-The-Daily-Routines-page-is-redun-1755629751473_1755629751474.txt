@@ -1,0 +1,47 @@
+Aha 💡 got it — thanks for pointing that out.
+So the problem is:
+	•	The Daily Routines page is redundant (since routines already live on the Home Screen),
+	•	BUT you still need the functionality for:
+	•	Creating new routines
+	•	Editing existing routines
+	•	Getting AI-generated routines
+
+✅ Solution: Instead of a full page, those actions should exist as modals, drawers, or sub-components directly accessible from the Home Screen widget.
+
+Here’s how you can phrase the Replit AI prompt so it removes the page, but keeps (and relocates) the functionality:
+
+⸻
+
+Prompt for Replit AI
+
+You are a senior React/Next.js engineer. I’m building a fitness app.
+
+Currently, the app has both:
+	1.	A Daily Routines widget on the Home Screen, and
+	2.	A separate Daily Routines page.
+
+I want to delete the redundant Daily Routines page, but still keep all of its functionality inside the Home Screen.
+
+Task:
+	1.	Remove the standalone Daily Routines page component and its route.
+	2.	Move the following functionality into the Home Screen widget:
+	•	Create new routine
+	•	Edit routine
+	•	Get AI-generated routines
+	3.	Implement these features as modals (or side-drawers) triggered by buttons inside the Home Screen widget.
+	•	Example: A “+ New Routine” button opens a modal to create a routine.
+	•	An “Edit” button appears on each routine card to modify it.
+	•	An “AI Suggest” button triggers AI-generated routines.
+	4.	Clean up code: remove unused imports, routes, and navigation links to the old page.
+	5.	Confirm app builds successfully and all routine actions now work directly from the Home Screen.
+
+Tech details:
+	•	React + Next.js
+	•	TailwindCSS
+	•	Use existing state management / API logic, just relocate it into modals connected to the Home widget.
+
+Deliver: Updated app with no separate Daily Routines page, and all routine actions accessible via modals from the Home widget.
+
+⸻
+
+Vil du at jeg også designer en UX-flyt med knapper og modaler (visuell wireframe) så du kan gi Replit et konkret bilde av hvordan disse handlingene skal vises?

@@ -3,6 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { WeightLogger } from "@/components/ui/weight-logger";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
@@ -18,12 +22,13 @@ import { GamificationSystem } from "@/components/ui/gamification-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
 
 import { useUserStore } from "@/store/userStore";
-import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler, CheckCircle2, Plus, Flame, Trophy, Star } from "lucide-react";
+import { Zap, TrendingUp, Target, Activity, RotateCcw, Ruler, CheckCircle2, Plus, Flame, Trophy, Star, Settings, Sparkles, Edit } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { toast } from "@/hooks/use-toast";
 import type { DailyRoutine, DailyRoutineCompletion } from "@shared/schema";
+import { defaultRoutines } from "@/data/default-routines";
 import { SmartNotifications } from "@/components/ui/smart-notifications";
 import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
 import { MobileHeader } from "@/components/ui/mobile-header";
@@ -125,6 +130,14 @@ function DailyRoutinesQuickChecker() {
   const [completingRoutineId, setCompletingRoutineId] = useState<string | null>(null);
   const [displayedRoutines, setDisplayedRoutines] = useState<DailyRoutine[]>([]);
   const [routineSlideKey, setRoutineSlideKey] = useState(0);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showQuickSetupDialog, setShowQuickSetupDialog] = useState(false);
+  const [newRoutine, setNewRoutine] = useState({
+    title: "",
+    description: "",
+    category: "health" as "health" | "fitness" | "nutrition" | "productivity",
+    points: 25
+  });
 
   // Fetch user routines (limit to 4 for home page)
   const { data: routines = [], isLoading: routinesLoading } = useQuery<DailyRoutine[]>({
@@ -136,6 +149,27 @@ function DailyRoutinesQuickChecker() {
   const { data: completions = [], isLoading: completionsLoading } = useQuery<DailyRoutineCompletion[]>({
     queryKey: ['/api/daily-routine-completions', userId, today],
     queryFn: () => fetch(`/api/daily-routine-completions/${userId}/${today}`).then(res => res.json())
+  });
+
+  // Create routine mutation
+  const createRoutineMutation = useMutation({
+    mutationFn: async (routineData: typeof newRoutine & { userId: string }) => {
+      const response = await fetch('/api/daily-routines', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(routineData)
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
+      setShowCreateDialog(false);
+      setNewRoutine({ title: "", description: "", category: "health", points: 25 });
+      toast({
+        title: "Success!",
+        description: "New routine created successfully!"
+      });
+    }
   });
 
   // Complete routine mutation
@@ -304,13 +338,139 @@ function DailyRoutinesQuickChecker() {
             </Badge>
           )}
         </h3>
-        {routines.length > 4 && (
-          <Link href="/daily-routines">
-            <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
-              View All
-            </Button>
-          </Link>
-        )}
+        <div className="flex gap-2">
+          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
+                <Plus className="h-4 w-4 mr-1" />
+                New
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-gradient-to-br from-emerald-950/95 to-teal-950/95 border-emerald-400/30 backdrop-blur-lg max-w-sm mx-auto">
+              <DialogHeader>
+                <DialogTitle className="text-emerald-400 text-lg">Create New Routine</DialogTitle>
+                <DialogDescription className="text-emerald-300/70">
+                  Build a habit aligned with your weight gain goals
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-3">
+                <div>
+                  <label className="text-emerald-300 text-xs font-medium mb-1 block">Title</label>
+                  <Input
+                    value={newRoutine.title}
+                    onChange={(e) => setNewRoutine(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="e.g., Morning protein shake"
+                    className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm"
+                    data-testid="input-routine-title"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-emerald-300 text-xs font-medium mb-1 block">Description (Optional)</label>
+                  <Textarea
+                    value={newRoutine.description}
+                    onChange={(e) => setNewRoutine(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Brief description..."
+                    className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm h-16"
+                    data-testid="input-routine-description"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-emerald-300 text-xs font-medium mb-1 block">Category</label>
+                    <Select
+                      value={newRoutine.category}
+                      onValueChange={(value: "health" | "fitness" | "nutrition" | "productivity") => 
+                        setNewRoutine(prev => ({ ...prev, category: value }))}
+                    >
+                      <SelectTrigger className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-emerald-900/95 border-emerald-400/30">
+                        <SelectItem value="health">Health</SelectItem>
+                        <SelectItem value="fitness">Fitness</SelectItem>
+                        <SelectItem value="nutrition">Nutrition</SelectItem>
+                        <SelectItem value="productivity">Productivity</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="text-emerald-300 text-xs font-medium mb-1 block">Points</label>
+                    <Input
+                      type="number"
+                      min="5"
+                      max="100"
+                      step="5"
+                      value={newRoutine.points}
+                      onChange={(e) => setNewRoutine(prev => ({ ...prev, points: parseInt(e.target.value) || 25 }))}
+                      className="bg-emerald-900/30 border-emerald-400/30 text-emerald-100 text-sm"
+                      data-testid="input-routine-points"
+                    />
+                  </div>
+                </div>
+                
+                <Button
+                  onClick={() => createRoutineMutation.mutate({ ...newRoutine, userId })}
+                  disabled={!newRoutine.title.trim() || createRoutineMutation.isPending}
+                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 text-sm"
+                  data-testid="button-create-routine"
+                >
+                  {createRoutineMutation.isPending ? "Creating..." : "Create Routine"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={showQuickSetupDialog} onOpenChange={setShowQuickSetupDialog}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
+                <Sparkles className="h-4 w-4 mr-1" />
+                Quick Setup
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-gradient-to-br from-emerald-950/95 to-teal-950/95 border-emerald-400/30 backdrop-blur-lg max-w-sm mx-auto">
+              <DialogHeader>
+                <DialogTitle className="text-emerald-400 text-lg">Quick Setup</DialogTitle>
+                <DialogDescription className="text-emerald-300/70">
+                  Add 10 pre-configured hardgainer routines
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-4">
+                <p className="text-emerald-300/80 text-sm">
+                  This will add 10 carefully crafted daily routines optimized for hardgainers, including:
+                </p>
+                <ul className="text-emerald-300/70 text-xs space-y-1 list-disc list-inside">
+                  <li>Protein shakes and meal timing</li>
+                  <li>Progress tracking and measurements</li>
+                  <li>Strength training reminders</li>
+                  <li>Hydration and sleep habits</li>
+                </ul>
+                
+                <Button
+                  onClick={async () => {
+                    // Add all default routines
+                    for (const routine of defaultRoutines) {
+                      await createRoutineMutation.mutateAsync({ ...routine, userId });
+                    }
+                    setShowQuickSetupDialog(false);
+                    toast({
+                      title: "Success!",
+                      description: "Added 10 hardgainer-optimized routines!"
+                    });
+                  }}
+                  disabled={createRoutineMutation.isPending}
+                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 text-sm"
+                >
+                  {createRoutineMutation.isPending ? "Adding..." : "Add Routines"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {displayedRoutines.length === 0 ? (
@@ -318,12 +478,25 @@ function DailyRoutinesQuickChecker() {
           <CardContent className="p-4 text-center">
             <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
             <p className="text-emerald-300/70 text-sm mb-3">No routines yet!</p>
-            <Link href="/daily-routines">
-              <Button size="sm" className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0">
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => setShowCreateDialog(true)}
+                size="sm" 
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0"
+              >
                 <Plus className="h-4 w-4 mr-1" />
-                Create Routines
+                Create Routine
               </Button>
-            </Link>
+              <Button
+                onClick={() => setShowQuickSetupDialog(true)}
+                variant="outline"
+                size="sm"
+                className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
+              >
+                <Sparkles className="h-4 w-4 mr-1" />
+                Quick Setup
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ) : (
