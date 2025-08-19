@@ -262,23 +262,26 @@ function DailyRoutinesQuickChecker() {
 
   // Smart routine display logic - show next uncompleted tasks
   useEffect(() => {
-    if (routines.length > 0) {
-      const completed = routines.filter(r => completions.some(c => c.routineId === r.id));
-      const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
-      
-      // Show mix of completed and uncompleted, prioritizing uncompleted
-      const newDisplayed = [
-        ...completed.slice(0, 2), // Show up to 2 completed for satisfaction
-        ...uncompleted.slice(0, 4 - Math.min(completed.length, 2)) // Fill rest with uncompleted
-      ].slice(0, 4);
-      
-      // Trigger animation when routine list changes
-      if (JSON.stringify(newDisplayed) !== JSON.stringify(displayedRoutines)) {
-        setRoutineSlideKey(prev => prev + 1);
-        setDisplayedRoutines(newDisplayed);
-      }
+    if (routines.length === 0) return;
+    
+    const completed = routines.filter(r => completions.some(c => c.routineId === r.id));
+    const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
+    
+    // Show mix of completed and uncompleted, prioritizing uncompleted
+    const newDisplayed = [
+      ...completed.slice(0, 2), // Show up to 2 completed for satisfaction
+      ...uncompleted.slice(0, 4 - Math.min(completed.length, 2)) // Fill rest with uncompleted
+    ].slice(0, 4);
+    
+    // Only update if different to prevent infinite loops
+    const currentIds = displayedRoutines.map(r => r.id).sort();
+    const newIds = newDisplayed.map(r => r.id).sort();
+    
+    if (JSON.stringify(currentIds) !== JSON.stringify(newIds)) {
+      setRoutineSlideKey(prev => prev + 1);
+      setDisplayedRoutines(newDisplayed);
     }
-  }, [routines, completions, displayedRoutines]);
+  }, [routines, completions]);
 
   const completedCount = displayedRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
 
