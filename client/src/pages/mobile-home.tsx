@@ -676,11 +676,11 @@ function DailyRoutinesQuickChecker() {
           <CardContent className="p-4 text-center">
             <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
             <p className="text-emerald-300/70 text-sm mb-3">No routines yet!</p>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 w-full">
               <Button 
                 onClick={() => setShowCreateDialog(true)}
                 size="sm" 
-                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0"
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white border-0 w-full"
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Create Routine
@@ -689,7 +689,7 @@ function DailyRoutinesQuickChecker() {
                 onClick={() => setShowQuickSetupDialog(true)}
                 variant="outline"
                 size="sm"
-                className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
+                className="border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10 w-full"
               >
                 <Sparkles className="h-4 w-4 mr-1" />
                 Quick Setup
