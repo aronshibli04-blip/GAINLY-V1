@@ -332,7 +332,7 @@ export class DatabaseStorage implements IStorage {
 
     // Calculate new values
     const newTotalPoints = stats.totalPoints + pointsEarned;
-    const newLevel = Math.floor(newTotalPoints / 1000) + 1;
+    const newLevel = Math.floor(newTotalPoints / 100) + 1;
     
     // Check if this is a new completion day for streak calculation
     let newCurrentStreak = stats.currentStreak;
