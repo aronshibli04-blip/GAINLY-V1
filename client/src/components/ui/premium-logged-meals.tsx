@@ -112,16 +112,9 @@ export function PremiumLoggedMeals() {
 
   const totalCalories = todaysMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
   
-  // Calculate actual target calories from TDEE analysis or user data
-  let targetCalories = 6000; // fallback
-  
-  if (currentTdeeAnalysis?.targetCalories) {
-    targetCalories = currentTdeeAnalysis.targetCalories;
-  } else if (weightEntries.length > 0 && calorieEntries.length > 0) {
-    // Calculate TDEE if we have user data but no analysis yet
-    const calculation = calculateTdee(weightEntries, calorieEntries, userId);
-    targetCalories = calculation.tdee + 1100; // Add surplus for weight gain
-  }
+  // Use the EXACT same calculation as AggressiveSurplusTracker
+  const targetTdee = currentTdeeAnalysis?.tdee || 2500;
+  const targetCalories = targetTdee + 1100; // 1100kcal surplus for 1kg/week
   
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);
 
