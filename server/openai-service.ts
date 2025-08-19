@@ -280,4 +280,84 @@ Respond with raw JSON only (no markdown formatting):`;
       throw new Error(`Failed to generate meal plan: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
+
+  async scanNutritionLabel(base64Image: string): Promise<{
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    servingSize?: string;
+  }> {
+    try {
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+        messages: [
+          {
+            role: "system",
+            content: `You are a nutrition expert specialized in analyzing nutrition labels. Extract nutrition information from the uploaded image and return it in JSON format.
+
+IMPORTANT RULES:
+1. Extract values per 100g serving if available, otherwise per serving shown
+2. Only extract these 4 core values: calories, protein, carbs, fat
+3. Convert all values to numbers (remove units like "g", "kcal", etc.)
+4. If multiple serving sizes shown, prioritize "per 100g" data
+5. For carbs, use total carbohydrates (not net carbs)
+6. Return serving size information if clearly visible
+
+Response format (JSON only):
+{
+  "calories": number,
+  "protein": number,
+  "carbs": number,
+  "fat": number,
+  "servingSize": "100g" or "1 serving" etc (optional)
+}`
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Please analyze this nutrition label and extract the nutrition information in JSON format. Focus on getting accurate values for calories, protein, carbs, and fat."
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:image/jpeg;base64,${base64Image}`
+                }
+              }
+            ]
+          }
+        ],
+        max_tokens: 500,
+        response_format: { type: "json_object" }
+      });
+
+      const content = response.choices[0].message.content;
+      if (!content) {
+        throw new Error('No content received from OpenAI');
+      }
+
+      const nutritionData = JSON.parse(content);
+      
+      // Validate the response has required fields
+      if (typeof nutritionData.calories !== 'number' || 
+          typeof nutritionData.protein !== 'number' || 
+          typeof nutritionData.carbs !== 'number' || 
+          typeof nutritionData.fat !== 'number') {
+        throw new Error('Invalid nutrition data format');
+      }
+
+      return {
+        calories: Math.round(nutritionData.calories),
+        protein: Math.round(nutritionData.protein * 10) / 10, // 1 decimal place
+        carbs: Math.round(nutritionData.carbs * 10) / 10,
+        fat: Math.round(nutritionData.fat * 10) / 10,
+        servingSize: nutritionData.servingSize || "100g"
+      };
+    } catch (error) {
+      console.error('OpenAI nutrition scanning error:', error);
+      throw new Error('Failed to analyze nutrition label');
+    }
+  }
 }

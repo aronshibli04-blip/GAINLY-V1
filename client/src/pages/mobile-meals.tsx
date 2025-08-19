@@ -5,6 +5,7 @@ import { BottomNav } from "@/components/ui/bottom-nav";
 import { SmartMealLogger } from "@/components/ui/smart-meal-logger";
 import { UltraFastLogger } from "@/components/ui/ultra-fast-logger";
 import { PremiumLoggedMeals } from "@/components/ui/premium-logged-meals";
+import { PhotoNutritionScanner } from "@/components/ui/photo-nutrition-scanner";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
@@ -343,6 +344,9 @@ export default function MobileMeals() {
         ) : (
           <SmartMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
         )}
+
+        {/* AI Photo Nutrition Scanner */}
+        <PhotoNutritionScanner onFoodCreated={handleMealLogged} />
 
         {/* Today's Logged Meals - Premium Design */}
         <PremiumLoggedMeals />

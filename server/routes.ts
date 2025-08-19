@@ -357,6 +357,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI nutrition label scanning
+  app.post("/api/scan-nutrition", async (req, res) => {
+    try {
+      const { image } = req.body;
+      
+      if (!image || typeof image !== 'string') {
+        return res.status(400).json({ message: "Base64 image data required" });
+      }
+
+      const openaiService = new OpenAIService();
+      const nutritionData = await openaiService.scanNutritionLabel(image);
+
+      res.json(nutritionData);
+    } catch (error: any) {
+      console.error("Nutrition scanning error:", error);
+      res.status(500).json({ message: "Failed to scan nutrition label" });
+    }
+  });
+
   // Clear test data from database
   app.post("/api/clear-test-data", async (req, res) => {
     try {
