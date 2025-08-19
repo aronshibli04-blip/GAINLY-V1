@@ -266,6 +266,11 @@ export class DatabaseStorage implements IStorage {
     return foodItem || undefined;
   }
 
+  async createFoodItem(foodData: InsertFoodItem): Promise<FoodItem> {
+    const [foodItem] = await db.insert(foodItems).values(foodData).returning();
+    return foodItem;
+  }
+
   async updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog> {
     const [meal] = await db
       .update(mealLogs)

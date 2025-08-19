@@ -6,7 +6,8 @@ import {
   insertWeightLogSchema, 
   insertMealLogSchema, 
   insertActivityLogSchema,
-  insertAiAnalysisSchema 
+  insertAiAnalysisSchema,
+  insertFoodItemSchema
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
 import { OpenAIService } from "./openai-service";
@@ -227,6 +228,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('AI Coach chat error:', error);
       res.status(500).json({ message: "Failed to get AI response" });
+    }
+  });
+
+  // Food items CRUD routes
+  app.post("/api/food-items", async (req, res) => {
+    try {
+      const foodData = insertFoodItemSchema.parse(req.body);
+      const foodItem = await storage.createFoodItem(foodData);
+      res.json(foodItem);
+    } catch (error: any) {
+      console.error('Food item creation error:', error);
+      res.status(400).json({ message: error.message });
     }
   });
 
