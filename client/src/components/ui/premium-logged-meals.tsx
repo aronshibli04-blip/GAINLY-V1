@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, Zap, Trash2, Edit3, Check, X, Target, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useUserStore } from "@/store/userStore";
 
 interface MealLog {
   id: string;
@@ -106,9 +105,8 @@ export function PremiumLoggedMeals() {
     },
   });
 
-  const { currentTdeeAnalysis } = useUserStore();
   const totalCalories = todaysMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
-  const targetCalories = currentTdeeAnalysis?.targetCalories || 4500; // Fallback to reasonable default
+  const targetCalories = 6000;
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);
 
   // Swipe handlers
@@ -216,24 +214,24 @@ export function PremiumLoggedMeals() {
   }
 
   return (
-    <Card className="meals-glow-hover bg-gradient-to-r from-green-600/20 to-emerald-600/20 border-green-400/30">
+    <Card className="meals-glow-hover bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 border-green-500/20 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-8 h-8 bg-green-400 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-lg flex items-center justify-center">
                 <Clock className="h-4 w-4 text-black" />
               </div>
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-green-400">Today's Fuel</h3>
-              <p className="text-xs text-green-300">Logged meals</p>
+              <h3 className="text-lg font-bold text-white">Today's Fuel</h3>
+              <p className="text-xs text-green-400/80">Logged meals</p>
             </div>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-green-400">{totalCalories}</div>
-            <div className="text-xs text-green-300">calories</div>
+            <div className="text-xs text-green-400/60">calories</div>
           </div>
         </CardTitle>
       </CardHeader>
@@ -241,7 +239,7 @@ export function PremiumLoggedMeals() {
       <CardContent className="space-y-3">
         {/* Progress Bar */}
         <div className="relative">
-          <div className="h-3 bg-black/30 rounded-full overflow-hidden">
+          <div className="h-2 bg-slate-700/50 rounded-full overflow-hidden">
             <motion.div 
               className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"
               initial={{ width: 0 }}
@@ -250,10 +248,10 @@ export function PremiumLoggedMeals() {
             />
           </div>
           <div className="flex justify-between items-center mt-2 text-xs">
-            <span className="text-green-300">Daily Progress</span>
+            <span className="text-slate-400">Progress</span>
             <div className="flex items-center gap-1 text-green-400">
               <Target className="h-3 w-3" />
-              <span>{Math.round(progressPercentage)}% of {targetCalories.toLocaleString()}</span>
+              <span>{Math.round(progressPercentage)}% of {targetCalories}</span>
             </div>
           </div>
         </div>
@@ -280,8 +278,8 @@ export function PremiumLoggedMeals() {
                   
                   {/* Main meal card */}
                   <div
-                    className={`relative bg-gradient-to-r from-green-600/10 to-emerald-600/10 backdrop-blur-sm rounded-xl border border-green-500/20 transition-all duration-200 ${
-                      editingMeal === meal.id ? 'ring-2 ring-green-400/50 shadow-lg shadow-green-400/20' : 'hover:border-green-500/30'
+                    className={`relative bg-gradient-to-r from-slate-800/60 to-slate-700/40 backdrop-blur-sm rounded-xl border border-slate-600/30 transition-all duration-200 ${
+                      editingMeal === meal.id ? 'ring-2 ring-green-400/50 shadow-lg shadow-green-400/20' : 'hover:border-slate-500/50'
                     }`}
                     style={{ transform: getTransform(meal.id) }}
                     onTouchStart={(e) => handleTouchStart(meal.id, e)}
@@ -291,26 +289,26 @@ export function PremiumLoggedMeals() {
                     {editingMeal === meal.id ? (
                       // Edit Mode - Premium Design
                       <div className="p-4 space-y-4">
-                        <div className="text-sm font-medium text-green-400 mb-3">✏️ Edit Portion</div>
+                        <div className="text-sm font-medium text-green-400 mb-3">Edit Portion</div>
                         <div className="space-y-3">
                           <div>
-                            <label className="text-xs text-green-300 mb-1 block">Description</label>
+                            <label className="text-xs text-slate-400 mb-1 block">Description</label>
                             <Input
                               value={editValues.description}
                               onChange={(e) => setEditValues(prev => ({ ...prev, description: e.target.value }))}
                               placeholder="What did you eat?"
-                              className="bg-black/30 border-green-500/30 text-white placeholder:text-green-400/50 focus:border-green-400 focus:ring-green-400/20"
+                              className="bg-slate-700/50 border-slate-600/50 text-white placeholder:text-slate-400 focus:border-green-400/50 focus:ring-green-400/20"
                               data-testid={`edit-description-${meal.id}`}
                             />
                           </div>
                           <div>
-                            <label className="text-xs text-green-300 mb-1 block">Calories</label>
+                            <label className="text-xs text-slate-400 mb-1 block">Calories</label>
                             <Input
                               type="number"
                               value={editValues.calories}
                               onChange={(e) => setEditValues(prev => ({ ...prev, calories: e.target.value }))}
                               placeholder="Enter calories"
-                              className="bg-black/30 border-green-500/30 text-white placeholder:text-green-400/50 focus:border-green-400 focus:ring-green-400/20"
+                              className="bg-slate-700/50 border-slate-600/50 text-white placeholder:text-slate-400 focus:border-green-400/50 focus:ring-green-400/20"
                               data-testid={`edit-calories-${meal.id}`}
                             />
                           </div>
@@ -320,7 +318,7 @@ export function PremiumLoggedMeals() {
                             onClick={saveEdit}
                             disabled={updateMealMutation.isPending}
                             size="sm"
-                            className="flex-1 bg-green-500 text-black font-medium hover:bg-green-400 transition-all duration-200"
+                            className="flex-1 bg-gradient-to-r from-green-400 to-emerald-500 text-black font-medium hover:from-green-500 hover:to-emerald-600 transition-all duration-200"
                             data-testid={`save-edit-${meal.id}`}
                           >
                             <Check className="h-3 w-3 mr-1" />
@@ -330,7 +328,7 @@ export function PremiumLoggedMeals() {
                             onClick={cancelEdit}
                             size="sm"
                             variant="outline"
-                            className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+                            className="border-slate-600/50 text-slate-300 hover:bg-slate-700/50"
                             data-testid={`cancel-edit-${meal.id}`}
                           >
                             <X className="h-3 w-3" />
@@ -385,24 +383,24 @@ export function PremiumLoggedMeals() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-green-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-green-400/50" />
+              <div className="w-16 h-16 bg-slate-700/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Zap className="h-8 w-8 text-slate-500" />
               </div>
-              <p className="text-green-300 text-sm">No meals logged yet today</p>
-              <p className="text-green-400/60 text-xs mt-1">Start by using the Ultra-Fast Logger above</p>
+              <p className="text-slate-400 text-sm">No meals logged yet today</p>
+              <p className="text-slate-500 text-xs mt-1">Start by using the Ultra-Fast Logger above</p>
             </div>
           )}
         </AnimatePresence>
 
         {/* Footer Stats */}
         {todaysMeals && todaysMeals.length > 0 && (
-          <div className="pt-4 border-t border-green-500/20">
+          <div className="pt-4 border-t border-slate-700/50">
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-1 text-green-300">
+              <div className="flex items-center gap-1 text-slate-400">
                 <TrendingUp className="h-3 w-3" />
                 <span>Daily Target: {targetCalories.toLocaleString()} cal</span>
               </div>
-              <div className={`font-medium ${progressPercentage >= 100 ? 'text-green-400' : 'text-green-300'}`}>
+              <div className={`font-medium ${progressPercentage >= 100 ? 'text-green-400' : 'text-orange-400'}`}>
                 {Math.round(progressPercentage)}% complete
               </div>
             </div>
