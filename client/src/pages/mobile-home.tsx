@@ -84,29 +84,32 @@ function LevelProgressCard() {
 // Celebration Particles Component
 function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete: () => void }) {
   if (!show) return null;
-  
+
+  // Auto-hide after 2 seconds
+  React.useEffect(() => {
+    if (show) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [show, onComplete]);
+
   return (
     <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
       <div className="relative">
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-emerald-400 rounded-full animate-ping"
+            className="absolute w-3 h-3 bg-emerald-400 rounded-full animate-particle-float"
             style={{
               top: Math.random() * 200 - 100,
               left: Math.random() * 200 - 100,
-              animationDelay: `${i * 100}ms`,
-              animationDuration: '1.5s',
-            }}
-            onAnimationEnd={() => {
-              if (i === 7) onComplete(); // Last particle triggers completion
+              animationDelay: `${i * 150}ms`,
             }}
           />
         ))}
-        <div 
-          className="text-4xl animate-bounce"
-          onAnimationEnd={() => setTimeout(onComplete, 1500)}
-        >
+        <div className="text-4xl animate-bounce">
           🎉
         </div>
       </div>
