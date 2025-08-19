@@ -108,34 +108,48 @@ export default function MobileMeals() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black">
-      {/* Premium Glassmorphism Header */}
-      <div className="glass-card glass-card-hover rounded-none border-0 border-b border-white/10 p-6 mb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center shadow-xl">
-                <Utensils className="h-6 w-6 text-white" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-slate-900 animate-pulse"></div>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white">Meals</h1>
-              <p className="text-white/60 text-sm">Smart nutrition tracking</p>
-            </div>
-          </div>
-          <button 
-            onClick={openMenu}
-            className="w-10 h-10 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all"
-          >
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900/20 to-slate-900 text-white pb-24">
+      {/* Mobile Header with Menu Toggle */}
+      <MobileHeader 
+        title="Meals" 
+        onOpenMenu={openMenu}
+      />
+      
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(35)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-orange-400/20 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
       </div>
       
-      <div className="px-4 space-y-6 pb-24">
+      <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
+        
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-orange-400/30 animate-spin" 
+                 style={{ animationDuration: '12s' }} />
+            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-orange-400 to-amber-400 flex items-center justify-center shadow-xl">
+              <Utensils className="h-8 w-8 text-black" />
+            </div>
+          </div>
+          
+          <h1 className="text-3xl font-black mb-2">
+            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-400 bg-clip-text text-transparent">
+              MEAL PLANS
+            </span>
+          </h1>
+          <p className="text-orange-400/70">AI-generated nutrition for hardgainers</p>
+        </div>
 
         {/* No Analysis Warning - Moved to Top */}
         {!canGenerateMealPlan && (
@@ -291,55 +305,37 @@ export default function MobileMeals() {
           </Card>
         )}
 
-        {/* Premium Ultra-Fast Logger Toggle */}
-        <div className="glass-card glass-card-hover rounded-2xl p-6 premium-gradient relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-500/10 to-transparent rounded-full -mr-16 -mt-16"></div>
-          <div className="relative z-10">
+        {/* Logger Toggle */}
+        <Card className="meals-glow-hover mb-6">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center">
-                  <span className="text-xl">⚡</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-white text-lg">Ultra-Fast Logger</h3>
-                  <p className="text-white/60 text-sm">
-                    {useUltraFast ? "3 taps • Voice enabled • Smart learning" : "Advanced mode • Manual entry"}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
-                      BEATS MACROFACTOR
-                    </Badge>
-                    <span className="text-xs text-white/40">3 vs 10 taps</span>
-                  </div>
-                </div>
+              <div>
+                <h3 className="font-semibold text-white">Food Logger Mode</h3>
+                <p className="text-sm text-muted-foreground">
+                  {useUltraFast ? "⚡ Ultra-Fast (3 taps)" : "🔧 Advanced (10+ taps)"}
+                </p>
               </div>
               <div className="flex gap-2">
                 <Button
                   onClick={() => setUseUltraFast(true)}
                   variant={useUltraFast ? "default" : "outline"}
                   size="sm"
-                  className={useUltraFast 
-                    ? "bg-green-500 text-black font-semibold shadow-lg" 
-                    : "border-green-500/30 text-green-400 hover:bg-green-500/10"
-                  }
+                  className={useUltraFast ? "bg-green-500 text-black" : "border-green-500/50 text-green-400"}
                 >
-                  ⚡ Ultra
+                  ⚡ Ultra-Fast
                 </Button>
                 <Button
                   onClick={() => setUseUltraFast(false)}
                   variant={!useUltraFast ? "default" : "outline"}
                   size="sm"
-                  className={!useUltraFast 
-                    ? "bg-orange-500 text-black font-semibold shadow-lg" 
-                    : "border-orange-500/30 text-orange-400 hover:bg-orange-500/10"
-                  }
+                  className={!useUltraFast ? "bg-orange-400 text-black" : "border-orange-400/50 text-orange-400"}
                 >
                   🔧 Advanced
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Conditional Logger */}
         {useUltraFast ? (
