@@ -422,6 +422,15 @@ function DailyRoutinesQuickChecker() {
             {showAllRoutines ? <EyeOff className="h-4 w-4 mr-1" /> : <Eye className="h-4 w-4 mr-1" />}
             {showAllRoutines ? "Show Less" : "Show All"}
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowQuickSetupDialog(true)}
+            className="text-emerald-400 hover:text-emerald-300 h-8 px-2"
+          >
+            <Sparkles className="h-4 w-4 mr-1" />
+            Quick Setup
+          </Button>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 h-8 px-2">
