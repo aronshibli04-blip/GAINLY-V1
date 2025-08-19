@@ -402,17 +402,17 @@ function DailyRoutinesQuickChecker() {
       />
       
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-          Daily Routines
-          {displayedRoutines.length > 0 && (
-            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
-              {completedCount}/{displayedRoutines.length}
-            </Badge>
-          )}
-        </h3>
-        <div className="flex gap-2">
+        <div>
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+            Daily Routines
+            {displayedRoutines.length > 0 && (
+              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
+                {completedCount}/{displayedRoutines.length}
+              </Badge>
+            )}
+          </h3>
+          <div className="flex gap-2 mb-4">
           <Button
             variant="ghost"
             size="sm"
