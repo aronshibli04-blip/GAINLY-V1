@@ -86,7 +86,7 @@ function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete:
   if (!show) return null;
 
   // Auto-hide after 2 seconds
-  React.useEffect(() => {
+  useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
         onComplete();
