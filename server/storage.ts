@@ -81,7 +81,7 @@ export interface IStorage {
 
   // User stats methods
   getUserStats(userId: string): Promise<UserStats | null>;
-  updateUserStats(userId: string, pointsEarned: number): Promise<UserStats>;
+  updateUserStats(userId: string, pointsEarned: number): Promise<void>;
 
   // Meal log edit methods
   updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog>;
@@ -316,6 +316,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteDailyRoutine(routineId: string): Promise<void> {
+    // First delete all completion records for this routine
+    await db
+      .delete(dailyRoutineCompletions)
+      .where(eq(dailyRoutineCompletions.routineId, routineId));
+    
+    // Then delete the routine itself
     await db
       .delete(dailyRoutines)
       .where(eq(dailyRoutines.id, routineId));

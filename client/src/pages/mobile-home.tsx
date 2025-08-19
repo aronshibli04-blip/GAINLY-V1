@@ -206,6 +206,10 @@ function DailyRoutinesQuickChecker() {
       const response = await fetch(`/api/daily-routines/${routineId}`, {
         method: 'DELETE'
       });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete routine');
+      }
       return response.json();
     },
     onSuccess: () => {
@@ -215,6 +219,14 @@ function DailyRoutinesQuickChecker() {
       toast({
         title: "Success!",
         description: "Routine deleted successfully!"
+      });
+    },
+    onError: (error: Error) => {
+      console.error('Delete routine error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete routine. Please try again.",
+        variant: "destructive"
       });
     }
   });
