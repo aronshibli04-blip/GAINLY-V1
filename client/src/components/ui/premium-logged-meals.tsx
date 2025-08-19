@@ -32,7 +32,7 @@ interface SwipeState {
 
 export function PremiumLoggedMeals() {
   const [editingMeal, setEditingMeal] = useState<string | null>(null);
-  const [editValues, setEditValues] = useState({ description: '', calories: '' });
+  const [editPortions, setEditPortions] = useState("");
   const [swipeState, setSwipeState] = useState<SwipeState | null>(null);
   const today = new Date().toISOString().split('T')[0];
   const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
@@ -159,37 +159,52 @@ export function PremiumLoggedMeals() {
 
   const startEdit = (meal: MealLog) => {
     setEditingMeal(meal.id);
-    setEditValues({
-      description: meal.description,
-      calories: meal.calories.toString()
-    });
+    // Extract portion number from description (e.g., "2x Banana" -> "2")
+    const portionMatch = meal.description.match(/^(\d+(?:\.\d+)?)\s*x?\s*/);
+    setEditPortions(portionMatch ? portionMatch[1] : "1");
   };
 
   const saveEdit = () => {
     if (!editingMeal) return;
     
-    const calories = parseInt(editValues.calories);
-    if (isNaN(calories) || calories < 0) {
+    const portions = parseFloat(editPortions);
+    if (isNaN(portions) || portions <= 0) {
       toast({
-        title: "Invalid calories",
-        description: "Please enter a valid number of calories.",
+        title: "Invalid portion",
+        description: "Please enter a valid portion amount.",
         variant: "destructive",
       });
       return;
     }
 
+    // Find the current meal to get its base calories and description
+    const currentMeal = todaysMeals?.find(m => m.id === editingMeal);
+    if (!currentMeal) return;
+
+    // Extract base food name (remove existing portion prefix)
+    const baseName = currentMeal.description.replace(/^\d+(?:\.\d+)?\s*x?\s*/, '');
+    
+    // Calculate base calories per portion (assuming current is 1 portion if no prefix)
+    const currentPortionMatch = currentMeal.description.match(/^(\d+(?:\.\d+)?)\s*x?\s*/);
+    const currentPortions = currentPortionMatch ? parseFloat(currentPortionMatch[1]) : 1;
+    const baseCaloriesPerPortion = Math.round(currentMeal.calories / currentPortions);
+    
+    // Calculate new total calories
+    const newCalories = Math.round(baseCaloriesPerPortion * portions);
+    const newDescription = portions === 1 ? baseName : `${portions}x ${baseName}`;
+
     updateMealMutation.mutate({
       mealId: editingMeal,
       updates: {
-        description: editValues.description.trim(),
-        calories: calories
+        description: newDescription,
+        calories: newCalories
       }
     });
   };
 
   const cancelEdit = () => {
     setEditingMeal(null);
-    setEditValues({ description: '', calories: '' });
+    setEditPortions("");
   };
 
   const formatTime = (timestamp: string) => {
@@ -296,51 +311,83 @@ export function PremiumLoggedMeals() {
                     onTouchEnd={handleTouchEnd}
                   >
                     {editingMeal === meal.id ? (
-                      // Edit Mode - Premium Design
+                      // Edit Mode - Simple Fun Portion Editor 
                       <div className="p-4 space-y-4">
-                        <div className="text-sm font-medium text-green-400 mb-3">Edit Portion</div>
-                        <div className="space-y-3">
-                          <div>
-                            <label className="text-xs text-slate-400 mb-1 block">Description</label>
-                            <Input
-                              value={editValues.description}
-                              onChange={(e) => setEditValues(prev => ({ ...prev, description: e.target.value }))}
-                              placeholder="What did you eat?"
-                              className="bg-slate-700/50 border-slate-600/50 text-white placeholder:text-slate-400 focus:border-green-400/50 focus:ring-green-400/20"
-                              data-testid={`edit-description-${meal.id}`}
-                            />
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-green-400 mb-1">🍽️ Edit Portion</div>
+                          <div className="text-xs text-slate-400">{meal.description.replace(/^\d+(?:\.\d+)?\s*x?\s*/, '')}</div>
+                        </div>
+                        
+                        {/* Fun Portion Input */}
+                        <div className="bg-gradient-to-r from-slate-800/80 to-slate-700/60 rounded-2xl p-4 border border-green-400/30">
+                          <div className="flex items-center justify-center gap-3">
+                            <Button
+                              onClick={() => setEditPortions(String(Math.max(0.5, parseFloat(editPortions || "1") - 0.5)))}
+                              size="sm"
+                              variant="outline"
+                              className="w-10 h-10 rounded-full border-green-400/50 text-green-400 hover:bg-green-400/10 font-bold text-lg"
+                            >
+                              −
+                            </Button>
+                            
+                            <div className="text-center">
+                              <Input
+                                type="number"
+                                step="0.5"
+                                min="0.5"
+                                max="20"
+                                value={editPortions}
+                                onChange={(e) => setEditPortions(e.target.value)}
+                                className="w-20 h-12 text-center text-2xl font-bold bg-transparent border-none text-green-400 focus:ring-0 focus:border-none"
+                                data-testid={`edit-portions-${meal.id}`}
+                              />
+                              <div className="text-xs text-slate-400 mt-1">portions</div>
+                            </div>
+                            
+                            <Button
+                              onClick={() => setEditPortions(String(parseFloat(editPortions || "1") + 0.5))}
+                              size="sm"
+                              variant="outline"
+                              className="w-10 h-10 rounded-full border-green-400/50 text-green-400 hover:bg-green-400/10 font-bold text-lg"
+                            >
+                              +
+                            </Button>
                           </div>
-                          <div>
-                            <label className="text-xs text-slate-400 mb-1 block">Calories</label>
-                            <Input
-                              type="number"
-                              value={editValues.calories}
-                              onChange={(e) => setEditValues(prev => ({ ...prev, calories: e.target.value }))}
-                              placeholder="Enter calories"
-                              className="bg-slate-700/50 border-slate-600/50 text-white placeholder:text-slate-400 focus:border-green-400/50 focus:ring-green-400/20"
-                              data-testid={`edit-calories-${meal.id}`}
-                            />
+                          
+                          {/* Calorie Preview */}
+                          <div className="text-center mt-3 p-2 bg-slate-900/50 rounded-lg">
+                            <div className="text-sm text-slate-400">New calories</div>
+                            <div className="text-lg font-bold text-green-400">
+                              {(() => {
+                                const portions = parseFloat(editPortions || "1");
+                                const currentPortionMatch = meal.description.match(/^(\d+(?:\.\d+)?)\s*x?\s*/);
+                                const currentPortions = currentPortionMatch ? parseFloat(currentPortionMatch[1]) : 1;
+                                const baseCaloriesPerPortion = Math.round(meal.calories / currentPortions);
+                                return Math.round(baseCaloriesPerPortion * portions);
+                              })()}
+                            </div>
                           </div>
                         </div>
+                        
                         <div className="flex gap-2">
                           <Button
                             onClick={saveEdit}
                             disabled={updateMealMutation.isPending}
                             size="sm"
-                            className="flex-1 bg-gradient-to-r from-green-400 to-emerald-500 text-black font-medium hover:from-green-500 hover:to-emerald-600 transition-all duration-200"
+                            className="flex-1 bg-gradient-to-r from-green-400 to-emerald-500 text-black font-medium hover:from-green-500 hover:to-emerald-600 transition-all duration-200 h-12"
                             data-testid={`save-edit-${meal.id}`}
                           >
-                            <Check className="h-3 w-3 mr-1" />
-                            {updateMealMutation.isPending ? 'Saving...' : 'Save Changes'}
+                            <Check className="h-4 w-4 mr-1" />
+                            {updateMealMutation.isPending ? 'Saving...' : 'Update Portion'}
                           </Button>
                           <Button
                             onClick={cancelEdit}
                             size="sm"
                             variant="outline"
-                            className="border-slate-600/50 text-slate-300 hover:bg-slate-700/50"
+                            className="border-slate-600/50 text-slate-300 hover:bg-slate-700/50 h-12 px-4"
                             data-testid={`cancel-edit-${meal.id}`}
                           >
-                            <X className="h-3 w-3" />
+                            <X className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
