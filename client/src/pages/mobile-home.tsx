@@ -123,6 +123,8 @@ function DailyRoutinesQuickChecker() {
   const today = new Date().toISOString().split('T')[0];
   const [showCelebration, setShowCelebration] = useState(false);
   const [completingRoutineId, setCompletingRoutineId] = useState<string | null>(null);
+  const [displayedRoutines, setDisplayedRoutines] = useState<DailyRoutine[]>([]);
+  const [routineSlideKey, setRoutineSlideKey] = useState(0);
 
   // Fetch user routines (limit to 4 for home page)
   const { data: routines = [], isLoading: routinesLoading } = useQuery<DailyRoutine[]>({
@@ -258,8 +260,27 @@ function DailyRoutinesQuickChecker() {
     );
   }
 
-  const displayRoutines = routines.slice(0, 4); // Show max 4 on home page
-  const completedCount = displayRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
+  // Smart routine display logic - show next uncompleted tasks
+  useEffect(() => {
+    if (routines.length > 0) {
+      const completed = routines.filter(r => completions.some(c => c.routineId === r.id));
+      const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
+      
+      // Show mix of completed and uncompleted, prioritizing uncompleted
+      const newDisplayed = [
+        ...completed.slice(0, 2), // Show up to 2 completed for satisfaction
+        ...uncompleted.slice(0, 4 - Math.min(completed.length, 2)) // Fill rest with uncompleted
+      ].slice(0, 4);
+      
+      // Trigger animation when routine list changes
+      if (JSON.stringify(newDisplayed) !== JSON.stringify(displayedRoutines)) {
+        setRoutineSlideKey(prev => prev + 1);
+        setDisplayedRoutines(newDisplayed);
+      }
+    }
+  }, [routines, completions, displayedRoutines]);
+
+  const completedCount = displayedRoutines.filter(r => completions.some(c => c.routineId === r.id)).length;
 
   return (
     <>
@@ -273,9 +294,9 @@ function DailyRoutinesQuickChecker() {
           <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
           Daily Routines
-          {displayRoutines.length > 0 && (
-            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs">
-              {completedCount}/{displayRoutines.length}
+          {displayedRoutines.length > 0 && (
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
+              {completedCount}/{displayedRoutines.length}
             </Badge>
           )}
         </h3>
@@ -288,7 +309,7 @@ function DailyRoutinesQuickChecker() {
         )}
       </div>
 
-      {displayRoutines.length === 0 ? (
+      {displayedRoutines.length === 0 ? (
         <Card className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-400/20 backdrop-blur-sm">
           <CardContent className="p-4 text-center">
             <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
@@ -302,8 +323,8 @@ function DailyRoutinesQuickChecker() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-2">
-          {displayRoutines.map((routine) => {
+        <div key={routineSlideKey} className="space-y-2">
+          {displayedRoutines.map((routine, index) => {
             const isCompleted = completions.some(c => c.routineId === routine.id);
             const categoryColor = categoryColors[routine.category as keyof typeof categoryColors];
             const categoryIcon = categoryIcons[routine.category as keyof typeof categoryIcons];
@@ -311,12 +332,12 @@ function DailyRoutinesQuickChecker() {
             return (
               <Card
                 key={routine.id}
-                className={`bg-gradient-to-br ${categoryColor} backdrop-blur-sm transition-all duration-300 ${isCompleted ? 'ring-2 ring-emerald-400/70 shadow-lg shadow-emerald-400/20' : 'hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer'} ${completeRoutineMutation.isPending ? 'animate-pulse' : ''}`}
-                onClick={(e) => toggleCompletion(routine, e)}
+                className={`bg-gradient-to-br ${categoryColor} backdrop-blur-sm transition-all duration-300 animate-routine-slide-in ${isCompleted ? 'ring-2 ring-emerald-400/70 shadow-lg shadow-emerald-400/20' : 'hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg cursor-pointer'} ${completeRoutineMutation.isPending ? 'animate-pulse' : ''}`}
                 style={{
-                  animationDuration: isCompleted ? '0.6s' : undefined,
-                  animationName: isCompleted ? 'bounce' : undefined,
+                  animationDelay: `${index * 100}ms`,
+                  animationFillMode: 'both'
                 }}
+                onClick={(e) => toggleCompletion(routine, e)}
               >
                 <CardContent className="p-3">
                   <div className="flex items-center justify-between">
@@ -363,7 +384,7 @@ function DailyRoutinesQuickChecker() {
             );
           })}
           
-          {completedCount === displayRoutines.length && displayRoutines.length > 0 && (
+          {completedCount === displayedRoutines.length && displayedRoutines.length > 0 && (
             <Card className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-400/50 backdrop-blur-sm">
               <CardContent className="p-3 text-center">
                 <div className="flex items-center justify-center gap-2 text-emerald-400">
