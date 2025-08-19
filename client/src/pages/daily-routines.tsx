@@ -33,11 +33,11 @@ import { defaultRoutines } from "@/data/default-routines";
 // Particle animation background
 const ParticleBackground = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div className="absolute w-2 h-2 bg-emerald-400/20 rounded-full animate-pulse" style={{ top: '20%', left: '10%', animationDelay: '0s' }} />
-    <div className="absolute w-1 h-1 bg-emerald-300/30 rounded-full animate-pulse" style={{ top: '60%', left: '80%', animationDelay: '1s' }} />
-    <div className="absolute w-3 h-3 bg-emerald-500/10 rounded-full animate-pulse" style={{ top: '40%', left: '60%', animationDelay: '2s' }} />
-    <div className="absolute w-1.5 h-1.5 bg-emerald-400/25 rounded-full animate-pulse" style={{ top: '80%', left: '20%', animationDelay: '0.5s' }} />
-    <div className="absolute w-2 h-2 bg-emerald-300/20 rounded-full animate-pulse" style={{ top: '30%', left: '90%', animationDelay: '1.5s' }} />
+    <div className="absolute w-2 h-2 bg-emerald-400/20 rounded-full animate-pulse" style={{ top: '20%', left: '10%', animationDelay: '0s' }}></div>
+    <div className="absolute w-1 h-1 bg-emerald-300/30 rounded-full animate-pulse" style={{ top: '60%', left: '80%', animationDelay: '1s' }}></div>
+    <div className="absolute w-3 h-3 bg-emerald-500/10 rounded-full animate-pulse" style={{ top: '40%', left: '60%', animationDelay: '2s' }}></div>
+    <div className="absolute w-1.5 h-1.5 bg-emerald-400/25 rounded-full animate-pulse" style={{ top: '80%', left: '20%', animationDelay: '0.5s' }}></div>
+    <div className="absolute w-2 h-2 bg-emerald-300/20 rounded-full animate-pulse" style={{ top: '30%', left: '90%', animationDelay: '1.5s' }}></div>
   </div>
 );
 
@@ -491,6 +491,7 @@ export default function DailyRoutines() {
           </Card>
         )}
       </div>
+    </div>
     </div>
   );
 }
