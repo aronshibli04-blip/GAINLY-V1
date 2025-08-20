@@ -18,6 +18,16 @@ export function InstallPrompt() {
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setShowInstallPrompt(false);
+      return;
+    }
+
+    // For iOS Safari - show install instructions immediately
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    
+    if (isIOS && isSafari) {
+      setIsInstallable(true);
+      setShowInstallPrompt(true);
     }
 
     return () => {
@@ -26,10 +36,16 @@ export function InstallPrompt() {
   }, []);
 
   const handleInstall = () => {
-    if ((window as any).installApp) {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    
+    if (isIOS && isSafari) {
+      // Show iOS install instructions
+      alert('For å installere GAINLY:\n\n1. Trykk på Del-knappen (□↗) nederst\n2. Scroll ned og velg "Legg til på startskjerm"\n3. Trykk "Legg til"');
+    } else if ((window as any).installApp) {
       (window as any).installApp();
-      setShowInstallPrompt(false);
     }
+    setShowInstallPrompt(false);
   };
 
   const handleDismiss = () => {
@@ -51,7 +67,7 @@ export function InstallPrompt() {
           </div>
           <div>
             <h3 className="text-white font-semibold text-sm">Installer GAINLY</h3>
-            <p className="text-emerald-100 text-xs">Få full app-opplevelse på telefonen din</p>
+            <p className="text-emerald-100 text-xs">Legg til på startskjerm for best opplevelse</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
