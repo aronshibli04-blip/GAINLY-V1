@@ -8,6 +8,7 @@ import { SideMenu } from "@/components/ui/side-menu";
 import { MenuProvider, useMenu } from "@/components/ui/menu-context";
 import { OnboardingFlow } from "@/components/ui/onboarding-flow";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { InstallPrompt } from "@/components/install-prompt";
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";
@@ -50,6 +51,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MenuProvider>
+        <InstallPrompt />
         <AppContent />
         <Toaster />
       </MenuProvider>
