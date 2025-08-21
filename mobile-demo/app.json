@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "GAINLY Mobile",
+    "slug": "gainly-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.gainly.mobile"
+    }
+  }
+}

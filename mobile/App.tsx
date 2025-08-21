@@ -1,75 +1,126 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 
-// Store
-import { useUserStore } from './src/store/userStore';
+// Simple demo app structure for GAINLY mobile
+interface TabItem {
+  id: string;
+  title: string;
+  icon: string;
+  color: string;
+}
 
-// Screens
-import WelcomeScreen from './src/components/WelcomeScreen';
-import OnboardingScreen from './src/screens/OnboardingScreen';
-import DashboardScreen from './src/screens/DashboardScreen';
-import TrackingScreen from './src/screens/TrackingScreen';
-import MealPlanScreen from './src/screens/MealPlanScreen';
-import ProgressScreen from './src/screens/ProgressScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
+const tabs: TabItem[] = [
+  { id: 'dashboard', title: 'Dashboard', icon: '🏠', color: '#10b981' },
+  { id: 'calories', title: 'Calories', icon: '🍽️', color: '#f59e0b' },
+  { id: 'training', title: 'Training', icon: '💪', color: '#ef4444' },
+  { id: 'progress', title: 'Progress', icon: '📈', color: '#8b5cf6' },
+  { id: 'profile', title: 'Profile', icon: '👤', color: '#06b6d4' },
+];
 
-// Navigation Types
-import type { RootStackParamList, MainTabParamList } from './src/types';
-
-const Stack = createStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<MainTabParamList>();
-
-function MainTabs() {
+function MainApp() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return (
+          <View style={styles.contentCard}>
+            <Text style={styles.cardTitle}>🎯 GAINLY Dashboard</Text>
+            <Text style={styles.cardSubtitle}>AI-Powered Weight Gain Tracking</Text>
+            
+            <View style={styles.statsGrid}>
+              <View style={[styles.statCard, { backgroundColor: '#10b981' }]}>
+                <Text style={styles.statNumber}>72.5</Text>
+                <Text style={styles.statLabel}>kg</Text>
+              </View>
+              <View style={[styles.statCard, { backgroundColor: '#f59e0b' }]}>
+                <Text style={styles.statNumber}>2847</Text>
+                <Text style={styles.statLabel}>kcal</Text>
+              </View>
+              <View style={[styles.statCard, { backgroundColor: '#ef4444' }]}>
+                <Text style={styles.statNumber}>5</Text>
+                <Text style={styles.statLabel}>days</Text>
+              </View>
+            </View>
+            
+            <Text style={styles.description}>
+              GAINLY combines AI-powered TDEE calculation with personalized meal planning for optimal weight gain.
+            </Text>
+          </View>
+        );
+      
+      case 'calories':
+        return (
+          <View style={styles.contentCard}>
+            <Text style={styles.cardTitle}>🍽️ Calorie Tracking</Text>
+            <Text style={styles.cardSubtitle}>Ultra-Fast Food Logging</Text>
+            
+            <View style={styles.mealCard}>
+              <Text style={styles.mealTitle}>Today's Meals</Text>
+              <Text style={styles.mealItem}>🥞 Breakfast - 850 kcal</Text>
+              <Text style={styles.mealItem}>🍖 Lunch - 1200 kcal</Text>
+              <Text style={styles.mealItem}>🥤 Snack - 300 kcal</Text>
+              <Text style={styles.mealItem}>🍝 Dinner - 1100 kcal</Text>
+            </View>
+            
+            <Text style={styles.description}>
+              Revolutionary 3-tap food logging system with AI nutrition recognition and voice input.
+            </Text>
+          </View>
+        );
+      
+      default:
+        return (
+          <View style={styles.contentCard}>
+            <Text style={styles.cardTitle}>🚀 {tabs.find(t => t.id === activeTab)?.title}</Text>
+            <Text style={styles.cardSubtitle}>Feature Coming Soon</Text>
+            
+            <Text style={styles.description}>
+              This section will include comprehensive {activeTab} tracking with gamification elements and AI insights.
+            </Text>
+          </View>
+        );
+    }
+  };
+  
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
-
-          if (route.name === 'Dashboard') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Tracking') {
-            iconName = focused ? 'fitness' : 'fitness-outline';
-          } else if (route.name === 'MealPlan') {
-            iconName = focused ? 'restaurant' : 'restaurant-outline';
-          } else if (route.name === 'Progress') {
-            iconName = focused ? 'analytics' : 'analytics-outline';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'person' : 'person-outline';
-          } else {
-            iconName = 'help-outline';
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#10b981',
-        tabBarInactiveTintColor: '#64748b',
-        tabBarStyle: {
-          backgroundColor: '#1e293b',
-          borderTopColor: 'rgba(255, 255, 255, 0.1)',
-          borderTopWidth: 1,
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 70,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '500',
-        },
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Tracking" component={TrackingScreen} />
-      <Tab.Screen name="MealPlan" component={MealPlanScreen} />
-      <Tab.Screen name="Progress" component={ProgressScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" backgroundColor="#0f172a" />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>GAINLY</Text>
+        <Text style={styles.headerSubtitle}>Mobile App Demo</Text>
+      </View>
+      
+      {/* Content */}
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {renderContent()}
+      </ScrollView>
+      
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        {tabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.id}
+            style={[
+              styles.tabButton,
+              activeTab === tab.id && styles.activeTabButton
+            ]}
+            onPress={() => setActiveTab(tab.id)}
+          >
+            <Text style={styles.tabIcon}>{tab.icon}</Text>
+            <Text style={[
+              styles.tabLabel,
+              activeTab === tab.id && styles.activeTabLabel
+            ]}>
+              {tab.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -84,61 +135,29 @@ function LoadingScreen() {
 
 export default function App() {
   const [isAppReady, setIsAppReady] = useState(false);
-  const { user, isOnboarded, loadUserData, isLoading } = useUserStore();
 
   useEffect(() => {
-    async function prepare() {
-      try {
-        await loadUserData();
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setIsAppReady(true);
-      }
-    }
-
-    prepare();
+    // Simulate app loading
+    const timer = setTimeout(() => {
+      setIsAppReady(true);
+    }, 2000);
+    
+    return () => clearTimeout(timer);
   }, []);
 
-  if (!isAppReady || isLoading) {
+  if (!isAppReady) {
     return <LoadingScreen />;
   }
 
-  return (
-    <NavigationContainer
-      theme={{
-        dark: true,
-        colors: {
-          primary: '#10b981',
-          background: '#0f172a',
-          card: '#1e293b',
-          text: '#ffffff',
-          border: 'rgba(255, 255, 255, 0.1)',
-          notification: '#10b981',
-        },
-      }}
-    >
-      <StatusBar style="light" backgroundColor="#0f172a" />
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          cardStyle: { backgroundColor: '#0f172a' },
-        }}
-      >
-        {!user || !isOnboarded ? (
-          <>
-            <Stack.Screen name="Welcome" component={WelcomeScreen} />
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-          </>
-        ) : (
-          <Stack.Screen name="Main" component={MainTabs} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  return <MainApp />;
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0f172a',
+  },
+  
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -150,5 +169,128 @@ const styles = StyleSheet.create({
     color: '#94a3b8',
     fontSize: 16,
     fontWeight: '500',
+  },
+  
+  header: {
+    padding: 24,
+    backgroundColor: '#1e293b',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#10b981',
+    textAlign: 'center',
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#64748b',
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  
+  contentCard: {
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  cardTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    marginBottom: 8,
+  },
+  cardSubtitle: {
+    fontSize: 16,
+    color: '#10b981',
+    marginBottom: 20,
+  },
+  
+  statsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  statCard: {
+    flex: 1,
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginTop: 4,
+  },
+  
+  mealCard: {
+    backgroundColor: '#334155',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+  },
+  mealTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    marginBottom: 12,
+  },
+  mealItem: {
+    fontSize: 14,
+    color: '#e2e8f0',
+    marginBottom: 8,
+    paddingLeft: 8,
+  },
+  
+  description: {
+    fontSize: 14,
+    color: '#94a3b8',
+    lineHeight: 20,
+  },
+  
+  bottomNav: {
+    flexDirection: 'row',
+    backgroundColor: '#1e293b',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  activeTabButton: {
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+  },
+  tabIcon: {
+    fontSize: 20,
+    marginBottom: 4,
+  },
+  tabLabel: {
+    fontSize: 10,
+    color: '#64748b',
+    textAlign: 'center',
+  },
+  activeTabLabel: {
+    color: '#10b981',
+    fontWeight: '600',
   },
 });

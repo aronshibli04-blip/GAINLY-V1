@@ -71,7 +71,6 @@ export const useUserStore = create<UserState>((set, get) => ({
     }));
     
     get().saveUserData();
-    get().checkPhaseTransition();
   },
 
   addCalorieEntry: (entry) => {
@@ -88,7 +87,6 @@ export const useUserStore = create<UserState>((set, get) => ({
     }));
     
     get().saveUserData();
-    get().checkPhaseTransition();
   },
 
   addActivityEntry: (entry) => {
