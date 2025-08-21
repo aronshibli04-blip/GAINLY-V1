@@ -22,6 +22,7 @@ import MobileMeasurements from "@/pages/mobile-measurements";
 import { MobileAchievements } from "@/pages/mobile-achievements";
 import { MobileGoals } from "@/pages/mobile-goals";
 import MobileProgress from "@/pages/mobile-progress";
+import MobileDemo from "./pages/MobileDemo";
 
 
 // Setup pages
@@ -89,6 +90,7 @@ function AppContent() {
           <Route path="/achievements" component={MobileAchievements} />
           <Route path="/goals" component={MobileGoals} />
           <Route path="/progress" component={MobileProgress} />
+          <Route path="/mobile-demo" component={MobileDemo} />
 
           <Route path="/setup" component={HardgainerProfileSetup} />
           
