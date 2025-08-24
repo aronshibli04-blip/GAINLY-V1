@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SplashScreen } from './SplashScreen';
 import { AICoachIntro } from './AICoachIntro';
-import { CalibrationDay } from './CalibrationDay';
+import { InitialProfileSetup } from './InitialProfileSetup';
 import { CalibrationComplete } from './CalibrationComplete';
 import { useUserStore } from '@/store/userStore';
 
@@ -12,27 +12,33 @@ interface CalibrationData {
   sleep?: number;
 }
 
-type FlowStep = 'splash' | 'intro' | 'calibration' | 'complete';
+interface ProfileData {
+  firstName: string;
+  age: string;
+  height: string;
+  weight: string;
+  sex: string;
+  activityLevel: string;
+  goalWeight: string;
+  dietaryPreferences: string[];
+}
+
+type FlowStep = 'splash' | 'intro' | 'profile' | 'complete';
 
 export function FuturisticCalibrationFlow() {
   const [currentStep, setCurrentStep] = useState<FlowStep>('splash');
-  const [currentDay, setCurrentDay] = useState(1);
-  const [calibrationData, setCalibrationData] = useState<CalibrationData[]>([]);
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const { setUser, completeOnboarding } = useUserStore();
 
-  // Load existing calibration data if any
+  // Load existing data if any
   useEffect(() => {
-    const savedData = localStorage.getItem('calibration_data');
-    const savedDay = localStorage.getItem('calibration_day');
+    const savedProfile = localStorage.getItem('profile_data');
     const savedStep = localStorage.getItem('calibration_step');
     
-    if (savedData) {
-      setCalibrationData(JSON.parse(savedData));
+    if (savedProfile) {
+      setProfileData(JSON.parse(savedProfile));
     }
-    if (savedDay) {
-      setCurrentDay(parseInt(savedDay));
-    }
-    if (savedStep && ['splash', 'intro', 'calibration', 'complete'].includes(savedStep)) {
+    if (savedStep && ['splash', 'intro', 'profile', 'complete'].includes(savedStep)) {
       setCurrentStep(savedStep as FlowStep);
     }
   }, []);
@@ -40,71 +46,80 @@ export function FuturisticCalibrationFlow() {
   // Save progress to localStorage
   useEffect(() => {
     localStorage.setItem('calibration_step', currentStep);
-    localStorage.setItem('calibration_day', currentDay.toString());
-    localStorage.setItem('calibration_data', JSON.stringify(calibrationData));
-  }, [currentStep, currentDay, calibrationData]);
+    if (profileData) {
+      localStorage.setItem('profile_data', JSON.stringify(profileData));
+    }
+  }, [currentStep, profileData]);
 
   const handleBeginCalibration = () => {
     setCurrentStep('intro');
   };
 
   const handleIntroComplete = () => {
-    setCurrentStep('calibration');
+    setCurrentStep('profile');
   };
 
-  const handleDayComplete = (data: CalibrationData) => {
-    const updatedData = [...calibrationData];
-    updatedData[currentDay - 1] = data;
-    setCalibrationData(updatedData);
-
-    if (currentDay === 7) {
-      setCurrentStep('complete');
-    } else {
-      setCurrentDay(prev => prev + 1);
-    }
+  const handleProfileComplete = (data: ProfileData) => {
+    setProfileData(data);
+    setCurrentStep('complete');
   };
 
   const handleActivateProtocol = () => {
-    // Calculate TDEE from collected data
-    const avgWeight = calibrationData.reduce((sum, day) => sum + day.weight, 0) / calibrationData.length;
-    const avgCalories = calibrationData.reduce((sum, day) => sum + day.calories, 0) / calibrationData.length;
+    if (!profileData) return;
+
+    const weight = parseFloat(profileData.weight);
+    const height = parseFloat(profileData.height);
+    const age = parseInt(profileData.age);
+    const goalWeight = parseFloat(profileData.goalWeight);
     
-    // Simple TDEE estimation (this would be more sophisticated in real implementation)
-    const estimatedTDEE = Math.round(avgCalories * 1.4); // Rough multiplier for hardgainers
+    // Calculate BMR using Mifflin-St Jeor equation
+    const bmr = profileData.sex === 'male' 
+      ? 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+      : 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+    
+    // Activity multipliers
+    const activityMultipliers = {
+      sedentary: 1.2,
+      light: 1.375,
+      moderate: 1.55,
+      very: 1.725,
+      extreme: 1.9
+    };
+    
+    const estimatedTDEE = Math.round(bmr * activityMultipliers[profileData.activityLevel as keyof typeof activityMultipliers]);
 
     // Create user profile
     const userProfile = {
       id: `user_${Date.now()}`,
-      username: 'hardgainer',
-      firstName: 'User',
-      name: 'User',
-      startWeight: calibrationData[0]?.weight || avgWeight,
-      currentWeight: avgWeight,
-      weight: avgWeight,
-      goalWeight: avgWeight + 10, // Default 10kg goal
-      age: 25,
-      height: 175,
-      sex: 'male' as const,
-      gender: 'male',
-      activityLevel: calibrationData[0]?.activityLevel || 'moderate',
+      username: profileData.firstName.toLowerCase(),
+      firstName: profileData.firstName,
+      name: profileData.firstName,
+      startWeight: weight,
+      currentWeight: weight,
+      weight: weight,
+      goalWeight: goalWeight,
+      age: age,
+      height: height,
+      sex: profileData.sex as 'male' | 'female',
+      gender: profileData.sex,
+      activityLevel: profileData.activityLevel,
       tdee: estimatedTDEE,
-      calorieGoal: estimatedTDEE + 500, // 500 calorie surplus
+      calorieGoal: estimatedTDEE + 500, // 500 calorie surplus for hardgainers
       phase: 'tracking' as const,
       createdAt: new Date().toISOString(),
-      dietaryPreferences: [],
+      dietaryPreferences: profileData.dietaryPreferences.map(name => ({ name, isAllergy: false })),
     };
 
     setUser(userProfile);
     completeOnboarding();
 
-    // Clear calibration data
-    localStorage.removeItem('calibration_data');
-    localStorage.removeItem('calibration_day');
+    // Clear stored data
+    localStorage.removeItem('profile_data');
     localStorage.removeItem('calibration_step');
   };
 
   const getUserData = () => {
-    if (calibrationData.length === 0) {
+    if (!profileData) {
       return {
         startWeight: 70,
         avgCalories: 2500,
@@ -112,13 +127,28 @@ export function FuturisticCalibrationFlow() {
       };
     }
 
-    const startWeight = calibrationData[0]?.weight || 70;
-    const avgCalories = calibrationData.reduce((sum, day) => sum + day.calories, 0) / calibrationData.length;
-    const estimatedTDEE = Math.round(avgCalories * 1.4);
+    const weight = parseFloat(profileData.weight);
+    const height = parseFloat(profileData.height);
+    const age = parseInt(profileData.age);
+    
+    // Calculate BMR and TDEE
+    const bmr = profileData.sex === 'male' 
+      ? 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+      : 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+    
+    const activityMultipliers = {
+      sedentary: 1.2,
+      light: 1.375,
+      moderate: 1.55,
+      very: 1.725,
+      extreme: 1.9
+    };
+    
+    const estimatedTDEE = Math.round(bmr * activityMultipliers[profileData.activityLevel as keyof typeof activityMultipliers]);
 
     return {
-      startWeight,
-      avgCalories,
+      startWeight: weight,
+      avgCalories: estimatedTDEE - 300, // Simulated current intake below TDEE
       estimatedTDEE
     };
   };
@@ -130,14 +160,8 @@ export function FuturisticCalibrationFlow() {
     case 'intro':
       return <AICoachIntro onComplete={handleIntroComplete} />;
     
-    case 'calibration':
-      return (
-        <CalibrationDay
-          day={currentDay}
-          onComplete={handleDayComplete}
-          existingData={calibrationData[currentDay - 1]}
-        />
-      );
+    case 'profile':
+      return <InitialProfileSetup onComplete={handleProfileComplete} />;
     
     case 'complete':
       return (

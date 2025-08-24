@@ -14,12 +14,6 @@ import { User as UserType, DietaryPreference } from "@/types";
 import { FuturisticCalibrationFlow } from "@/components/futuristic-calibration/FuturisticCalibrationFlow";
 
 export default function HardgainerProfileSetup() {
-  // Check if user wants the futuristic calibration experience
-  const useFuturisticFlow = true; // Can be made configurable
-  
-  if (useFuturisticFlow) {
-    return <FuturisticCalibrationFlow />;
-  }
   const { toast } = useToast();
   const { user, setUser, completeOnboarding } = useUserStore();
 
