@@ -24,12 +24,6 @@ export default function CalibrationMode() {
   const [daysRemaining, setDaysRemaining] = useState(7);
 
   useEffect(() => {
-    // If user has already completed calibration, redirect to main app
-    if (user?.hasCompletedCalibration) {
-      window.location.href = '/';
-      return;
-    }
-
     if (user?.calibrationStartDate) {
       const startDate = new Date(user.calibrationStartDate);
       const currentDate = new Date();
@@ -49,20 +43,8 @@ export default function CalibrationMode() {
       const remaining = Math.max(0, 7 - dataEntryDays);
       setDaysRemaining(remaining);
       setCalibrationProgress(Math.min((dataEntryDays / 7) * 100, 100));
-
-      // Auto-complete calibration if we have 7+ days of data
-      if (dataEntryDays >= 7 && !user.hasCompletedCalibration) {
-        setUser({ ...user, hasCompletedCalibration: true });
-        toast({
-          title: "🎉 AI Calibration Complete!",
-          description: "Full neural network capabilities are now unlocked.",
-        });
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1000);
-      }
     }
-  }, [user, setUser, toast, weightEntries, calorieEntries]);
+  }, [user, weightEntries, calorieEntries]);
 
   const handleCompleteCalibration = () => {
     if (user && !user.hasCompletedCalibration) {
@@ -71,9 +53,6 @@ export default function CalibrationMode() {
         title: "🎉 Calibration Complete!",
         description: "Unlocking full GAINLY experience...",
       });
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 1000);
     }
   };
 
