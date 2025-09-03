@@ -24,6 +24,12 @@ export default function CalibrationMode() {
   const [daysRemaining, setDaysRemaining] = useState(7);
 
   useEffect(() => {
+    // If user has already completed calibration, redirect to main app
+    if (user?.hasCompletedCalibration) {
+      window.location.href = '/';
+      return;
+    }
+
     if (user?.calibrationStartDate) {
       const startDate = new Date(user.calibrationStartDate);
       const currentDate = new Date();
@@ -32,20 +38,25 @@ export default function CalibrationMode() {
       // Calculate progress based on unique days with data entries
       const uniqueWeightDays = new Set(weightEntries.map(w => w.date)).size;
       const uniqueCalorieDays = new Set(calorieEntries.map(c => c.date)).size;
-      const dataEntryDays = Math.max(uniqueWeightDays, uniqueCalorieDays);
+      
+      // Count days with any data (weight OR calories)
+      const allDates = new Set([
+        ...weightEntries.map(w => w.date),
+        ...calorieEntries.map(c => c.date)
+      ]);
+      const dataEntryDays = allDates.size;
       
       const remaining = Math.max(0, 7 - dataEntryDays);
       setDaysRemaining(remaining);
       setCalibrationProgress(Math.min((dataEntryDays / 7) * 100, 100));
 
-      // Check if calibration is complete (7 days of data)
+      // Auto-complete calibration if we have 7+ days of data
       if (dataEntryDays >= 7 && !user.hasCompletedCalibration) {
         setUser({ ...user, hasCompletedCalibration: true });
         toast({
           title: "🎉 AI Calibration Complete!",
           description: "Full neural network capabilities are now unlocked.",
         });
-        // Use a timeout to allow state to update before navigation
         setTimeout(() => {
           window.location.href = '/';
         }, 1000);
@@ -53,12 +64,12 @@ export default function CalibrationMode() {
     }
   }, [user, setUser, toast, weightEntries, calorieEntries]);
 
-  const handleSkipCalibration = () => {
+  const handleCompleteCalibration = () => {
     if (user && !user.hasCompletedCalibration) {
       setUser({ ...user, hasCompletedCalibration: true });
       toast({
-        title: "Calibration Skipped",
-        description: "Jumping to main app for testing.",
+        title: "🎉 Calibration Complete!",
+        description: "Unlocking full GAINLY experience...",
       });
       setTimeout(() => {
         window.location.href = '/';
@@ -267,29 +278,18 @@ export default function CalibrationMode() {
               </span>
             </div>
 
-            {/* Developer Controls - Only show in development */}
-            {process.env.NODE_ENV === 'development' && calibrationProgress >= 100 && (
+            {/* Manual Override for Users who completed 7 days */}
+            {(calibrationProgress >= 100 || daysRemaining === 0) && (
               <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-primary/20">
                 <Button
-                  onClick={() => {
-                    if (user && !user.hasCompletedCalibration) {
-                      setUser({ ...user, hasCompletedCalibration: true });
-                      toast({
-                        title: "🎉 AI Calibration Complete!",
-                        description: "Full neural network capabilities are now unlocked.",
-                      });
-                      setTimeout(() => {
-                        window.location.href = '/';
-                      }, 1000);
-                    }
-                  }}
+                  onClick={handleCompleteCalibration}
                   variant="default"
-                  size="sm"
-                  className="neural-button"
+                  size="lg"
+                  className="neural-button bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3"
                   data-testid="button-complete-calibration"
                 >
-                  <Brain className="h-4 w-4 mr-2" />
-                  Complete Calibration
+                  <Brain className="h-5 w-5 mr-2" />
+                  🎉 Complete Calibration & Enter GAINLY
                 </Button>
               </div>
             )}
