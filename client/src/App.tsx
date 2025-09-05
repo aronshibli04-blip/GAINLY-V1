@@ -23,7 +23,6 @@ import { MobileAchievements } from "@/pages/mobile-achievements";
 import { MobileGoals } from "@/pages/mobile-goals";
 import MobileProgress from "@/pages/mobile-progress";
 import MobileDemo from "./pages/MobileDemo";
-import DebugCalibrationComplete from "./pages/DebugCalibrationComplete";
 
 
 // Setup pages
@@ -44,18 +43,6 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <div className="min-h-screen bg-background">
           <HardgainerProfileSetup />
-          <Toaster />
-        </div>
-      </QueryClientProvider>
-    );
-  }
-
-  // If user exists but hasn't completed calibration, redirect to calibration
-  if (user && isOnboarded && !user.hasCompletedCalibration) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen bg-background">
-          <CalibrationMode />
           <Toaster />
         </div>
       </QueryClientProvider>
@@ -104,7 +91,18 @@ function AppContent() {
           <Route path="/goals" component={MobileGoals} />
           <Route path="/progress" component={MobileProgress} />
           <Route path="/mobile-demo" component={MobileDemo} />
-          <Route path="/debug-calibration" component={DebugCalibrationComplete} />
+          <Route path="/futuristic-demo">
+            {() => {
+              const FuturisticDemo = React.lazy(() => import('./pages/FuturisticDemo'));
+              return (
+                <React.Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                  <div className="text-emerald-400">Loading...</div>
+                </div>}>
+                  <FuturisticDemo />
+                </React.Suspense>
+              );
+            }}
+          </Route>
 
           <Route path="/setup" component={HardgainerProfileSetup} />
           

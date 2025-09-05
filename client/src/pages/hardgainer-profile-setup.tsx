@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, User, Scale, ArrowLeft, Brain, Target, BarChart3, Zap } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 import { User as UserType, DietaryPreference } from "@/types";
+import { FuturisticCalibrationFlow } from "@/components/futuristic-calibration/FuturisticCalibrationFlow";
 
 export default function HardgainerProfileSetup() {
   const { toast } = useToast();

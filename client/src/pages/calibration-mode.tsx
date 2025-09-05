@@ -32,27 +32,37 @@ export default function CalibrationMode() {
       // Calculate progress based on unique days with data entries
       const uniqueWeightDays = new Set(weightEntries.map(w => w.date)).size;
       const uniqueCalorieDays = new Set(calorieEntries.map(c => c.date)).size;
-      
-      // Count days with any data (weight OR calories)
-      const allDates = new Set([
-        ...weightEntries.map(w => w.date),
-        ...calorieEntries.map(c => c.date)
-      ]);
-      const dataEntryDays = allDates.size;
+      const dataEntryDays = Math.max(uniqueWeightDays, uniqueCalorieDays);
       
       const remaining = Math.max(0, 7 - dataEntryDays);
       setDaysRemaining(remaining);
       setCalibrationProgress(Math.min((dataEntryDays / 7) * 100, 100));
-    }
-  }, [user, weightEntries, calorieEntries]);
 
-  const handleCompleteCalibration = () => {
+      // Check if calibration is complete (7 days of data)
+      if (dataEntryDays >= 7 && !user.hasCompletedCalibration) {
+        setUser({ ...user, hasCompletedCalibration: true });
+        toast({
+          title: "🎉 AI Calibration Complete!",
+          description: "Full neural network capabilities are now unlocked.",
+        });
+        // Use a timeout to allow state to update before navigation
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      }
+    }
+  }, [user, setUser, toast, weightEntries, calorieEntries]);
+
+  const handleSkipCalibration = () => {
     if (user && !user.hasCompletedCalibration) {
       setUser({ ...user, hasCompletedCalibration: true });
       toast({
-        title: "🎉 Calibration Complete!",
-        description: "Unlocking full GAINLY experience...",
+        title: "Calibration Skipped",
+        description: "Jumping to main app for testing.",
       });
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     }
   };
 
@@ -257,35 +267,32 @@ export default function CalibrationMode() {
               </span>
             </div>
 
-            {/* Manual Override for Users who completed 7 days */}
-            {(calibrationProgress >= 100 || daysRemaining === 0) && (
+            {/* Developer Controls - Only show in development */}
+            {process.env.NODE_ENV === 'development' && calibrationProgress >= 100 && (
               <div className="flex justify-center gap-4 mt-4 pt-4 border-t border-primary/20">
                 <Button
-                  onClick={handleCompleteCalibration}
+                  onClick={() => {
+                    if (user && !user.hasCompletedCalibration) {
+                      setUser({ ...user, hasCompletedCalibration: true });
+                      toast({
+                        title: "🎉 AI Calibration Complete!",
+                        description: "Full neural network capabilities are now unlocked.",
+                      });
+                      setTimeout(() => {
+                        window.location.href = '/';
+                      }, 1000);
+                    }
+                  }}
                   variant="default"
-                  size="lg"
-                  className="neural-button bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3"
+                  size="sm"
+                  className="neural-button"
                   data-testid="button-complete-calibration"
                 >
-                  <Brain className="h-5 w-5 mr-2" />
-                  🎉 Complete Calibration & Enter GAINLY
+                  <Brain className="h-4 w-4 mr-2" />
+                  Complete Calibration
                 </Button>
               </div>
             )}
-
-            {/* Developer Skip Button - Always visible for testing */}
-            <div className="flex justify-center gap-4 mt-6 pt-4 border-t border-slate-700/50">
-              <Button
-                onClick={handleCompleteCalibration}
-                variant="outline"
-                size="sm"
-                className="border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-white font-medium px-6 py-2"
-                data-testid="button-skip-calibration-dev"
-              >
-                <FastForward className="h-4 w-4 mr-2" />
-                Skip Calibration (Dev)
-              </Button>
-            </div>
           </div>
         </div>
 
