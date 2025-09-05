@@ -56,6 +56,9 @@ interface DailyReward {
   icon: React.ReactNode;
   unlocked: boolean;
   preview?: string;
+  actionLabel?: string;
+  content?: React.ReactNode;
+  onClick?: () => void;
 }
 
 interface GamifiedCalibrationProps {
@@ -72,12 +75,121 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
   const [currentDay, setCurrentDay] = useState(1);
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [todayReward, setTodayReward] = useState<DailyReward | null>(null);
+  const [activeReward, setActiveReward] = useState<DailyReward | null>(null);
+  const [showRewardContent, setShowRewardContent] = useState(false);
   
   const [formData, setFormData] = useState({
     weight: '',
     calories: '',
     activityDescription: ''
   });
+
+  const getTrainingPlan = () => (
+    <div className="space-y-4">
+      <h4 className="text-lg font-bold text-emerald-400 mb-4">Your Training Split</h4>
+      <div className="space-y-3">
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <h5 className="font-semibold text-white mb-2">Day 1 & 4: Upper Body</h5>
+          <ul className="text-sm text-slate-300 space-y-1">
+            <li>• Bench Press: 4x6-8</li>
+            <li>• Bent-Over Rows: 4x6-8</li>
+            <li>• Overhead Press: 3x8-10</li>
+            <li>• Pull-ups: 3x8-12</li>
+            <li>• Dips: 3x10-15</li>
+          </ul>
+        </div>
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <h5 className="font-semibold text-white mb-2">Day 2 & 5: Lower Body</h5>
+          <ul className="text-sm text-slate-300 space-y-1">
+            <li>• Squats: 4x6-8</li>
+            <li>• Deadlifts: 4x6-8</li>
+            <li>• Bulgarian Split Squats: 3x10 each</li>
+            <li>• Hip Thrusts: 3x12-15</li>
+            <li>• Calf Raises: 4x15-20</li>
+          </ul>
+        </div>
+      </div>
+      <Button 
+        className="w-full bg-emerald-500 hover:bg-emerald-600"
+        onClick={() => window.location.href = '/training'}
+      >
+        Open Full Training App
+      </Button>
+    </div>
+  );
+
+  const getNutritionPlan = () => (
+    <div className="space-y-4">
+      <h4 className="text-lg font-bold text-orange-400 mb-4">High-Calorie Meal Ideas</h4>
+      <div className="space-y-3">
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <h5 className="font-semibold text-white mb-2">Mass Gainer Smoothie (850 cal)</h5>
+          <ul className="text-sm text-slate-300 space-y-1">
+            <li>• 300ml whole milk</li>
+            <li>• 1 banana</li>
+            <li>• 2 tbsp peanut butter</li>
+            <li>• 1 scoop whey protein</li>
+            <li>• 1 tbsp olive oil</li>
+          </ul>
+        </div>
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <h5 className="font-semibold text-white mb-2">Loaded Rice Bowl (750 cal)</h5>
+          <ul className="text-sm text-slate-300 space-y-1">
+            <li>• 150g white rice</li>
+            <li>• 120g grilled chicken</li>
+            <li>• 1 avocado</li>
+            <li>• 2 tbsp olive oil</li>
+            <li>• Mixed vegetables</li>
+          </ul>
+        </div>
+      </div>
+      <Button 
+        className="w-full bg-orange-500 hover:bg-orange-600"
+        onClick={() => window.location.href = '/meals'}
+      >
+        Open Meal Logger & AI Plans
+      </Button>
+    </div>
+  );
+
+  const getSupplementGuide = () => (
+    <div className="space-y-4">
+      <h4 className="text-lg font-bold text-purple-400 mb-4">Supplement Stack</h4>
+      <div className="space-y-3">
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <h5 className="font-semibold text-white mb-2">Essential Stack</h5>
+          <ul className="text-sm text-slate-300 space-y-2">
+            <li>• <strong>Creatine:</strong> 5g daily for strength & size</li>
+            <li>• <strong>Whey Protein:</strong> 1-2 scoops post-workout</li>
+            <li>• <strong>Mass Gainer:</strong> 1000+ cal shakes between meals</li>
+            <li>• <strong>Fish Oil:</strong> 2g daily for recovery</li>
+          </ul>
+        </div>
+      </div>
+      <div className="text-xs text-slate-400 mt-2">
+        *Consult healthcare provider before starting supplements
+      </div>
+    </div>
+  );
+
+  const getMotivationalContent = () => (
+    <div className="space-y-4">
+      <h4 className="text-lg font-bold text-blue-400 mb-4">Hardgainer Success Stories</h4>
+      <div className="space-y-3">
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <p className="text-white font-semibold mb-2">Alex: 65kg → 85kg in 8 months</p>
+          <p className="text-sm text-slate-300">"The key was consistency with the 4000+ calorie plan and compound movements. I gained 20kg of solid muscle."</p>
+        </div>
+        <div className="bg-slate-700/50 rounded-lg p-4">
+          <p className="text-white font-semibold mb-2">Maria: 58kg → 72kg in 6 months</p>
+          <p className="text-sm text-slate-300">"Liquid calories changed everything. Mass gainer shakes made hitting my targets possible even with low appetite."</p>
+        </div>
+      </div>
+      <div className="bg-emerald-500/10 rounded-lg p-4 border border-emerald-500/30">
+        <p className="text-emerald-400 text-sm font-medium">Your journey starts now. Every gram counts.</p>
+      </div>
+    </div>
+  );
 
   const dailyRewards: DailyReward[] = [
     {
@@ -86,7 +198,13 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Unlock your personalized workout plan preview",
       icon: <Target className="w-6 h-6" />,
       unlocked: false,
-      preview: "Your training split: Push/Pull/Legs optimized for hardgainers"
+      preview: "Your training split: Push/Pull/Legs optimized for hardgainers",
+      actionLabel: "View Training Plan",
+      content: getTrainingPlan(),
+      onClick: () => {
+        setActiveReward(dailyRewards[0]);
+        setShowRewardContent(true);
+      }
     },
     {
       day: 2,
@@ -94,7 +212,13 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Access high-calorie meal suggestions",
       icon: <Utensils className="w-6 h-6" />,
       unlocked: false,
-      preview: "Mass gainer recipes and liquid calorie strategies unlocked"
+      preview: "Mass gainer recipes and liquid calorie strategies unlocked",
+      actionLabel: "View Meal Ideas",
+      content: getNutritionPlan(),
+      onClick: () => {
+        setActiveReward(dailyRewards[1]);
+        setShowRewardContent(true);
+      }
     },
     {
       day: 3,
@@ -102,7 +226,12 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Enhanced body composition analysis",
       icon: <Camera className="w-6 h-6" />,
       unlocked: false,
-      preview: "Body scan shows 1.2% muscle mass increase prediction"
+      preview: "Body scan shows 1.2% muscle mass increase prediction",
+      actionLabel: "View Analysis",
+      onClick: () => toast({
+        title: "Body Scan Updated",
+        description: "Based on your data: muscle mass trending +1.2%. Keep logging to improve accuracy!",
+      })
     },
     {
       day: 4,
@@ -110,7 +239,13 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Personalized supplement recommendations",
       icon: <Pill className="w-6 h-6" />,
       unlocked: false,
-      preview: "Creatine + whey protein stack optimized for your metabolism"
+      preview: "Creatine + whey protein stack optimized for your metabolism",
+      actionLabel: "View Supplements",
+      content: getSupplementGuide(),
+      onClick: () => {
+        setActiveReward(dailyRewards[3]);
+        setShowRewardContent(true);
+      }
     },
     {
       day: 5,
@@ -118,7 +253,13 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Unlock exclusive hardgainer success stories",
       icon: <Play className="w-6 h-6" />,
       unlocked: false,
-      preview: "3 transformation videos from similar body types"
+      preview: "3 transformation videos from similar body types",
+      actionLabel: "Read Stories",
+      content: getMotivationalContent(),
+      onClick: () => {
+        setActiveReward(dailyRewards[4]);
+        setShowRewardContent(true);
+      }
     },
     {
       day: 6,
@@ -126,7 +267,12 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Detailed progress tracking unlocked",
       icon: <TrendingUp className="w-6 h-6" />,
       unlocked: false,
-      preview: "TDEE accuracy increased to 94% confidence level"
+      preview: "TDEE accuracy increased to 94% confidence level",
+      actionLabel: "View Metrics",
+      onClick: () => toast({
+        title: "Advanced Metrics Unlocked!",
+        description: "TDEE confidence: 94%. Weight trend: +0.3kg/week. Surplus efficiency: Excellent.",
+      })
     },
     {
       day: 7,
@@ -134,7 +280,9 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Complete access to your personalized system",
       icon: <Trophy className="w-6 h-6" />,
       unlocked: false,
-      preview: "All features unlocked - The hardgainer curse ends today!"
+      preview: "All features unlocked - The hardgainer curse ends today!",
+      actionLabel: "Activate Protocol",
+      onClick: () => onComplete()
     }
   ];
 
@@ -383,14 +531,15 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                       transition={{ delay: index * 0.1 }}
                       className={`p-4 rounded-lg border-2 transition-all ${
                         reward.unlocked 
-                          ? 'border-emerald-500 bg-emerald-500/10' 
+                          ? 'border-emerald-500 bg-emerald-500/10 cursor-pointer hover:bg-emerald-500/20' 
                           : currentDay === reward.day
                             ? 'border-purple-500 bg-purple-500/10'
                             : 'border-slate-600 bg-slate-800/50'
                       }`}
+                      onClick={reward.unlocked && reward.onClick ? reward.onClick : undefined}
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center">
+                        <div className="flex items-center flex-1">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
                             reward.unlocked 
                               ? 'bg-emerald-500/20 text-emerald-400' 
@@ -404,7 +553,7 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                               reward.icon
                             )}
                           </div>
-                          <div>
+                          <div className="flex-1">
                             <p className={`font-medium ${
                               reward.unlocked ? 'text-emerald-400' : 'text-white'
                             }`}>
@@ -413,17 +562,31 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                             <p className="text-sm text-slate-400">{reward.description}</p>
                           </div>
                         </div>
-                        {reward.unlocked && (
-                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50">
-                            <Star className="w-3 h-3 mr-1" />
-                            Unlocked
-                          </Badge>
-                        )}
-                        {currentDay === reward.day && !reward.unlocked && (
-                          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">
-                            Today
-                          </Badge>
-                        )}
+                        <div className="flex flex-col items-end gap-2">
+                          {reward.unlocked && (
+                            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50">
+                              <Star className="w-3 h-3 mr-1" />
+                              Unlocked
+                            </Badge>
+                          )}
+                          {currentDay === reward.day && !reward.unlocked && (
+                            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">
+                              Today
+                            </Badge>
+                          )}
+                          {reward.unlocked && reward.actionLabel && (
+                            <Button
+                              size="sm"
+                              className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50 hover:bg-emerald-500/30 text-xs"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (reward.onClick) reward.onClick();
+                              }}
+                            >
+                              {reward.actionLabel}
+                            </Button>
+                          )}
+                        </div>
                       </div>
                       
                       {reward.unlocked && reward.preview && (
@@ -432,7 +595,10 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                           animate={{ opacity: 1, height: 'auto' }}
                           className="mt-3 pt-3 border-t border-slate-700"
                         >
-                          <p className="text-sm text-emerald-400">{reward.preview}</p>
+                          <p className="text-sm text-emerald-400 mb-2">{reward.preview}</p>
+                          {reward.unlocked && reward.onClick && (
+                            <p className="text-xs text-slate-500">👆 Click to access full content</p>
+                          )}
                         </motion.div>
                       )}
                     </motion.div>
@@ -498,6 +664,58 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                 
                 <Button 
                   onClick={closeRewardModal}
+                  className="bg-gradient-to-r from-emerald-500 to-purple-600 hover:from-emerald-600 hover:to-purple-700 text-white font-bold px-6"
+                >
+                  Continue Calibration
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Reward Content Modal */}
+      <AnimatePresence>
+        {showRewardContent && activeReward && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full border border-emerald-500/50 max-h-[80vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                    {activeReward.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">{activeReward.title}</h3>
+                    <p className="text-slate-400">{activeReward.description}</p>
+                  </div>
+                </div>
+                <Button 
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowRewardContent(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </Button>
+              </div>
+              
+              <div className="mb-6">
+                {activeReward.content}
+              </div>
+              
+              <div className="flex justify-end">
+                <Button 
+                  onClick={() => setShowRewardContent(false)}
                   className="bg-gradient-to-r from-emerald-500 to-purple-600 hover:from-emerald-600 hover:to-purple-700 text-white font-bold px-6"
                 >
                   Continue Calibration
