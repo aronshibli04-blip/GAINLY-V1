@@ -272,6 +272,20 @@ export default function CalibrationMode() {
                 </Button>
               </div>
             )}
+
+            {/* Developer Skip Button - Always visible for testing */}
+            <div className="flex justify-center gap-4 mt-6 pt-4 border-t border-slate-700/50">
+              <Button
+                onClick={handleCompleteCalibration}
+                variant="outline"
+                size="sm"
+                className="border-slate-600 text-slate-400 hover:bg-slate-800 hover:text-white font-medium px-6 py-2"
+                data-testid="button-skip-calibration-dev"
+              >
+                <FastForward className="h-4 w-4 mr-2" />
+                Skip Calibration (Dev)
+              </Button>
+            </div>
           </div>
         </div>
 
