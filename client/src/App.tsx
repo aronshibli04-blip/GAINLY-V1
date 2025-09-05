@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { useUserStore } from "@/store/userStore";
@@ -9,6 +9,9 @@ import { MenuProvider, useMenu } from "@/components/ui/menu-context";
 import { OnboardingFlow } from "@/components/ui/onboarding-flow";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { InstallPrompt } from "@/components/install-prompt";
+
+// Enhanced Onboarding Flow
+import { EnhancedOnboardingFlow } from "@/components/enhanced-onboarding/EnhancedOnboardingFlow";
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";
@@ -37,12 +40,12 @@ function App() {
     document.documentElement.classList.add('dark');
   }, []);
 
-  // If no user profile, show setup
+  // If no user profile, show enhanced onboarding
   if (!user || !isOnboarded) {
     return (
       <QueryClientProvider client={queryClient}>
         <div className="min-h-screen bg-background">
-          <HardgainerProfileSetup />
+          <EnhancedOnboardingFlow />
           <Toaster />
         </div>
       </QueryClientProvider>
