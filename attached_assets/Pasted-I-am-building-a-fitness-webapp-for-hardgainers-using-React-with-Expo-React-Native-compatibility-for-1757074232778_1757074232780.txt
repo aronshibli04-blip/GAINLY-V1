@@ -1,0 +1,37 @@
+I am building a fitness webapp for hardgainers using React (with Expo/React Native compatibility for future mobile builds). 
+Right now, my onboarding requires 7 days of calibration before users see real value, and testers drop off. 
+I need you to rebuild my onboarding flow as follows:
+
+1. **Instant WOW (Day 0)**:
+   - After signup, ask for basic data: weight, height, age, gender, activity level.
+   - Immediately generate a "base plan" preview (sample calories, training split, and a projected body goal image placeholder).
+   - Show a message: "This is your base protocol. Each day you log, AI sharpens it to unlock your *Impossible Growth Mode*."
+
+2. **Gamified Calibration (Days 1–7)**:
+   - Keep the daily weight, calories, and activity logging system.
+   - Add a visible "Calibration Progress %" bar (starts at 0%, reaches 100% after 7 days of consistent logging).
+   - Each day of logging unlocks a new reward/feature preview:
+     - Day 1: Training preview
+     - Day 2: Nutrition preview
+     - Day 3: AI body scan update (placeholder image that changes slightly each day)
+     - Day 4: Custom supplement or lifestyle tip
+     - Day 5: Motivational video
+     - Day 6: Advanced metrics preview
+     - Day 7: Fully unlocked personalized protocol
+
+3. **UI/UX adjustments**:
+   - Onboarding should feel like a futuristic AI coach (year 2125) guiding the user step by step.
+   - Friendly but scientific tone.
+   - Use a progress tracker (like a horizontal bar or circular ring) on the home screen to remind users of calibration progress.
+   - Ensure users can always access their base plan (so they don’t feel locked out).
+
+4. **Technical requirements**:
+   - Write clean, modular React code with state management for user progress.
+   - Store user data locally (mock database or localStorage for now).
+   - Make sure the onboarding flow is reusable, so I can later plug in my AI backend.
+
+Finally: Show me the complete React code for the new onboarding flow, including components for:
+- Signup (basic info collection)
+- Base plan preview
+- Daily logging with calibration progress
+- Unlockable daily rewards (features gated by progress)
