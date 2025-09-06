@@ -173,13 +173,15 @@ function DailyRoutinesQuickChecker() {
   // Fetch user routines (limit to 4 for home page)
   const { data: routines = [], isLoading: routinesLoading } = useQuery<DailyRoutine[]>({
     queryKey: ['/api/daily-routines', userId],
-    queryFn: () => fetch(`/api/daily-routines/${userId}`).then(res => res.json())
+    queryFn: () => fetch(`/api/daily-routines/${userId}`).then(res => res.json()),
+    select: (data) => Array.isArray(data) ? data : []
   });
 
   // Fetch today's completions
   const { data: completions = [], isLoading: completionsLoading } = useQuery<DailyRoutineCompletion[]>({
     queryKey: ['/api/daily-routine-completions', userId, today],
-    queryFn: () => fetch(`/api/daily-routine-completions/${userId}/${today}`).then(res => res.json())
+    queryFn: () => fetch(`/api/daily-routine-completions/${userId}/${today}`).then(res => res.json()),
+    select: (data) => Array.isArray(data) ? data : []
   });
 
   // Create routine mutation
@@ -268,11 +270,13 @@ function DailyRoutinesQuickChecker() {
       return response.json();
     },
     onSuccess: () => {
-      // Optimistically clear the cache data first for immediate UI update
-      queryClient.setQueryData(['/api/daily-routines', userId], []);
-      queryClient.setQueryData(['/api/daily-routine-completions', userId, today], []);
+      // Clear local state first
+      setShowAllRoutines(false);
+      setEditingRoutine(null);
+      setDeletingRoutine(null);
+      setDisplayedRoutines([]);
       
-      // Then invalidate to refetch fresh data
+      // Then invalidate to refetch fresh data (empty arrays)
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
       
