@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, User, Activity, Target, Utensils } from 'lucide-react';
 
 interface UserBasicData {
   firstName: string;
@@ -23,6 +23,9 @@ interface InstantDataCollectionProps {
 }
 
 export function InstantDataCollection({ onComplete }: InstantDataCollectionProps) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
+  
   const [formData, setFormData] = useState({
     firstName: '',
     age: '',
@@ -48,9 +51,21 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(prev => prev + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
+  const handleSubmit = () => {
     if (!formData.firstName || !formData.age || !formData.height || 
         !formData.weight || !formData.sex || !formData.goalWeight) {
       return;
@@ -69,9 +84,233 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     onComplete(data);
   };
 
-  const isFormValid = () => {
-    return formData.firstName && formData.age && formData.height && 
-           formData.weight && formData.sex && formData.goalWeight;
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.firstName && formData.age;
+      case 2:
+        return formData.sex && formData.height && formData.weight && formData.goalWeight;
+      case 3:
+        return true; // Activity description is optional
+      case 4:
+        return true; // Dietary preferences are optional
+      default:
+        return false;
+    }
+  };
+
+  const getStepIcon = (step: number) => {
+    switch (step) {
+      case 1: return <User className="w-8 h-8 text-white" />;
+      case 2: return <Activity className="w-8 h-8 text-white" />;
+      case 3: return <Target className="w-8 h-8 text-white" />;
+      case 4: return <Utensils className="w-8 h-8 text-white" />;
+      default: return <User className="w-8 h-8 text-white" />;
+    }
+  };
+
+  const getStepTitle = (step: number) => {
+    switch (step) {
+      case 1: return 'PERSONAL IDENTIFIERS';
+      case 2: return 'BIOLOGICAL PARAMETERS';
+      case 3: return 'ACTIVITY PROFILE';
+      case 4: return 'NUTRITIONAL CONSTRAINTS';
+      default: return 'PERSONAL IDENTIFIERS';
+    }
+  };
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <motion.div
+            key="step1"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div className="space-y-4">
+              <div>
+                <Label className="text-emerald-400 text-sm font-medium">FIRST NAME</Label>
+                <Input
+                  value={formData.firstName}
+                  onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
+                  placeholder="Neural ID Required"
+                  data-testid="input-first-name"
+                />
+              </div>
+
+              <div>
+                <Label className="text-emerald-400 text-sm font-medium">AGE</Label>
+                <Input
+                  type="number"
+                  value={formData.age}
+                  onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
+                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
+                  placeholder="Biological Age Required"
+                  data-testid="input-age"
+                />
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      case 2:
+        return (
+          <motion.div
+            key="step2"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div className="space-y-4">
+              <div>
+                <Label className="text-emerald-400 text-sm font-medium">BIOLOGICAL SEX</Label>
+                <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
+                  <SelectTrigger className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg" data-testid="select-sex">
+                    <SelectValue placeholder="Neural Classification Required" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label className="text-emerald-400 text-sm font-medium">HEIGHT (CM)</Label>
+                <Input
+                  type="number"
+                  value={formData.height}
+                  onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
+                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
+                  placeholder="Neural Scan Required"
+                  data-testid="input-height"
+                />
+              </div>
+
+              <div>
+                <Label className="text-emerald-400 text-sm font-medium">CURRENT WEIGHT (KG)</Label>
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={formData.weight}
+                  onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
+                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
+                  placeholder="Mass Calibration"
+                  data-testid="input-weight"
+                />
+              </div>
+
+              <div>
+                <Label className="text-emerald-400 text-sm font-medium">GOAL WEIGHT (KG)</Label>
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={formData.goalWeight}
+                  onChange={(e) => setFormData(prev => ({ ...prev, goalWeight: e.target.value }))}
+                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
+                  placeholder="Target Protocol"
+                  data-testid="input-goal-weight"
+                />
+              </div>
+
+              {formData.weight && formData.goalWeight && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/30"
+                >
+                  <p className="text-emerald-400 font-medium text-center">
+                    Target gain: +{(parseFloat(formData.goalWeight) - parseFloat(formData.weight)).toFixed(1)}kg
+                  </p>
+                  <p className="text-slate-400 text-sm text-center mt-1">
+                    Optimal for hardgainer protocol
+                  </p>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        );
+
+      case 3:
+        return (
+          <motion.div
+            key="step3"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div>
+              <Label className="text-emerald-400 text-sm font-medium">ACTIVITY PROFILE DESCRIPTION</Label>
+              <p className="text-slate-400 text-sm mt-1 mb-3">
+                Describe your daily routine for precise AI metabolic analysis
+              </p>
+              <Textarea
+                value={formData.activityDescription}
+                onChange={(e) => setFormData(prev => ({ ...prev, activityDescription: e.target.value }))}
+                className="mt-2 bg-slate-800 border-slate-600 text-white rounded-xl min-h-[120px] text-sm resize-none"
+                placeholder="Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1 hour hypertrophy training 4x per week. On weekends I'm mostly sedentary but do light household activities."
+                data-testid="textarea-activity"
+              />
+            </div>
+          </motion.div>
+        );
+
+      case 4:
+        return (
+          <motion.div
+            key="step4"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div>
+              <Label className="text-emerald-400 text-sm font-medium mb-3 block">DIETARY PARAMETERS (OPTIONAL)</Label>
+              <p className="text-slate-400 text-sm mb-4">
+                Configure nutritional processing constraints for AI meal optimization
+              </p>
+              
+              <div className="grid grid-cols-2 gap-3">
+                {dietaryOptions.map((option) => (
+                  <motion.button
+                    key={option}
+                    type="button"
+                    onClick={() => toggleDietaryPreference(option)}
+                    className={`flex items-center p-3 rounded-xl border transition-all text-left ${
+                      formData.dietaryPreferences.includes(option)
+                        ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
+                        : 'border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    data-testid={`option-${option.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                  >
+                    <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                      formData.dietaryPreferences.includes(option)
+                        ? 'border-emerald-400 bg-emerald-400'
+                        : 'border-slate-500'
+                    }`}>
+                      {formData.dietaryPreferences.includes(option) && (
+                        <div className="w-2 h-2 bg-black rounded-full m-0.5"></div>
+                      )}
+                    </div>
+                    <span className="text-sm font-medium">{option}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
@@ -101,7 +340,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
         ))}
       </div>
 
-      <div className="relative z-10 px-4 py-8">
+      <div className="relative z-10 px-4 py-8 min-h-screen flex flex-col justify-center">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}
@@ -152,13 +391,24 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
           </motion.p>
         </motion.div>
 
+        {/* Progress bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="flex justify-between text-sm text-slate-400 mb-2">
+            <span>CALIBRATION PROGRESS</span>
+            <span>{Math.round((currentStep / totalSteps) * 100)}% COMPLETE</span>
+          </div>
+          <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-emerald-400 to-purple-400"
+              initial={{ width: 0 }}
+              animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+        </div>
+
         {/* Main Form Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="max-w-md mx-auto"
-        >
+        <div className="max-w-md mx-auto w-full flex-1 flex flex-col justify-center">
           {/* Biometric Initialization Header */}
           <div className="bg-gradient-to-r from-emerald-600/20 to-blue-600/20 rounded-2xl p-6 border border-emerald-500/30 mb-6">
             <div className="flex items-center mb-4">
@@ -170,192 +420,58 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 <p className="text-emerald-400 text-sm">● NEURAL NETWORK READY</p>
               </div>
             </div>
-            <p className="text-slate-300 text-sm mb-4">
+            <p className="text-slate-300 text-sm">
               Advanced AI algorithms require precise biometric data to construct your unique metabolic profile
             </p>
-            <div className="flex justify-between text-sm text-slate-400 mb-2">
-              <span>CALIBRATION PROGRESS</span>
-              <span>45% COMPLETE</span>
-            </div>
-            <Progress value={45} className="h-2" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Section 01 - Personal Identifiers */}
-            <div>
-              <h4 className="text-emerald-400 font-bold text-lg mb-6 flex items-center">
-                <span className="bg-emerald-500 text-black px-3 py-1 rounded-full text-sm mr-3">01</span>
-                PERSONAL IDENTIFIERS
-              </h4>
-              
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-emerald-400 text-sm font-medium">FIRST NAME</Label>
-                  <Input
-                    value={formData.firstName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                    className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                    placeholder="Neural ID Required"
-                    data-testid="input-first-name"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-emerald-400 text-sm font-medium">AGE</Label>
-                  <Input
-                    type="number"
-                    value={formData.age}
-                    onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-                    className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                    placeholder="Biological Age Required"
-                    data-testid="input-age"
-                  />
-                </div>
+          {/* Step Content */}
+          <div className="bg-slate-800/70 backdrop-blur rounded-2xl p-6 border border-slate-700 min-h-[400px] flex flex-col">
+            {/* Step Header */}
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                {getStepIcon(currentStep)}
               </div>
-            </div>
-
-            {/* Section 02 - Biological Parameters */}
-            <div>
-              <h4 className="text-emerald-400 font-bold text-lg mb-6 flex items-center">
-                <span className="bg-emerald-500 text-black px-3 py-1 rounded-full text-sm mr-3">02</span>
-                BIOLOGICAL PARAMETERS
+              <h4 className="text-emerald-400 font-bold text-lg mb-2 flex items-center justify-center">
+                <span className="bg-emerald-500 text-black px-3 py-1 rounded-full text-sm mr-3">
+                  {String(currentStep).padStart(2, '0')}
+                </span>
+                {getStepTitle(currentStep)}
               </h4>
-              
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-emerald-400 text-sm font-medium">BIOLOGICAL SEX</Label>
-                  <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
-                    <SelectTrigger className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg" data-testid="select-sex">
-                      <SelectValue placeholder="Neural Classification Required" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label className="text-emerald-400 text-sm font-medium">HEIGHT (CM)</Label>
-                  <Input
-                    type="number"
-                    value={formData.height}
-                    onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
-                    className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                    placeholder="Neural Scan Required"
-                    data-testid="input-height"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-emerald-400 text-sm font-medium">CURRENT WEIGHT (KG)</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    value={formData.weight}
-                    onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
-                    className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                    placeholder="Mass Calibration"
-                    data-testid="input-weight"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-emerald-400 text-sm font-medium">GOAL WEIGHT (KG)</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    value={formData.goalWeight}
-                    onChange={(e) => setFormData(prev => ({ ...prev, goalWeight: e.target.value }))}
-                    className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                    placeholder="Target Protocol"
-                    data-testid="input-goal-weight"
-                  />
-                </div>
-              </div>
             </div>
 
-            {/* Section 03 - Activity Profile */}
-            <div>
-              <h4 className="text-emerald-400 font-bold text-lg mb-6 flex items-center">
-                <span className="bg-emerald-500 text-black px-3 py-1 rounded-full text-sm mr-3">03</span>
-                ACTIVITY PROFILE
-              </h4>
-              
-              <div>
-                <Label className="text-emerald-400 text-sm font-medium">ACTIVITY PROFILE DESCRIPTION</Label>
-                <p className="text-slate-400 text-sm mt-1 mb-3">
-                  Describe your daily routine for precise AI metabolic analysis
-                </p>
-                <Textarea
-                  value={formData.activityDescription}
-                  onChange={(e) => setFormData(prev => ({ ...prev, activityDescription: e.target.value }))}
-                  className="mt-2 bg-slate-800 border-slate-600 text-white rounded-xl min-h-[120px] text-sm resize-none"
-                  placeholder="Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1 hour hypertrophy training 4x per week. On weekends I'm mostly sedentary but do light household activities."
-                  data-testid="textarea-activity"
-                />
-              </div>
+            {/* Step Form Content */}
+            <div className="flex-1">
+              <AnimatePresence mode="wait">
+                {renderStep()}
+              </AnimatePresence>
             </div>
+          </div>
 
-            {/* Section 04 - Nutritional Constraints */}
-            <div>
-              <h4 className="text-emerald-400 font-bold text-lg mb-6 flex items-center">
-                <span className="bg-emerald-500 text-black px-3 py-1 rounded-full text-sm mr-3">04</span>
-                NUTRITIONAL CONSTRAINTS
-              </h4>
-              
-              <div>
-                <Label className="text-emerald-400 text-sm font-medium mb-3 block">DIETARY PARAMETERS (OPTIONAL)</Label>
-                <p className="text-slate-400 text-sm mb-4">
-                  Configure nutritional processing constraints for AI meal optimization
-                </p>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  {dietaryOptions.map((option) => (
-                    <motion.button
-                      key={option}
-                      type="button"
-                      onClick={() => toggleDietaryPreference(option)}
-                      className={`flex items-center p-3 rounded-xl border transition-all text-left ${
-                        formData.dietaryPreferences.includes(option)
-                          ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
-                          : 'border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500'
-                      }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      data-testid={`option-${option.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                    >
-                      <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                        formData.dietaryPreferences.includes(option)
-                          ? 'border-emerald-400 bg-emerald-400'
-                          : 'border-slate-500'
-                      }`}>
-                        {formData.dietaryPreferences.includes(option) && (
-                          <div className="w-2 h-2 bg-black rounded-full m-0.5"></div>
-                        )}
-                      </div>
-                      <span className="text-sm font-medium">{option}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="pt-6">
-              <Button
-                type="submit"
-                disabled={!isFormValid()}
-                className="w-full h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-black font-bold text-lg rounded-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
-                data-testid="button-initialize-calibration"
-              >
-                INITIALIZE AI CALIBRATION
-              </Button>
-            </div>
-          </form>
+          {/* Navigation */}
+          <div className="flex justify-between mt-6">
+            <Button
+              onClick={handleBack}
+              disabled={currentStep === 1}
+              variant="outline"
+              className="border-slate-600 text-slate-300 hover:bg-slate-700 h-12 px-6"
+              data-testid="button-back"
+            >
+              Back
+            </Button>
+            
+            <Button
+              onClick={handleNext}
+              disabled={!isStepValid()}
+              className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-black font-bold h-12 px-6"
+              data-testid="button-next"
+            >
+              {currentStep === totalSteps ? 'INITIALIZE AI CALIBRATION' : 'Next'}
+            </Button>
+          </div>
 
           {/* Bottom Icon */}
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-6">
             <motion.div
               className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-purple-600 rounded-full flex items-center justify-center"
               animate={{ rotate: 360 }}
@@ -366,7 +482,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
               </div>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
