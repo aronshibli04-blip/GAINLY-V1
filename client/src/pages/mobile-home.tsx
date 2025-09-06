@@ -1165,31 +1165,45 @@ export default function MobileHome() {
         {/* Enhanced Quick Action Cards */}
         <div className="grid grid-cols-2 gap-6">
           <Link href="/progress">
-            <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-cyan-400/30 hover:border-cyan-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/20 cursor-pointer backdrop-blur-sm" 
+            <Card className="group bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-cyan-400/30 hover:border-cyan-400/70 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 cursor-pointer backdrop-blur-sm relative overflow-hidden" 
                   style={{ 
                     boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
                   }}>
-              <CardContent className="p-5 text-center">
-                <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-cyan-400/20">
-                  <Activity className="h-6 w-6 text-cyan-400 drop-shadow-lg" />
+              {/* Subtle glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <CardContent className="p-5 text-center relative z-10">
+                <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-cyan-400/20 group-hover:bg-cyan-400/30 transition-colors">
+                  <Activity className="h-6 w-6 text-cyan-400 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <p className="text-xs text-slate-300 font-medium tracking-wide uppercase">Advanced</p>
-                <p className="text-sm font-bold text-white tracking-tight">Progress</p>
+                <p className="text-xs text-slate-300 font-medium tracking-wide uppercase group-hover:text-slate-200 transition-colors">Advanced</p>
+                <p className="text-sm font-bold text-white tracking-tight group-hover:text-cyan-100 transition-colors">Progress</p>
+                
+                {/* Tap indicator */}
+                <div className="absolute top-3 right-3 w-2 h-2 bg-cyan-400/60 rounded-full animate-pulse group-hover:bg-cyan-400 transition-colors" />
+                <div className="mt-2 text-xs text-cyan-400/70 font-medium group-hover:text-cyan-400 transition-colors">Tap to explore →</div>
               </CardContent>
             </Card>
           </Link>
 
           <Link href="/measurements">
-            <Card className="bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-purple-400/30 hover:border-purple-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer backdrop-blur-sm" 
+            <Card className="group bg-gradient-to-br from-slate-800/95 via-slate-700/95 to-slate-800/95 border border-purple-400/30 hover:border-purple-400/70 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 cursor-pointer backdrop-blur-sm relative overflow-hidden" 
                   style={{ 
                     boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
                   }}>
-              <CardContent className="p-5 text-center">
-                <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-purple-400/20">
-                  <Ruler className="h-6 w-6 text-purple-400 drop-shadow-lg" />
+              {/* Subtle glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/5 to-pink-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <CardContent className="p-5 text-center relative z-10">
+                <div className="relative inline-flex items-center justify-center w-10 h-10 mb-3 rounded-full bg-purple-400/20 group-hover:bg-purple-400/30 transition-colors">
+                  <Ruler className="h-6 w-6 text-purple-400 drop-shadow-lg group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <p className="text-xs text-slate-300 font-medium tracking-wide uppercase">Body</p>
-                <p className="text-sm font-bold text-white tracking-tight">Measurements</p>
+                <p className="text-xs text-slate-300 font-medium tracking-wide uppercase group-hover:text-slate-200 transition-colors">Body</p>
+                <p className="text-sm font-bold text-white tracking-tight group-hover:text-purple-100 transition-colors">Measurements</p>
+                
+                {/* Tap indicator */}
+                <div className="absolute top-3 right-3 w-2 h-2 bg-purple-400/60 rounded-full animate-pulse group-hover:bg-purple-400 transition-colors" />
+                <div className="mt-2 text-xs text-purple-400/70 font-medium group-hover:text-purple-400 transition-colors">Tap to explore →</div>
               </CardContent>
             </Card>
           </Link>
