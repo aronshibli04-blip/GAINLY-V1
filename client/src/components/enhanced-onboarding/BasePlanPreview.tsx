@@ -42,10 +42,10 @@ interface BasePlan {
 interface BasePlanPreviewProps {
   userData: UserBasicData;
   basePlan: BasePlan;
-  onStartCalibration: () => void;
+  onStartApp: () => void;
 }
 
-export function BasePlanPreview({ userData, basePlan, onStartCalibration }: BasePlanPreviewProps) {
+export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPreviewProps) {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [currentPhase, setCurrentPhase] = useState<'analyzing' | 'results' | 'ready'>('analyzing');
@@ -373,27 +373,27 @@ export function BasePlanPreview({ userData, basePlan, onStartCalibration }: Base
         >
           <div className="bg-gradient-to-r from-emerald-500/20 via-blue-500/20 to-purple-500/20 rounded-xl p-6 border border-emerald-500/30 mb-6">
             <h3 className="text-xl font-bold text-white mb-2">
-              This is your base protocol. 
+              Your protocol is ready! 
             </h3>
             <p className="text-slate-300 mb-4">
-              Each day you log data, AI sharpens it to unlock your <span className="text-emerald-400 font-bold">Impossible Growth Mode</span>
+              Start logging immediately and let AI optimize as you go. Your <span className="text-emerald-400 font-bold">Impossible Growth</span> begins now.
             </p>
             <p className="text-sm text-slate-400">
-              7-day calibration ahead • Daily rewards unlock • Full access after completion
+              Full app access • Immediate tracking • AI learns from your data
             </p>
           </div>
 
           <Button 
-            onClick={onStartCalibration}
+            onClick={onStartApp}
             className="bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white font-bold py-4 px-8 text-lg rounded-full transition-all duration-300 transform hover:scale-105"
-            data-testid="button-start-calibration"
+            data-testid="button-enter-app"
           >
             <Zap className="w-5 h-5 mr-2" />
-            Start Calibration Mode
+            Enter GAINLY App
           </Button>
           
           <p className="text-xs text-slate-500 mt-3">
-            You can always return to view your base plan during calibration
+            Your hardgainer protocol is activated and ready to use
           </p>
         </motion.div>
       </motion.div>

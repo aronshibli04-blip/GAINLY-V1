@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { InstantDataCollection } from './InstantDataCollection';
 import { BasePlanPreview } from './BasePlanPreview';
-import { GamifiedCalibration } from './GamifiedCalibration';
 import { useUserStore } from '@/store/userStore';
 
 interface UserBasicData {
@@ -27,7 +26,7 @@ interface BasePlan {
   fatTarget: number;
 }
 
-type FlowStep = 'data_collection' | 'base_plan' | 'calibration';
+type FlowStep = 'data_collection' | 'base_plan';
 
 export function EnhancedOnboardingFlow() {
   const [currentStep, setCurrentStep] = useState<FlowStep>('data_collection');
@@ -99,19 +98,14 @@ export function EnhancedOnboardingFlow() {
       activityLevel: data.activityLevel,
       createdAt: new Date().toISOString(),
       calibrationStartDate: new Date().toISOString(),
-      hasCompletedCalibration: false
+      hasCompletedCalibration: true
     };
     
     setUser(user);
     setCurrentStep('base_plan');
   };
 
-  const handleStartCalibration = () => {
-    setCurrentStep('calibration');
-    updatePhase('calibration');
-  };
-
-  const handleCalibrationComplete = () => {
+  const handleStartApp = () => {
     completeOnboarding();
     updatePhase('tracking');
     // Navigate to main app
@@ -170,26 +164,11 @@ export function EnhancedOnboardingFlow() {
               <BasePlanPreview 
                 userData={userData}
                 basePlan={basePlan}
-                onStartCalibration={handleStartCalibration}
+                onStartApp={handleStartApp}
               />
             </motion.div>
           )}
 
-          {currentStep === 'calibration' && userData && basePlan && (
-            <motion.div
-              key="calibration"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.6 }}
-            >
-              <GamifiedCalibration 
-                userData={userData}
-                basePlan={basePlan}
-                onComplete={handleCalibrationComplete}
-              />
-            </motion.div>
-          )}
         </AnimatePresence>
       </div>
     </div>
