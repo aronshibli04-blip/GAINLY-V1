@@ -159,6 +159,7 @@ function DailyRoutinesQuickChecker() {
   const [showQuickSetupDialog, setShowQuickSetupDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showDeleteAllAlert, setShowDeleteAllAlert] = useState(false);
   const [editingRoutine, setEditingRoutine] = useState<DailyRoutine | null>(null);
   const [deletingRoutine, setDeletingRoutine] = useState<DailyRoutine | null>(null);
   const [showAllRoutines, setShowAllRoutines] = useState(false);
@@ -254,6 +255,37 @@ function DailyRoutinesQuickChecker() {
     }
   });
 
+  // Delete all routines mutation
+  const deleteAllRoutinesMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/daily-routines/user/${userId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete all routines');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
+      setShowDeleteAllAlert(false);
+      toast({
+        title: "Success!",
+        description: "All routines deleted successfully!"
+      });
+    },
+    onError: (error: Error) => {
+      console.error('Delete all routines error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete all routines. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
   // Complete routine mutation
   const completeRoutineMutation = useMutation({
     mutationFn: async ({ routineId, points }: { routineId: string; points: number }) => {
@@ -335,6 +367,14 @@ function DailyRoutinesQuickChecker() {
     if (deletingRoutine) {
       deleteRoutineMutation.mutate(deletingRoutine.id);
     }
+  };
+
+  const handleDeleteAllRoutines = () => {
+    setShowDeleteAllAlert(true);
+  };
+
+  const confirmDeleteAll = () => {
+    deleteAllRoutinesMutation.mutate();
   };
 
   const toggleCompletion = (routine: DailyRoutine, event: React.MouseEvent) => {
@@ -539,6 +579,19 @@ function DailyRoutinesQuickChecker() {
               </div>
             </DialogContent>
           </Dialog>
+          {totalRoutines > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDeleteAllRoutines}
+              className="text-red-400 hover:text-red-300 h-8 px-2"
+              data-testid="button-delete-all"
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
+              Delete All
+            </Button>
+          )}
+          </div>
 
           <Dialog open={showQuickSetupDialog} onOpenChange={setShowQuickSetupDialog}>
             <DialogTrigger asChild>
@@ -698,6 +751,35 @@ function DailyRoutinesQuickChecker() {
                 data-testid="button-confirm-delete"
               >
                 {deleteRoutineMutation.isPending ? "Deleting..." : "Delete"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Delete All Confirmation Dialog */}
+        <AlertDialog open={showDeleteAllAlert} onOpenChange={setShowDeleteAllAlert}>
+          <AlertDialogContent className="bg-gradient-to-br from-red-950/95 to-red-900/95 border-red-400/30 backdrop-blur-lg max-w-sm mx-auto">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-red-400 text-lg">Delete All Routines</AlertDialogTitle>
+              <AlertDialogDescription className="text-red-300/70">
+                Are you sure you want to delete all {totalRoutines} routine{totalRoutines !== 1 ? 's' : ''}? This will permanently remove all your routines and completion history. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel 
+                className="bg-transparent border-slate-600 text-slate-300 hover:bg-slate-700"
+                disabled={deleteAllRoutinesMutation.isPending}
+                data-testid="button-cancel-delete-all"
+              >
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDeleteAll}
+                disabled={deleteAllRoutinesMutation.isPending}
+                className="bg-red-600 hover:bg-red-700 text-white border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                data-testid="button-confirm-delete-all"
+              >
+                {deleteAllRoutinesMutation.isPending ? "Deleting All..." : "Delete All"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -874,7 +956,6 @@ function DailyRoutinesQuickChecker() {
           <LevelProgressCard />
         </div>
       )}
-      </div>
     </>
   );
 }

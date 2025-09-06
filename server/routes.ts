@@ -298,6 +298,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/daily-routines/user/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      
+      await storage.deleteAllDailyRoutines(userId);
+      res.json({ success: true, message: 'All routines deleted successfully' });
+    } catch (error: any) {
+      console.error('Delete all routines error:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Daily routine completions routes
   app.post("/api/daily-routine-completions", async (req, res) => {
     try {

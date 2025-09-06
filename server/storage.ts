@@ -74,6 +74,7 @@ export interface IStorage {
   getDailyRoutinesByUser(userId: string): Promise<DailyRoutine[]>;
   updateDailyRoutine(routineId: string, updates: Partial<InsertDailyRoutine>): Promise<DailyRoutine>;
   deleteDailyRoutine(routineId: string): Promise<void>;
+  deleteAllDailyRoutines(userId: string): Promise<void>;
 
   // Daily routine completion methods
   createDailyRoutineCompletion(completionData: InsertDailyRoutineCompletion): Promise<DailyRoutineCompletion>;
@@ -325,6 +326,21 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(dailyRoutines)
       .where(eq(dailyRoutines.id, routineId));
+  }
+
+  async deleteAllDailyRoutines(userId: string): Promise<void> {
+    // Use transaction to ensure atomicity
+    await db.transaction(async (tx) => {
+      // First delete all completion records for this user's routines
+      await tx
+        .delete(dailyRoutineCompletions)
+        .where(eq(dailyRoutineCompletions.userId, userId));
+      
+      // Then delete all routines for this user
+      await tx
+        .delete(dailyRoutines)
+        .where(eq(dailyRoutines.userId, userId));
+    });
   }
 
   async createDailyRoutineCompletion(completionData: InsertDailyRoutineCompletion): Promise<DailyRoutineCompletion> {
