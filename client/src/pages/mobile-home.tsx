@@ -316,35 +316,25 @@ function DailyRoutinesQuickChecker() {
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
       
-      // Enhanced celebration effect with emojis and points
+      // Enhanced celebration effect with points
       const routine = routines.find(r => r.id === variables.routineId);
-      const categoryEmojis = {
-        health: "❤️💪",
-        fitness: "🏋️‍♂️💪", 
-        nutrition: "🍎🥗",
-        productivity: "🧠⚡"
-      };
-      
-      const celebrationEmojis = ["🎉", "✨", "🌟", "🎯", "🚀"];
-      const randomEmoji = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
-      const categoryEmoji = categoryEmojis[routine?.category as keyof typeof categoryEmojis] || "✨";
       
       // Get updated stats to show level progress
       queryClient.invalidateQueries({ queryKey: ['/api/user-stats'] });
       
       toast({
-        title: `${randomEmoji} Routine Completed! +${variables.points} XP`,
-        description: `${categoryEmoji} Great job staying consistent with your habits!`,
+        title: `Routine Completed! +${variables.points} XP`,
+        description: `Great job staying consistent with your habits!`,
         duration: 4000,
       });
       
       // Show level progress after a delay
       setTimeout(() => {
         const levelUpMessages = [
-          "⚡ XP gained! Check your level progress below!",
-          "🎯 Points added to your experience!",
-          "🚀 Getting closer to the next level!",
-          "💪 Building your fitness journey!"
+          "XP gained! Check your level progress below!",
+          "Points added to your experience!",
+          "Getting closer to the next level!",
+          "Building your fitness journey!"
         ];
         const randomMessage = levelUpMessages[Math.floor(Math.random() * levelUpMessages.length)];
         
@@ -419,12 +409,15 @@ function DailyRoutinesQuickChecker() {
     }
   };
 
-  const categoryIcons = {
-    health: "❤️",
-    fitness: "💪", 
-    nutrition: "🍎",
-    productivity: "🧠"
-  } as const;
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'health': return <Activity className="h-4 w-4" />;
+      case 'fitness': return <Zap className="h-4 w-4" />;
+      case 'nutrition': return <Target className="h-4 w-4" />;
+      case 'productivity': return <TrendingUp className="h-4 w-4" />;
+      default: return <Star className="h-4 w-4" />;
+    }
+  };
 
   const categoryColors = {
     health: "from-red-500/20 to-pink-500/20 border-red-400/30",
@@ -837,7 +830,6 @@ function DailyRoutinesQuickChecker() {
           {displayedRoutines?.map((routine, index) => {
             const isCompleted = completions?.some(c => c.routineId === routine.id);
             const categoryColor = categoryColors[routine.category as keyof typeof categoryColors];
-            const categoryIcon = categoryIcons[routine.category as keyof typeof categoryIcons];
             
             return (
               <Card
@@ -858,7 +850,7 @@ function DailyRoutinesQuickChecker() {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between min-h-[3rem]">
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="text-lg flex-shrink-0">{categoryIcon}</div>
+                      <div className="flex-shrink-0 text-emerald-400">{getCategoryIcon(routine.category)}</div>
                       <div className="flex-1 min-w-0">
                         <h4 className={`font-medium text-sm leading-5 ${isCompleted ? 'text-emerald-400 line-through' : 'text-white'}`}>
                           {routine.title}
