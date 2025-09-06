@@ -264,7 +264,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/daily-routines/:userId", async (req, res) => {
     try {
-      // Use the actual onboarded user ID
+      // Use the actual onboarded user ID (ignore URL param during no-auth phase)
       const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
       const routines = await storage.getDailyRoutinesByUser(actualUserId);
       res.json(routines);
@@ -300,9 +300,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/daily-routines/user/:userId", async (req, res) => {
     try {
-      const { userId } = req.params;
+      // Use the actual onboarded user ID (same pattern as other endpoints)
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
       
-      await storage.deleteAllDailyRoutines(userId);
+      await storage.deleteAllDailyRoutines(actualUserId);
       res.json({ success: true, message: 'All routines deleted successfully' });
     } catch (error: any) {
       console.error('Delete all routines error:', error);

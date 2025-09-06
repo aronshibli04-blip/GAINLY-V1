@@ -268,8 +268,14 @@ function DailyRoutinesQuickChecker() {
       return response.json();
     },
     onSuccess: () => {
+      // Optimistically clear the cache data first for immediate UI update
+      queryClient.setQueryData(['/api/daily-routines', userId], []);
+      queryClient.setQueryData(['/api/daily-routine-completions', userId, today], []);
+      
+      // Then invalidate to refetch fresh data
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routines'] });
       queryClient.invalidateQueries({ queryKey: ['/api/daily-routine-completions'] });
+      
       setShowDeleteAllAlert(false);
       toast({
         title: "Success!",
