@@ -37,6 +37,25 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
+// Progressive leveling helper function
+const getXPForLevel = (level: number) => {
+  // Progressive: Level 1=100, Level 2=250, Level 3=450, Level 4=700, etc.
+  // Formula: 25 * level * (level + 3)
+  return 25 * level * (level + 3);
+};
+
+const getLevelFromXP = (xp: number) => {
+  let level = 1;
+  while (xp >= getXPForLevel(level)) {
+    level++;
+  }
+  return level;
+};
+
+const getXPForCurrentLevel = (level: number) => {
+  return level === 1 ? 0 : getXPForLevel(level - 1);
+};
+
 // Level Progress Card Component
 function LevelProgressCard() {
   const userId = localStorage.getItem("userId") || "user1";
@@ -48,11 +67,13 @@ function LevelProgressCard() {
 
   if (!userStats) return null;
 
-  const level = userStats.level || 1;
   const currentXP = userStats.totalPoints || 0;
-  const xpForNextLevel = level * 100; // 100 XP per level
-  const xpProgress = currentXP % 100; // Progress within current level
-  const progressPercent = (xpProgress / 100) * 100;
+  const level = getLevelFromXP(currentXP);
+  const xpForThisLevel = getXPForCurrentLevel(level);
+  const xpForNextLevel = getXPForLevel(level);
+  const xpProgress = currentXP - xpForThisLevel;
+  const xpNeeded = xpForNextLevel - xpForThisLevel;
+  const progressPercent = (xpProgress / xpNeeded) * 100;
 
   return (
     <Card className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-purple-400/30 backdrop-blur-sm">
@@ -69,8 +90,8 @@ function LevelProgressCard() {
         
         <div className="space-y-1">
           <div className="flex justify-between text-xs text-purple-300/70">
-            <span>{xpProgress} / 100 XP</span>
-            <span>Next Level</span>
+            <span>{xpProgress} / {xpNeeded} XP</span>
+            <span>Level {level + 1}</span>
           </div>
           <Progress 
             value={progressPercent} 
@@ -362,21 +383,18 @@ function DailyRoutinesQuickChecker() {
     productivity: "from-yellow-500/20 to-orange-500/20 border-yellow-400/30"
   } as const;
 
-  // Smart routine display logic - show next uncompleted tasks or all routines
+  // Hide completed routines - only show incomplete ones for better UX
   useEffect(() => {
     if (!routines || routines.length === 0) return;
     
     if (showAllRoutines) {
-      setDisplayedRoutines(routines);
-    } else {
-      const completed = routines.filter(r => completions.some(c => c.routineId === r.id));
+      // Show all when explicitly requested
       const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
-      
-      // Show mix of completed and uncompleted, prioritizing uncompleted
-      const newDisplayed = [
-        ...completed.slice(0, 2), // Show up to 2 completed for satisfaction
-        ...uncompleted.slice(0, 4 - Math.min(completed.length, 2)) // Fill rest with uncompleted
-      ].slice(0, 4);
+      setDisplayedRoutines(uncompleted);
+    } else {
+      // Only show incomplete routines (up to 4)
+      const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
+      const newDisplayed = uncompleted.slice(0, 4);
       
       // Only update if different to prevent infinite loops
       const currentIds = displayedRoutines.map(r => r.id).sort();
@@ -389,7 +407,9 @@ function DailyRoutinesQuickChecker() {
     }
   }, [routines, completions, showAllRoutines]);
 
-  const completedCount = displayedRoutines?.filter(r => completions?.some(c => c.routineId === r.id)).length || 0;
+  const completedCount = routines?.filter(r => completions?.some(c => c.routineId === r.id)).length || 0;
+  const totalRoutines = routines?.length || 0;
+  const allCompleted = totalRoutines > 0 && completedCount === totalRoutines;
 
   // Show loading state
   if (routinesLoading || completionsLoading) {
@@ -420,9 +440,9 @@ function DailyRoutinesQuickChecker() {
           <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
             <CheckCircle2 className="h-5 w-5 text-emerald-400" />
             Daily Routines
-            {displayedRoutines && displayedRoutines.length > 0 && (
+            {totalRoutines > 0 && (
               <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-400/30 text-xs animate-pulse">
-                {completedCount}/{displayedRoutines.length}
+                {completedCount}/{totalRoutines}
               </Badge>
             )}
           </h3>
@@ -686,6 +706,15 @@ function DailyRoutinesQuickChecker() {
       </div>
 
       {!displayedRoutines || displayedRoutines.length === 0 ? (
+        allCompleted && totalRoutines > 0 ? (
+          <Card className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-400/20 backdrop-blur-sm">
+            <CardContent className="p-4 text-center">
+              <Trophy className="h-12 w-12 text-emerald-400 mx-auto mb-2 animate-bounce" />
+              <p className="text-emerald-400 text-lg font-semibold mb-1">🎉 All routines completed!</p>
+              <p className="text-emerald-300/70 text-sm">Amazing work today! Come back tomorrow for more!</p>
+            </CardContent>
+          </Card>
+        ) : (
         <Card className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-400/20 backdrop-blur-sm">
           <CardContent className="p-4 text-center">
             <Target className="h-12 w-12 text-emerald-400/50 mx-auto mb-2" />
@@ -711,6 +740,7 @@ function DailyRoutinesQuickChecker() {
             </div>
           </CardContent>
         </Card>
+        )
       ) : (
         <div key={routineSlideKey} className={`space-y-2 ${showAllRoutines ? 'max-h-96 overflow-y-auto' : ''}`}>
           {displayedRoutines?.map((routine, index) => {

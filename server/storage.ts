@@ -368,7 +368,13 @@ export class DatabaseStorage implements IStorage {
 
     // Calculate new values
     const newTotalPoints = stats.totalPoints + pointsEarned;
-    const newLevel = Math.floor(newTotalPoints / 100) + 1;
+    
+    // Progressive leveling: Level 1=100XP, Level 2=250XP, Level 3=450XP, etc.
+    // Formula: 25 * level * (level + 3) XP required for each level
+    let newLevel = 1;
+    while (newTotalPoints >= (25 * newLevel * (newLevel + 3))) {
+      newLevel++;
+    }
     
     // Check if this is a new completion day for streak calculation
     let newCurrentStreak = stats.currentStreak;
