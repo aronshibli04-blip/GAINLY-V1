@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Brain, User, Scale, Target, Activity, Zap } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { User, Scale, Target, Zap } from 'lucide-react';
 
 interface UserBasicData {
   firstName: string;
@@ -29,22 +30,34 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     weight: '',
     sex: '',
     activityLevel: '',
-    goalWeight: ''
+    goalWeight: '',
+    dietaryPreferences: [] as string[],
   });
 
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
 
-  const activityOptions = [
-    { value: 'sedentary', label: 'Sedentary', desc: 'Desk job, minimal exercise' },
-    { value: 'light', label: 'Lightly Active', desc: '1-3 days/week light exercise' },
-    { value: 'moderate', label: 'Moderately Active', desc: '3-5 days/week exercise' },
-    { value: 'very', label: 'Very Active', desc: '6-7 days/week intense exercise' },
-    { value: 'extreme', label: 'Extremely Active', desc: 'Physical job + daily exercise' },
+  const restrictions = [
+    'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free',
+    'Nut-Free', 'Shellfish-Free', 'Low-Sodium', 'Kosher', 'Halal'
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(prev => prev + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
+  const handleSubmit = () => {
+    // Validate required fields
     if (!formData.firstName || !formData.age || !formData.height || 
         !formData.weight || !formData.sex || !formData.activityLevel || 
         !formData.goalWeight) {
@@ -64,211 +77,210 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     onComplete(data);
   };
 
-  const isFormValid = () => {
-    return formData.firstName && formData.age && formData.height && 
-           formData.weight && formData.sex && formData.activityLevel && 
-           formData.goalWeight;
+  const toggleDietaryPreference = (preference: string) => {
+    setFormData(prev => ({
+      ...prev,
+      dietaryPreferences: prev.dietaryPreferences.includes(preference)
+        ? prev.dietaryPreferences.filter(p => p !== preference)
+        : [...prev.dietaryPreferences, preference]
+    }));
   };
 
-  if (showWelcome) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center max-w-2xl"
-        >
-          {/* AI Brain Logo */}
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.firstName && formData.age && formData.sex;
+      case 2:
+        return formData.height && formData.weight;
+      case 3:
+        return formData.activityLevel;
+      case 4:
+        return formData.goalWeight;
+      default:
+        return false;
+    }
+  };
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="mb-8"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
           >
-            <div className="w-24 h-24 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 relative">
-              <Brain className="w-12 h-12 text-white" />
-              <motion.div
-                className="absolute inset-0 rounded-full border-4 border-emerald-400/50"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              />
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <User className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Personal Information</h3>
+              <p className="text-slate-400">Let's start with the basics</p>
             </div>
-            
-            <motion.h1 
-              className="text-5xl font-bold bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-4"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              GAINLY AI COACH
-            </motion.h1>
-            
-            <motion.p 
-              className="text-xl text-slate-300 mb-8"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.7 }}
-            >
-              Year 2125 • Hardgainer Protocol Activated
-            </motion.p>
-          </motion.div>
 
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="space-y-6 mb-8"
-          >
-            <p className="text-2xl text-white font-semibold">
-              Welcome, Future Hardgainer
-            </p>
-            <p className="text-lg text-slate-400 leading-relaxed">
-              I'm your AI Coach from the future. In 60 seconds, I'll analyze your body data 
-              and generate your <span className="text-emerald-400 font-semibold">Personal Growth Protocol</span>.
-            </p>
-            <p className="text-md text-slate-500">
-              This is just the beginning. Each day you log data, I'll sharpen your protocol 
-              to unlock your <span className="text-purple-400 font-bold">Impossible Growth Mode</span>.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 1.1 }}
-          >
-            <Button 
-              onClick={() => setShowWelcome(false)}
-              className="bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white font-bold py-4 px-8 text-lg rounded-full transition-all duration-300 transform hover:scale-105"
-              data-testid="button-begin-protocol"
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              Initialize Protocol
-            </Button>
-          </motion.div>
-        </motion.div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full"
-      >
-        <Card className="bg-slate-800/90 backdrop-blur border-slate-700">
-          <CardHeader className="text-center pb-2">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <User className="w-8 h-8 text-white" />
-            </motion.div>
-            <h2 className="text-3xl font-bold text-white mb-2">Data Acquisition</h2>
-            <p className="text-slate-400">AI requires baseline metrics for protocol generation</p>
-          </CardHeader>
-
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Row 1: Name and Age */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="firstName" className="text-white font-medium">First Name</Label>
-                  <Input
-                    id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                    className="mt-2 bg-slate-700 border-slate-600 text-white"
-                    placeholder="Your name"
-                    data-testid="input-first-name"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="age" className="text-white font-medium">Age</Label>
-                  <Input
-                    id="age"
-                    type="number"
-                    value={formData.age}
-                    onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-                    className="mt-2 bg-slate-700 border-slate-600 text-white"
-                    placeholder="25"
-                    data-testid="input-age"
-                  />
-                </div>
-              </div>
-
-              {/* Row 2: Physical Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="height" className="text-white font-medium">Height (cm)</Label>
-                  <Input
-                    id="height"
-                    type="number"
-                    value={formData.height}
-                    onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
-                    className="mt-2 bg-slate-700 border-slate-600 text-white"
-                    placeholder="175"
-                    data-testid="input-height"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="weight" className="text-white font-medium">Weight (kg)</Label>
-                  <Input
-                    id="weight"
-                    type="number"
-                    step="0.1"
-                    value={formData.weight}
-                    onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
-                    className="mt-2 bg-slate-700 border-slate-600 text-white"
-                    placeholder="70.0"
-                    data-testid="input-weight"
-                  />
-                </div>
-                <div>
-                  <Label className="text-white font-medium">Sex</Label>
-                  <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
-                    <SelectTrigger className="mt-2 bg-slate-700 border-slate-600 text-white" data-testid="select-sex">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Row 3: Activity Level */}
+            <div className="space-y-4">
               <div>
-                <Label className="text-white font-medium mb-3 block">Activity Level</Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {activityOptions.map((activity) => (
-                    <motion.button
-                      key={activity.value}
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, activityLevel: activity.value }))}
-                      className={`p-3 rounded-xl border-2 transition-all text-left ${
-                        formData.activityLevel === activity.value
-                          ? 'border-emerald-500 bg-emerald-500/20'
-                          : 'border-slate-600 bg-slate-800/50 hover:border-slate-500'
-                      }`}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      data-testid={`button-activity-${activity.value}`}
-                    >
-                      <div className="font-medium text-white text-sm">{activity.label}</div>
-                      <div className="text-xs text-slate-400 mt-1">{activity.desc}</div>
-                    </motion.button>
-                  ))}
-                </div>
+                <Label htmlFor="firstName" className="text-white font-medium">First Name</Label>
+                <Input
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                  className="mt-2 bg-slate-700 border-slate-600 text-white"
+                  placeholder="Your name"
+                />
               </div>
 
-              {/* Row 4: Goal Weight */}
-              <div className="max-w-xs">
+              <div>
+                <Label htmlFor="age" className="text-white font-medium">Age</Label>
+                <Input
+                  id="age"
+                  type="number"
+                  value={formData.age}
+                  onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
+                  className="mt-2 bg-slate-700 border-slate-600 text-white"
+                  placeholder="25"
+                />
+              </div>
+
+              <div>
+                <Label className="text-white font-medium">Sex</Label>
+                <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
+                  <SelectTrigger className="mt-2 bg-slate-700 border-slate-600 text-white">
+                    <SelectValue placeholder="Select sex" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      case 2:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Scale className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Body Measurements</h3>
+              <p className="text-slate-400">Current physical stats</p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="height" className="text-white font-medium">Height (cm)</Label>
+                <Input
+                  id="height"
+                  type="number"
+                  value={formData.height}
+                  onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
+                  className="mt-2 bg-slate-700 border-slate-600 text-white"
+                  placeholder="175"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="weight" className="text-white font-medium">Current Weight (kg)</Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  step="0.1"
+                  value={formData.weight}
+                  onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
+                  className="mt-2 bg-slate-700 border-slate-600 text-white"
+                  placeholder="70.5"
+                />
+              </div>
+            </div>
+
+            {formData.height && formData.weight && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-slate-800/50 rounded-xl p-4 border border-emerald-500/30"
+              >
+                <p className="text-emerald-400 font-medium text-center">
+                  BMI: {(parseFloat(formData.weight) / Math.pow(parseFloat(formData.height) / 100, 2)).toFixed(1)}
+                </p>
+                <p className="text-slate-400 text-sm text-center mt-1">
+                  Perfect for the hardgainer protocol
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
+        );
+
+      case 3:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Activity Level</h3>
+              <p className="text-slate-400">How active are you daily?</p>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                { value: 'sedentary', label: 'Sedentary', desc: 'Desk job, little exercise' },
+                { value: 'light', label: 'Lightly Active', desc: 'Light exercise 1-3 days/week' },
+                { value: 'moderate', label: 'Moderately Active', desc: 'Moderate exercise 3-5 days/week' },
+                { value: 'very', label: 'Very Active', desc: 'Hard exercise 6-7 days/week' },
+                { value: 'extreme', label: 'Extremely Active', desc: 'Physical job + exercise' },
+              ].map((activity) => (
+                <motion.button
+                  key={activity.value}
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, activityLevel: activity.value }))}
+                  className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                    formData.activityLevel === activity.value
+                      ? 'border-emerald-500 bg-emerald-500/20'
+                      : 'border-slate-600 bg-slate-800/50 hover:border-slate-500'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="font-medium text-white">{activity.label}</div>
+                  <div className="text-sm text-slate-400 mt-1">{activity.desc}</div>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        );
+
+      case 4:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Goals & Preferences</h3>
+              <p className="text-slate-400">What's your target?</p>
+            </div>
+
+            <div className="space-y-6">
+              <div>
                 <Label htmlFor="goalWeight" className="text-white font-medium">Goal Weight (kg)</Label>
                 <Input
                   id="goalWeight"
@@ -277,8 +289,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.goalWeight}
                   onChange={(e) => setFormData(prev => ({ ...prev, goalWeight: e.target.value }))}
                   className="mt-2 bg-slate-700 border-slate-600 text-white"
-                  placeholder="85.0"
-                  data-testid="input-goal-weight"
+                  placeholder="80"
                 />
                 {formData.weight && formData.goalWeight && (
                   <p className="text-emerald-400 text-sm mt-2">
@@ -287,22 +298,122 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 )}
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-4">
-                <Button
-                  type="submit"
-                  disabled={!isFormValid()}
-                  className="w-full bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white font-bold py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                  data-testid="button-generate-protocol"
-                >
-                  <Brain className="w-5 h-5 mr-2" />
-                  Generate My Protocol
-                </Button>
+              <div>
+                <Label className="text-white font-medium mb-3 block">Dietary Preferences (optional)</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {restrictions.map((restriction) => (
+                    <div key={restriction} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={restriction}
+                        checked={formData.dietaryPreferences.includes(restriction)}
+                        onCheckedChange={() => toggleDietaryPreference(restriction)}
+                      />
+                      <Label htmlFor={restriction} className="text-sm text-slate-300 cursor-pointer">
+                        {restriction}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+                {formData.dietaryPreferences.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {formData.dietaryPreferences.map((pref) => (
+                      <Badge key={pref} variant="secondary" className="bg-emerald-500/20 text-emerald-400">
+                        {pref}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
-            </form>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </div>
+          </motion.div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 opacity-20">
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-emerald-400 rounded-full"
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.3, 0.7, 0.3],
+            }}
+            transition={{
+              duration: 3 + (i % 4),
+              repeat: Infinity,
+              delay: i * 0.3,
+            }}
+            style={{
+              left: `${(i * 10) % 100}%`,
+              top: `${(i * 15) % 100}%`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 min-h-screen flex flex-col justify-center px-6 py-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2">
+            Initialize Protocol
+          </h1>
+          <p className="text-slate-400">AI needs your baseline data to design your Personal Growth Protocol</p>
+        </motion.div>
+
+        {/* Progress bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="flex justify-between text-sm text-slate-400 mb-2">
+            <span>Step {currentStep} of {totalSteps}</span>
+            <span>{Math.round((currentStep / totalSteps) * 100)}%</span>
+          </div>
+          <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-emerald-400 to-blue-400"
+              initial={{ width: 0 }}
+              animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+        </div>
+
+        {/* Form content */}
+        <div className="max-w-md mx-auto w-full">
+          <div className="bg-slate-800/70 backdrop-blur rounded-2xl p-6 border border-slate-700 min-h-[400px]">
+            {renderStep()}
+          </div>
+
+          {/* Navigation */}
+          <div className="flex justify-between mt-6">
+            <Button
+              onClick={handleBack}
+              disabled={currentStep === 1}
+              variant="outline"
+              className="border-slate-600 text-slate-300 hover:bg-slate-700"
+            >
+              Back
+            </Button>
+            
+            <Button
+              onClick={handleNext}
+              disabled={!isStepValid()}
+              className="bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white font-bold"
+            >
+              {currentStep === totalSteps ? 'Generate My Plan' : 'Next'}
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
