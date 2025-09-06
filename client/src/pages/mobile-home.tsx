@@ -92,8 +92,6 @@ function LevelProgressCard() {
 function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete: () => void }) {
   const handleComplete = useCallback(onComplete, [onComplete]);
   
-  if (!show) return null;
-
   // Auto-hide after 2 seconds
   useEffect(() => {
     if (show) {
@@ -103,6 +101,8 @@ function CelebrationParticles({ show, onComplete }: { show: boolean; onComplete:
       return () => clearTimeout(timer);
     }
   }, [show, handleComplete]);
+
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
