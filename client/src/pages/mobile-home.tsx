@@ -388,9 +388,8 @@ function DailyRoutinesQuickChecker() {
     if (!routines || routines.length === 0) return;
     
     if (showAllRoutines) {
-      // Show all when explicitly requested
-      const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
-      setDisplayedRoutines(uncompleted);
+      // Show ALL routines when explicitly requested (both completed and incomplete)
+      setDisplayedRoutines(routines);
     } else {
       // Only show incomplete routines (up to 4)
       const uncompleted = routines.filter(r => !completions.some(c => c.routineId === r.id));
@@ -705,7 +704,7 @@ function DailyRoutinesQuickChecker() {
         </AlertDialog>
       </div>
 
-      {!displayedRoutines || displayedRoutines.length === 0 ? (
+      {(!displayedRoutines || displayedRoutines.length === 0) && !showAllRoutines ? (
         allCompleted && totalRoutines > 0 ? (
           <Card className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-400/20 backdrop-blur-sm">
             <CardContent className="p-4 text-center">
