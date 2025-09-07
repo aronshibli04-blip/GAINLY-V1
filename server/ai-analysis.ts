@@ -63,8 +63,8 @@ export function calculateTdeeAndPlan(
   // Ensure TDEE is within reasonable bounds for hardgainers
   tdee = Math.max(1800, Math.min(4000, tdee));
 
-  // Recommended surplus for hardgainers (moderate approach)
-  const surplus = 500; // Start with 500 calorie surplus for ~1 lb/week gain
+  // Aggressive surplus for hardgainers (1kg/week approach)
+  const surplus = 1100; // Aggressive 1100 calorie surplus for hardgainer goals
   const targetCalories = tdee + surplus;
 
   // Calculate confidence based on data quality

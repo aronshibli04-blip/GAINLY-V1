@@ -72,8 +72,8 @@ export function calculateTdee(
   // Ensure TDEE is within reasonable bounds for adults
   tdee = Math.max(1200, Math.min(5000, tdee));
 
-  // Calculate recommended surplus for hardgainers
-  const surplus = 500; // Conservative surplus for steady weight gain
+  // Calculate recommended surplus for hardgainers  
+  const surplus = 1100; // Aggressive surplus for 1kg/week hardgainer goals
   const targetCalories = tdee + surplus;
 
   // Calculate confidence based on data quality - more responsive for real-time calibration
