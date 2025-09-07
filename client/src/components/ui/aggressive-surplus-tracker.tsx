@@ -29,8 +29,9 @@ export function AggressiveSurplusTracker() {
     ?.filter(c => c?.date === today)
     ?.reduce((sum, c) => sum + (c?.calories || 0), 0) || 0;
   
-  const targetTdee = currentTdeeAnalysis?.tdee || 2500;
-  const requiredCalories = targetTdee + 1100; // 1100kcal surplus for 1kg/week
+  // Use targetCalories from TDEE analysis (already includes 1100 surplus) or calculate fallback
+  const requiredCalories = currentTdeeAnalysis?.targetCalories || 
+    ((currentTdeeAnalysis?.tdee || 2500) + 1100); // 1100kcal surplus for 1kg/week
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / requiredCalories) * 100);
   const currentHour = new Date().getHours();
@@ -199,7 +200,7 @@ export function AggressiveSurplusTracker() {
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Today's Progress</span>
             <span className="font-semibold text-white">
-              {(todayCalories || 0).toLocaleString()} / {(requiredCalories || 3600).toLocaleString()} kcal
+              {(todayCalories || 0).toLocaleString()} / {requiredCalories.toLocaleString()} kcal
             </span>
           </div>
           <Progress value={progress} className="h-3" />
