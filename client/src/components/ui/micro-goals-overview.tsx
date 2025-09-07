@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Target, Trophy, Calendar, TrendingUp, Zap } from "lucide-react";
+import { Target, Trophy, Calendar, TrendingUp, Zap, Clock } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 import { Link } from "wouter";
 
@@ -37,13 +37,35 @@ export function MicroGoalsOverview() {
     ? nextMajorMilestone + 2 
     : nextMajorMilestone;
   
-  // Calculate progress and dates
+  // Calculate actual weight trend (kg per week)
+  let actualWeightTrend = 0;
+  if (weightEntries.length >= 2) {
+    const sortedWeights = [...weightEntries].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    const firstWeight = sortedWeights[0].weight;
+    const lastWeight = sortedWeights[sortedWeights.length - 1].weight;
+    const daysDiff = Math.abs(
+      new Date(sortedWeights[sortedWeights.length - 1].date).getTime() - 
+      new Date(sortedWeights[0].date).getTime()
+    ) / (1000 * 60 * 60 * 24);
+    
+    if (daysDiff > 0) {
+      actualWeightTrend = ((lastWeight - firstWeight) / daysDiff) * 7; // kg per week
+    }
+  }
+
+  // Calculate progress and dates using actual trend if positive, otherwise default
+  const isGoodProgress = actualWeightTrend >= 0.5; // Only show predictions for good progress
+  const trendToUse = isGoodProgress ? actualWeightTrend : 1; // Fallback to 1kg/week
+  
   const totalWeightToGain = targetWeight - currentWeight;
-  const weeksToGoal = Math.ceil(totalWeightToGain); // 1kg per week
+  const weeksToGoal = totalWeightToGain / trendToUse;
   const estimatedGoalDate = new Date();
   estimatedGoalDate.setDate(estimatedGoalDate.getDate() + (weeksToGoal * 7));
   
-  const weeksToNextMilestone = Math.ceil(nextMilestoneAdjusted - currentWeight);
+  const weightToNextMilestone = nextMilestoneAdjusted - currentWeight;
+  const weeksToNextMilestone = weightToNextMilestone / trendToUse;
   const nextMilestoneDate = new Date();
   nextMilestoneDate.setDate(nextMilestoneDate.getDate() + (weeksToNextMilestone * 7));
   
@@ -85,6 +107,22 @@ export function MicroGoalsOverview() {
             <Progress value={Math.max(0, progressToNext)} className="h-2" />
           </div>
           
+          {/* Timeline Predictor - Only show for good progress */}
+          {isGoodProgress && (
+            <div className="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-400/20 rounded-lg p-3 mb-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Clock className="h-4 w-4 text-emerald-400" />
+                <span className="text-sm font-semibold text-emerald-400">Timeline Predictor</span>
+                <Badge variant="outline" className="text-emerald-400 border-emerald-400/40 text-xs">
+                  +{actualWeightTrend.toFixed(1)}kg/uke
+                </Badge>
+              </div>
+              <div className="text-xs text-emerald-300/90">
+                At your current pace, you'll reach <span className="font-semibold text-emerald-300">{targetWeight}kg by {formatDate(estimatedGoalDate)}</span>
+              </div>
+            </div>
+          )}
+
           {/* Quick Stats Row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center">
@@ -101,10 +139,12 @@ export function MicroGoalsOverview() {
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Trophy className="h-3 w-3 text-purple-400" />
                 <span className="text-xs font-semibold text-purple-400">
-                  {formatDate(estimatedGoalDate)}
+                  {isGoodProgress ? formatDate(estimatedGoalDate) : 'Keep logging'}
                 </span>
               </div>
-              <div className="text-xs text-slate-400">Målvekt ({targetWeight}kg)</div>
+              <div className="text-xs text-slate-400">
+                {isGoodProgress ? `Målvekt (${targetWeight}kg)` : 'Build consistency'}
+              </div>
             </div>
           </div>
           
