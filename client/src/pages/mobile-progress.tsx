@@ -19,13 +19,16 @@ import {
   ChevronRight,
   Plus,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Moon,
+  Brain
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Tooltip } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Tooltip, AreaChart, Area } from "recharts";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 
 export default function MobileProgress() {
   const { 
@@ -40,6 +43,19 @@ export default function MobileProgress() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | 'all'>('30d');
   const [progressPhotos, setProgressPhotos] = useState<string[]>([]);
+
+  const userId = localStorage.getItem("userId") || "user1";
+
+  // Fetch wellness data
+  const { data: sleepLogs = [] } = useQuery({
+    queryKey: ['/api/sleep-logs', userId],
+    queryFn: () => fetch(`/api/sleep-logs/${userId}?limit=30`).then(res => res.json())
+  });
+
+  const { data: stressLogs = [] } = useQuery({
+    queryKey: ['/api/stress-logs', userId],
+    queryFn: () => fetch(`/api/stress-logs/${userId}?limit=30`).then(res => res.json())
+  });
 
   // Handle photo capture/upload
   const handleTakePhoto = () => {
@@ -135,8 +151,28 @@ export default function MobileProgress() {
         date: entry.date
       }));
 
-    return { weightData, calorieData };
-  }, [weightEntries, calorieEntries, selectedPeriod]);
+    // Filter and prepare wellness data
+    const sleepData = sleepLogs
+      .slice(0, days)
+      .reverse()
+      .map((entry: any, index: number) => ({
+        day: index + 1,
+        quality: entry.quality,
+        hours: entry.hours ? parseFloat(entry.hours) : null,
+        date: entry.logDate
+      }));
+
+    const stressData = stressLogs
+      .slice(0, days)
+      .reverse()
+      .map((entry: any, index: number) => ({
+        day: index + 1,
+        level: entry.level,
+        date: entry.logDate
+      }));
+
+    return { weightData, calorieData, sleepData, stressData };
+  }, [weightEntries, calorieEntries, sleepLogs, stressLogs, selectedPeriod]);
 
   if (!user || !stats) return null;
 
@@ -492,6 +528,106 @@ export default function MobileProgress() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Wellness Charts */}
+            {chartData.sleepData.length > 0 && (
+              <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-indigo-400/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-indigo-400">
+                    <Moon className="h-5 w-5" />
+                    Sleep Quality Trends
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData.sleepData}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-slate-700" />
+                        <XAxis 
+                          dataKey="day"
+                          className="text-slate-500 text-xs"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <YAxis 
+                          domain={[1, 5]}
+                          className="text-slate-500 text-xs"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: '#1e293b', 
+                            border: '1px solid #334155',
+                            borderRadius: '8px' 
+                          }}
+                          labelStyle={{ color: '#e2e8f0' }}
+                          formatter={(value: any) => [`${value}/5`, 'Sleep Quality']}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="quality" 
+                          stroke="#8b5cf6" 
+                          strokeWidth={3}
+                          dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 4 }}
+                          activeDot={{ r: 6, fill: "#8b5cf6" }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {chartData.stressData.length > 0 && (
+              <Card className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border-cyan-400/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-cyan-400">
+                    <Brain className="h-5 w-5" />
+                    Stress Level Patterns
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={chartData.stressData}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-slate-700" />
+                        <XAxis 
+                          dataKey="day"
+                          className="text-slate-500 text-xs"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <YAxis 
+                          domain={[1, 5]}
+                          className="text-slate-500 text-xs"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: '#1e293b', 
+                            border: '1px solid #334155',
+                            borderRadius: '8px' 
+                          }}
+                          labelStyle={{ color: '#e2e8f0' }}
+                          formatter={(value: any) => [`${value}/5`, 'Stress Level']}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="level"
+                          stroke="#06b6d4"
+                          fill="url(#stressGradient)"
+                          strokeWidth={3}
+                        />
+                        <defs>
+                          <linearGradient id="stressGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
+                            <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1} />
+                          </linearGradient>
+                        </defs>
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
           
           <TabsContent value="photos" className="space-y-4">
