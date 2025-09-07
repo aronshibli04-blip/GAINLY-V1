@@ -9,7 +9,8 @@ import {
   insertAiAnalysisSchema,
   insertFoodItemSchema,
   insertDailyRoutineSchema,
-  insertDailyRoutineCompletionSchema
+  insertDailyRoutineCompletionSchema,
+  insertSleepLogSchema
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
 import { OpenAIService } from "./openai-service";
@@ -146,6 +147,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const activityLog = await storage.getActivityLogByDate(req.params.userId, req.params.date);
       res.json(activityLog || null);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Sleep log routes
+  app.post("/api/sleep-logs", async (req, res) => {
+    try {
+      const sleepLogData = insertSleepLogSchema.parse(req.body);
+      const sleepLog = await storage.createSleepLog(sleepLogData);
+      res.json(sleepLog);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/sleep-logs/:userId", async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const sleepLogs = await storage.getSleepLogsByUser(req.params.userId, limit);
+      res.json(sleepLogs);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/sleep-logs/:userId/:date", async (req, res) => {
+    try {
+      const sleepLog = await storage.getSleepLogByDate(req.params.userId, req.params.date);
+      res.json(sleepLog || null);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

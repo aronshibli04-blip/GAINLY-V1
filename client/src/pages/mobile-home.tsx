@@ -35,6 +35,7 @@ import { SmartNotifications } from "@/components/ui/smart-notifications";
 import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
+import { SleepQualityTracker } from "@/components/ui/sleep-quality-tracker";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
 // Progressive leveling helper function
@@ -1211,6 +1212,17 @@ export default function MobileHome() {
 
         {/* Daily Routines Quick Checker */}
         <DailyRoutinesQuickChecker />
+
+        {/* Sleep Quality Tracker */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+            <div className="relative">
+              <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse" />
+            </div>
+            Recovery Tracking
+          </h3>
+          <SleepQualityTracker userId={userId} />
+        </div>
 
         {/* Enhanced Micro Goals Overview */}
         <div className="space-y-5">

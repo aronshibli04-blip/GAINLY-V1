@@ -16,6 +16,8 @@ import {
   type DailyRoutineCompletion,
   type InsertDailyRoutineCompletion,
   type UserStats,
+  type SleepLog,
+  type InsertSleepLog,
   users,
   weightLogs,
   mealLogs,
@@ -24,7 +26,8 @@ import {
   foodItems,
   dailyRoutines,
   dailyRoutineCompletions,
-  userStats
+  userStats,
+  sleepLogs
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -89,6 +92,11 @@ export interface IStorage {
   deleteMealLog(mealId: string): Promise<void>;
   deleteMealLogsByDescription(userId: string, description: string): Promise<void>;
   deleteWeightLogsByDateRange(userId: string, startDate: string, endDate: string): Promise<void>;
+  
+  // Sleep log methods
+  createSleepLog(sleepLog: InsertSleepLog): Promise<SleepLog>;
+  getSleepLogsByUser(userId: string, limit?: number): Promise<SleepLog[]>;
+  getSleepLogByDate(userId: string, date: string): Promise<SleepLog | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -468,6 +476,31 @@ export class DatabaseStorage implements IStorage {
         gte(weightLogs.logDate, startDate),
         sql`${weightLogs.logDate} <= ${endDate}`
       ));
+  }
+
+  async createSleepLog(sleepLog: InsertSleepLog): Promise<SleepLog> {
+    const [log] = await db
+      .insert(sleepLogs)
+      .values(sleepLog)
+      .returning();
+    return log;
+  }
+
+  async getSleepLogsByUser(userId: string, limit: number = 30): Promise<SleepLog[]> {
+    return await db
+      .select()
+      .from(sleepLogs)
+      .where(eq(sleepLogs.userId, userId))
+      .orderBy(desc(sleepLogs.logDate))
+      .limit(limit);
+  }
+
+  async getSleepLogByDate(userId: string, date: string): Promise<SleepLog | undefined> {
+    const [log] = await db
+      .select()
+      .from(sleepLogs)
+      .where(and(eq(sleepLogs.userId, userId), eq(sleepLogs.logDate, date)));
+    return log || undefined;
   }
 }
 

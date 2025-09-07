@@ -97,6 +97,16 @@ export const userStats = pgTable("user_stats", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const sleepLogs = pgTable("sleep_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  quality: integer("quality").notNull(), // 1-5 scale (1=poor, 5=excellent)
+  hours: decimal("hours", { precision: 3, scale: 1 }), // 7.5 hours, optional
+  notes: text("notes"), // optional user notes
+  logDate: date("log_date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   weightLogs: many(weightLogs),
@@ -106,6 +116,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   dailyRoutines: many(dailyRoutines),
   routineCompletions: many(dailyRoutineCompletions),
   userStats: one(userStats),
+  sleepLogs: many(sleepLogs),
 }));
 
 export const weightLogsRelations = relations(weightLogs, ({ one }) => ({
@@ -162,6 +173,13 @@ export const userStatsRelations = relations(userStats, ({ one }) => ({
   }),
 }));
 
+export const sleepLogsRelations = relations(sleepLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [sleepLogs.userId],
+    references: [users.id],
+  }),
+}));
+
 // Schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -212,6 +230,11 @@ export const insertUserStatsSchema = createInsertSchema(userStats).omit({
   updatedAt: true,
 });
 
+export const insertSleepLogSchema = createInsertSchema(sleepLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -231,3 +254,5 @@ export type InsertDailyRoutineCompletion = z.infer<typeof insertDailyRoutineComp
 export type DailyRoutineCompletion = typeof dailyRoutineCompletions.$inferSelect;
 export type InsertUserStats = z.infer<typeof insertUserStatsSchema>;
 export type UserStats = typeof userStats.$inferSelect;
+export type InsertSleepLog = z.infer<typeof insertSleepLogSchema>;
+export type SleepLog = typeof sleepLogs.$inferSelect;
