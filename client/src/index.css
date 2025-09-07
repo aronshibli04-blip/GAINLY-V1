@@ -10,26 +10,29 @@
   --card-foreground: hsl(210, 40%, 98%);
   --popover: hsl(0, 0%, 6%);
   --popover-foreground: hsl(210, 40%, 98%);
-  --primary: hsl(147, 100%, 45%);
+  --primary: hsl(147, 100%, 50%);
   --primary-foreground: hsl(0, 0%, 0%);
-  --secondary: hsl(0, 0%, 10%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --muted: hsl(0, 0%, 8%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
-  --accent: hsl(147, 100%, 45%);
+  --secondary: hsl(0, 0%, 12%);
+  --secondary-foreground: hsl(210, 50%, 98%);
+  --muted: hsl(0, 0%, 10%);
+  --muted-foreground: hsl(215, 30%, 70%);
+  --accent: hsl(147, 100%, 50%);
   --accent-foreground: hsl(0, 0%, 0%);
-  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive: hsl(0, 90%, 65%);
   --destructive-foreground: hsl(210, 40%, 98%);
-  --border: hsl(0, 0%, 15%);
-  --input: hsl(0, 0%, 10%);
-  --ring: hsl(147, 100%, 45%);
+  --border: hsl(0, 0%, 18%);
+  --input: hsl(0, 0%, 12%);
+  --ring: hsl(147, 100%, 50%);
   --radius: 0.75rem;
   
-  /* Grok-specific colors */
-  --grok-green: hsl(147, 100%, 45%);
-  --grok-green-dark: hsl(147, 100%, 35%);
-  --grok-purple: hsl(270, 100%, 70%);
-  --grok-blue: hsl(220, 100%, 70%);
+  /* Enhanced saturation Grok-specific colors */
+  --grok-green: hsl(147, 100%, 50%);
+  --grok-green-dark: hsl(147, 100%, 40%);
+  --grok-purple: hsl(270, 100%, 75%);
+  --grok-blue: hsl(220, 100%, 75%);
+  --grok-orange: hsl(25, 100%, 60%);
+  --grok-cyan: hsl(180, 100%, 60%);
+  --grok-indigo: hsl(240, 100%, 70%);
   --grok-background: hsl(0, 0%, 3%);
   --grok-surface: hsl(0, 0%, 6%);
   --grok-surface-hover: hsl(0, 0%, 10%);
@@ -42,19 +45,19 @@
   --card-foreground: hsl(210, 40%, 98%);
   --popover: hsl(0, 0%, 6%);
   --popover-foreground: hsl(210, 40%, 98%);
-  --primary: hsl(147, 100%, 45%);
+  --primary: hsl(147, 100%, 50%);
   --primary-foreground: hsl(0, 0%, 0%);
-  --secondary: hsl(0, 0%, 10%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --muted: hsl(0, 0%, 8%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
-  --accent: hsl(147, 100%, 45%);
+  --secondary: hsl(0, 0%, 12%);
+  --secondary-foreground: hsl(210, 50%, 98%);
+  --muted: hsl(0, 0%, 10%);
+  --muted-foreground: hsl(215, 30%, 70%);
+  --accent: hsl(147, 100%, 50%);
   --accent-foreground: hsl(0, 0%, 0%);
-  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive: hsl(0, 90%, 65%);
   --destructive-foreground: hsl(210, 40%, 98%);
-  --border: hsl(0, 0%, 15%);
-  --input: hsl(0, 0%, 10%);
-  --ring: hsl(147, 100%, 45%);
+  --border: hsl(0, 0%, 18%);
+  --input: hsl(0, 0%, 12%);
+  --ring: hsl(147, 100%, 50%);
 }
 
 @layer base {
@@ -65,60 +68,62 @@
     @apply bg-background text-foreground font-sans antialiased;
     background: linear-gradient(135deg, hsl(0, 0%, 3%) 0%, hsl(0, 0%, 1%) 100%);
     min-height: 100vh;
+    /* Instagram-style saturation boost */
+    filter: saturate(1.3) contrast(1.05) brightness(1.02);
   }
   
   /* Grok-inspired animations */
   .grok-glow {
-    box-shadow: 0 0 20px hsla(147, 100%, 45%, 0.3);
+    box-shadow: 0 0 25px hsla(147, 100%, 50%, 0.4);
   }
   
   .grok-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(147, 100%, 45%, 0.5);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(147, 100%, 50%, 0.6);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
 
-  /* Page-specific glow effects */
+  /* Enhanced page-specific glow effects */
   .meals-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(39, 100%, 50%, 0.5);
-    border-color: hsla(39, 100%, 50%, 0.4);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(39, 100%, 55%, 0.6);
+    border-color: hsla(39, 100%, 55%, 0.5);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
 
   .training-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(4, 90%, 58%, 0.5);
-    border-color: hsla(4, 90%, 58%, 0.4);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(4, 95%, 63%, 0.6);
+    border-color: hsla(4, 95%, 63%, 0.5);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
 
   .ai-coach-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(300, 70%, 70%, 0.5);
-    border-color: hsla(300, 70%, 70%, 0.4);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(300, 80%, 75%, 0.6);
+    border-color: hsla(300, 80%, 75%, 0.5);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
 
   .statistics-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(200, 90%, 60%, 0.5);
-    border-color: hsla(200, 90%, 60%, 0.4);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(200, 95%, 65%, 0.6);
+    border-color: hsla(200, 95%, 65%, 0.5);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
 
   .measurements-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(175, 70%, 55%, 0.5);
-    border-color: hsla(175, 70%, 55%, 0.4);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(175, 80%, 60%, 0.6);
+    border-color: hsla(175, 80%, 60%, 0.5);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
 
   .profile-glow-hover:hover {
-    box-shadow: 0 0 30px hsla(260, 70%, 65%, 0.5);
-    border-color: hsla(260, 70%, 65%, 0.4);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
+    box-shadow: 0 0 40px hsla(260, 80%, 70%, 0.6);
+    border-color: hsla(260, 80%, 70%, 0.5);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
   }
   
   .grok-gradient {

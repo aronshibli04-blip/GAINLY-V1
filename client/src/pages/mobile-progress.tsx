@@ -111,7 +111,7 @@ export default function MobileProgress() {
     const weightGainRate = totalDaysTracked > 0 ? (weightGained / totalDaysTracked) * 7 : 0;
     
     // Progress to goal
-    const progressToGoal = goalWeight > startWeight && currentWeight > startWeight 
+    const progressToGoal = (goalWeight || 0) > (startWeight || 0) && (currentWeight || 0) > (startWeight || 0)
       ? (((currentWeight || 0) - (startWeight || 0)) / ((goalWeight || 0) - (startWeight || 0))) * 100
       : 0;
     
