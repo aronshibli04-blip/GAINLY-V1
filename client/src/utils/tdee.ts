@@ -65,8 +65,10 @@ export function calculateTdee(
     // If losing weight (negative trend), then intake < TDEE, so TDEE = intake - deficit (which is intake + positive value)
     tdee = Math.round(averageCalories - dailyCalorieBalance);
   } else {
-    // If weight is stable (no significant change), assume current intake equals TDEE
-    tdee = Math.round(averageCalories);
+    // If weight is stable, use baseline calculation - don't assume intake = TDEE
+    // Use a conservative estimate: intake - expected surplus for hardgainers
+    // This prevents showing intake as TDEE when user has stable weight
+    tdee = Math.round(Math.max(1800, averageCalories - 200)); // Conservative baseline
   }
 
   // Ensure TDEE is within reasonable bounds for adults

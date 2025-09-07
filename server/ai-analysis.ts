@@ -56,8 +56,9 @@ export function calculateTdeeAndPlan(
     const dailyCalorieBalance = (weightTrend * 3500) / 7;
     tdee = Math.round(avgCalories - dailyCalorieBalance);
   } else {
-    // If weight is stable, assume current intake is close to TDEE
-    tdee = avgCalories;
+    // If weight is stable, use conservative baseline - don't assume intake = TDEE  
+    // Use baseline calculation to avoid showing intake as TDEE
+    tdee = Math.max(1800, Math.round(avgCalories - 300)); // Conservative baseline
   }
 
   // Ensure TDEE is within reasonable bounds for hardgainers
