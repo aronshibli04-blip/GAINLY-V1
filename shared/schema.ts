@@ -233,6 +233,11 @@ export const insertUserStatsSchema = createInsertSchema(userStats).omit({
 export const insertSleepLogSchema = createInsertSchema(sleepLogs).omit({
   id: true,
   createdAt: true,
+}).extend({
+  hours: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  notes: z.string().nullable().optional(),
 });
 
 // Types
