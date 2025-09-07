@@ -107,6 +107,15 @@ export const sleepLogs = pgTable("sleep_logs", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const stressLogs = pgTable("stress_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  level: integer("level").notNull(), // 1-5 scale (1=very relaxed, 5=very stressed)
+  triggers: text("triggers"), // optional stress triggers/notes
+  logDate: date("log_date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   weightLogs: many(weightLogs),
@@ -117,6 +126,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   routineCompletions: many(dailyRoutineCompletions),
   userStats: one(userStats),
   sleepLogs: many(sleepLogs),
+  stressLogs: many(stressLogs),
 }));
 
 export const weightLogsRelations = relations(weightLogs, ({ one }) => ({
@@ -240,6 +250,13 @@ export const insertSleepLogSchema = createInsertSchema(sleepLogs).omit({
   notes: z.string().nullable().optional(),
 });
 
+export const insertStressLogSchema = createInsertSchema(stressLogs).omit({
+  id: true,
+  createdAt: true,
+}).extend({
+  triggers: z.string().nullable().optional(),
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -261,3 +278,5 @@ export type InsertUserStats = z.infer<typeof insertUserStatsSchema>;
 export type UserStats = typeof userStats.$inferSelect;
 export type InsertSleepLog = z.infer<typeof insertSleepLogSchema>;
 export type SleepLog = typeof sleepLogs.$inferSelect;
+export type InsertStressLog = z.infer<typeof insertStressLogSchema>;
+export type StressLog = typeof stressLogs.$inferSelect;

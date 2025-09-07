@@ -36,6 +36,7 @@ import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tra
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
 import { SleepQualityTracker } from "@/components/ui/sleep-quality-tracker";
+import { StressLevelTracker } from "@/components/ui/stress-level-tracker";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
 
 // Progressive leveling helper function
@@ -61,6 +62,12 @@ const getXPForCurrentLevel = (level: number) => {
 function SleepQualityTrackerComponent() {
   const userId = localStorage.getItem("userId") || "user1";
   return <SleepQualityTracker userId={userId} />;
+}
+
+// Stress Level Tracker Component
+function StressLevelTrackerComponent() {
+  const userId = localStorage.getItem("userId") || "user1";
+  return <StressLevelTracker userId={userId} />;
 }
 
 // Level Progress Card Component
@@ -1219,15 +1226,19 @@ export default function MobileHome() {
         {/* Daily Routines Quick Checker */}
         <DailyRoutinesQuickChecker />
 
-        {/* Sleep Quality Tracker */}
+        {/* Recovery Tracking Section */}
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-white flex items-center gap-2">
             <div className="relative">
               <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse" />
             </div>
-            Recovery Tracking
+            Recovery & Wellness
           </h3>
-          <SleepQualityTrackerComponent />
+          
+          <div className="grid gap-3">
+            <SleepQualityTrackerComponent />
+            <StressLevelTrackerComponent />
+          </div>
         </div>
 
         {/* Enhanced Micro Goals Overview */}

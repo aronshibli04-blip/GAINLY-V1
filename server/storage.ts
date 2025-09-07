@@ -18,6 +18,8 @@ import {
   type UserStats,
   type SleepLog,
   type InsertSleepLog,
+  type StressLog,
+  type InsertStressLog,
   users,
   weightLogs,
   mealLogs,
@@ -27,7 +29,8 @@ import {
   dailyRoutines,
   dailyRoutineCompletions,
   userStats,
-  sleepLogs
+  sleepLogs,
+  stressLogs
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -97,6 +100,11 @@ export interface IStorage {
   createSleepLog(sleepLog: InsertSleepLog): Promise<SleepLog>;
   getSleepLogsByUser(userId: string, limit?: number): Promise<SleepLog[]>;
   getSleepLogByDate(userId: string, date: string): Promise<SleepLog | undefined>;
+
+  // Stress log methods
+  createStressLog(stressLog: InsertStressLog): Promise<StressLog>;
+  getStressLogsByUser(userId: string, limit?: number): Promise<StressLog[]>;
+  getStressLogByDate(userId: string, date: string): Promise<StressLog | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -500,6 +508,31 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(sleepLogs)
       .where(and(eq(sleepLogs.userId, userId), eq(sleepLogs.logDate, date)));
+    return log || undefined;
+  }
+
+  async createStressLog(stressLog: InsertStressLog): Promise<StressLog> {
+    const [log] = await db
+      .insert(stressLogs)
+      .values(stressLog)
+      .returning();
+    return log;
+  }
+
+  async getStressLogsByUser(userId: string, limit: number = 30): Promise<StressLog[]> {
+    return await db
+      .select()
+      .from(stressLogs)
+      .where(eq(stressLogs.userId, userId))
+      .orderBy(desc(stressLogs.logDate))
+      .limit(limit);
+  }
+
+  async getStressLogByDate(userId: string, date: string): Promise<StressLog | undefined> {
+    const [log] = await db
+      .select()
+      .from(stressLogs)
+      .where(and(eq(stressLogs.userId, userId), eq(stressLogs.logDate, date)));
     return log || undefined;
   }
 }

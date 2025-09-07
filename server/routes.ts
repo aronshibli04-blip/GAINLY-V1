@@ -10,7 +10,8 @@ import {
   insertFoodItemSchema,
   insertDailyRoutineSchema,
   insertDailyRoutineCompletionSchema,
-  insertSleepLogSchema
+  insertSleepLogSchema,
+  insertStressLogSchema
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
 import { OpenAIService } from "./openai-service";
@@ -177,6 +178,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const sleepLog = await storage.getSleepLogByDate(req.params.userId, req.params.date);
       res.json(sleepLog || null);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Stress log routes
+  app.post("/api/stress-logs", async (req, res) => {
+    try {
+      const stressLogData = insertStressLogSchema.parse(req.body);
+      const stressLog = await storage.createStressLog(stressLogData);
+      res.json(stressLog);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/stress-logs/:userId", async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const stressLogs = await storage.getStressLogsByUser(req.params.userId, limit);
+      res.json(stressLogs);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/stress-logs/:userId/:date", async (req, res) => {
+    try {
+      const stressLog = await storage.getStressLogByDate(req.params.userId, req.params.date);
+      res.json(stressLog || null);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
