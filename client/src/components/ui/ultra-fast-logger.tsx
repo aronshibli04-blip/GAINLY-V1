@@ -53,6 +53,23 @@ const HARDGAINER_QUICK_FOODS: QuickFood[] = [
   { id: 'olive-oil-15ml', name: 'Olive Oil', calories: 135, protein: 0, defaultAmount: 15, unit: 'g', emoji: '🫒', category: 'fats' }
 ];
 
+// Smart meal-time recommendations
+const MEAL_TIME_FOODS = {
+  breakfast: ['oats-80g', 'eggs-2', 'milk-250ml', 'banana-1', 'bread-2', 'peanut-butter-30g'],
+  lunch: ['chicken-150g', 'rice-200g', 'pasta-200g', 'bread-2', 'olive-oil-15ml'],
+  dinner: ['beef-150g', 'chicken-150g', 'rice-200g', 'pasta-200g', 'olive-oil-15ml'],
+  snack: ['protein-shake-1', 'banana-1', 'peanut-butter-30g', 'milk-250ml']
+};
+
+// Get meal type based on current time
+function getCurrentMealTime(): 'breakfast' | 'lunch' | 'dinner' | 'snack' {
+  const hour = new Date().getHours();
+  if (hour >= 6 && hour < 11) return 'breakfast';
+  if (hour >= 11 && hour < 16) return 'lunch';
+  if (hour >= 16 && hour < 22) return 'dinner';
+  return 'snack';
+}
+
 interface UltraFastLoggerProps {
   userId: string;
   onMealLogged?: (calories: number) => void;
@@ -69,8 +86,13 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Load recent foods from localStorage
+  // Auto-detect meal type based on time and load recent foods
   useEffect(() => {
+    // Smart meal time detection
+    const detectedMealType = getCurrentMealTime();
+    setMealType(detectedMealType);
+    
+    // Load recent foods from localStorage
     const saved = localStorage.getItem('ultrafast-recent-foods');
     if (saved) {
       try {
@@ -143,6 +165,34 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
     calories: acc.calories + (food.calories * multiplier),
     protein: acc.protein + (food.protein * multiplier)
   }), {calories: 0, protein: 0});
+
+  // Smart suggestions based on meal time and patterns
+  const getSmartSuggestions = (): QuickFood[] => {
+    const mealTimeFoodIds = MEAL_TIME_FOODS[mealType] || [];
+    const suggestedFoods = HARDGAINER_QUICK_FOODS.filter(food => 
+      mealTimeFoodIds.includes(food.id)
+    );
+    
+    // Prioritize recent foods for this meal time
+    const recentMealFoods = recentFoods.filter(recent => 
+      mealTimeFoodIds.includes(recent.id)
+    ).slice(0, 3);
+    
+    // Combine recent + suggested, prioritizing recent
+    const uniqueIds = new Set();
+    const smartSuggestions: QuickFood[] = [];
+    
+    [...recentMealFoods, ...suggestedFoods].forEach(food => {
+      if (!uniqueIds.has(food.id) && smartSuggestions.length < 4) {
+        uniqueIds.add(food.id);
+        smartSuggestions.push(food);
+      }
+    });
+    
+    return smartSuggestions;
+  };
+
+  const smartSuggestions = getSmartSuggestions();
 
   // Ultra-fast add food (1 tap)
   const quickAddFood = (food: QuickFood, customMultiplier?: number) => {
@@ -367,6 +417,39 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
                 ))}
               </div>
             )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Smart Suggestions for Current Meal */}
+      {smartSuggestions.length > 0 && (
+        <Card className="border-blue-400/30 bg-gradient-to-r from-blue-600/10 to-purple-600/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm text-blue-400 flex items-center gap-2">
+              <Star className="h-4 w-4" />
+              Smart {mealType.charAt(0).toUpperCase() + mealType.slice(1)} Picks
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-2">
+              {smartSuggestions.map((food) => (
+                <Button
+                  key={`smart-${food.id}`}
+                  onClick={() => quickAddFood(food)}
+                  variant="outline"
+                  size="sm"
+                  className="h-16 flex-col border-blue-400/50 text-blue-400 hover:bg-blue-400/10 transition-all hover:scale-105"
+                  data-testid={`button-smart-add-${food.id}`}
+                >
+                  <span className="text-lg mb-1">{food.emoji}</span>
+                  <div className="text-xs font-medium">{food.name}</div>
+                  <div className="text-blue-300 text-xs">{food.defaultAmount}{food.unit}</div>
+                </Button>
+              ))}
+            </div>
+            <div className="mt-3 text-xs text-blue-300/70 text-center">
+              ⚡ Suggested based on time and your patterns
+            </div>
           </CardContent>
         </Card>
       )}
