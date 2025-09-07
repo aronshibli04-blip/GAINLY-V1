@@ -983,6 +983,7 @@ export default function MobileHome() {
     activityEntries, 
     currentPhase,
     user,
+    currentTdeeAnalysis,
     clearUserData
   } = useUserStore();
   
