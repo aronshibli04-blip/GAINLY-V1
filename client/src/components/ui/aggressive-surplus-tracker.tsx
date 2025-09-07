@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
+import { calculateTdee } from "@/utils/tdee";
 import { 
   Target, 
   AlertTriangle, 
@@ -29,9 +30,12 @@ export function AggressiveSurplusTracker() {
     ?.filter(c => c?.date === today)
     ?.reduce((sum, c) => sum + (c?.calories || 0), 0) || 0;
   
-  // Use targetCalories from TDEE analysis (already includes 1100 surplus) or calculate fallback
-  const requiredCalories = currentTdeeAnalysis?.targetCalories || 
-    ((currentTdeeAnalysis?.tdee || 2500) + 1100); // 1100kcal surplus for 1kg/week
+  // FORCE real-time calculation instead of using potentially wrong stored analysis
+  // Calculate TDEE directly to avoid using outdated stored values
+  // Get weight entries from user store for proper TDEE calculation
+  const { weightEntries } = useUserStore();
+  const realtimeTdeeCalc = calculateTdee(weightEntries || [], calorieEntries || [], 'user1');
+  const requiredCalories = realtimeTdeeCalc.targetCalories; // This includes the 1100 surplus
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / requiredCalories) * 100);
   const currentHour = new Date().getHours();

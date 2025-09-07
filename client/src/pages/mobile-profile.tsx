@@ -84,11 +84,11 @@ export default function MobileProfile() {
     ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
     : 0;
 
-  // Calculate real-time TDEE if analysis is missing
+  // FORCE real-time TDEE calculation to avoid wrong stored values
+  // Always calculate fresh TDEE instead of using potentially outdated stored analysis
   const realtimeTdeeCalc = useMemo(() => {
-    if (currentTdeeAnalysis) return currentTdeeAnalysis;
     return calculateTdee(weightEntries || [], calorieEntries || [], user?.id || '');
-  }, [currentTdeeAnalysis, weightEntries, calorieEntries, user?.id]);
+  }, [weightEntries, calorieEntries, user?.id]);
   
   const currentTdee = realtimeTdeeCalc.tdee;
 
