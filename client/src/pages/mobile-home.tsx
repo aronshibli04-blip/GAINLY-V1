@@ -57,6 +57,12 @@ const getXPForCurrentLevel = (level: number) => {
   return level === 1 ? 0 : getXPForLevel(level - 1);
 };
 
+// Sleep Quality Tracker Component
+function SleepQualityTrackerComponent() {
+  const userId = localStorage.getItem("userId") || "user1";
+  return <SleepQualityTracker userId={userId} />;
+}
+
 // Level Progress Card Component
 function LevelProgressCard() {
   const userId = localStorage.getItem("userId") || "user1";
@@ -1221,7 +1227,7 @@ export default function MobileHome() {
             </div>
             Recovery Tracking
           </h3>
-          <SleepQualityTracker userId={userId} />
+          <SleepQualityTrackerComponent />
         </div>
 
         {/* Enhanced Micro Goals Overview */}
