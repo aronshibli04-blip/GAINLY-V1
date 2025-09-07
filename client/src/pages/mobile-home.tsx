@@ -1169,7 +1169,7 @@ export default function MobileHome() {
               </p>
               {todayCalories > 0 && (
                 <p className="text-xs text-orange-400 font-bold mt-2 tracking-wide">
-                  +{(todayCalories - 2400).toLocaleString()} surplus
+                  +{Math.max(0, (todayCalories - (currentTdeeAnalysis?.tdee || 2500))).toLocaleString()} surplus
                 </p>
               )}
             </CardContent>

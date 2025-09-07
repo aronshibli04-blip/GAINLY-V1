@@ -23,6 +23,7 @@ import { useMenu } from "@/components/ui/menu-context";
 import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Tooltip } from "recharts";
+import { calculateTdee } from "@/utils/tdee";
 
 export default function MobileStatistics() {
   const { 
@@ -53,7 +54,9 @@ export default function MobileStatistics() {
       ? Math.round(calorieEntries.reduce((sum, entry) => sum + entry.calories, 0) / calorieEntries.length)
       : 0;
 
-    const currentTdee = currentTdeeAnalysis?.tdee || 2400;
+    // Calculate real-time TDEE if analysis is missing
+    const realtimeTdeeCalc = currentTdeeAnalysis || calculateTdee(weightEntries || [], calorieEntries || [], user?.id || '');
+    const currentTdee = realtimeTdeeCalc.tdee;
     const avgSurplus = avgCaloriesPerDay - currentTdee;
     
     // Weight gain rate (kg per week)

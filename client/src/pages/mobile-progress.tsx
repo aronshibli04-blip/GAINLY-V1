@@ -29,6 +29,7 @@ import { useMenu } from "@/components/ui/menu-context";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Tooltip, AreaChart, Area } from "recharts";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { calculateTdee } from "@/utils/tdee";
 
 export default function MobileProgress() {
   const { 
@@ -104,7 +105,9 @@ export default function MobileProgress() {
       ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
       : 0;
 
-    const currentTdee = currentTdeeAnalysis?.tdee || 2400;
+    // Calculate real-time TDEE if analysis is missing
+    const realtimeTdeeCalc = currentTdeeAnalysis || calculateTdee(weightEntries || [], calorieEntries || [], user?.id || '');
+    const currentTdee = realtimeTdeeCalc.tdee;
     const avgSurplus = avgCaloriesPerDay > 0 ? avgCaloriesPerDay - currentTdee : 0;
     
     // Weight gain rate (kg per week)

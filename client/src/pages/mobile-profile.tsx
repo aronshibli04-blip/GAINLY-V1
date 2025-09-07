@@ -37,6 +37,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useMenu } from "@/components/ui/menu-context";
+import { calculateTdee } from "@/utils/tdee";
 
 export default function MobileProfile() {
   const { toast } = useToast();
@@ -83,7 +84,13 @@ export default function MobileProfile() {
     ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
     : 0;
 
-  const currentTdee = currentTdeeAnalysis?.tdee || 2400;
+  // Calculate real-time TDEE if analysis is missing
+  const realtimeTdeeCalc = useMemo(() => {
+    if (currentTdeeAnalysis) return currentTdeeAnalysis;
+    return calculateTdee(weightEntries || [], calorieEntries || [], user?.id || '');
+  }, [currentTdeeAnalysis, weightEntries, calorieEntries, user?.id]);
+  
+  const currentTdee = realtimeTdeeCalc.tdee;
 
   // Advanced statistics
   const stats = useMemo(() => {
