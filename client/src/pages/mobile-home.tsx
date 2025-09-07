@@ -1223,6 +1223,24 @@ export default function MobileHome() {
           </Link>
         </div>
 
+        {/* Weight Logging Section - Priority placement at top */}
+        {!todayWeight && (
+          <div className="space-y-3">
+            <h3 className="text-2xl font-black text-white flex items-center gap-3 tracking-tight">
+              <div className="relative">
+                <Activity className="h-6 w-6 text-orange-400 drop-shadow-lg" />
+                <div className="absolute inset-0 animate-ping">
+                  <Activity className="h-6 w-6 text-orange-400/40" />
+                </div>
+              </div>
+              <span className="bg-gradient-to-r from-orange-300 to-amber-400 bg-clip-text text-transparent">
+                Log Today's Weight
+              </span>
+            </h3>
+            <WeightLogger />
+          </div>
+        )}
+
         {/* Daily Routines Quick Checker */}
         <DailyRoutinesQuickChecker />
 
@@ -1257,13 +1275,6 @@ export default function MobileHome() {
           <MicroGoalsOverview />
         </div>
 
-        {/* Weight Logging Section - Only show if not logged today */}
-        {!todayWeight && (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-white">Log Weight</h3>
-            <WeightLogger />
-          </div>
-        )}
 
         {/* Weight Progress Chart - Keep this for quick overview */}
         {weightEntries.length >= 3 && (
