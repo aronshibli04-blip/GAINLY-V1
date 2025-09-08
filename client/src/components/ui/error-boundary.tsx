@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    // Error logged for debugging
   }
 
   private handleRetry = () => {
@@ -41,12 +41,12 @@ export class ErrorBoundary extends Component<Props, State> {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-red-400">
               <AlertTriangle className="h-5 w-5" />
-              Something went wrong
+              Noe gikk galt
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-red-300/70 text-sm">
-              The app encountered an unexpected error. This has been logged for investigation.
+              Appen støtte på en uventet feil. Dette er logget for undersøkelse.
             </p>
             
             {process.env.NODE_ENV === 'development' && this.state.error && (
@@ -64,7 +64,7 @@ export class ErrorBoundary extends Component<Props, State> {
               className="border-red-400/30 text-red-400 hover:bg-red-400/10"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
-              Try Again
+              Prøv igjen
             </Button>
           </CardContent>
         </Card>

@@ -172,8 +172,8 @@ export function PremiumLoggedMeals() {
     const portions = parseFloat(editPortions);
     if (isNaN(portions) || portions <= 0) {
       toast({
-        title: "Invalid portion",
-        description: "Please enter a valid portion amount.",
+        title: "Ugyldig porsjon",
+        description: "Vennligst skriv inn gyldig porsjonsstørrelse.",
         variant: "destructive",
       });
       return;

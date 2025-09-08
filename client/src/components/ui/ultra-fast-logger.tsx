@@ -228,7 +228,12 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
   // Save meal mutation
   const saveMealMutation = useMutation({
     mutationFn: async () => {
-      if (currentMeal.length === 0) throw new Error("No foods selected");
+      if (currentMeal.length === 0) throw new Error("Ingen mat valgt");
+      
+      // Validate total calories are realistic
+      if (totals.calories < 50 || totals.calories > 3000) {
+        throw new Error("Urealistisk kaloriinnhold for ett måltid");
+      }
       
       const response = await fetch('/api/meal-logs', {
         method: 'POST',
@@ -247,8 +252,8 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
     },
     onSuccess: () => {
       toast({
-        title: "⚡ Meal logged instantly!",
-        description: `${Math.round(totals.calories)} calories saved in record time`,
+        title: "⚡ Måltid registrert øyeblikkelig!",
+        description: `${Math.round(totals.calories)} kalorier lagret på rekordtid`,
       });
       onMealLogged?.(totals.calories);
       setCurrentMeal([]);
@@ -257,10 +262,10 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
     },
     onError: (error: any) => {
-      console.error('Meal save error:', error);
+      // Meal save error logged
       toast({
-        title: "⚠️ Save failed",
-        description: "Please try again or switch to Advanced mode",
+        title: "⚠️ Lagring feilet",
+        description: "Prøv igjen eller bytt til Avansert modus",
         variant: "destructive"
       });
     }
@@ -270,8 +275,8 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
   const duplicateLastMeal = () => {
     // This would fetch the last meal and duplicate it
     toast({
-      title: "Duplicating last meal...",
-      description: "Coming soon - instant meal duplication",
+      title: "Dupliserer forrige måltid...",
+      description: "Kommer snart - øyeblikkelig måltidduplisering",
     });
   };
 

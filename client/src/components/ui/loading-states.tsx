@@ -73,7 +73,7 @@ export function InlineLoader({ size = "sm" }: { size?: "sm" | "md" | "lg" }) {
 }
 
 // Full page loading screen
-export function FullPageLoader({ message = "Loading..." }: { message?: string }) {
+export function FullPageLoader({ message = "Laster..." }: { message?: string }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900/20 to-slate-900 flex items-center justify-center">
       <div className="text-center space-y-4">
