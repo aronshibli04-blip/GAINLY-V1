@@ -125,20 +125,24 @@ export function AggressiveSurplusTracker() {
 
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Quick Calorie Boost - Meal saved successfully:', data);
       // Invalidate meal logs cache with exact same query key as PremiumLoggedMeals
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Quick Calorie Boost - Error saving meal:', error);
       toast({
         title: "Error saving meal",
-        description: "Please try again",
+        description: error?.message || "Please try again",
         variant: "destructive"
       });
     }
   });
 
   const handleQuickAdd = (food: { name: string; calories: number }) => {
+    console.log('Quick Calorie Boost - Adding food:', food, 'userId:', userId, 'today:', today);
+    
     // Save to localStorage (for immediate UI update)
     addCalorieEntry({
       date: today,
