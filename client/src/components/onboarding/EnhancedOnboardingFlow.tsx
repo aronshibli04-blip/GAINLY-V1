@@ -182,6 +182,7 @@ export function EnhancedOnboardingFlow() {
         username: userData.firstName.toLowerCase(),
         createdAt: new Date().toISOString(),
         password: '',
+        hasCompletedCalibration: true, // Skip calibration since we have AI analysis
       };
       
       setUser(user);

@@ -30,7 +30,6 @@ import MobileDemo from "./pages/MobileDemo";
 
 // Setup pages
 import HardgainerProfileSetup from "@/pages/hardgainer-profile-setup";
-import CalibrationMode from "@/pages/calibration-mode";
 
 function App() {
   const { user, isOnboarded, completeOnboarding } = useUserStore();
@@ -83,7 +82,6 @@ function AppContent() {
       <ErrorBoundary>
         <Switch>
           <Route path="/" component={MobileHome} />
-          <Route path="/calibration" component={CalibrationMode} />
           <Route path="/calories" component={MobileCalories} />
           <Route path="/training" component={MobileTraining} />
           <Route path="/ai-coach" component={MobileAICoach} />

@@ -1001,12 +1001,7 @@ export default function MobileHome() {
     }
   }, []);
 
-  // Redirect to calibration mode if user hasn't completed calibration
-  useEffect(() => {
-    if (user && !user.hasCompletedCalibration) {
-      window.location.href = '/calibration';
-    }
-  }, [user]);
+  // Removed calibration redirect - users now go directly to dashboard after onboarding
 
   // Get today's data
   const today = new Date().toISOString().split('T')[0];
