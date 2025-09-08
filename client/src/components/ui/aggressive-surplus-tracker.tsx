@@ -62,19 +62,20 @@ export function AggressiveSurplusTracker() {
   }, []);
 
   // Auto-transition to motivation after 5 seconds regardless of completion
+  // Reset timer when calories change (user adds food)
   useEffect(() => {
-    const autoTransitionTimer = setTimeout(() => {
-      if (!showMotivation) {
+    if (!showMotivation) {
+      const autoTransitionTimer = setTimeout(() => {
         setAnimatingOut(true);
         setTimeout(() => {
           setShowMotivation(true);
           setAnimatingOut(false);
         }, 1000);
-      }
-    }, 5000); // Show progress for 5 seconds then transition
-    
-    return () => clearTimeout(autoTransitionTimer);
-  }, [showMotivation]);
+      }, 5000); // Show progress for 5 seconds then transition
+      
+      return () => clearTimeout(autoTransitionTimer);
+    }
+  }, [showMotivation, todayCalories]); // Reset timer when calories change
 
   // Also transition when completed for immediate feedback
   useEffect(() => {
@@ -106,6 +107,12 @@ export function AggressiveSurplusTracker() {
       description: food.name + " (Quick Add)",
       userId: "user1"
     });
+    
+    // Reset to progress view when user adds food to show updated status
+    if (showMotivation) {
+      setShowMotivation(false);
+      setAnimatingOut(false);
+    }
     
     toast({
       title: `${food.name} Added!`,
