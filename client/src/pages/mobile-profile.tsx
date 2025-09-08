@@ -71,14 +71,14 @@ export default function MobileProfile() {
   const startWeight = weightEntries?.length > 0 ? weightEntries[weightEntries.length - 1]?.weight || user.weight : user.weight;
   const weightGained = (currentWeight || 0) - (startWeight || 0);
   const goalWeight = user.goalWeight || (currentWeight || 0) + 10;
-  const progressToGoal = goalWeight > startWeight && currentWeight > startWeight 
-    ? (((currentWeight || 0) - (startWeight || 0)) / ((goalWeight || 0) - (startWeight || 0))) * 100
+  const progressToGoal = goalWeight && startWeight && currentWeight && goalWeight > startWeight && currentWeight > startWeight 
+    ? ((currentWeight - startWeight) / (goalWeight - startWeight)) * 100
     : 0;
   
-  const totalDaysTracked = new Set([
+  const totalDaysTracked = Array.from(new Set([
     ...weightEntries.map(w => w.date),
     ...calorieEntries.map(c => c.date)
-  ]).size;
+  ])).length;
 
   const avgCaloriesPerDay = calorieEntries?.length > 0 
     ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
