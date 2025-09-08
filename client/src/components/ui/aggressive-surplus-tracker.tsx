@@ -102,6 +102,9 @@ export function AggressiveSurplusTracker() {
     { name: "Energy Bar", calories: 300, icon: Cookie }
   ];
 
+  // Use the same userId as PremiumLoggedMeals
+  const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
+
   // Mutation to save to database
   const saveMealLogMutation = useMutation({
     mutationFn: async (food: { name: string; calories: number }) => {
@@ -109,7 +112,7 @@ export function AggressiveSurplusTracker() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: "user1",
+          userId: userId,
           logDate: today,
           calories: food.calories,
           description: food.name + " (Quick Boost)"
@@ -123,8 +126,8 @@ export function AggressiveSurplusTracker() {
       return response.json();
     },
     onSuccess: () => {
-      // Invalidate meal logs cache to refresh "Today's Logged Meals"
-      queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
+      // Invalidate meal logs cache with exact same query key as PremiumLoggedMeals
+      queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
     },
     onError: () => {
       toast({
@@ -141,7 +144,7 @@ export function AggressiveSurplusTracker() {
       date: today,
       calories: food.calories,
       description: food.name + " (Quick Add)",
-      userId: "user1"
+      userId: userId
     });
     
     // Save to database (for meals page)
