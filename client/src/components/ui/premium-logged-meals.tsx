@@ -117,6 +117,15 @@ export function PremiumLoggedMeals() {
   const calculation = calculateTdee(weightEntries || [], calorieEntries || [], 'user1');
   const targetCalories = calculation.targetCalories; // This should show 4850 like AI Analysis
   
+  // DEBUG: Log the calculated values
+  console.log('🟠 MEALS - PremiumLoggedMeals:', {
+    tdee: calculation.tdee,
+    surplus: calculation.surplus,
+    targetCalories: calculation.targetCalories,
+    weightEntries: weightEntries?.length,
+    calorieEntries: calorieEntries?.length
+  });
+  
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);
 
   // Swipe handlers

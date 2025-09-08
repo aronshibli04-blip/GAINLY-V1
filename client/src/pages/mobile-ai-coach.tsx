@@ -44,6 +44,15 @@ export default function MobileAICoach() {
     // Calculate TDEE analysis
     const calculation = calculateTdee(weightEntries, calorieEntries, "user1");
     
+    // DEBUG: Log the calculated values
+    console.log('🟣 AI ANALYSIS - Mobile AI Coach:', {
+      tdee: calculation.tdee,
+      surplus: calculation.surplus,
+      targetCalories: calculation.targetCalories,
+      weightEntries: weightEntries?.length,
+      calorieEntries: calorieEntries?.length
+    });
+    
     const analysis = {
       id: Date.now().toString(),
       userId: "user1",

@@ -87,7 +87,18 @@ export default function MobileProfile() {
   // FORCE real-time TDEE calculation to avoid wrong stored values
   // Always calculate fresh TDEE instead of using potentially outdated stored analysis
   const realtimeTdeeCalc = useMemo(() => {
-    return calculateTdee(weightEntries || [], calorieEntries || [], user?.id || '');
+    const calc = calculateTdee(weightEntries || [], calorieEntries || [], user?.id || '');
+    
+    // DEBUG: Log the calculated values
+    console.log('🔵 PROFILE - Mobile Profile:', {
+      tdee: calc.tdee,
+      surplus: calc.surplus,
+      targetCalories: calc.targetCalories,
+      weightEntries: weightEntries?.length,
+      calorieEntries: calorieEntries?.length
+    });
+    
+    return calc;
   }, [weightEntries, calorieEntries, user?.id]);
   
   const currentTdee = realtimeTdeeCalc.tdee;
