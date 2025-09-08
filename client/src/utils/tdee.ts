@@ -51,7 +51,7 @@ export function calculateTdee(
   const dailyCalorieTotals = Array.from(dailyCaloriesByDate.values());
   const averageCalories = dailyCalorieTotals.length > 0 
     ? dailyCalorieTotals.reduce((sum, calories) => sum + calories, 0) / dailyCalorieTotals.length 
-    : 2500;
+    : 3750; // Higher fallback for hardgainers when no data
 
   // Calculate TDEE based on weight change and calorie intake
   let tdee = averageCalories;
@@ -68,7 +68,7 @@ export function calculateTdee(
     // If weight is stable, use baseline calculation - don't assume intake = TDEE
     // Use a conservative estimate: intake - expected surplus for hardgainers
     // This prevents showing intake as TDEE when user has stable weight
-    tdee = Math.round(Math.max(1800, averageCalories - 200)); // Conservative baseline
+    tdee = Math.round(Math.max(3750, averageCalories - 200)); // Higher baseline for hardgainers
   }
 
   // Ensure TDEE is within reasonable bounds for adults

@@ -35,14 +35,6 @@ export function AggressiveSurplusTracker() {
   const realtimeTdeeCalc = calculateTdee(weightEntries || [], calorieEntries || [], 'user1');
   const requiredCalories = realtimeTdeeCalc.targetCalories; // This includes the 1100 surplus
   
-  // DEBUG: Log the calculated values
-  console.log('🔴 DASHBOARD - AggressiveSurplusTracker:', {
-    tdee: realtimeTdeeCalc.tdee,
-    surplus: realtimeTdeeCalc.surplus, 
-    targetCalories: realtimeTdeeCalc.targetCalories,
-    weightEntries: weightEntries?.length,
-    calorieEntries: calorieEntries?.length
-  });
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / requiredCalories) * 100);
   const currentHour = new Date().getHours();
