@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { calculateTdee } from "@/utils/tdee";
 import { 
   Target, 
@@ -20,6 +21,7 @@ import {
 
 export function AggressiveSurplusTracker() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const { calorieEntries, weightEntries, addCalorieEntry, currentTdeeAnalysis } = useUserStore();
   const [showMotivation, setShowMotivation] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
@@ -100,13 +102,50 @@ export function AggressiveSurplusTracker() {
     { name: "Energy Bar", calories: 300, icon: Cookie }
   ];
 
+  // Mutation to save to database
+  const saveMealLogMutation = useMutation({
+    mutationFn: async (food: { name: string; calories: number }) => {
+      const response = await fetch('/api/meal-logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: "user1",
+          logDate: today,
+          calories: food.calories,
+          description: food.name + " (Quick Boost)"
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save meal log');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      // Invalidate meal logs cache to refresh "Today's Logged Meals"
+      queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
+    },
+    onError: () => {
+      toast({
+        title: "Error saving meal",
+        description: "Please try again",
+        variant: "destructive"
+      });
+    }
+  });
+
   const handleQuickAdd = (food: { name: string; calories: number }) => {
+    // Save to localStorage (for immediate UI update)
     addCalorieEntry({
       date: today,
       calories: food.calories,
       description: food.name + " (Quick Add)",
       userId: "user1"
     });
+    
+    // Save to database (for meals page)
+    saveMealLogMutation.mutate(food);
     
     // Reset to progress view when user adds food to show updated status
     if (showMotivation) {
