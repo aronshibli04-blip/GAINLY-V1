@@ -10,6 +10,7 @@ import {
   MealPlan,
   UserPhase
 } from '../types';
+import { SubscriptionStatus, mockSubscriptionService, SubscriptionType } from '@/utils/tiers';
 
 interface UserState {
   // User data
@@ -24,6 +25,16 @@ interface UserState {
   // Analysis data
   currentTdeeAnalysis: TdeeAnalysis | null;
   mealPlans: MealPlan[];
+  
+  // Subscription & Tier data
+  subscription: SubscriptionStatus;
+  
+  // Gamification data
+  xp: number;
+  level: number;
+  currentStreak: number;
+  longestStreak: number;
+  badges: string[];
   
   // UI state
   isLoading: boolean;
@@ -41,6 +52,18 @@ interface UserState {
   updatePhase: (phase: UserPhase) => void;
   clearUserData: () => void;
   setLoading: (loading: boolean) => void;
+  
+  // Subscription actions
+  upgradeSubscription: (type: SubscriptionType) => void;
+  startTrial: () => void;
+  cancelSubscription: () => void;
+  
+  // Gamification actions  
+  addXp: (amount: number) => void;
+  incrementStreak: () => void;
+  resetStreak: () => void;
+  addBadge: (badgeId: string) => void;
+  
   // skipToNextDay removed - was generating fake test data
 }
 
@@ -55,6 +78,17 @@ export const useUserStore = create<UserState>()(
       activityEntries: [],
       currentTdeeAnalysis: null,
       mealPlans: [],
+      
+      // Subscription & tier initial state
+      subscription: { tier: 'free' },
+      
+      // Gamification initial state
+      xp: 0,
+      level: 1,
+      currentStreak: 0,
+      longestStreak: 0,
+      badges: [],
+      
       isLoading: false,
       currentPhase: 'onboarding',
 
@@ -157,6 +191,59 @@ export const useUserStore = create<UserState>()(
         set({ isLoading: loading });
       },
 
+      // Subscription actions
+      upgradeSubscription: (type) => {
+        const state = get();
+        const userId = state.user?.id || 'user1';
+        const subscription = mockSubscriptionService.upgradeToPremium(userId, type);
+        set({ subscription });
+      },
+
+      startTrial: () => {
+        const state = get();
+        const userId = state.user?.id || 'user1';
+        const subscription = mockSubscriptionService.startTrial(userId);
+        set({ subscription });
+      },
+
+      cancelSubscription: () => {
+        const state = get();
+        const userId = state.user?.id || 'user1';
+        const subscription = mockSubscriptionService.cancelSubscription(userId);
+        set({ subscription });
+      },
+
+      // Gamification actions
+      addXp: (amount) => {
+        set(state => {
+          const newXp = state.xp + amount;
+          const newLevel = Math.floor(newXp / 1000) + 1;
+          return { 
+            xp: newXp, 
+            level: Math.max(newLevel, state.level) 
+          };
+        });
+      },
+
+      incrementStreak: () => {
+        set(state => ({
+          currentStreak: state.currentStreak + 1,
+          longestStreak: Math.max(state.longestStreak, state.currentStreak + 1)
+        }));
+      },
+
+      resetStreak: () => {
+        set({ currentStreak: 0 });
+      },
+
+      addBadge: (badgeId) => {
+        set(state => ({
+          badges: state.badges.includes(badgeId) 
+            ? state.badges 
+            : [...state.badges, badgeId]
+        }));
+      },
+
       clearUserData: () => {
         // Clear localStorage completely to remove any lingering test data
         const keysToRemove = [];
@@ -176,6 +263,12 @@ export const useUserStore = create<UserState>()(
           activityEntries: [],
           currentTdeeAnalysis: null,
           mealPlans: [],
+          subscription: { tier: 'free' },
+          xp: 0,
+          level: 1,
+          currentStreak: 0,
+          longestStreak: 0,
+          badges: [],
           currentPhase: 'onboarding',
         });
       },
@@ -192,6 +285,12 @@ export const useUserStore = create<UserState>()(
         activityEntries: state.activityEntries,
         currentTdeeAnalysis: state.currentTdeeAnalysis,
         mealPlans: state.mealPlans,
+        subscription: state.subscription,
+        xp: state.xp,
+        level: state.level,
+        currentStreak: state.currentStreak,
+        longestStreak: state.longestStreak,
+        badges: state.badges,
         currentPhase: state.currentPhase,
       }),
 

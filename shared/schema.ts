@@ -94,6 +94,15 @@ export const userStats = pgTable("user_stats", {
   longestStreak: integer("longest_streak").notNull().default(0),
   level: integer("level").notNull().default(1),
   lastCompletionDate: date("last_completion_date"),
+  // Subscription and tier data
+  subscriptionTier: text("subscription_tier").notNull().default('free'), // 'free' | 'premium'
+  subscriptionType: text("subscription_type"), // 'monthly' | 'yearly' | 'lifetime'
+  subscriptionExpiresAt: timestamp("subscription_expires_at"),
+  trialEndsAt: timestamp("trial_ends_at"),
+  isTrialing: boolean("is_trialing").notNull().default(false),
+  // Gamification
+  totalBadgesEarned: integer("total_badges_earned").notNull().default(0),
+  totalXp: integer("total_xp").notNull().default(0),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
