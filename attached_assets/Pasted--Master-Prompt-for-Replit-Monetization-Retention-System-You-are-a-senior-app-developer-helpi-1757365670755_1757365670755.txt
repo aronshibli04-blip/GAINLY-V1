@@ -1,0 +1,70 @@
+📌 Master Prompt for Replit (Monetization + Retention System)
+
+“You are a senior app developer helping me build a premium fitness app for hardgainers. I want you to implement the following monetization and retention system into my existing web app (built in React/Next.js on Replit):
+
+⸻
+
+1. App Structure & Tiers
+	•	The app must have two tiers:
+	•	Free Tier (basic tracking + 7-day calibration).
+	•	Premium Tier (AI meal plans, grocery lists, personalized training, realistic 3D body preview, advanced analytics, and AI challenges).
+	•	Make sure free users can use the app immediately and get instant value, but premium feels essential for full progress.
+	•	Include mock subscription management system (so I can later hook it up to Stripe/RevenueCat). For now, just simulate premium vs free states in code.
+
+⸻
+
+2. Onboarding Flow
+	•	Redesign onboarding into step-by-step interactive flow:
+	1.	Welcome screen with app motto → “We make the impossible possible for hardgainers.”
+	2.	Collect basic info: age, gender, weight, height, goal weight.
+	3.	Show AI-generated 3D body preview (placeholder 3D model now, upgrade later).
+	4.	Show them a peek at their “future body” at goal weight (premium users get better preview).
+	5.	Explain 7-day calibration phase but let them log right away.
+	6.	End onboarding with: “Start your journey today!” and a premium trial button.
+
+⸻
+
+3. Gamification Layer
+	•	Add a Daily Routine Checklist with streak tracking (XP + level system).
+	•	Users earn XP for logging weight, meals, workouts, and routines.
+	•	Add badges: first streak, first kg gained, first meal prep.
+	•	Free tier shows basic XP, but premium unlocks advanced badges + AI challenges.
+
+⸻
+
+4. Premium Upsell System
+	•	Add an Upgrade to Premium screen accessible from side menu.
+	•	Pricing tiers (just mock for now):
+	•	$6.99/month, $59.99/year (later adjustable).
+	•	Special “lifetime unlock” $99 one-time.
+	•	Highlight premium-only features: AI meal plans, 3D previews, challenges, grocery lists.
+	•	Add a launch perk → premium free trial after 7-day streak.
+
+⸻
+
+5. Retention Features
+	•	Add daily push reminder system (simulate with local notifications for now) with friendly AI coach tone.
+	•	Weekly “progress preview” → show how close they are to their goal (using data from logs).
+	•	Monthly recalibration prompt → “Your metabolism has adapted. Ready for updated meal plans?” (premium only).
+
+⸻
+
+6. Code & UI Implementation
+	•	Use React + Tailwind for sleek dark UI (inspired by Grok).
+	•	Organize code so:
+	•	/components/Onboarding.js = new step flow.
+	•	/components/DailyRoutines.js = gamified checklist.
+	•	/components/PremiumUpsell.js = subscription showcase.
+	•	/utils/tiers.js = handles free vs premium logic.
+	•	Create dummy user data so I can demo free vs premium instantly.
+
+⸻
+
+7. Deployment
+	•	Keep everything local for now (no real payment integration yet).
+	•	Make sure the app runs smoothly on mobile browsers (responsive design).
+	•	Later, I will wrap this into Expo for iOS/Android.
+
+⸻
+
+Deliver a working version where I can demo onboarding, free tier, premium upsell, and gamification to testers right away.

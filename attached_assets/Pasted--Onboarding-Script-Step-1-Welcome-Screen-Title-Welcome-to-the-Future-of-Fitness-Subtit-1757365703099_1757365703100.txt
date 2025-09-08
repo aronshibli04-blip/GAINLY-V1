@@ -1,0 +1,74 @@
+🚀 Onboarding Script
+
+Step 1 – Welcome Screen
+	•	Title: “Welcome to the Future of Fitness”
+	•	Subtitle: “We make the impossible possible for hardgainers.”
+	•	Button: “Start My Transformation”
+
+⸻
+
+Step 2 – Collect User Info
+	•	Title: “Tell me about you.”
+	•	Fields: Age, Gender, Height, Current Weight, Goal Weight.
+	•	Copy: “Your journey starts here. I’ll calculate the exact protocol to make you grow stronger every week.”
+
+⸻
+
+Step 3 – 3D Body Preview (Current Body)
+	•	Title: “Here’s You Today”
+	•	Copy: “This is your digital twin. Together, we’ll evolve it week by week.”
+	•	Button: “See My Future”
+
+⸻
+
+Step 4 – Future Body Preview (Goal Weight)
+	•	Title: “The Future You”
+	•	Copy: “This is what’s waiting for you at your goal weight. Every log, every meal, every rep brings you closer.”
+	•	Free tier: rough/low-res preview.
+	•	Premium: realistic 3D model + muscle growth visualization.
+	•	Button: “I Want This”
+
+⸻
+
+Step 5 – Calibration Intro
+	•	Title: “Your Body, My Science”
+	•	Copy: “For 7 days, we’ll measure your metabolism. You log your meals and weight. I’ll calculate your exact maintenance calories and design your perfect surplus.”
+	•	Button: “Begin Calibration”
+
+⸻
+
+Step 6 – Final Motivational Push
+	•	Title: “Your Transformation Starts Now”
+	•	Copy: “No more guessing. No more failure. Only progress. I’ll be your coach, your scientist, and your accountability partner.”
+	•	Buttons:
+	•	Primary: “Start Free”
+	•	Secondary: “Unlock Premium Features”
+
+⸻
+
+💎 Premium Upsell Screen
+
+Header: “Upgrade to Premium — Unlock Your Full Potential”
+
+Features List:
+✅ AI-Generated Meal Plans (personalized for you)
+✅ Smart Grocery Lists & Meal Prep Guides
+✅ Progressive Training Protocols (with overload built-in)
+✅ Realistic 3D Future Body Visualization
+✅ Advanced Calorie Recalibration Every Month
+✅ Exclusive AI Challenges & Premium Badges
+
+Pricing Section:
+	•	Monthly: $6.99
+	•	Yearly: $59.99 (save 30%)
+	•	Lifetime Unlock: $99 (limited founder’s offer)
+
+CTA Button:
+	•	“Upgrade Now and Transform Faster”
+
+⸻
+
+🔁 Retention Notifications (Example Copy)
+	•	Daily: “Your future self is waiting. Log today’s weight and meals — every entry brings you closer.”
+	•	Weekly: “Progress Report: You’re +0.7kg this week. Keep the streak alive!”
+	•	Monthly: “Your metabolism has adapted. Ready for updated AI meal plans?”

@@ -1,0 +1,91 @@
+🖼 Wireframe Layout: Free vs Premium
+
+⸻
+
+Onboarding Flow
+
+Screen 1 – Welcome
+	•	Full-screen dark background (gradient like Grok).
+	•	Centered Title: “Welcome to the Future of Fitness”
+	•	Subtitle: “We make the impossible possible for hardgainers.”
+	•	CTA Button: “Start My Transformation” (large, primary color).
+
+⸻
+
+Screen 2 – User Info
+	•	Progress bar at top (Step 1 of 5).
+	•	Input fields stacked vertically: Age, Gender, Height, Current Weight, Goal Weight.
+	•	Friendly text under each field: “Your journey starts here…”
+	•	Bottom: “Next” button.
+
+⸻
+
+Screen 3 – Current Body Preview
+	•	Placeholder 3D avatar in center (expandable later).
+	•	Title above: “Here’s You Today.”
+	•	Subtitle below: “This is your digital twin. Together, we’ll evolve it week by week.”
+	•	Bottom CTA: “See My Future.”
+
+⸻
+
+Screen 4 – Future Body Preview
+	•	Split screen: Current Body (left, faded) vs Future Body (right, highlighted).
+	•	Title: “The Future You.”
+	•	Free Tier: blurred/faded preview.
+	•	Premium: realistic 3D preview with muscles.
+	•	Two buttons:
+	•	“I Want This” (continues to calibration).
+	•	“Unlock Premium Features” (opens upsell).
+
+⸻
+
+Screen 5 – Calibration Intro
+	•	Simple checklist UI:
+	•	✅ Log meals
+	•	✅ Log weight
+	•	✅ Log training
+	•	Title: “Your Body, My Science.”
+	•	Subtitle: “For 7 days, I’ll measure your metabolism and design your surplus.”
+	•	CTA: “Begin Calibration.”
+
+⸻
+
+⸻
+
+Premium Upsell Screen
+
+Header: Full-width banner “Unlock Your Full Potential”
+
+Section 1: Feature Grid (icons + short text)
+	•	🍲 AI Meal Plans
+	•	🛒 Grocery Lists
+	•	🏋 Progressive Training
+	•	🧬 Monthly Recalibration
+	•	🏆 Premium Badges
+	•	🧍 3D Future Body
+
+Section 2: Pricing Cards
+	•	Monthly: $6.99 (highlighted in gray).
+	•	Yearly: $59.99 (highlighted as “Most Popular”).
+	•	Lifetime: $99 (gold border, labeled “Founder’s Offer”).
+
+Section 3: CTA Buttons
+	•	Primary: “Upgrade Now and Transform Faster” (glowing, large).
+	•	Secondary: “Maybe Later” (small, muted).
+
+⸻
+
+Gamification Layer (Home Screen)
+	•	Daily Routine Checklist (cards you can check off).
+	•	XP bar at top → Level system.
+	•	Streak counter → flame icon.
+	•	Badge carousel → locked badges grayed out.
+
+Premium users: extra badges + AI challenges show up.
+
+⸻
+
+⚡ With this wireframe:
+	•	Replit devs know exactly where each element goes.
+	•	Free vs Premium split is obvious but motivating.
+	•	Onboarding flows directly into calibration + upsell without boring drop-offs.
