@@ -42,30 +42,17 @@ export function PremiumLoggedMeals() {
   // Get user's actual calorie target from store
   const { currentTdeeAnalysis, user, weightEntries, calorieEntries } = useUserStore();
 
-  const { data: todaysMeals, isLoading, error } = useQuery({
+  const { data: todaysMeals, isLoading } = useQuery({
     queryKey: ['/api/meal-logs', userId, today],
     queryFn: async (): Promise<MealLog[]> => {
-      console.log(`Fetching meals from: /api/meal-logs/${userId}/${today}`);
       const response = await fetch(`/api/meal-logs/${userId}/${today}`);
       if (!response.ok) {
         throw new Error('Failed to fetch meals');
       }
-      const data = await response.json();
-      console.log('Fetched meals:', data);
-      return data;
+      return response.json();
     },
     refetchInterval: 10000,
-    staleTime: 0, // Force fresh data
-    gcTime: 0, // Disable caching temporarily for debugging
-  });
-
-  // Debug logging
-  console.log('PremiumLoggedMeals - Query State:', { 
-    isLoading, 
-    error: error?.message, 
-    mealsCount: todaysMeals?.length || 0,
-    userId,
-    today
+    staleTime: 5000,
   });
 
   // Delete meal mutation
