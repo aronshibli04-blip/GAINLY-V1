@@ -21,7 +21,7 @@ export async function clearOldTestData() {
   // Remove old keys from localStorage
   keysToRemove.forEach(key => {
     localStorage.removeItem(key);
-    console.log(`Cleared old test data from localStorage: ${key}`);
+    // Cleared old test data from localStorage
   });
   
   // Also clear old test data from database
@@ -34,14 +34,14 @@ export async function clearOldTestData() {
     });
     
     if (response.ok) {
-      console.log('Cleared old test data from database');
+      // Cleared old test data from database
     }
   } catch (error) {
     console.warn('Could not clear test data from database:', error);
   }
   
   if (keysToRemove.length > 0) {
-    console.log(`Cleared ${keysToRemove.length} old test data entries from localStorage`);
+    // Cleared old test data entries from localStorage
   }
 }
 
@@ -70,7 +70,7 @@ export function isTestData(): boolean {
       // If we have August data but it's not August, it's likely test data
       return hasAugustData && currentMonth !== 7;
     } catch (e) {
-      console.warn('Could not parse localStorage data:', e);
+      // Could not parse localStorage data
     }
   }
   

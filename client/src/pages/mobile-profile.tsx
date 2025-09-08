@@ -97,7 +97,8 @@ export default function MobileProfile() {
     const weeklyAverage = last7Days.length > 0 ? Math.round(last7DaysCalories / last7Days.length) : 0;
     
     // Streak calculation
-    const sortedDates = [...new Set(calorieEntries?.map(entry => entry.date) || [])].sort().reverse();
+    const uniqueDates = Array.from(new Set(calorieEntries?.map(entry => entry.date) || []));
+    const sortedDates = uniqueDates.sort().reverse();
     let currentStreak = 0;
     const today = new Date().toISOString().split('T')[0];
     

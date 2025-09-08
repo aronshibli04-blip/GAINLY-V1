@@ -166,7 +166,6 @@ export function EnhancedOnboardingFlow() {
     };
     
     setTdeeAnalysis(tdeeAnalysis);
-    console.log('💾 ONBOARDING - Saved target calories:', plan.targetCalories);
     
     setCurrentStep('base_plan');
   };
