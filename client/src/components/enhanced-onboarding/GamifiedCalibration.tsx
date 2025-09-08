@@ -177,16 +177,16 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       <h4 className="text-lg font-bold text-blue-400 mb-4">Hardgainer Success Stories</h4>
       <div className="space-y-3">
         <div className="bg-slate-700/50 rounded-lg p-4">
-          <p className="text-white font-semibold mb-2">Alex: 65kg → 85kg in 8 months</p>
-          <p className="text-sm text-slate-300">"The key was consistency with the 4000+ calorie plan and compound movements. I gained 20kg of solid muscle."</p>
+          <p className="text-white font-semibold mb-2">Lars: 65kg → 85kg på 8 måneder</p>
+          <p className="text-sm text-slate-300">"Nøkkelen var konsistens med 4000+ kalori-planen og sammensatte øvelser. Jeg la på meg 20kg solid muskelmasse."</p>
         </div>
         <div className="bg-slate-700/50 rounded-lg p-4">
-          <p className="text-white font-semibold mb-2">Maria: 58kg → 72kg in 6 months</p>
-          <p className="text-sm text-slate-300">"Liquid calories changed everything. Mass gainer shakes made hitting my targets possible even with low appetite."</p>
+          <p className="text-white font-semibold mb-2">Ingrid: 58kg → 72kg på 6 måneder</p>
+          <p className="text-sm text-slate-300">"Flytende kalorier forandret alt. Proteinshakes gjorde det mulig å nå målene mine selv med lav appetitt."</p>
         </div>
       </div>
       <div className="bg-emerald-500/10 rounded-lg p-4 border border-emerald-500/30">
-        <p className="text-emerald-400 text-sm font-medium">Your journey starts now. Every gram counts.</p>
+        <p className="text-emerald-400 text-sm font-medium">Din reise starter nå. Hvert gram teller.</p>
       </div>
     </div>
   );

@@ -19,13 +19,28 @@ export function WeightLogger() {
 
   const handleLogWeight = () => {
     if (!weight) {
-      toast({ title: "Enter your weight", variant: "destructive" });
+      toast({ title: "Skriv inn vekten din", variant: "destructive" });
       return;
     }
 
     const weightNum = parseFloat(weight);
-    if (isNaN(weightNum) || weightNum < 30 || weightNum > 300) {
-      toast({ title: "Enter a valid weight (30-300kg)", variant: "destructive" });
+    if (isNaN(weightNum)) {
+      toast({ title: "Ugyldig vekt - skriv inn tall", variant: "destructive" });
+      return;
+    }
+    
+    if (weightNum < 40 || weightNum > 200) {
+      toast({ title: "Vekt må være mellom 40-200kg", variant: "destructive" });
+      return;
+    }
+    
+    // Additional validation for unrealistic changes
+    if (lastWeight && Math.abs(weightNum - lastWeight) > 5) {
+      toast({ 
+        title: "Stor vektendring oppdaget", 
+        description: "Er du sikker på at vekten er riktig?",
+        variant: "destructive" 
+      });
       return;
     }
 
@@ -37,8 +52,8 @@ export function WeightLogger() {
 
     setWeight("");
     toast({ 
-      title: "Weight logged!", 
-      description: `${weightNum}kg recorded for today`,
+      title: "Vekt registrert!", 
+      description: `${weightNum}kg lagret for i dag`,
     });
   };
 
