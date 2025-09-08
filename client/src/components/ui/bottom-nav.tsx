@@ -22,8 +22,8 @@ export function BottomNav() {
             <Link key={item.path} href={item.path}>
               <button
                 className={cn(
-                  "flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200",
-                  "min-w-[60px] h-14",
+                  "flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200",
+                  "min-w-[80px] h-16 touch-manipulation",
                   isActive
                     ? "text-primary grok-glow"
                     : "text-muted-foreground hover:text-foreground"
@@ -32,7 +32,7 @@ export function BottomNav() {
               >
                 <item.icon 
                   className={cn(
-                    "h-5 w-5 mb-1",
+                    "h-6 w-6 mb-1",
                     isActive && "grok-glow"
                   )} 
                 />
