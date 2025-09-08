@@ -89,14 +89,6 @@ export default function MobileProfile() {
   const currentTdee = currentTdeeAnalysis?.tdee || 3750;
   const targetCalories = currentTdeeAnalysis?.targetCalories || 4850;
   
-  // DEBUG: What values are we actually getting?
-  console.log('🔵 PROFILE:', {
-    hasAnalysis: !!currentTdeeAnalysis,
-    storedTdee: currentTdeeAnalysis?.tdee,
-    storedTargetCalories: currentTdeeAnalysis?.targetCalories,
-    usedTdee: currentTdee,
-    usedTargetCalories: targetCalories
-  });
 
   // Advanced statistics
   const stats = useMemo(() => {

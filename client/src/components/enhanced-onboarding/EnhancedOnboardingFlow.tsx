@@ -32,7 +32,7 @@ export function EnhancedOnboardingFlow() {
   const [currentStep, setCurrentStep] = useState<FlowStep>('data_collection');
   const [userData, setUserData] = useState<UserBasicData | null>(null);
   const [basePlan, setBasePlan] = useState<BasePlan | null>(null);
-  const { setUser, completeOnboarding, updatePhase } = useUserStore();
+  const { setUser, completeOnboarding, updatePhase, setTdeeAnalysis } = useUserStore();
 
   // Analyze activity description to determine accurate multiplier
   const analyzeActivityLevel = (activityDescription: string): number => {
@@ -150,6 +150,24 @@ export function EnhancedOnboardingFlow() {
     };
     
     setUser(user);
+    
+    // CRITICAL: Save the calculated target calories as TDEE analysis
+    // This ensures all components use the same target calories as Nutrition Protocol
+    const tdeeAnalysis = {
+      id: Date.now().toString(),
+      userId: 'user1',
+      tdee: plan.tdeeEstimate,
+      surplus: plan.surplus,
+      targetCalories: plan.targetCalories, // This is the 4850 from Nutrition Protocol!
+      confidence: 0.9, // High confidence from complete user data
+      dataPoints: 1,
+      weekNumber: 1,
+      createdAt: new Date().toISOString(),
+    };
+    
+    setTdeeAnalysis(tdeeAnalysis);
+    console.log('💾 ONBOARDING - Saved target calories:', plan.targetCalories);
+    
     setCurrentStep('base_plan');
   };
 
