@@ -60,6 +60,13 @@ export default function MobileAICoach() {
     setTdeeAnalysis(analysis);
     setIsGenerating(false);
     
+    // DEBUG: What did we just store?
+    console.log('🟣 AI ANALYSIS - Just stored:', {
+      tdee: analysis.tdee,
+      targetCalories: analysis.targetCalories,
+      surplus: analysis.surplus
+    });
+    
     toast({ 
       title: "Analysis complete!", 
       description: `Your TDEE is ${calculation.tdee} calories`

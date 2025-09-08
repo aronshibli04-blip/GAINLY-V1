@@ -34,6 +34,14 @@ export function AggressiveSurplusTracker() {
   // All components must show the same target calories as AI Analysis
   const requiredCalories = currentTdeeAnalysis?.targetCalories || 4850; // Use AI Analysis result
   
+  // DEBUG: What values are we actually getting?
+  console.log('🔴 DASHBOARD:', {
+    hasAnalysis: !!currentTdeeAnalysis,
+    storedTdee: currentTdeeAnalysis?.tdee,
+    storedTargetCalories: currentTdeeAnalysis?.targetCalories,
+    usedValue: requiredCalories
+  });
+  
   
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / requiredCalories) * 100);

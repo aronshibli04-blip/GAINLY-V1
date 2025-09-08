@@ -116,6 +116,14 @@ export function PremiumLoggedMeals() {
   // All components must show the same target calories as AI Analysis
   const targetCalories = currentTdeeAnalysis?.targetCalories || 4850; // Use AI Analysis result
   
+  // DEBUG: What values are we actually getting?
+  console.log('🟠 MEALS:', {
+    hasAnalysis: !!currentTdeeAnalysis,
+    storedTdee: currentTdeeAnalysis?.tdee,
+    storedTargetCalories: currentTdeeAnalysis?.targetCalories,
+    usedValue: targetCalories
+  });
+  
   
   
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);
