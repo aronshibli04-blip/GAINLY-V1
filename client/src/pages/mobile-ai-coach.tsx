@@ -30,14 +30,15 @@ export default function MobileAICoach() {
   );
 
   const handleGenerateAnalysis = () => {
-    if (totalDays < 7) {
-      toast({ 
-        title: "Need more data", 
-        description: "Track for at least 7 days to generate analysis",
-        variant: "destructive"
-      });
-      return;
-    }
+    // TEMPORARILY bypass 7-day requirement for testing alignment
+    // if (totalDays < 7) {
+    //   toast({ 
+    //     title: "Need more data", 
+    //     description: "Track for at least 7 days to generate analysis",
+    //     variant: "destructive"
+    //   });
+    //   return;
+    // }
 
     setIsGenerating(true);
     
@@ -58,7 +59,6 @@ export default function MobileAICoach() {
     };
 
     setTdeeAnalysis(analysis);
-    setIsGenerating(false);
     
     // DEBUG: What did we just store?
     console.log('🟣 AI ANALYSIS - Just stored:', {
@@ -66,6 +66,18 @@ export default function MobileAICoach() {
       targetCalories: analysis.targetCalories,
       surplus: analysis.surplus
     });
+    
+    // Verify storage worked
+    setTimeout(() => {
+      const stored = useUserStore.getState().currentTdeeAnalysis;
+      console.log('🟣 AI ANALYSIS - Verification:', {
+        stored: !!stored,
+        storedTdee: stored?.tdee,
+        storedTarget: stored?.targetCalories
+      });
+    }, 100);
+    
+    setIsGenerating(false);
     
     toast({ 
       title: "Analysis complete!", 
