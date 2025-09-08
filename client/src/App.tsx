@@ -11,7 +11,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { InstallPrompt } from "@/components/install-prompt";
 
 // Enhanced Onboarding Flow
-import { EnhancedOnboardingFlow } from "@/components/enhanced-onboarding/EnhancedOnboardingFlow";
+import { EnhancedOnboardingFlow } from "@/components/onboarding/EnhancedOnboardingFlow";
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";

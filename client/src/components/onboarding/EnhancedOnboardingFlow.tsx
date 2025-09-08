@@ -28,6 +28,15 @@ interface BasePlan {
   trainingDays: number;
   estimatedWeeksToGoal: number;
   activityMultiplier: number;
+  // Additional fields to match BasePlanPreview interface
+  targetCalories: number;
+  tdeeEstimate: number;
+  surplus: number;
+  projectedWeight: number;
+  timeToGoal: number;
+  proteinTarget: number;
+  carbTarget: number;
+  fatTarget: number;
 }
 
 type FlowStep = 'welcome' | 'data_collection' | 'body_preview' | 'premium_upsell' | 'plan_preview' | 'complete';
@@ -121,7 +130,16 @@ export function EnhancedOnboardingFlow() {
       fatGrams,
       trainingDays,
       estimatedWeeksToGoal,
-      activityMultiplier
+      activityMultiplier,
+      // Additional fields to match BasePlanPreview interface
+      targetCalories: caloriesForSurplus,
+      tdeeEstimate: Math.round(tdee),
+      surplus: 1100,
+      projectedWeight: data.goalWeight,
+      timeToGoal: estimatedWeeksToGoal,
+      proteinTarget: proteinGrams,
+      carbTarget: carbGrams,
+      fatTarget: fatGrams,
     };
   };
 
@@ -168,14 +186,15 @@ export function EnhancedOnboardingFlow() {
       
       setUser(user);
       
-      // Set TDEE analysis
+      // Set TDEE analysis (match TdeeAnalysis interface)
       const analysis = {
         id: Date.now().toString(),
         userId: user.id,
-        calculatedTdee: basePlan.tdee,
-        recommendedSurplus: 1100,
+        tdee: basePlan.tdee,
+        surplus: 1100,
+        confidence: 0.9, // high confidence as number
+        weekNumber: 1,
         targetCalories: basePlan.caloriesForSurplus,
-        analysisDate: new Date().toISOString().split('T')[0],
         dataPoints: 7,
         createdAt: new Date().toISOString(),
       };
