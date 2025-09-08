@@ -112,9 +112,10 @@ export function PremiumLoggedMeals() {
 
   const totalCalories = todaysMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
   
-  // Use the EXACT same calculation as AggressiveSurplusTracker
-  const targetTdee = currentTdeeAnalysis?.tdee || 2500;
-  const targetCalories = targetTdee + 1100; // 1100kcal surplus for 1kg/week
+  // FORCE same calculation as AI Analysis to ensure 4850 consistency
+  // Use exact same method as AI Analysis page instead of stored values
+  const calculation = calculateTdee(weightEntries || [], calorieEntries || [], 'user1');
+  const targetCalories = calculation.targetCalories; // This should show 4850 like AI Analysis
   
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);
 

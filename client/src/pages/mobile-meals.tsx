@@ -10,6 +10,7 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { useMenu } from "@/components/ui/menu-context";
+import { calculateTdee } from "@/utils/tdee";
 import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -51,7 +52,9 @@ export default function MobileMeals() {
     setIsGenerating(true);
     
     try {
-      const hardgainerTargetCalories = currentTdeeAnalysis.tdee + 1100; // 1100 cal surplus for 1kg/week
+      // FORCE same calculation as AI Analysis to ensure consistency  
+      const calculation = calculateTdee(weightEntries, calorieEntries, "user1");
+      const hardgainerTargetCalories = calculation.targetCalories; // Use same method as AI Analysis
       
       // Create proper meal plan request with user preferences
       const mealPlanRequest = {
