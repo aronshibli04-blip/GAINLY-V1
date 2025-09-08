@@ -12,10 +12,14 @@ export function MicroCelebration() {
   // Get current weight and calculate progress
   const currentWeight = weightEntries.length > 0 
     ? weightEntries[weightEntries.length - 1].weight 
-    : 70;
+    : (user?.weight || 70);
     
   const targetWeight = user?.goalWeight || 85;
-  const startWeight = 70; // This should come from user's initial weight
+  
+  // Use actual starting weight instead of hardcoded 70kg
+  const startWeight = weightEntries.length > 0 
+    ? weightEntries[0].weight  // First recorded weight (oldest entry)
+    : (user?.weight || 70);    // Fallback to user's initial weight
   
   // Calculate next major milestone (every 2kg)
   const nextMajorMilestone = Math.ceil(currentWeight / 2) * 2;
