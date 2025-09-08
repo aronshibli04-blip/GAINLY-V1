@@ -112,10 +112,10 @@ export function PremiumLoggedMeals() {
 
   const totalCalories = todaysMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
   
-  // FORCE same calculation as AI Analysis to ensure 4850 consistency
-  // Use exact same method as AI Analysis page instead of stored values
-  const calculation = calculateTdee(weightEntries || [], calorieEntries || [], 'user1');
-  const targetCalories = calculation.targetCalories; // This should show 4850 like AI Analysis
+  // USE stored AI Analysis value as the source of truth  
+  // All components must show the same target calories as AI Analysis
+  const targetCalories = currentTdeeAnalysis?.targetCalories || 4850; // Use AI Analysis result
+  
   
   
   const progressPercentage = Math.min((totalCalories / targetCalories) * 100, 100);

@@ -30,10 +30,10 @@ export function AggressiveSurplusTracker() {
     ?.filter(c => c?.date === today)
     ?.reduce((sum, c) => sum + (c?.calories || 0), 0) || 0;
   
-  // FORCE real-time calculation instead of using potentially wrong stored analysis
-  // Calculate TDEE directly to avoid using outdated stored values  
-  const realtimeTdeeCalc = calculateTdee(weightEntries || [], calorieEntries || [], 'user1');
-  const requiredCalories = realtimeTdeeCalc.targetCalories; // This includes the 1100 surplus
+  // USE stored AI Analysis value as the source of truth
+  // All components must show the same target calories as AI Analysis
+  const requiredCalories = currentTdeeAnalysis?.targetCalories || 4850; // Use AI Analysis result
+  
   
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / requiredCalories) * 100);
