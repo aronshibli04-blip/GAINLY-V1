@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 // Removed chat component
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { Brain, Zap, TrendingUp, Target, Activity, Apple, Beef, Coffee, Droplets, Utensils } from "lucide-react";
@@ -14,7 +14,7 @@ import { calculateTdee } from "@/utils/tdee";
 
 export default function MobileAICoach() {
   const { toast } = useToast();
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const [isGenerating, setIsGenerating] = useState(false);
   const { 
     weightEntries, 

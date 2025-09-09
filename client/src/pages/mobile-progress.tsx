@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Tooltip, AreaChart, Area } from "recharts";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ export default function MobileProgress() {
     currentTdeeAnalysis 
   } = useUserStore();
   
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | 'all'>('30d');

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserStore } from "@/store/userStore";
@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function MobileTraining() {
   const { toast } = useToast();
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const { addActivityEntry, activityEntries } = useUserStore();
 
   const [activityType, setActivityType] = useState<string>("");

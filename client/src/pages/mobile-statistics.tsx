@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Tooltip } from "recharts";
@@ -33,7 +33,7 @@ export default function MobileStatistics() {
     currentTdeeAnalysis 
   } = useUserStore();
   
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | 'all'>('30d');
 
   // Calculate comprehensive statistics

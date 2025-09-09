@@ -34,7 +34,7 @@ import { defaultRoutines } from "@/data/default-routines";
 import { SmartNotifications } from "@/components/ui/smart-notifications";
 import { AggressiveSurplusTracker } from "@/components/ui/aggressive-surplus-tracker";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { SleepQualityTracker } from "@/components/ui/sleep-quality-tracker";
 import { StressLevelTracker } from "@/components/ui/stress-level-tracker";
 import { clearOldTestData, isTestData } from "@/utils/clearOldTestData";
@@ -987,7 +987,7 @@ export default function MobileHome() {
     clearUserData
   } = useUserStore();
   
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
 
   // Clear old test data on component mount
   useEffect(() => {

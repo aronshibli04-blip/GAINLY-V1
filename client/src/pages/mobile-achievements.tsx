@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Star, Zap, Target, Award, TrendingUp } from "lucide-react";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { GamificationSystem } from "@/components/ui/gamification-system";
 import { AchievementSystem } from "@/components/ui/achievement-system";
 import { DailyChallenges } from "@/components/ui/daily-challenges";
@@ -11,7 +11,7 @@ import { ProgressStreaks } from "@/components/ui/progress-streaks";
 import { PowerUpSystem } from "@/components/ui/power-up-system";
 
 export function MobileAchievements() {
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-yellow-900/20 to-slate-900 text-white pb-24">

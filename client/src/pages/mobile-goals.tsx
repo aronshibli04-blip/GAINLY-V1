@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Target, Trophy, Gift, Star, Zap, Crown, Heart, Coffee, Camera, ShoppingBag, Gamepad2, Wand2, Sparkles, Flame } from "lucide-react";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { useUserStore } from "@/store/userStore";
 import { RewardCustomizer } from "@/components/reward-customizer";
 import { MicroCelebration } from "@/components/ui/micro-celebration";
 
 export function MobileGoals() {
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const { user, weightEntries } = useUserStore();
   const [customRewards, setCustomRewards] = useState<{[key: number]: string}>({});
   

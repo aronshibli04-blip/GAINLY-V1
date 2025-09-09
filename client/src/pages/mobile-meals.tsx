@@ -9,7 +9,7 @@ import { PhotoNutritionScanner } from "@/components/ui/photo-nutrition-scanner";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { calculateTdee } from "@/utils/tdee";
 import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 
 export default function MobileMeals() {
   const { toast } = useToast();
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const [isGenerating, setIsGenerating] = useState(false);
   const [preferences, setPreferences] = useState("");
   const [useUltraFast, setUseUltraFast] = useState(true); // Default to ultra-fast logger

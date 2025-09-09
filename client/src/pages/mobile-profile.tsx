@@ -36,12 +36,12 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 import { calculateTdee } from "@/utils/tdee";
 
 export default function MobileProfile() {
   const { toast } = useToast();
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   const { 
     user, 
     setUser, 

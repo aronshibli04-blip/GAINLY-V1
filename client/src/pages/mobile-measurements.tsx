@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { useMenu } from "@/components/ui/menu-context";
+import { useSideMenu } from "@/hooks/use-side-menu";
 
 interface MeasurementEntry {
   id: string;
@@ -36,7 +36,7 @@ interface MeasurementEntry {
 export default function MobileMeasurements() {
   const { toast } = useToast();
   const { user } = useUserStore();
-  const { openMenu } = useMenu();
+  const { openMenu } = useSideMenu();
   
   const [measurements, setMeasurements] = useState<MeasurementEntry[]>([
     {
