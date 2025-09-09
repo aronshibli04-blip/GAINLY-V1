@@ -5,7 +5,7 @@ import { useUserStore } from "@/store/userStore";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { SideMenu } from "@/components/ui/side-menu";
-import { MenuProvider, useMenu } from "@/components/ui/menu-context";
+import { SideMenuProvider, useSideMenu } from "@/hooks/use-side-menu";
 import { OnboardingFlow } from "@/components/ui/onboarding-flow";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { InstallPrompt } from "@/components/install-prompt";
@@ -53,17 +53,17 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MenuProvider>
+      <SideMenuProvider>
         <InstallPrompt />
         <AppContent />
         <Toaster />
-      </MenuProvider>
+      </SideMenuProvider>
     </QueryClientProvider>
   );
 }
 
 function AppContent() {
-  const { isMenuOpen, openMenu, closeMenu } = useMenu();
+  const { isOpen: isMenuOpen, openMenu, closeMenu } = useSideMenu();
 
   // Force dark theme for Grok-inspired design
   useEffect(() => {
