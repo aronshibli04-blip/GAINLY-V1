@@ -33,20 +33,44 @@ import HardgainerProfileSetup from "@/pages/hardgainer-profile-setup";
 
 function App() {
   const { user, isOnboarded, completeOnboarding } = useUserStore();
+  const [hasError, setHasError] = useState(false);
 
   // Force dark theme for Grok-inspired design
   useEffect(() => {
     document.documentElement.classList.add('dark');
   }, []);
 
+  // Error boundary fallback
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">GAINLY</h1>
+          <p className="text-gray-300 mb-4">Starting app...</p>
+          <button 
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
+            className="bg-emerald-500 text-white px-4 py-2 rounded"
+          >
+            Reset & Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // If no user profile, show enhanced onboarding
   if (!user || !isOnboarded) {
     return (
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen bg-background">
-          <EnhancedOnboardingFlow />
-          <Toaster />
-        </div>
+        <ErrorBoundary fallback={<div className="min-h-screen bg-slate-900 text-white flex items-center justify-center"><h1>Loading GAINLY...</h1></div>}>
+          <div className="min-h-screen bg-background">
+            <EnhancedOnboardingFlow />
+            <Toaster />
+          </div>
+        </ErrorBoundary>
       </QueryClientProvider>
     );
   }
