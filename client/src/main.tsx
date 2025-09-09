@@ -34,4 +34,10 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }
 };
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Ensure root element exists
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  document.body.innerHTML = '<div style="color: white; background: #0f172a; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: system-ui;"><h1>GAINLY Loading...</h1></div>';
+} else {
+  createRoot(rootElement).render(<App />);
+}
