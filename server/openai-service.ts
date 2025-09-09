@@ -218,9 +218,7 @@ Respond with raw JSON only (no markdown formatting):`;
         }
       }
 
-      // Log the raw response for debugging
-      console.log('OpenAI Raw Response Length:', content.length);
-      console.log('OpenAI Clean Content Preview:', cleanContent.substring(0, 500) + '...');
+      // Response cleaning complete
       
       // Additional JSON cleaning
       cleanContent = cleanContent
@@ -239,18 +237,12 @@ Respond with raw JSON only (no markdown formatting):`;
           const truncatedContent = cleanContent.substring(0, lastBraceIndex + 1);
           try {
             mealPlanData = JSON.parse(truncatedContent);
-            console.log('Recovered from truncated JSON response');
+            // Recovered from truncated JSON response
           } catch (secondError) {
-            console.error('JSON Parse Error:', jsonError);
-            const errorPos = jsonError.message.match(/\d+/)?.[0] || 0;
-            console.error('Content around error position:', cleanContent.substring(Math.max(0, errorPos - 50), errorPos + 50));
-            throw new Error(`Invalid JSON response from OpenAI: ${jsonError.message}`);
+            throw new Error('Invalid JSON response format');
           }
         } else {
-          console.error('JSON Parse Error:', jsonError);
-          const errorPos = jsonError.message.match(/\d+/)?.[0] || 0;
-          console.error('Content around error position:', cleanContent.substring(Math.max(0, errorPos - 50), errorPos + 50));
-          throw new Error(`Invalid JSON response from OpenAI: ${jsonError.message}`);
+          throw new Error('Invalid JSON response format');
         }
       }
       
@@ -276,7 +268,7 @@ Respond with raw JSON only (no markdown formatting):`;
 
       return mealPlan;
     } catch (error) {
-      console.error('OpenAI meal plan generation error:', error);
+      
       throw new Error(`Failed to generate meal plan: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -356,7 +348,7 @@ Response format (JSON only):
         servingSize: nutritionData.servingSize || "100g"
       };
     } catch (error) {
-      console.error('OpenAI nutrition scanning error:', error);
+      
       throw new Error('Failed to analyze nutrition label');
     }
   }

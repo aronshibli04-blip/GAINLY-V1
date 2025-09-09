@@ -290,7 +290,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ response });
     } catch (error: any) {
-      console.error('AI Coach chat error:', error);
       res.status(500).json({ message: "Failed to get AI response" });
     }
   });
@@ -302,8 +301,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const foodItem = await storage.createFoodItem(foodData);
       res.json(foodItem);
     } catch (error: any) {
-      console.error('Food item creation error:', error);
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ message: "Failed to create food item" });
     }
   });
 
@@ -319,8 +317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const routine = await storage.createDailyRoutine(updatedRoutineData);
       res.json(routine);
     } catch (error: any) {
-      console.error('Daily routine creation error:', error);
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ message: "Failed to create daily routine" });
     }
   });
 
@@ -343,7 +340,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updatedRoutine = await storage.updateDailyRoutine(routineId, updates);
       res.json(updatedRoutine);
     } catch (error: any) {
-      console.error('Daily routine update error:', error);
+      
       res.status(400).json({ message: error.message });
     }
   });
@@ -355,7 +352,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.deleteDailyRoutine(routineId);
       res.json({ success: true });
     } catch (error: any) {
-      console.error('Daily routine delete error:', error);
+      
       res.status(400).json({ message: error.message });
     }
   });
@@ -368,7 +365,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.deleteAllDailyRoutines(actualUserId);
       res.json({ success: true, message: 'All routines deleted successfully' });
     } catch (error: any) {
-      console.error('Delete all routines error:', error);
+      
       res.status(500).json({ message: error.message });
     }
   });
@@ -389,7 +386,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(completion);
     } catch (error: any) {
-      console.error('Daily routine completion error:', error);
+      
       res.status(400).json({ message: error.message });
     }
   });
@@ -414,7 +411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stats = await storage.getUserStats(actualUserId);
       res.json(stats);
     } catch (error: any) {
-      console.error('User stats error:', error);
+      
       res.status(500).json({ message: error.message });
     }
   });
@@ -437,7 +434,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const localFoods = await storage.searchFoodItems(query);
       res.json(localFoods);
     } catch (error: any) {
-      console.error('Food search error:', error);
+      
       
       // Fallback to local database on API error
       try {
@@ -476,7 +473,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const food = await fatSecretService.searchByBarcode(req.params.barcode);
       res.json(food);
     } catch (error: any) {
-      console.error('Barcode search error:', error);
+      
       res.status(500).json({ message: error.message });
     }
   });
@@ -507,15 +504,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           timeout
         ]);
         
-        console.log('Successfully generated meal plan with OpenAI GPT-4o');
+        
       } catch (openAIError: any) {
-        console.log('OpenAI failed, using hardgainer fallback:', openAIError.message);
+        
         mealPlan = generateHardgainerFallbackMealPlan(mealPlanRequest);
       }
 
       res.json(mealPlan);
     } catch (error: any) {
-      console.error('Meal plan generation error:', error);
+      
       res.status(500).json({ 
         message: `Failed to generate meal plan: ${error.message}`,
         error: error.message 
@@ -560,7 +557,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(nutritionData);
     } catch (error: any) {
-      console.error("Nutrition scanning error:", error);
+      
       res.status(500).json({ message: "Failed to scan nutrition label" });
     }
   });
@@ -584,7 +581,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ message: "Test data cleared successfully" });
     } catch (error: any) {
-      console.error("Error clearing test data:", error);
+      
       res.status(500).json({ 
         message: "Failed to clear test data", 
         error: error.message 
@@ -770,7 +767,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const rewards = await generatePersonalizedRewards(goalWeight, userPreferences, currentReward);
       res.json({ rewards });
     } catch (error: any) {
-      console.error("Reward generation error:", error);
+      
       res.status(500).json({ message: "Failed to generate rewards" });
     }
   });

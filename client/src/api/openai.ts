@@ -91,7 +91,7 @@ class OpenAIService {
         // Small delay to avoid hitting rate limits
         await new Promise(resolve => setTimeout(resolve, 1000));
       } catch (error) {
-        console.error(`Failed to generate meal plan for day ${i + 1}:`, error);
+        
         throw error;
       }
     }

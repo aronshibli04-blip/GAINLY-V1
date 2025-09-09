@@ -71,7 +71,6 @@ Hold svarene korte (1-2 setninger) og fokuser på ÉN praktisk endring om gangen
 
       return response.choices[0]?.message?.content || "Jeg er her for å hjelpe deg med vektøkning! Hva lurer du på?";
     } catch (error) {
-      console.error('AI Coach service error:', error);
       return "Jeg har litt problemer akkurat nå. Prøv igjen om et øyeblikk!";
     }
   }

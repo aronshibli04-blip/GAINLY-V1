@@ -37,7 +37,7 @@ export async function clearOldTestData() {
       // Cleared old test data from database
     }
   } catch (error) {
-    console.warn('Could not clear test data from database:', error);
+    
   }
   
   if (keysToRemove.length > 0) {

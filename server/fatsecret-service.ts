@@ -92,8 +92,7 @@ class FatSecretService {
       
       return this.accessToken;
     } catch (error) {
-      console.error('Error getting FatSecret access token:', error);
-      throw error;
+      throw new Error('Failed to authenticate with FatSecret API');
     }
   }
 
@@ -139,7 +138,6 @@ class FatSecretService {
           try {
             return await this.getFoodDetails(food.food_id);
           } catch (error) {
-            console.error(`Error getting details for food ${food.food_id}:`, error);
             // Return basic info if detailed fetch fails
             return {
               id: food.food_id,
@@ -156,7 +154,6 @@ class FatSecretService {
 
       return detailedFoods.filter(food => food !== null);
     } catch (error) {
-      console.error('Error searching FatSecret foods:', error);
       return [];
     }
   }
@@ -208,7 +205,6 @@ class FatSecretService {
         serving: serving.serving_description || 'Unknown serving'
       };
     } catch (error) {
-      console.error(`Error getting FatSecret food details for ${foodId}:`, error);
       throw error;
     }
   }
@@ -250,7 +246,6 @@ class FatSecretService {
       // Get detailed nutrition info for the barcode food
       return await this.getFoodDetails(data.food_id.value);
     } catch (error) {
-      console.error('Error searching by barcode:', error);
       return null;
     }
   }

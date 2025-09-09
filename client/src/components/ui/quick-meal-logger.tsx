@@ -119,7 +119,7 @@ export function QuickMealLogger({ userId }: QuickMealLoggerProps) {
         addFood(fallbackFood, 1);
       }
     } catch (error) {
-      console.error('Quick add failed:', error);
+      
     }
   };
 

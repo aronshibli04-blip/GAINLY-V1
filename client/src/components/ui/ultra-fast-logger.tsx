@@ -99,7 +99,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
         const parsed = JSON.parse(saved);
         setRecentFoods(parsed.map((f: any) => ({...f, lastUsed: new Date(f.lastUsed)})));
       } catch (e) {
-        console.error('Failed to load recent foods:', e);
+        
       }
     }
   }, []);

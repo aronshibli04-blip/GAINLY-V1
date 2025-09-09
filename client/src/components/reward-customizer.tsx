@@ -35,7 +35,7 @@ export function RewardCustomizer({ goalWeight, currentReward, onRewardChange }: 
       const data = await response.json();
       setAiSuggestions(data.rewards || []);
     } catch (error) {
-      console.error('Failed to generate rewards:', error);
+      
       // Fallback suggestions
       setAiSuggestions([
         "Noe du har ønsket deg lenge",

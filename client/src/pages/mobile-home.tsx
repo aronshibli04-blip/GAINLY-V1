@@ -262,7 +262,7 @@ function DailyRoutinesQuickChecker() {
       });
     },
     onError: (error: Error) => {
-      console.error('Delete routine error:', error);
+      
       toast({
         title: "Error",
         description: "Failed to delete routine. Please try again.",
@@ -301,7 +301,7 @@ function DailyRoutinesQuickChecker() {
       });
     },
     onError: (error: Error) => {
-      console.error('Delete all routines error:', error);
+      
       toast({
         title: "Error",
         description: "Failed to delete all routines. Please try again.",
@@ -993,7 +993,7 @@ export default function MobileHome() {
   useEffect(() => {
     // Clear old test data if detected
     if (isTestData()) {
-      console.warn('Detected test data from August - clearing for fresh start');
+      
       clearOldTestData().then(() => {
         clearUserData();
         window.location.reload();

@@ -39,7 +39,7 @@ router.get('/:userId', async (req, res) => {
 
     res.json(routinesWithCompletion);
   } catch (error) {
-    console.error('Error fetching daily routines:', error);
+    
     res.status(500).json({ error: 'Failed to fetch daily routines' });
   }
 });
@@ -132,7 +132,7 @@ router.post('/complete', async (req, res) => {
       pointsEarned: routine.points,
     });
   } catch (error) {
-    console.error('Error completing routine:', error);
+    
     res.status(500).json({ error: 'Failed to complete routine' });
   }
 });
@@ -207,7 +207,7 @@ router.post('/generate/:userId', async (req, res) => {
       routines: createdRoutines 
     });
   } catch (error) {
-    console.error('Error generating routines:', error);
+    
     res.status(500).json({ error: 'Failed to generate routines' });
   }
 });

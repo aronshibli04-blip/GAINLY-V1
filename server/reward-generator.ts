@@ -47,7 +47,7 @@ Returner som JSON array med kun belønningene:
     return result.rewards || [];
     
   } catch (error) {
-    console.error('Error generating personalized rewards:', error);
+    // Error generating personalized rewards, falling back to default options
     
     // Fallback rewards based on common interests
     const fallbackRewards = [

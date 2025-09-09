@@ -31,7 +31,7 @@ export const Performance = {
       fn();
       const end = performance.now();
       if (end - start > 16) { // Alert if render takes more than 16ms
-        console.warn(`Slow render detected in ${componentName}: ${(end - start).toFixed(2)}ms`);
+        
       }
     } else {
       fn();

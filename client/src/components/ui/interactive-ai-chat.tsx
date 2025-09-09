@@ -99,7 +99,7 @@ export function InteractiveAIChat({ currentTdeeAnalysis, userProgress }: Interac
       const data = await response.json();
       return data.response;
     } catch (error) {
-      console.error('AI chat error:', error);
+      
       return "I'm having trouble processing your request. Please try again in a moment.";
     }
   };
