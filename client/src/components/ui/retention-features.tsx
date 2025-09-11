@@ -25,10 +25,10 @@ const WEEKLY_CHALLENGES = [
 ];
 
 const PROGRESS_PREVIEWS = [
-  { week: 1, weight: 65, muscle: "+0.2kg", strength: "+5%" },
-  { week: 4, weight: 68, muscle: "+1.1kg", strength: "+15%" },
-  { week: 8, weight: 72, muscle: "+2.8kg", strength: "+30%" },
-  { week: 12, weight: 75, muscle: "+4.2kg", strength: "+45%" },
+  { week: 1, weight: 65, muscle: "+0.2kg", strength: "Growing" },
+  { week: 4, weight: 68, muscle: "+1.1kg", strength: "Stronger" },
+  { week: 8, weight: 72, muscle: "+2.8kg", strength: "Strong" },
+  { week: 12, weight: 75, muscle: "+4.2kg", strength: "Very Strong" },
 ];
 
 export function RetentionFeatures() {
