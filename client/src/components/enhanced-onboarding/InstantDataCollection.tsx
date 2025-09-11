@@ -409,7 +409,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
 
         {/* Main Form Container */}
         <div className="max-w-md mx-auto w-full flex-1 flex flex-col justify-center">
-          {/* Biometric Initialization Header */}
+          {/* Personlige opplysninger Header */}
           <div className="bg-gradient-to-r from-emerald-600/20 to-blue-600/20 rounded-2xl p-6 border border-emerald-500/30 mb-6">
             <div className="flex items-center mb-4">
               <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center mr-3">
