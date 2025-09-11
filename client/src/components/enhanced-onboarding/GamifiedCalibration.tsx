@@ -226,11 +226,11 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Enhanced body composition analysis",
       icon: <Camera className="w-6 h-6" />,
       unlocked: false,
-      preview: "Body scan shows 1.2% muscle mass increase prediction",
+      preview: "Body scan shows improved muscle tracking",
       actionLabel: "View Analysis",
       onClick: () => toast({
         title: "Body Scan Updated",
-        description: "Based on your data: muscle mass trending +1.2%. Keep logging to improve accuracy!",
+        description: "Based on your data: muscle tracking is improving. Keep logging to improve accuracy!",
       })
     },
     {
