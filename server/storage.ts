@@ -90,6 +90,9 @@ export interface IStorage {
   getUserStats(userId: string): Promise<UserStats | null>;
   updateUserStats(userId: string, pointsEarned: number): Promise<void>;
 
+  // Reset functionality - Added for "Reset App" button
+  clearAllUserData(userId: string): Promise<void>;
+
   // Meal log edit methods
   updateMealLog(mealId: string, updates: Partial<InsertMealLog>): Promise<MealLog>;
   deleteMealLog(mealId: string): Promise<void>;
@@ -517,6 +520,60 @@ export class DatabaseStorage implements IStorage {
       .values(stressLog)
       .returning();
     return log;
+  }
+
+  // COMPLETE USER DATA RESET - Added for "Reset App" functionality
+  // This method clears ALL user data from the database including:
+  // - User stats (level, XP, streaks, points)
+  // - Weight logs, meal logs, activity logs  
+  // - AI analysis data, daily routines, completions
+  // - Sleep and stress logs
+  // Essential for proper app reset functionality
+  async clearAllUserData(userId: string): Promise<void> {
+    try {
+      // Clear all user-related data in the correct order (considering foreign key constraints)
+      
+      // 1. Clear daily routine completions first (references routines and user)
+      await db.delete(dailyRoutineCompletions)
+        .where(eq(dailyRoutineCompletions.userId, userId));
+      
+      // 2. Clear daily routines
+      await db.delete(dailyRoutines)
+        .where(eq(dailyRoutines.userId, userId));
+      
+      // 3. Clear all tracking logs
+      await db.delete(weightLogs)
+        .where(eq(weightLogs.userId, userId));
+      
+      await db.delete(mealLogs)
+        .where(eq(mealLogs.userId, userId));
+      
+      await db.delete(activityLogs)
+        .where(eq(activityLogs.userId, userId));
+      
+      await db.delete(sleepLogs)
+        .where(eq(sleepLogs.userId, userId));
+      
+      await db.delete(stressLogs)
+        .where(eq(stressLogs.userId, userId));
+      
+      // 4. Clear AI analysis data
+      await db.delete(aiAnalysis)
+        .where(eq(aiAnalysis.userId, userId));
+      
+      // 5. Clear user stats (level, XP, streaks, points) - THIS IS THE KEY ONE!
+      await db.delete(userStats)
+        .where(eq(userStats.userId, userId));
+      
+      // 6. Finally clear the user record itself
+      await db.delete(users)
+        .where(eq(users.id, userId));
+        
+      console.log(`✅ Successfully cleared ALL data for user ${userId}`);
+    } catch (error: any) {
+      console.error(`❌ Failed to clear user data for ${userId}:`, error);
+      throw new Error(`Failed to clear user data: ${error.message}`);
+    }
   }
 
   async getStressLogsByUser(userId: string, limit: number = 30): Promise<StressLog[]> {

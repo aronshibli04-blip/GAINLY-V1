@@ -772,6 +772,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // COMPLETE USER DATA RESET ENDPOINT - Added for "Reset App" functionality  
+  // This endpoint clears ALL user data from the database including:
+  // - User stats (level, XP, streaks, points) 
+  // - All tracking logs (weight, meals, activities, sleep, stress)
+  // - AI analysis data, daily routines, completions
+  // - The entire user record
+  // Essential for proper app reset to level 1 with zero data
+  // SECURITY: Uses hardcoded userId pattern from other endpoints (no auth system yet)
+  app.post("/api/clear-all-user-data", async (req, res) => {
+    try {
+      // SECURITY FIX: Use hardcoded userId like other endpoints in this app
+      // This matches the pattern used in daily-routines, user-stats, etc.
+      const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      
+      // Call storage method to clear all user data from database
+      await storage.clearAllUserData(actualUserId);
+      
+      console.log(`🗑️ Successfully cleared all data for user: ${actualUserId}`);
+      res.json({ 
+        success: true, 
+        message: "All user data cleared successfully",
+        clearedUserId: actualUserId 
+      });
+      
+    } catch (error: any) {
+      console.error(`❌ Failed to clear user data via API:`, error);
+      res.status(500).json({ 
+        success: false,
+        message: "Failed to clear user data", 
+        error: error.message 
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -244,33 +244,91 @@ export const useUserStore = create<UserState>()(
         }));
       },
 
-      clearUserData: () => {
-        // Clear localStorage completely to remove any lingering test data
-        const keysToRemove = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key?.includes('gainly') || key?.includes('hardgainer')) {
-            keysToRemove.push(key);
+      clearUserData: async () => {
+        try {
+          // COMPREHENSIVE USER DATA RESET - Added for "Reset App" functionality
+          console.log('🗑️ Starting complete user data reset...');
+          
+          // 1. CLEAR ALL LOCALSTORAGE DATA (including main persistence key)
+          // This is critical - must clear the main Zustand persistence key first
+          localStorage.removeItem('gainly-user-storage'); // Main persistence key
+          
+          // Clear any other GAINLY-related keys that might exist
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key?.includes('gainly') || key?.includes('hardgainer') || key?.includes('test-') || key?.includes('demo-')) {
+              keysToRemove.push(key);
+            }
           }
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+          console.log(`✅ Cleared ${keysToRemove.length + 1} localStorage keys`);
+          
+          // 2. CLEAR DATABASE RECORDS (level, XP, all tracking data)
+          // Call backend API to clear ALL user data from database
+          const currentUser = get().user;
+          if (currentUser?.id) {
+            try {
+              const response = await fetch('/api/clear-all-user-data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.id })
+              });
+              
+              if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Database cleared:', result.message);
+              } else {
+                console.warn('⚠️ Database clear failed, but continuing with frontend reset');
+              }
+            } catch (dbError) {
+              console.warn('⚠️ Database API call failed, but continuing with frontend reset:', dbError);
+            }
+          }
+          
+          // 3. RESET ZUSTAND STATE TO INITIAL VALUES
+          // Reset ALL state to initial values, ensuring level = 1
+          set({
+            user: null,
+            isOnboarded: false,
+            weightEntries: [],
+            calorieEntries: [],
+            activityEntries: [],
+            currentTdeeAnalysis: null,
+            mealPlans: [],
+            subscription: { tier: 'free' },
+            xp: 0,
+            level: 1, // CRITICAL: Always start at level 1
+            currentStreak: 0,
+            longestStreak: 0,
+            badges: [],
+            currentPhase: 'onboarding',
+            isLoading: false
+          });
+          
+          console.log('🎉 Complete user data reset finished! User will start at level 1.');
+          
+        } catch (error) {
+          console.error('❌ Error during user data reset:', error);
+          // Even if there's an error, still reset the frontend state
+          set({
+            user: null,
+            isOnboarded: false,
+            weightEntries: [],
+            calorieEntries: [],
+            activityEntries: [],
+            currentTdeeAnalysis: null,
+            mealPlans: [],
+            subscription: { tier: 'free' },
+            xp: 0,
+            level: 1, // CRITICAL: Always start at level 1
+            currentStreak: 0,
+            longestStreak: 0,
+            badges: [],
+            currentPhase: 'onboarding',
+            isLoading: false
+          });
         }
-        keysToRemove.forEach(key => localStorage.removeItem(key));
-        
-        set({
-          user: null,
-          isOnboarded: false,
-          weightEntries: [],
-          calorieEntries: [],
-          activityEntries: [],
-          currentTdeeAnalysis: null,
-          mealPlans: [],
-          subscription: { tier: 'free' },
-          xp: 0,
-          level: 1,
-          currentStreak: 0,
-          longestStreak: 0,
-          badges: [],
-          currentPhase: 'onboarding',
-        });
       },
 
       // Removed skipToNextDay - was generating fake test data

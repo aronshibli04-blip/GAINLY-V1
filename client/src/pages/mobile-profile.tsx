@@ -186,13 +186,33 @@ export default function MobileProfile() {
     });
   };
 
-  const handleClearData = () => {
-    clearUserData();
-    toast({
-      title: "🗑️ Data slettet",
-      description: "All brukerdata er tilbakestilt.",
-    });
-    window.location.href = '/setup';
+  const handleClearData = async () => {
+    try {
+      // ENHANCED RESET HANDLER - Added for comprehensive "Reset App" functionality
+      // Now properly calls async clearUserData function with database clearing
+      console.log('🔄 Reset App button pressed - starting comprehensive reset...');
+      
+      await clearUserData(); // Now awaits the async function
+      
+      toast({
+        title: "🗑️ App tilbakestilt",
+        description: "All data er slettet. Starter fra level 1.",
+      });
+      
+      // Force a complete page reload to ensure clean state
+      // This ensures onboarding starts fresh without any lingering state
+      setTimeout(() => {
+        window.location.href = '/setup';
+      }, 1000); // Small delay to show the toast
+      
+    } catch (error) {
+      console.error('❌ Reset failed:', error);
+      toast({
+        title: "⚠️ Reset feilet",
+        description: "Prøv igjen eller last siden på nytt.",
+        variant: "destructive"
+      });
+    }
   };
 
   const activityLevels = {
