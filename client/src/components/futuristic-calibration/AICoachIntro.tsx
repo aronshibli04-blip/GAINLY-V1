@@ -11,18 +11,18 @@ export function AICoachIntro({ onComplete }: AICoachIntroProps) {
 
   const messages = [
     {
-      text: "Welcome, recruit. I am your AI Coach from the year 2125.",
-      subtext: "Scanning hardgainer profile... DNA analysis complete.",
+      text: "Hi there! I'm your AI Coach, and I'm here to help you succeed.",
+      subtext: "Getting to know your profile... Analysis complete.",
       delay: 2000
     },
     {
-      text: "My mission: to make you grow faster than anyone ever thought possible.",
-      subtext: "Accessing advanced protocols from the future...",
+      text: "My goal is to help you gain weight faster and easier than ever before.",
+      subtext: "Preparing your personalized recommendations...",
       delay: 3000
     },
     {
-      text: "But first, I must scan your body data to design your Personal Protocol.",
-      subtext: "7-day calibration sequence initiated.",
+      text: "First, let's collect some data about you to create your personalized plan.",
+      subtext: "Starting your 7-day data collection period.",
       delay: 2500
     }
   ];

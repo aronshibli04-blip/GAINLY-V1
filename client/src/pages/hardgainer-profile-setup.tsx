@@ -449,7 +449,7 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                         data-testid="button-create-profile"
                       >
                         <span className="relative z-10">
-                          {user ? "UPDATE YOUR PROFILE" : "START YOUR JOURNEY"}
+                          {user ? "UPDATE YOUR PROFILE" : "START YOUR PLAN"}
                         </span>
                       </Button>
                     </div>

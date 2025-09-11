@@ -71,7 +71,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
             className="text-lg text-slate-300"
           >
             {currentView === 'current' 
-              ? "This is your digital twin. Together, we'll evolve it week by week."
+              ? "This is your body preview. Together, we'll track your progress week by week."
               : "This is what's waiting for you at your goal weight. Every log, every meal, every rep brings you closer."}
           </motion.p>
         </div>

@@ -357,9 +357,9 @@ export function InitialProfileSetup({ onComplete }: InitialProfileSetupProps) {
           className="text-center mb-8"
         >
           <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2">
-            Initialize Protocol
+            Start Setup
           </h1>
-          <p className="text-slate-400">AI needs your baseline data to design your Personal Growth Protocol</p>
+          <p className="text-slate-400">AI needs your data to create your personalized plan</p>
         </motion.div>
 
         {/* Progress bar */}
@@ -400,7 +400,7 @@ export function InitialProfileSetup({ onComplete }: InitialProfileSetupProps) {
               disabled={!isStepValid()}
               className="bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white font-bold"
             >
-              {currentStep === totalSteps ? 'Begin Calibration' : 'Next'}
+              {currentStep === totalSteps ? 'Start Your Plan' : 'Next'}
             </Button>
           </div>
         </div>

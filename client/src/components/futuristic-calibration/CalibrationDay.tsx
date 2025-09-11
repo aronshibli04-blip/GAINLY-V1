@@ -57,27 +57,27 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
     switch (day) {
       case 1:
         return {
-          title: "Day 1: Initial Body Scan",
-          subtitle: "Establishing your metabolic baseline",
-          aiMessage: "Excellent. Your body signature is being recorded. I can already detect unique hardgainer patterns."
+          title: "Day 1: Initial Data Entry",
+          subtitle: "Getting your starting data",
+          aiMessage: "Excellent. Recording your data. I can already see patterns that will help us optimize your plan."
         };
       case 2:
         return {
-          title: "Day 2: Metabolic Analysis",
-          subtitle: "Analyzing your energy expenditure patterns",
-          aiMessage: `${progressPercentage}% calibrated. Your metabolism is ${data.calories > 2500 ? 'extremely fast' : 'moderately fast'} - exactly what I expected.`
+          title: "Day 2: Metabolism Check",
+          subtitle: "Checking your energy needs",
+          aiMessage: `${progressPercentage}% complete. Your metabolism is ${data.calories > 2500 ? 'extremely fast' : 'moderately fast'} - exactly what I expected.`
         };
       case 7:
         return {
-          title: "Day 7: Final Calibration",
-          subtitle: "Completing your Personal Protocol",
-          aiMessage: "Perfect. Calibration complete. Your body's growth formula is now unlocked."
+          title: "Day 7: Final Data Entry",
+          subtitle: "Finalizing your plan",
+          aiMessage: "Perfect. Setup complete. Your personalized growth plan is now ready."
         };
       default:
         return {
-          title: `Day ${day}: Continuous Monitoring`,
-          subtitle: "Refining your metabolic profile",
-          aiMessage: `Day ${day} of calibration complete. The data reveals you're burning ~${Math.round(data.calories * 1.4)} kcal/day.`
+          title: `Day ${day}: Daily Check-in`,
+          subtitle: "Updating your profile",
+          aiMessage: `Day ${day} data recorded. The data shows you're burning ~${Math.round(data.calories * 1.4)} kcal/day.`
         };
     }
   };
@@ -114,7 +114,7 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
           {/* Progress bar */}
           <div className="mt-6 max-w-md mx-auto">
             <div className="flex justify-between text-sm text-slate-400 mb-2">
-              <span>Calibration Progress</span>
+              <span>Setup Progress</span>
               <span>{progressPercentage}%</span>
             </div>
             <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
@@ -137,7 +137,7 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
           >
             <div className="max-w-sm mx-auto bg-slate-800/50 rounded-2xl p-6 border border-emerald-500/30">
               <h3 className="text-white font-bold text-center mb-4">
-                Body Scan Analysis
+                Progress Preview
               </h3>
               <div className="flex justify-center space-x-8 mb-4">
                 {/* Before silhouette */}
@@ -248,7 +248,7 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
               disabled={!data.weight || !data.calories || !data.activityLevel}
               className="w-full mt-8 bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white font-bold py-3 rounded-xl transition-all duration-300"
             >
-              {day === 7 ? 'Complete Calibration' : 'Log Day ' + day}
+              {day === 7 ? 'Complete Setup' : 'Log Day ' + day}
             </Button>
           </div>
         </motion.div>
@@ -281,7 +281,7 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
         >
           <div className="bg-slate-800/90 rounded-full px-4 py-2 flex items-center space-x-2">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span className="text-white text-sm">Scanning... {scanProgress}%</span>
+            <span className="text-white text-sm">Processing... {scanProgress}%</span>
           </div>
         </motion.div>
       </div>

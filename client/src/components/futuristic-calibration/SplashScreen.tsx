@@ -65,7 +65,7 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
                 Gain weight fast with
               </p>
               <p className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-4">
-                INNOVATIVE TECHNOLOGY
+                SMART AI GUIDANCE
               </p>
               <p className="text-lg text-slate-400 font-light">
                 Making the impossible, possible —
@@ -89,7 +89,7 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
                 </div>
               </div>
               <p className="text-sm text-slate-400 mt-4">
-                AI Body Transformation Protocol v2.125
+                Smart Body Transformation System
               </p>
             </motion.div>
 
@@ -104,7 +104,7 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
               whileTap={{ scale: 0.95 }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
-              <span className="relative">Begin Calibration</span>
+              <span className="relative">Start Your Plan</span>
             </motion.button>
 
             <motion.p
@@ -113,9 +113,9 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
               transition={{ delay: 2, duration: 0.8 }}
               className="text-sm text-slate-500 mt-6 max-w-md"
             >
-              Your personalized growth protocol awaits.
+              Your personalized plan is waiting for you.
               <br />
-              Prepare for 7 days of advanced body scanning.
+              Get ready for 7 days of smart progress tracking.
             </motion.p>
           </>
         )}

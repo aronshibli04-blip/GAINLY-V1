@@ -70,10 +70,10 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
           className="text-center mb-12"
         >
           <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent mb-4">
-            CALIBRATION COMPLETE
+            SETUP COMPLETE
           </h1>
           <p className="text-white text-xl">
-            Your body signature has been decoded.
+            Your personalized plan is ready!
           </p>
         </motion.div>
 
@@ -86,7 +86,7 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
           <div className="bg-slate-800/70 rounded-2xl p-6 border border-emerald-500/30">
             <div className="text-center mb-4">
               <div className="text-6xl mb-4">🔓</div>
-              <p className="text-white font-medium">Unlocking Personal Protocol</p>
+              <p className="text-white font-medium">Preparing Your Plan</p>
             </div>
             
             <div className="w-full bg-slate-700 rounded-full h-4 overflow-hidden mb-2">
@@ -113,7 +113,7 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
           >
             <div className="bg-gradient-to-r from-emerald-900/50 to-purple-900/50 rounded-2xl p-6 border border-emerald-500/30">
               <h3 className="text-white font-bold text-xl mb-6 text-center">
-                🧬 Your Personal Growth Protocol
+                🎯 Your Personalized Plan
               </h3>
               
               <div className="grid grid-cols-2 gap-4 mb-6">
@@ -213,7 +213,7 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
               
               <div className="text-center">
                 <p className="text-emerald-400 text-sm font-medium">
-                  Breaking the hardgainer curse.
+                  Your transformation starts here.
                 </p>
               </div>
             </div>
@@ -237,7 +237,7 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
                 animate={{ rotate: 360 }}
                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
               />
-              <span className="relative">🚀 Activate Protocol</span>
+              <span className="relative">🚀 Start My Plan</span>
             </Button>
             
             <motion.p
@@ -248,7 +248,7 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
             >
               Your personalized meal plans, workouts, and growth strategy are ready.
               <br />
-              <span className="text-emerald-400">The hardgainer curse ends now.</span>
+              <span className="text-emerald-400">Your journey to success starts now.</span>
             </motion.p>
           </motion.div>
         )}

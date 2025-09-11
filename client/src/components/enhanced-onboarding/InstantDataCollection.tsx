@@ -111,11 +111,11 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
 
   const getStepTitle = (step: number) => {
     switch (step) {
-      case 1: return 'PERSONAL IDENTIFIERS';
-      case 2: return 'BIOLOGICAL PARAMETERS';
-      case 3: return 'ACTIVITY PROFILE';
-      case 4: return 'NUTRITIONAL CONSTRAINTS';
-      default: return 'PERSONAL IDENTIFIERS';
+      case 1: return 'Personal Info';
+      case 2: return 'Body Stats';
+      case 3: return 'Activity Level';
+      case 4: return 'Diet Preferences';
+      default: return 'Personal Info';
     }
   };
 
@@ -137,7 +137,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.firstName}
                   onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Neural ID Required"
+                  placeholder="Name Required"
                   data-testid="input-first-name"
                 />
               </div>
@@ -187,7 +187,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.height}
                   onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Neural Scan Required"
+                  placeholder="Height Required"
                   data-testid="input-height"
                 />
               </div>
@@ -213,7 +213,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.goalWeight}
                   onChange={(e) => setFormData(prev => ({ ...prev, goalWeight: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Target Protocol"
+                  placeholder="Goal Weight"
                   data-testid="input-goal-weight"
                 />
               </div>
@@ -369,7 +369,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            AI CALIBRATION PHASE
+            PROFILE SETUP
           </motion.h1>
           
           <motion.h2 
@@ -378,7 +378,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            INITIALIZE BIOMETRIC PARAMETERS
+            ENTER YOUR BODY DATA
           </motion.h2>
           
           <motion.p 
@@ -387,7 +387,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            Neural networks analyzing metabolic patterns
+            AI analyzing your metabolism for personalized recommendations
           </motion.p>
         </motion.div>
 
@@ -416,8 +416,8 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 <div className="w-3 h-3 bg-white rounded-full"></div>
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg">BIOMETRIC INITIALIZATION</h3>
-                <p className="text-emerald-400 text-sm">● NEURAL NETWORK READY</p>
+                <h3 className="text-white font-bold text-lg">BODY DATA SETUP</h3>
+                <p className="text-emerald-400 text-sm">● AI SYSTEM READY</p>
               </div>
             </div>
             <p className="text-slate-300 text-sm">
@@ -466,7 +466,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
               className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-black font-bold h-12 px-6"
               data-testid="button-next"
             >
-              {currentStep === totalSteps ? 'INITIALIZE AI CALIBRATION' : 'Next'}
+              {currentStep === totalSteps ? 'START YOUR PLAN' : 'Next'}
             </Button>
           </div>
 

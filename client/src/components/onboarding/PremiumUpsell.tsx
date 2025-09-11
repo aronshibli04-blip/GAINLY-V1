@@ -29,7 +29,7 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
   const features = [
     {
       icon: Utensils,
-      title: "AI-Generated Meal Plans",
+      title: "Personalized Meal Plans by AI",
       description: "Personalized daily meal plans based on your exact TDEE and preferences",
       premium: true
     },
@@ -41,7 +41,7 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
     },
     {
       icon: Dumbbell,
-      title: "Progressive Training Protocols",
+      title: "Adaptive Training Programs",
       description: "Science-based training programs with automatic progressive overload",
       premium: true
     },
@@ -53,7 +53,7 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
     },
     {
       icon: Sparkles,
-      title: "Monthly Recalibration",
+      title: "Monthly Plan Updates",
       description: "Advanced AI analysis adapts your plan as your metabolism changes",
       premium: true
     },
