@@ -124,7 +124,7 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
             <Brain className="w-16 h-16 text-white" />
           </motion.div>
 
-          <h2 className="text-3xl font-bold text-white mb-4">AI Analysis in Progress</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">Lager din personlige plan...</h2>
           <p className="text-slate-400 mb-8">Processing your data with future algorithms...</p>
 
           <div className="mb-6">
