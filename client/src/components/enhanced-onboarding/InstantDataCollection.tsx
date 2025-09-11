@@ -394,7 +394,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
         {/* Progress bar */}
         <div className="max-w-md mx-auto mb-8">
           <div className="flex justify-between text-sm text-slate-400 mb-2">
-            <span>CALIBRATION PROGRESS</span>
+            <span>Fremdrift</span>
             <span>{Math.round((currentStep / totalSteps) * 100)}% COMPLETE</span>
           </div>
           <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">

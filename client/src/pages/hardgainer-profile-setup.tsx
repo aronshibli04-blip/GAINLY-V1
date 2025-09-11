@@ -222,7 +222,7 @@ export default function HardgainerProfileSetup() {
                 {/* Progress Indicator */}
                 <div className="mb-8">
                   <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                    <span>CALIBRATION PROGRESS</span>
+                    <span>Fremdrift</span>
                     <span>45% COMPLETE</span>
                   </div>
                   <div className="w-full bg-muted/20 rounded-full h-1 overflow-hidden">
