@@ -293,7 +293,7 @@ export default function HardgainerProfileSetup() {
                         <Label htmlFor="sex" className="text-sm font-medium text-primary uppercase tracking-wider">Biological Sex</Label>
                         <Select onValueChange={(value) => setFormData({...formData, sex: value})} value={formData.sex}>
                           <SelectTrigger data-testid="select-sex" className="grok-input h-12 bg-muted/20 border-primary/20 focus:border-primary text-white">
-                            <SelectValue placeholder="Neural Classification Required" />
+                            <SelectValue placeholder="Gender" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="male">Male</SelectItem>
@@ -340,7 +340,7 @@ export default function HardgainerProfileSetup() {
                             onChange={(e) => setFormData({...formData, weight: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Mass Calibration"
+                            placeholder="Current Weight (kg)"
                             data-testid="input-weight"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

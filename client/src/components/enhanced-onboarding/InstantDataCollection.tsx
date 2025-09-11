@@ -171,7 +171,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 <Label className="text-emerald-400 text-sm font-medium">BIOLOGICAL SEX</Label>
                 <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
                   <SelectTrigger className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg" data-testid="select-sex">
-                    <SelectValue placeholder="Neural Classification Required" />
+                    <SelectValue placeholder="Gender" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="male">Male</SelectItem>
@@ -200,7 +200,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.weight}
                   onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Mass Calibration"
+                  placeholder="Current Weight (kg)"
                   data-testid="input-weight"
                 />
               </div>
