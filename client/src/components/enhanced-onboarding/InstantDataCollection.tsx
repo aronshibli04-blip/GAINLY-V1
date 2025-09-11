@@ -171,7 +171,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 <Label className="text-emerald-400 text-sm font-medium">BIOLOGICAL SEX</Label>
                 <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
                   <SelectTrigger className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg" data-testid="select-sex">
-                    <SelectValue placeholder="Gender" />
+                    <SelectValue placeholder="Kjønn" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="male">Male</SelectItem>
