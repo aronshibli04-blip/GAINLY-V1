@@ -252,7 +252,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
                 <Brain className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-white">AI Analysis Ready</p>
+                <p className="text-sm font-medium text-white">Your plan is ready</p>
                 <p className="text-xs text-gray-400">7 days of data collected</p>
               </div>
             </div>

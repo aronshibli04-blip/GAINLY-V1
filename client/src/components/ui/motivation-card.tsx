@@ -76,7 +76,7 @@ export function MotivationCard() {
 
     return {
       icon: Zap,
-      title: "AI Analysis Ready! 🧠",
+      title: "Your plan is ready! 🧠",
       message: "You've got enough data for AI analysis. Time to optimize your nutrition and accelerate your gains!"
     };
   };
