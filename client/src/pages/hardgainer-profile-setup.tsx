@@ -328,7 +328,7 @@ export default function HardgainerProfileSetup() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="weight" className="text-sm font-medium text-primary uppercase tracking-wider">Current Weight (kg)</Label>
+                        <Label htmlFor="weight" className="text-sm font-medium text-primary uppercase tracking-wider">Nåværende vekt (kg)</Label>
                         <div className="relative">
                           <Input
                             id="weight"
@@ -340,7 +340,7 @@ export default function HardgainerProfileSetup() {
                             onChange={(e) => setFormData({...formData, weight: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Current Weight (kg)"
+                            placeholder="Nåværende vekt (kg)"
                             data-testid="input-weight"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

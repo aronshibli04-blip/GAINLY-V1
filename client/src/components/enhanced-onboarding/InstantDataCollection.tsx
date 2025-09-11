@@ -200,7 +200,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.weight}
                   onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Current Weight (kg)"
+                  placeholder="Nåværende vekt (kg)"
                   data-testid="input-weight"
                 />
               </div>
