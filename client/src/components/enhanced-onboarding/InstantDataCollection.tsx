@@ -417,7 +417,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
               </div>
               <div>
                 <h3 className="text-white font-bold text-lg">BODY DATA SETUP</h3>
-                <p className="text-emerald-400 text-sm">● AI SYSTEM READY</p>
+                <p className="text-emerald-400 text-sm">● Alt klart for din plan!</p>
               </div>
             </div>
             <p className="text-slate-300 text-sm">
