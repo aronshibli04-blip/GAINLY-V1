@@ -116,8 +116,8 @@ export default function HardgainerProfileSetup() {
     completeOnboarding();
 
     toast({ 
-      title: "Neural Profile Initialized!",
-      description: "Begin 7-day AI calibration sequence to unlock full capabilities."
+      title: "Profile Created Successfully!",
+      description: "Start your 7-day data collection to unlock personalized recommendations."
     });
 
     // Redirect to calibration mode
@@ -166,14 +166,14 @@ export default function HardgainerProfileSetup() {
           
           {/* Title with Glow Effect */}
           <h1 className="text-5xl font-bold grok-text-gradient mb-6 tracking-tight">
-            AI CALIBRATION PHASE
+            PROFILE SETUP
           </h1>
           <div className="relative">
             <p className="text-xl text-primary/80 font-medium tracking-wide uppercase text-center">
               Initialize biometric parameters
             </p>
             <p className="text-lg text-muted-foreground mt-2">
-              Neural networks analyzing metabolic patterns
+              AI analyzing your metabolism for personalized recommendations
             </p>
             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
           </div>
@@ -195,10 +195,10 @@ export default function HardgainerProfileSetup() {
                         <User className="h-5 w-5 text-black" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl text-white tracking-wide">BIOMETRIC INITIALIZATION</CardTitle>
+                        <CardTitle className="text-xl text-white tracking-wide">BODY DATA SETUP</CardTitle>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                          <span className="text-xs text-primary font-medium uppercase tracking-wider">Neural Network Ready</span>
+                          <span className="text-xs text-primary font-medium uppercase tracking-wider">AI System Ready</span>
                         </div>
                       </div>
                     </div>
@@ -250,7 +250,7 @@ export default function HardgainerProfileSetup() {
                             onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Neural ID Required"
+                            placeholder="Name Required"
                             data-testid="input-first-name"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -318,7 +318,7 @@ export default function HardgainerProfileSetup() {
                             onChange={(e) => setFormData({...formData, height: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Neural Scan Required"
+                            placeholder="Height Required"
                             data-testid="input-height"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -362,7 +362,7 @@ export default function HardgainerProfileSetup() {
                             onChange={(e) => setFormData({...formData, goalWeight: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Target Protocol"
+                            placeholder="Goal Weight"
                             data-testid="input-goal-weight"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -449,7 +449,7 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                         data-testid="button-create-profile"
                       >
                         <span className="relative z-10">
-                          {user ? "UPDATE NEURAL PROFILE" : "INITIALIZE AI CALIBRATION"}
+                          {user ? "UPDATE YOUR PROFILE" : "START YOUR JOURNEY"}
                         </span>
                       </Button>
                     </div>
@@ -490,7 +490,7 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                     AI Accurate TDEE Calculation
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Neural networks analyze your metabolism patterns to calculate precise TDEE 
+                    AI analyzes your metabolism patterns to calculate your daily calorie needs 
                     based on real data, not generic formulas.
                   </p>
                 </div>
