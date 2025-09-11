@@ -193,7 +193,7 @@ export function SleepQualityTracker({ userId }: SleepQualityTrackerProps) {
           <div className="text-xs text-indigo-300/80 space-y-1">
             <div className="flex items-center gap-1">
               <Zap className="h-3 w-3" />
-              Poor sleep may increase calorie needs by 10-15%
+              Poor sleep may increase calorie needs
             </div>
             <div className="flex items-center gap-1">
               <Star className="h-3 w-3" />
