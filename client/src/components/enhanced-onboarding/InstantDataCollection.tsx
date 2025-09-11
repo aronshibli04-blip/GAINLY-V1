@@ -187,7 +187,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.height}
                   onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Height Required"
+                  placeholder="Høyde (cm)"
                   data-testid="input-height"
                 />
               </div>
