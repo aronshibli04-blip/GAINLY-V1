@@ -1,0 +1,12 @@
+Fix critical onboarding terminology issues in the Gainly app. Replace these problematic terms throughout the codebase:
+
+1. "Neural Classification Required" → "Gender"
+2. "Neural ID Required" → "What's your name?"
+3. "Biological Age Required" → "Age"
+4. "Neural Scan Required" → "Height (cm)"
+5. "Mass Calibration" → "Current Weight (kg)"
+6. "Target Protocol" → "Goal Weight (kg)"
+7. "AI Analysis in Progress" → "Creating your personalized plan..."
+8. "Biometric Initialization" → "Personal Information"
+
+Focus on the enhanced-onboarding components. Keep the futuristic visual design but make the language user-friendly.
