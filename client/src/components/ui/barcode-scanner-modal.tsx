@@ -144,7 +144,7 @@ export function BarcodeScannerModal({ isOpen, onClose, onFoodFound }: BarcodeSca
           
           <div className="text-xs text-center text-slate-400 border-t border-slate-600 pt-3">
             Powered by FatSecret Platform API<br/>
-            90%+ barcode coverage • 56 countries • 1.9M+ foods
+            Global barcode coverage • 56 countries • Extensive food database
           </div>
         </div>
       </DialogContent>
