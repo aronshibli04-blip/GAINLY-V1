@@ -1030,7 +1030,7 @@ export default function MobileHome() {
       case 'calibration':
         return {
           title: "AI Setup Active",
-          subtitle: `Day ${totalDays}/7 - AI systems analyzing metabolic patterns`,
+          subtitle: `Day ${totalDays}/7 - Analyserer dine behov`,
           color: "grok-gradient animate-pulse",
           progress: progressPercent
         };
