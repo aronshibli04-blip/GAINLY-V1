@@ -271,7 +271,7 @@ export default function HardgainerProfileSetup() {
                             onChange={(e) => setFormData({...formData, age: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Biological Age Required"
+                            placeholder="Alder"
                             data-testid="input-age"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

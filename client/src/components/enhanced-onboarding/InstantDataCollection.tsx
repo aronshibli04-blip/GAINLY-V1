@@ -149,7 +149,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.age}
                   onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Biological Age Required"
+                  placeholder="Alder"
                   data-testid="input-age"
                 />
               </div>
