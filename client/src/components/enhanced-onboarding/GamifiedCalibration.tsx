@@ -267,11 +267,11 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
       description: "Detailed progress tracking unlocked",
       icon: <TrendingUp className="w-6 h-6" />,
       unlocked: false,
-      preview: "TDEE accuracy increased to 94% confidence level",
+      preview: "Your calorie target is getting more accurate with each day",
       actionLabel: "View Metrics",
       onClick: () => toast({
-        title: "Advanced Metrics Unlocked!",
-        description: "TDEE confidence: 94%. Weight trend: +0.3kg/week. Surplus efficiency: Excellent.",
+        title: "Progress Tracking Unlocked!",
+        description: "Track your daily progress and see weekly weight trends.",
       })
     },
     {
@@ -621,7 +621,7 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
               Remember: You can always view your <span className="text-emerald-400 font-bold">Base Plan</span> during setup
             </p>
             <p className="text-slate-400 text-sm">
-              Each day of logging makes the AI 15% more accurate. Your impossible growth awaits.
+              Each day of logging helps us give you better recommendations. Your weight gain journey awaits.
             </p>
           </div>
         </motion.div>

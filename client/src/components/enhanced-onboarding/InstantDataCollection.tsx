@@ -421,7 +421,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
               </div>
             </div>
             <p className="text-slate-300 text-sm">
-              Advanced AI algorithms require precise biometric data to construct your unique metabolic profile
+              Tell us about your body so we can create a personalized plan that works for you
             </p>
           </div>
 

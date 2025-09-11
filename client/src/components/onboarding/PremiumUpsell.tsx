@@ -48,13 +48,13 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
     {
       icon: BarChart3,
       title: "Realistic 3D Body Visualization",
-      description: "See your future body transformation with accurate muscle growth prediction",
+      description: "Visualize your progress with body transformation estimates",
       premium: true
     },
     {
       icon: Sparkles,
       title: "Monthly Plan Updates",
-      description: "Advanced AI analysis adapts your plan as your metabolism changes",
+      description: "Your plan gets updated based on your progress and data",
       premium: true
     },
     {

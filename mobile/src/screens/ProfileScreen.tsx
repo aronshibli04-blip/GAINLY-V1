@@ -181,7 +181,7 @@ export default function ProfileScreen() {
           <Text style={styles.appName}>GAINLY</Text>
           <Text style={styles.appVersion}>Version 1.0.0</Text>
           <Text style={styles.appDescription}>
-            Smart weight gain through real TDEE calculation and AI-powered meal planning
+            Smart weight gain through real TDEE calculation and personalized meal planning
           </Text>
         </View>
       </ScrollView>

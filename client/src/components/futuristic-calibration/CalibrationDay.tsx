@@ -59,7 +59,7 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
         return {
           title: "Day 1: Initial Data Entry",
           subtitle: "Getting your starting data",
-          aiMessage: "Excellent. Recording your data. I can already see patterns that will help us optimize your plan."
+          aiMessage: "Great! Recording your starting data. This helps us understand your baseline."
         };
       case 2:
         return {
@@ -71,7 +71,7 @@ export function CalibrationDay({ day, onComplete, existingData }: CalibrationDay
         return {
           title: "Day 7: Final Data Entry",
           subtitle: "Finalizing your plan",
-          aiMessage: "Perfect. Setup complete. Your personalized growth plan is now ready."
+          aiMessage: "Great! Setup complete. Your personalized plan is now ready."
         };
       default:
         return {

@@ -128,7 +128,7 @@ export default function CalibrationMode() {
 
     toast({
       title: "✅ Data Recorded",
-      description: `Neural network processing ${today} calibration data...`,
+      description: `Processing ${today} calibration data...`,
     });
 
     // Clear form
@@ -168,7 +168,7 @@ export default function CalibrationMode() {
              }} />
       </div>
 
-      {/* Neural Network Nodes */}
+      {/* Animation Nodes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(12)].map((_, i) => (
           <div

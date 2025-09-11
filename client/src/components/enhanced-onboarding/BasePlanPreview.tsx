@@ -355,9 +355,9 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
                   <p className="text-xs text-slate-500 mt-1">After initial phase</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-purple-400">97%</p>
-                  <p className="text-slate-400 text-sm">Success Rate</p>
-                  <p className="text-xs text-slate-500 mt-1">For similar profiles</p>
+                  <p className="text-2xl font-bold text-purple-400">1kg</p>
+                  <p className="text-slate-400 text-sm">Weekly Target</p>
+                  <p className="text-xs text-slate-500 mt-1">Steady progress goal</p>
                 </div>
               </div>
             </CardContent>
@@ -376,10 +376,10 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
               Your protocol is ready! 
             </h3>
             <p className="text-slate-300 mb-4">
-              Start logging immediately and let AI optimize as you go. Your <span className="text-emerald-400 font-bold">Impossible Growth</span> begins now.
+              Start logging immediately and we'll help you stay on track. Your <span className="text-emerald-400 font-bold">Weight Gain Journey</span> begins now.
             </p>
             <p className="text-sm text-slate-400">
-              Full app access • Immediate tracking • AI learns from your data
+              Full app access • Immediate tracking • Personalized recommendations
             </p>
           </div>
 

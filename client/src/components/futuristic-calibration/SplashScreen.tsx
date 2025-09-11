@@ -65,10 +65,10 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
                 Gain weight fast with
               </p>
               <p className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-4">
-                SMART AI GUIDANCE
+                SMART TRACKING
               </p>
               <p className="text-lg text-slate-400 font-light">
-                Making the impossible, possible —
+                Helping hardgainers gain weight —
                 <br />
                 <span className="text-emerald-400 font-medium">especially for hardgainers</span>
               </p>
@@ -89,7 +89,7 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
                 </div>
               </div>
               <p className="text-sm text-slate-400 mt-4">
-                Smart Body Transformation System
+                Your Weight Gain Support System
               </p>
             </motion.div>
 

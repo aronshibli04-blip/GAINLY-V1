@@ -213,7 +213,7 @@ export default function HardgainerProfileSetup() {
                   </div>
                   <div className="mt-6">
                     <p className="text-muted-foreground leading-relaxed">
-                      Tell us about your body and lifestyle so we can create the perfect plan for your weight gain goals
+                      Tell us about your body and lifestyle so we can create a personalized plan for your weight gain goals
                     </p>
                   </div>
                 </CardHeader>

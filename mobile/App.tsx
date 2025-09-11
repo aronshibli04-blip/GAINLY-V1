@@ -45,7 +45,7 @@ function MainApp() {
             </View>
             
             <Text style={styles.description}>
-              GAINLY combines AI-powered TDEE calculation with personalized meal planning for optimal weight gain.
+              GAINLY combines calorie tracking with personalized meal planning to help you gain weight effectively.
             </Text>
           </View>
         );
@@ -65,7 +65,7 @@ function MainApp() {
             </View>
             
             <Text style={styles.description}>
-              Revolutionary 3-tap food logging system with AI nutrition recognition and voice input.
+              Quick 3-tap food logging system with nutrition recognition and voice input.
             </Text>
           </View>
         );
