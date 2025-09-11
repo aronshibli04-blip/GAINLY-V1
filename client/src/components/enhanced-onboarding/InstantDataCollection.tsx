@@ -137,7 +137,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.firstName}
                   onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Name Required"
+                  placeholder="Hva heter du?"
                   data-testid="input-first-name"
                 />
               </div>
