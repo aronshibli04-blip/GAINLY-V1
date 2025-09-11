@@ -276,12 +276,12 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
     },
     {
       day: 7,
-      title: "Full Protocol Activated",
+      title: "Full Plan Activated",
       description: "Complete access to your personalized system",
       icon: <Trophy className="w-6 h-6" />,
       unlocked: false,
       preview: "All features unlocked - The hardgainer curse ends today!",
-      actionLabel: "Activate Protocol",
+      actionLabel: "Activate Plan",
       onClick: () => onComplete()
     }
   ];
@@ -386,16 +386,16 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent mb-4">
-            Calibration Mode Active
+            Setup Mode Active
           </h1>
           <p className="text-xl text-slate-400 mb-6">
-            Day {Math.min(currentDay, 7)} of 7 • {userData.firstName}'s Protocol Evolution
+            Day {Math.min(currentDay, 7)} of 7 • {userData.firstName}'s Plan Development
           </p>
           
           {/* Progress Bar */}
           <div className="max-w-2xl mx-auto mb-6">
             <div className="flex justify-between text-sm text-slate-400 mb-2">
-              <span>Calibration Progress</span>
+              <span>Setup Progress</span>
               <span>{calibrationProgress.toFixed(0)}%</span>
             </div>
             <Progress 
@@ -403,7 +403,7 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
               className="w-full h-4 bg-slate-700"
             />
             <p className="text-emerald-400 mt-2 font-medium">
-              {daysRemaining > 0 ? `${daysRemaining} days remaining` : "Calibration Complete!"}
+              {daysRemaining > 0 ? `${daysRemaining} days remaining` : "Setup Complete!"}
             </p>
           </div>
 
@@ -618,7 +618,7 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
         >
           <div className="bg-gradient-to-r from-emerald-500/20 via-blue-500/20 to-purple-500/20 rounded-xl p-6 border border-emerald-500/30">
             <p className="text-lg text-white mb-2">
-              Remember: You can always view your <span className="text-emerald-400 font-bold">Base Protocol</span> during calibration
+              Remember: You can always view your <span className="text-emerald-400 font-bold">Base Plan</span> during setup
             </p>
             <p className="text-slate-400 text-sm">
               Each day of logging makes the AI 15% more accurate. Your impossible growth awaits.
@@ -666,7 +666,7 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                   onClick={closeRewardModal}
                   className="bg-gradient-to-r from-emerald-500 to-purple-600 hover:from-emerald-600 hover:to-purple-700 text-white font-bold px-6"
                 >
-                  Continue Calibration
+                  Continue Setup
                 </Button>
               </div>
             </motion.div>
@@ -718,7 +718,7 @@ export function GamifiedCalibration({ userData, basePlan, onComplete }: Gamified
                   onClick={() => setShowRewardContent(false)}
                   className="bg-gradient-to-r from-emerald-500 to-purple-600 hover:from-emerald-600 hover:to-purple-700 text-white font-bold px-6"
                 >
-                  Continue Calibration
+                  Continue Setup
                 </Button>
               </div>
             </motion.div>

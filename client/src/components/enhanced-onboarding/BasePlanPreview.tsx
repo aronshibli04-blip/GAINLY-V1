@@ -55,10 +55,10 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
     const phases = [
       { progress: 15, message: "Analyzing body composition...", duration: 800 },
       { progress: 35, message: "Calculating metabolic requirements...", duration: 600 },
-      { progress: 55, message: "Generating training protocol...", duration: 700 },
+      { progress: 55, message: "Creating training plan...", duration: 700 },
       { progress: 75, message: "Optimizing nutrition plan...", duration: 600 },
       { progress: 90, message: "Running future projections...", duration: 500 },
-      { progress: 100, message: "Protocol generation complete!", duration: 300 }
+      { progress: 100, message: "Plan creation complete!", duration: 300 }
     ];
 
     let currentPhaseIndex = 0;
@@ -144,10 +144,10 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
             >
               {analysisProgress < 15 && "Scanning body composition..."}
               {analysisProgress >= 15 && analysisProgress < 35 && "Calculating metabolic requirements..."}
-              {analysisProgress >= 35 && analysisProgress < 55 && "Generating training protocol..."}
+              {analysisProgress >= 35 && analysisProgress < 55 && "Creating training plan..."}
               {analysisProgress >= 55 && analysisProgress < 75 && "Optimizing nutrition plan..."}
               {analysisProgress >= 75 && analysisProgress < 100 && "Running future projections..."}
-              {analysisProgress >= 100 && "Protocol generation complete!"}
+              {analysisProgress >= 100 && "Plan creation complete!"}
             </motion.p>
           </div>
         </motion.div>
@@ -170,7 +170,7 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-4">
-            Your Base Protocol
+            Your Base Plan
           </h1>
           <p className="text-xl text-slate-400 mb-2">
             Welcome to the future, {userData.firstName}
@@ -242,7 +242,7 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
                   <ChefHat className="w-5 h-5 mr-2 text-orange-400" />
-                  Nutrition Protocol
+                  Nutrition Plan
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -292,7 +292,7 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
                   <Dumbbell className="w-5 h-5 mr-2 text-purple-400" />
-                  Training Protocol
+                  Training Plan
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
