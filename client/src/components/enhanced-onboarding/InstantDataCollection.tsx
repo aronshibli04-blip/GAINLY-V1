@@ -213,7 +213,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                   value={formData.goalWeight}
                   onChange={(e) => setFormData(prev => ({ ...prev, goalWeight: e.target.value }))}
                   className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Goal Weight"
+                  placeholder="Målvekt (kg)"
                   data-testid="input-goal-weight"
                 />
               </div>
