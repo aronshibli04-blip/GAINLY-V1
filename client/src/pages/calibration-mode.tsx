@@ -42,8 +42,8 @@ export default function CalibrationMode() {
       if (dataEntryDays >= 7 && !user.hasCompletedCalibration) {
         setUser({ ...user, hasCompletedCalibration: true });
         toast({
-          title: "🎉 AI Calibration Complete!",
-          description: "Full neural network capabilities are now unlocked.",
+          title: "🎉 AI Setup Complete!",
+          description: "Full AI capabilities are now unlocked.",
         });
         // Use a timeout to allow state to update before navigation
         setTimeout(() => {
@@ -275,8 +275,8 @@ export default function CalibrationMode() {
                     if (user && !user.hasCompletedCalibration) {
                       setUser({ ...user, hasCompletedCalibration: true });
                       toast({
-                        title: "🎉 AI Calibration Complete!",
-                        description: "Full neural network capabilities are now unlocked.",
+                        title: "🎉 AI Setup Complete!",
+                        description: "Full AI capabilities are now unlocked.",
                       });
                       setTimeout(() => {
                         window.location.href = '/';

@@ -1022,14 +1022,14 @@ export default function MobileHome() {
     switch (currentPhase) {
       case 'onboarding':
         return {
-          title: "Neural Network Initialization",
+          title: "AI System Setup",
           subtitle: "Activating AI systems for metabolic analysis",
           color: "grok-gradient",
           progress: 25
         };
       case 'calibration':
         return {
-          title: "Neural Calibration Active",
+          title: "AI Setup Active",
           subtitle: `Day ${totalDays}/7 - AI systems analyzing metabolic patterns`,
           color: "grok-gradient animate-pulse",
           progress: progressPercent
