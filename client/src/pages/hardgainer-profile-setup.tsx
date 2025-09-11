@@ -170,10 +170,10 @@ export default function HardgainerProfileSetup() {
           </h1>
           <div className="relative">
             <p className="text-xl text-primary/80 font-medium tracking-wide uppercase text-center">
-              Initialize biometric parameters
+              Tell us about yourself
             </p>
             <p className="text-lg text-muted-foreground mt-2">
-              AI analyzing your metabolism for personalized recommendations
+              We'll create your personalized weight gain plan
             </p>
             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
           </div>
@@ -198,7 +198,7 @@ export default function HardgainerProfileSetup() {
                         <CardTitle className="text-xl text-white tracking-wide">BODY DATA SETUP</CardTitle>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                          <span className="text-xs text-primary font-medium uppercase tracking-wider">AI System Ready</span>
+                          <span className="text-xs text-primary font-medium uppercase tracking-wider">Ready to Start</span>
                         </div>
                       </div>
                     </div>
@@ -213,7 +213,7 @@ export default function HardgainerProfileSetup() {
                   </div>
                   <div className="mt-6">
                     <p className="text-muted-foreground leading-relaxed">
-                      Advanced AI algorithms require precise biometric data to construct your unique metabolic profile
+                      Tell us about your body and lifestyle so we can create the perfect plan for your weight gain goals
                     </p>
                   </div>
                 </CardHeader>
@@ -237,7 +237,7 @@ export default function HardgainerProfileSetup() {
                       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                         <span className="text-primary font-bold text-sm">01</span>
                       </div>
-                      <h3 className="text-lg font-semibold text-white tracking-wide">PERSONAL IDENTIFIERS</h3>
+                      <h3 className="text-lg font-semibold text-white tracking-wide">BASIC INFO</h3>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -377,13 +377,13 @@ export default function HardgainerProfileSetup() {
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                           <span className="text-primary font-bold text-sm">03</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white tracking-wide">ACTIVITY PROFILE</h3>
+                        <h3 className="text-lg font-semibold text-white tracking-wide">DAILY ROUTINE</h3>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="activityDescription" className="text-sm font-medium text-primary uppercase tracking-wider">Activity Profile Description</Label>
+                        <Label htmlFor="activityDescription" className="text-sm font-medium text-primary uppercase tracking-wider">Your Daily Routine</Label>
                         <p className="text-xs text-muted-foreground mb-2">
-                          Describe your daily routine for precise AI metabolic analysis
+                          Tell us about your typical day so we can calculate your calorie needs
                         </p>
                         <Textarea
                           id="activityDescription"
@@ -405,13 +405,13 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                           <span className="text-primary font-bold text-sm">04</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white tracking-wide">NUTRITIONAL CONSTRAINTS</h3>
+                        <h3 className="text-lg font-semibold text-white tracking-wide">FOOD PREFERENCES</h3>
                       </div>
 
                       <div className="space-y-4">
-                        <Label className="text-sm font-medium text-primary uppercase tracking-wider">Dietary Parameters (Optional)</Label>
+                        <Label className="text-sm font-medium text-primary uppercase tracking-wider">Dietary Restrictions (Optional)</Label>
                         <p className="text-sm text-muted-foreground">
-                          Configure nutritional processing constraints for AI meal optimization
+                          Let us know if you avoid certain foods so we can create meals you'll love
                         </p>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                           {restrictions.map((restriction) => (
@@ -470,10 +470,10 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
             </div>
           </div>
           <h2 className="text-3xl font-bold grok-text-gradient mb-4 tracking-tight">
-            AI-POWERED CAPABILITIES
+            WHAT YOU'LL GET
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
-            Advanced neural networks and machine learning algorithms working together to optimize your weight gain journey
+            A personalized plan that adapts to your body and lifestyle, helping you gain weight faster than ever before
           </p>
         </div>
 
@@ -487,11 +487,11 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    AI Accurate TDEE Calculation
+                    Perfect Calorie Target
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    AI analyzes your metabolism patterns to calculate your daily calorie needs 
-                    based on real data, not generic formulas.
+                    Get the exact number of calories you need each day to gain weight steadily 
+                    - no guesswork, just results.
                   </p>
                 </div>
               </div>
@@ -506,11 +506,11 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    AI Analysis & Insights
+                    Smart Progress Reports
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Advanced analytics provide real-time insights into your progress, 
-                    metabolic changes, and optimization recommendations.
+                    See exactly how you're progressing and get simple tips 
+                    to gain weight faster and more effectively.
                   </p>
                 </div>
               </div>
@@ -525,11 +525,11 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    AI Personal Coach
+                    Personal Weight Gain Coach
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Your personal AI coach adapts strategies based on your progress, 
-                    providing motivation and guidance every step of the way.
+                    Get personalized advice and motivation that changes based on 
+                    your progress to keep you on track.
                   </p>
                 </div>
               </div>
@@ -544,11 +544,11 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    Smart Meal Planning
+                    Custom Meal Plans
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    AI generates personalized meal plans optimized for your TDEE, 
-                    dietary preferences, and weight gain goals.
+                    Get meal plans made just for you - designed around foods you like 
+                    and calories you need to reach your goal weight.
                   </p>
                 </div>
               </div>
@@ -563,11 +563,11 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    Progress Tracking
+                    Easy Progress Tracking
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Advanced tracking with visual analytics, weight trends, 
-                    and achievement systems to keep you motivated.
+                    See your weight progress with simple charts and unlock 
+                    achievements that celebrate your success.
                   </p>
                 </div>
               </div>
@@ -582,11 +582,11 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    Adaptive Learning
+                    Gets Smarter Over Time
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    The AI continuously learns from your data to improve 
-                    recommendations and adapt to your unique metabolism.
+                    The app learns what works best for your body and gives you 
+                    better recommendations as you use it.
                   </p>
                 </div>
               </div>
