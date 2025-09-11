@@ -16,8 +16,8 @@ const STRESS_LEVELS = [
   { value: 1, label: "Very Relaxed", emoji: "😌", icon: Smile, color: "text-green-400 border-green-400/30", impact: "Optimal recovery and metabolism" },
   { value: 2, label: "Relaxed", emoji: "😊", icon: Smile, color: "text-emerald-400 border-emerald-400/30", impact: "Good recovery conditions" },
   { value: 3, label: "Moderate", emoji: "😐", icon: Brain, color: "text-yellow-400 border-yellow-400/30", impact: "Normal calorie needs" },
-  { value: 4, label: "Stressed", emoji: "😰", icon: Frown, color: "text-orange-400 border-orange-400/30", impact: "May increase calorie needs 5-10%" },
-  { value: 5, label: "Very Stressed", emoji: "😫", icon: AlertTriangle, color: "text-red-400 border-red-400/30", impact: "Can increase calorie needs 10-20%" }
+  { value: 4, label: "Stressed", emoji: "😰", icon: Frown, color: "text-orange-400 border-orange-400/30", impact: "May increase calorie needs" },
+  { value: 5, label: "Very Stressed", emoji: "😫", icon: AlertTriangle, color: "text-red-400 border-red-400/30", impact: "Can significantly increase calorie needs" }
 ];
 
 export function StressLevelTracker({ userId }: StressLevelTrackerProps) {
