@@ -47,7 +47,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
           label: "Meals", 
           path: "/meals", 
           description: "Log food & track calories",
-          badge: "AI"
+          badge: null
         },
         { 
           icon: TrendingUp, 
@@ -89,9 +89,9 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       items: [
         { 
           icon: Brain, 
-          label: "AI Coach", 
+          label: "Coach", 
           path: "/ai-coach", 
-          description: "Smart nutrition guidance",
+          description: "Nutrition guidance",
           badge: "Enhanced"
         },
         { 
@@ -173,7 +173,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">GAINLY</h2>
-              <p className="text-xs text-primary/80">AI Weight Gain Coach</p>
+              <p className="text-xs text-primary/80">Weight Gain Coach</p>
             </div>
           </div>
           <Button 

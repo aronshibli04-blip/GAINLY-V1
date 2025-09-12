@@ -432,7 +432,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
           <CardHeader className="pb-3">
             <CardTitle className="text-sm text-blue-400 flex items-center gap-2">
               <Star className="h-4 w-4" />
-              Smart {mealType.charAt(0).toUpperCase() + mealType.slice(1)} Picks
+              Suggested {mealType.charAt(0).toUpperCase() + mealType.slice(1)} Picks
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -465,7 +465,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
           <CardHeader className="pb-3">
             <CardTitle className="text-sm text-yellow-400 flex items-center gap-2">
               <Star className="h-4 w-4" />
-              Smart Favorites ({recentFoods.length})
+              Recent Favorites ({recentFoods.length})
             </CardTitle>
           </CardHeader>
           <CardContent>

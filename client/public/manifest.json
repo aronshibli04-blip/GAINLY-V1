@@ -1,7 +1,7 @@
 {
   "name": "GAINLY - Weight Gain Tracker",
   "short_name": "GAINLY",
-  "description": "AI-powered weight gain and nutrition tracking for hardgainers",
+  "description": "Weight gain and nutrition tracking for hardgainers",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

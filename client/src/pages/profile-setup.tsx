@@ -67,7 +67,7 @@ export default function ProfileSetup() {
           </div>
           <CardTitle className="text-2xl font-bold">AI Calibration Phase</CardTitle>
           <CardDescription>
-            Initialize your biometric profile for AI-powered TDEE analysis
+            Initialize your biometric profile for TDEE analysis
           </CardDescription>
         </CardHeader>
         <CardContent>

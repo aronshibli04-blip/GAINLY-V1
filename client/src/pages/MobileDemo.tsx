@@ -33,7 +33,7 @@ const tabs = [
   { id: 'meals', title: 'Meals', icon: '🍽️', color: '#f59e0b' },
   { id: 'routines', title: 'Routines', icon: '✅', color: '#8b5cf6' },
   { id: 'progress', title: 'Progress', icon: '📈', color: '#ef4444' },
-  { id: 'ai', title: 'AI Coach', icon: '🤖', color: '#06b6d4' },
+  { id: 'ai', title: 'Coach', icon: '🤖', color: '#06b6d4' },
 ];
 
 function LoadingScreen() {
@@ -203,8 +203,8 @@ function GenericContent({ title }: { title: string }) {
         </p>
         
         <div className="space-y-2">
-          <p className="text-slate-300 text-sm">• AI-powered insights and recommendations</p>
-          <p className="text-slate-300 text-sm">• Advanced analytics and trends</p>
+          <p className="text-slate-300 text-sm">• insights and recommendations</p>
+          <p className="text-slate-300 text-sm">• analytics and trends</p>
           <p className="text-slate-300 text-sm">• Personalized goal tracking</p>
           <p className="text-slate-300 text-sm">• Social features and challenges</p>
         </div>

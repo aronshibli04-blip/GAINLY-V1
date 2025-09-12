@@ -18,7 +18,7 @@ export default function Navigation({ user }: NavigationProps) {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">GAINLY</h1>
-              <p className="text-xs text-gray-500">Smart Weight Gain</p>
+              <p className="text-xs text-gray-500">Weight Gain</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">

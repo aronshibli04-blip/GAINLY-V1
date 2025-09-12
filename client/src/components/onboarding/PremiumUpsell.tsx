@@ -29,13 +29,13 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
   const features = [
     {
       icon: Utensils,
-      title: "Personalized Meal Plans by AI",
+      title: "Personalized Meal Plans",
       description: "Personalized daily meal plans based on your exact TDEE and preferences",
       premium: true
     },
     {
       icon: ShoppingCart,
-      title: "Smart Grocery Lists",
+      title: "Grocery Lists",
       description: "Automated shopping lists with meal prep guides and cost optimization",
       premium: true
     },
@@ -59,7 +59,7 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
     },
     {
       icon: Trophy,
-      title: "Premium Badges & AI Challenges",
+      title: "Premium Badges & Challenges",
       description: "Exclusive achievements and personalized challenges to keep you motivated",
       premium: true
     }
@@ -143,7 +143,7 @@ export function PremiumUpsell({ onUpgrade, onContinueFree }: PremiumUpsellProps)
             transition={{ delay: 0.3 }}
             className="text-slate-400"
           >
-            Transform faster with AI-powered features designed for serious hardgainers
+            Transform faster with features designed for serious hardgainers
           </motion.p>
         </div>
 

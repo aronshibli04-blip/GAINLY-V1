@@ -43,7 +43,7 @@ export default function MobileMeals() {
     if (!currentTdeeAnalysis) {
       toast({ 
         title: "Generate TDEE analysis first", 
-        description: "Go to AI Coach to calculate your TDEE",
+        description: "Go to Coach to calculate your TDEE",
         variant: "destructive"
       });
       return;
@@ -88,7 +88,7 @@ export default function MobileMeals() {
       setIsGenerating(false);
       toast({ 
         title: "Meal plan generated!", 
-        description: `${mealPlan.totalCalories} calorie AI meal plan created`
+        description: `${mealPlan.totalCalories} calorie meal plan created`
       });
     } catch (error) {
       setIsGenerating(false);
@@ -106,7 +106,7 @@ export default function MobileMeals() {
     addCalorieEntry({
       userId: 'user1',
       calories,
-      description: `Ultra-fast logged meal`,
+      description: `Quick logged meal`,
       date: today
     });
   };
@@ -152,7 +152,7 @@ export default function MobileMeals() {
               MEAL PLANS
             </span>
           </h1>
-          <p className="text-orange-400/70">AI-generated nutrition for hardgainers</p>
+          <p className="text-orange-400/70">Nutrition for hardgainers</p>
         </div>
 
         {/* No Analysis Warning - Moved to Top */}
@@ -166,7 +166,7 @@ export default function MobileMeals() {
               <p className="text-xs text-muted-foreground">
                 {totalDays < 7 
                   ? `Track for ${7 - totalDays} more days, then generate TDEE analysis to unlock meal plans`
-                  : "Generate your TDEE analysis in AI Coach to unlock meal plans"
+                  : "Generate your TDEE analysis in Coach to unlock meal plans"
                 }
               </p>
             </CardContent>
@@ -204,7 +204,7 @@ export default function MobileMeals() {
                 data-testid="button-generate-meal-plan"
               >
                 <Sparkles className="h-5 w-5 mr-2 text-black" />
-                {isGenerating ? "Generating..." : "Generate AI Meal Plan"}
+                {isGenerating ? "Generating..." : "Generate Meal Plan"}
               </Button>
 
               {currentTdeeAnalysis && (

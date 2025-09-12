@@ -84,7 +84,7 @@ export default function MobileAICoach() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
-        title="AI Coach" 
+        title="Coach" 
         onOpenMenu={openMenu}
       />
       
@@ -118,7 +118,7 @@ export default function MobileAICoach() {
           
           <h1 className="text-3xl font-black mb-2">
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              AI COACH
+              COACH
             </span>
           </h1>
           <p className="text-purple-400/70">Nutrition guidance & recommendations</p>
@@ -150,7 +150,7 @@ export default function MobileAICoach() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-white flex items-center">
                 <Brain className="h-5 w-5 mr-2 text-purple-400" />
-                AI Analysis
+                Analysis
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -270,7 +270,7 @@ export default function MobileAICoach() {
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
               <Apple className="h-5 w-5 mr-2 text-purple-400" />
-              Smart Nutrition Guidance
+              Nutrition Guidance
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -354,7 +354,7 @@ export default function MobileAICoach() {
           <CardHeader className="pb-3">
             <CardTitle className="text-lg text-white flex items-center">
               <Coffee className="h-5 w-5 mr-2 text-purple-400" />
-              AI-Powered Meal Strategies
+              Meal Strategies
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -415,7 +415,7 @@ export default function MobileAICoach() {
                 onClick={() => {
                   toast({ 
                     title: "Meal Plan Coming Soon!",
-                    description: "AI-powered meal plans are being developed"
+                    description: "Meal plans are being developed"
                   });
                 }}
               >
@@ -439,7 +439,7 @@ export default function MobileAICoach() {
               <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
                 <p className="text-sm text-blue-400 font-medium">Continue Tracking</p>
                 <p className="text-xs text-muted-foreground">
-                  Track for {7 - totalDays} more days to unlock AI meal planning
+                  Track for {7 - totalDays} more days to unlock meal planning
                 </p>
               </div>
             ) : (

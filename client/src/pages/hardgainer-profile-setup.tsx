@@ -506,7 +506,7 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    Smart Progress Reports
+                    Progress Reports
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     See exactly how you're progressing and get simple tips 
@@ -582,7 +582,7 @@ Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-2 tracking-wide">
-                    Gets Smarter Over Time
+                    Improves Over Time
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     The app learns what works best for your body and gives you 

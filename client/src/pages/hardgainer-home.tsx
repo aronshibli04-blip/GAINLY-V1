@@ -64,10 +64,10 @@ export default function HardgainerHome() {
               GAINLY
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-2">
-              Smart Weight Gain Through Real TDEE Calculation
+              Weight Gain Through Real TDEE Calculation
             </p>
             <p className="text-gray-500 dark:text-gray-400">
-              Track your data for 7 days, then get AI-powered meal plans
+              Track your data for 7 days, then get meal plans
             </p>
           </div>
           
@@ -75,7 +75,7 @@ export default function HardgainerHome() {
             <CardContent className="p-6 text-center">
               <h2 className="text-2xl font-semibold mb-4">Get Started</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Complete your profile setup to begin your weight gain journey with personalized TDEE calculation and AI meal planning.
+                Complete your profile setup to begin your weight gain journey with personalized TDEE calculation and meal planning.
               </p>
               <Button asChild className="w-full" size="lg">
                 <a href="/setup">Start Profile Setup</a>
@@ -219,7 +219,7 @@ export default function HardgainerHome() {
       addMealPlan(mealPlan);
       updatePhase('tracking');
       
-      toast({ title: "AI meal plan generated successfully!" });
+      toast({ title: "Meal plan generated successfully!" });
     } catch (error: any) {
       toast({
         title: "Failed to generate meal plan",
@@ -242,9 +242,9 @@ export default function HardgainerHome() {
         };
       case 'meal_planning':
         return {
-          title: 'AI Meal Planning Phase',
+          title: 'Meal Planning Phase',
           subtitle: 'Ready for personalized meal plans',
-          description: 'Generate AI-powered meal plans based on your calculated TDEE',
+          description: 'Generate meal plans based on your calculated TDEE',
           color: 'bg-purple-500',
         };
       case 'tracking':

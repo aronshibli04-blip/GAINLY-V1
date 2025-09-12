@@ -19,16 +19,16 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
       content: (
         <div className="text-center space-y-4">
           <p className="text-lg text-white/90">
-            The AI-powered fitness app designed specifically for hardgainers
+            The fitness app designed specifically for hardgainers
           </p>
           <div className="grid grid-cols-2 gap-3 mt-6">
             <div className="bg-emerald-900/30 p-3 rounded-lg">
               <Trophy className="h-6 w-6 text-emerald-400 mb-2" />
-              <p className="text-sm text-emerald-300">Smart Weight Tracking</p>
+              <p className="text-sm text-emerald-300">Weight Tracking</p>
             </div>
             <div className="bg-purple-900/30 p-3 rounded-lg">
               <Target className="h-6 w-6 text-purple-400 mb-2" />
-              <p className="text-sm text-purple-300">AI Meal Planning</p>
+              <p className="text-sm text-purple-300">Meal Planning</p>
             </div>
           </div>
         </div>

@@ -154,7 +154,7 @@ export default function MobileStatistics() {
               STATISTICS
             </span>
           </h1>
-          <p className="text-blue-400/70">Advanced progress analytics & insights</p>
+          <p className="text-blue-400/70">progress analytics & insights</p>
         </div>
 
         {/* Compact Period Selection */}
@@ -363,7 +363,7 @@ export default function MobileStatistics() {
                   Consistency Opportunity
                 </div>
                 <p className="text-sm text-yellow-300/80">
-                  Your tracking consistency is {stats.consistencyScore.toFixed(0)}%. Try to log data daily for more accurate AI recommendations.
+                  Your tracking consistency is {stats.consistencyScore.toFixed(0)}%. Try to log data daily for more accurate recommendations.
                 </p>
               </div>
             )}
