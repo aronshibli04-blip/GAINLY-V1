@@ -52,9 +52,9 @@ export function GamificationSystem() {
     { level: 1, name: "Nybegynner", minPoints: 0, color: "text-gray-400", badge: Star, perks: ["Grunnleggende tracking"] },
     { level: 2, name: "Dedikert", minPoints: 100, color: "text-blue-400", badge: Shield, perks: ["Daglige tips", "Progress alerts"] },
     { level: 3, name: "Konsistent", minPoints: 300, color: "text-green-400", badge: Target, perks: ["Streak bonuser", "Ukentlige rapporter"] },
-    { level: 4, name: "Målrettet", minPoints: 600, color: "text-purple-400", badge: Medal, perks: ["Custom goals", "AI insights"] },
+    { level: 4, name: "Målrettet", minPoints: 600, color: "text-purple-400", badge: Medal, perks: ["Custom goals", "Progress insights"] },
     { level: 5, name: "Ekspert", minPoints: 1000, color: "text-yellow-400", badge: Crown, perks: ["Advanced analytics", "Priority support"] },
-    { level: 6, name: "Mester", minPoints: 1500, color: "text-orange-400", badge: Trophy, perks: ["Elite features", "Community access"] },
+    { level: 6, name: "Mester", minPoints: 1500, color: "text-orange-400", badge: Trophy, perks: ["Premium features", "Community access"] },
     { level: 7, name: "Legende", minPoints: 2500, color: "text-red-400", badge: Gem, perks: ["Exclusive content", "Beta features"] }
   ];
 

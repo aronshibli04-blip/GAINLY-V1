@@ -445,7 +445,7 @@ export function PremiumLoggedMeals() {
                 <Utensils className="h-8 w-8 text-orange-400/60" />
               </div>
               <p className="text-white text-sm">No meals logged yet today</p>
-              <p className="text-orange-400/60 text-xs mt-1">Start by using the Ultra-Fast Logger above</p>
+              <p className="text-orange-400/60 text-xs mt-1">Start by using the Quick Logger above</p>
             </div>
           )}
         </AnimatePresence>

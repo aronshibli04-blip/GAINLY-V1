@@ -195,7 +195,7 @@ export function EnhancedMealLogger() {
     
     toast({
       title: "Barcode Scanner",
-      description: "Barcode scanning feature coming soon!",
+      description: "Barcode scanning not available in this version.",
     });
   };
 
@@ -205,7 +205,7 @@ export function EnhancedMealLogger() {
     
     toast({
       title: "Photo Analysis",
-      description: "AI photo analysis feature coming soon!",
+      description: "Photo analysis not available in this version.",
     });
   };
 

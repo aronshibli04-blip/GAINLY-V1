@@ -282,7 +282,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
 
   return (
     <div className="space-y-4">
-      {/* Ultra-Fast Header with Stats */}
+      {/* Quick Logger Header with Stats */}
       <Card className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 border-green-400/30">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
@@ -492,7 +492,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
         </Card>
       )}
 
-      {/* Ultra-Fast Quick Add Grid (1-Tap Foods) */}
+      {/* Quick Add Grid (1-Tap Foods) */}
       <Card className="border-green-400/30">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm text-green-400 flex items-center gap-2">

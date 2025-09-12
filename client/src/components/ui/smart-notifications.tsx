@@ -279,7 +279,7 @@ export function SmartNotifications() {
             <CardContent className="p-0">
               <div className="sticky top-0 bg-slate-800/90 p-3 border-b border-primary/20 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-primary">Smart Notifications</h3>
+                  <h3 className="font-semibold text-primary">Notifications</h3>
                   <Button
                     onClick={() => setShowNotifications(false)}
                     variant="ghost"

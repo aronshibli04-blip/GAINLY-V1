@@ -111,7 +111,7 @@ function MealsContent() {
   return (
     <div className="flex-1 p-4 space-y-4 overflow-y-auto">
       <div className="bg-slate-800 rounded-2xl p-5">
-        <h2 className="text-lg font-bold text-white mb-2">🍽️ Ultra-Fast Food Logging</h2>
+        <h2 className="text-lg font-bold text-white mb-2">🍽️ Quick Food Logging</h2>
         <p className="text-emerald-500 text-sm mb-4">Log meals in just 3 taps</p>
         
         <button className="w-full bg-emerald-500 hover:bg-emerald-600 rounded-xl p-4 font-bold text-white transition-colors">
@@ -196,17 +196,17 @@ function GenericContent({ title }: { title: string }) {
     <div className="flex-1 p-4 space-y-4 overflow-y-auto">
       <div className="bg-slate-800 rounded-2xl p-5">
         <h2 className="text-lg font-bold text-white mb-2">🚀 {title}</h2>
-        <p className="text-emerald-500 text-sm mb-4">Feature Coming Soon</p>
+        <p className="text-emerald-500 text-sm mb-4">Complete tracking and insights</p>
         
         <p className="text-slate-400 text-sm mb-4">
-          This section will include comprehensive {title.toLowerCase()} features with:
+          Comprehensive {title.toLowerCase()} features including:
         </p>
         
         <div className="space-y-2">
-          <p className="text-slate-300 text-sm">• insights and recommendations</p>
-          <p className="text-slate-300 text-sm">• analytics and trends</p>
+          <p className="text-slate-300 text-sm">• Detailed insights and recommendations</p>
+          <p className="text-slate-300 text-sm">• Progress analytics and trends</p>
           <p className="text-slate-300 text-sm">• Personalized goal tracking</p>
-          <p className="text-slate-300 text-sm">• Social features and challenges</p>
+          <p className="text-slate-300 text-sm">• Achievement system</p>
         </div>
       </div>
     </div>

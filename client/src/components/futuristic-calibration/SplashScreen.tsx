@@ -65,7 +65,7 @@ export function SplashScreen({ onBeginCalibration }: SplashScreenProps) {
                 Gain weight fast with
               </p>
               <p className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-4">
-                SMART TRACKING
+                PRECISE TRACKING
               </p>
               <p className="text-lg text-slate-400 font-light">
                 Helping hardgainers gain weight —
