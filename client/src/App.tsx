@@ -25,6 +25,7 @@ import MobileMeasurements from "@/pages/mobile-measurements";
 import { MobileAchievements } from "@/pages/mobile-achievements";
 import { MobileGoals } from "@/pages/mobile-goals";
 import MobileProgress from "@/pages/mobile-progress";
+import MobileAbout from "@/pages/mobile-about";
 import MobileDemo from "./pages/MobileDemo";
 
 
@@ -115,6 +116,7 @@ function AppContent() {
           <Route path="/achievements" component={MobileAchievements} />
           <Route path="/goals" component={MobileGoals} />
           <Route path="/progress" component={MobileProgress} />
+          <Route path="/about" component={MobileAbout} />
           <Route path="/mobile-demo" component={MobileDemo} />
           <Route path="/futuristic-demo">
             {() => {

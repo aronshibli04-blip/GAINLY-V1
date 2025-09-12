@@ -119,6 +119,13 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
           path: "/settings", 
           description: "App configuration",
           badge: null
+        },
+        { 
+          icon: Apple, 
+          label: "About", 
+          path: "/about", 
+          description: "About Gainly",
+          badge: null
         }
       ]
     }
