@@ -80,12 +80,12 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
       )
     },
     {
-      title: "AI-Powered Features",
+      title: "Advanced Features",
       icon: <Sparkles className="h-12 w-12 text-yellow-400" />,
       content: (
         <div className="space-y-4">
           <p className="text-white/90">
-            Unlock powerful AI features to accelerate your weight gain journey
+            Unlock powerful features to accelerate your weight gain journey
           </p>
           <div className="grid gap-3">
             <div className="bg-gradient-to-r from-yellow-900/30 to-orange-900/30 p-4 rounded-lg border border-yellow-400/30">
@@ -97,7 +97,7 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
             <div className="bg-gradient-to-r from-green-900/30 to-emerald-900/30 p-4 rounded-lg border border-green-400/30">
               <h4 className="font-semibold text-green-300 mb-2">🤖 Personalized Meal Plans</h4>
               <p className="text-sm text-white/70">
-                AI generates meal plans based on your TDEE and preferences
+                Generates meal plans based on your TDEE and preferences
               </p>
             </div>
           </div>

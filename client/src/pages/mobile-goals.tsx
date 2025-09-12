@@ -308,15 +308,15 @@ export function MobileGoals() {
           </CardContent>
         </Card>
 
-        {/* AI-Powered Personalization Info */}
+        {/* Personalization Info */}
         <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-400/20 mt-4">
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Wand2 className="h-5 w-5 text-purple-400" />
-              <h3 className="text-lg font-semibold text-purple-400">AI-Tilpassede Belønninger</h3>
+              <h3 className="text-lg font-semibold text-purple-400">Tilpassede Belønninger</h3>
             </div>
             <p className="text-slate-300 text-sm mb-4">
-              Klikk "Tilpass" på et mål for å la AI-en lage personlige belønninger basert på dine interesser og ønsker.
+              Klikk "Tilpass" på et mål for å lage personlige belønninger basert på dine interesser og ønsker.
             </p>
             <div className="flex flex-wrap gap-2 justify-center">
               <Badge variant="outline" className="text-purple-400 border-purple-400/40">
@@ -325,7 +325,7 @@ export function MobileGoals() {
               </Badge>
               <Badge variant="outline" className="text-blue-400 border-blue-400/40">
                 <Wand2 className="h-3 w-3 mr-1" />
-                AI-drevet
+                Personalisert
               </Badge>
               <Badge variant="outline" className="text-green-400 border-green-400/40">
                 <Heart className="h-3 w-3 mr-1" />

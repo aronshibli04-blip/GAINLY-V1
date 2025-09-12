@@ -95,7 +95,7 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 <Card className="bg-white/5 border-emerald-400/20 backdrop-blur-sm">
                   <CardContent className="p-4 text-center">
                     <Star className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-                    <p className="text-sm text-emerald-300">AI-Powered Analysis</p>
+                    <p className="text-sm text-emerald-300">TDEE Analysis</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-emerald-400/20 backdrop-blur-sm">

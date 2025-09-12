@@ -1,51 +1,5 @@
 // Simplified OpenAI service that uses server endpoint
-interface MealPlanRequest {
-  targetCalories: number;
-  dietaryPreferences: string[];
-  preferredFoods: string[];
-  maxMealsPerDay: number;
-  maxPrepTime: number;
-  cookingExperience: string;
-  userId: string;
-}
-
-interface MealPlan {
-  id: string;
-  userId: string;
-  date: string;
-  meals: Array<{
-    id: string;
-    name: string;
-    type: string;
-    calories: number;
-    protein: number;
-    carbs: number;
-    fat: number;
-    ingredients: Array<{
-      id: string;
-      name: string;
-      amount: number;
-      unit: string;
-      calories: number;
-    }>;
-    instructions: string[];
-    prepTime: number;
-    cookTime: number;
-  }>;
-  totalCalories: number;
-  totalProtein: number;
-  totalCarbs: number;
-  totalFat: number;
-  shoppingList: Array<{
-    id: string;
-    name: string;
-    amount: number;
-    unit: string;
-    category: string;
-    purchased: boolean;
-  }>;
-  createdAt: string;
-}
+import { MealPlan, MealPlanRequest } from '@/types';
 
 class OpenAIService {
   hasApiKey(): boolean {
