@@ -93,9 +93,8 @@ export default function MobileMeals() {
     } catch (error) {
       setIsGenerating(false);
       toast({ 
-        title: "Generation failed", 
-        description: "Please try again",
-        variant: "destructive"
+        title: "Ready for another try!", 
+        description: "Meal plan generation didn't complete this time. Let's give it another shot!"
       });
     }
   };

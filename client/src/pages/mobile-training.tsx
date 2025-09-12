@@ -28,13 +28,13 @@ export default function MobileTraining() {
 
   const handleLogActivity = () => {
     if (!activityType || !duration) {
-      toast({ title: "Select activity type and duration", variant: "destructive" });
+      toast({ title: "💪 Let's log that workout!", description: "Choose your activity type and how long you trained to complete your entry." });
       return;
     }
 
     const durationNum = parseFloat(duration);
     if (isNaN(durationNum) || durationNum <= 0 || durationNum > 8) {
-      toast({ title: "Enter valid duration (0.1-8 hours)", variant: "destructive" });
+      toast({ title: "Almost there!", description: "Workout duration should be between 0.1-8 hours for accurate tracking." });
       return;
     }
 

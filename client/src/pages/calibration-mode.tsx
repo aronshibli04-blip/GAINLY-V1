@@ -71,7 +71,7 @@ export default function CalibrationMode() {
 
     if (!formData.weight || !formData.calories || !formData.activityDescription.trim()) {
       toast({
-        title: "All fields required",
+        title: "🎯 Complete your daily entry!",
         description: "Please provide weight, calories, and activity data.",
         variant: "destructive"
       });
@@ -85,7 +85,7 @@ export default function CalibrationMode() {
     if (weight < 40 || weight > 200) {
       toast({
         title: "Invalid weight",
-        description: "Weight must be between 40-200 kg",
+        description: "Weight should be between 40-200 kg for accurate tracking",
         variant: "destructive"
       });
       return;
@@ -94,7 +94,7 @@ export default function CalibrationMode() {
     if (calories < 500 || calories > 8000) {
       toast({
         title: "Invalid calories",
-        description: "Calories must be between 500-8000",
+        description: "Calories should be between 500-8000 for realistic tracking",
         variant: "destructive"
       });
       return;

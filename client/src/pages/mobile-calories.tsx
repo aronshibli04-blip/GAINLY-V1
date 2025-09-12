@@ -33,13 +33,13 @@ export default function MobileCalories() {
 
   const handleLogWeight = () => {
     if (!weight) {
-      toast({ title: "Enter your weight", variant: "destructive" });
+      toast({ title: "⚖️ Ready to track progress?", description: "Add your weight to see how you're growing!" });
       return;
     }
 
     const weightNum = parseFloat(weight);
     if (isNaN(weightNum) || weightNum < 30 || weightNum > 300) {
-      toast({ title: "Enter a valid weight (30-300kg)", variant: "destructive" });
+      toast({ title: "Perfect range coming up!", description: "Weight should be between 30-300kg for best tracking results." });
       return;
     }
 
@@ -55,13 +55,13 @@ export default function MobileCalories() {
 
   const handleLogCalories = () => {
     if (!calories) {
-      toast({ title: "Enter calories", variant: "destructive" });
+      toast({ title: "🔥 Fuel your gains!", description: "Add those calories to track your nutrition progress!" });
       return;
     }
 
     const caloriesNum = parseInt(calories);
     if (isNaN(caloriesNum) || caloriesNum < 50 || caloriesNum > 5000) {
-      toast({ title: "Enter valid calories (50-5000)", variant: "destructive" });
+      toast({ title: "Great tracking choice!", description: "Calories should be between 50-5000 for accurate nutrition logging." });
       return;
     }
 
@@ -69,7 +69,6 @@ export default function MobileCalories() {
       date: today,
       calories: caloriesNum,
       description: mealDescription || `${caloriesNum} calories`,
-      mealType: "snack",
       userId: "user1"
     });
 

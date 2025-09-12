@@ -151,11 +151,11 @@ export function getProgressInsights(
   
   // Progress insights
   if (uniqueWeightDays < 7) {
-    insights.push(`Track weight for ${7 - uniqueWeightDays} more days to unlock analysis`);
+    insights.push(`🚀 ${uniqueWeightDays} days logged! ${7 - uniqueWeightDays} more days will unlock your personalized analysis.`);
   }
   
   if (uniqueCalorieDays < 7) {
-    insights.push(`Log calories for ${7 - uniqueCalorieDays} more days to unlock analysis`);
+    insights.push(`💪 ${uniqueCalorieDays} days of nutrition logged! ${7 - uniqueCalorieDays} more days will unlock your analysis.`);
   }
   
   // Weight trend insights

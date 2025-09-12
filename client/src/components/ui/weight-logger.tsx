@@ -19,27 +19,26 @@ export function WeightLogger() {
 
   const handleLogWeight = () => {
     if (!weight) {
-      toast({ title: "Skriv inn vekten din", variant: "destructive" });
+      toast({ title: "⚖️ Klar for å logge vekt?", description: "Legg til din nåværende vekt for å spore fremgangen!" });
       return;
     }
 
     const weightNum = parseFloat(weight);
     if (isNaN(weightNum)) {
-      toast({ title: "Ugyldig vekt - skriv inn tall", variant: "destructive" });
+      toast({ title: "La oss få riktig tall!", description: "Vennligst skriv inn vekten din som et tall." });
       return;
     }
     
     if (weightNum < 40 || weightNum > 200) {
-      toast({ title: "Vekt må være mellom 40-200kg", variant: "destructive" });
+      toast({ title: "Perfekt område!", description: "Vekt bør være mellom 40-200kg for best sporingsresultater." });
       return;
     }
     
     // Additional validation for unrealistic changes
     if (lastWeight && Math.abs(weightNum - lastWeight) > 5) {
       toast({ 
-        title: "Stor vektendring oppdaget", 
-        description: "Er du sikker på at vekten er riktig?",
-        variant: "destructive" 
+        title: "🤔 Dobbeltsjekk vekten", 
+        description: "Det ser ut som en stor endring. Er du sikker på at tallet er riktig?"
       });
       return;
     }

@@ -98,13 +98,13 @@ export default function HardgainerHome() {
 
   const handleLogWeight = () => {
     if (!weightInput) {
-      toast({ title: "Please enter a weight", variant: "destructive" });
+      toast({ title: "💪 Ready to log your weight?", description: "Enter your current weight to track your progress!" });
       return;
     }
     
     const weight = parseFloat(weightInput);
     if (weight < 30 || weight > 300) {
-      toast({ title: "Please enter a valid weight between 30-300 kg", variant: "destructive" });
+      toast({ title: "Let's get the right number!", description: "Weight should be between 30-300 kg for accurate tracking." });
       return;
     }
 
@@ -120,13 +120,13 @@ export default function HardgainerHome() {
 
   const handleLogMeal = () => {
     if (!mealName || !calories) {
-      toast({ title: "Please enter meal description and calories", variant: "destructive" });
+      toast({ title: "🍽️ Time to fuel your gains!", description: "Add what you ate and the calories to track your progress." });
       return;
     }
     
     const calorieValue = parseInt(calories);
     if (calorieValue < 50 || calorieValue > 5000) {
-      toast({ title: "Please enter a valid calorie amount between 50-5000", variant: "destructive" });
+      toast({ title: "Great choice to track!", description: "Calories should be between 50-5000 for accurate logging." });
       return;
     }
 
@@ -144,13 +144,13 @@ export default function HardgainerHome() {
 
   const handleLogActivity = () => {
     if (!activityValue) {
-      toast({ title: "Please enter activity value", variant: "destructive" });
+      toast({ title: "🏃‍♂️ Keep moving forward!", description: "Add your activity details to complete your daily tracking." });
       return;
     }
 
     const value = parseInt(activityValue);
     if (value < 0 || value > 50000) {
-      toast({ title: "Please enter a valid activity value", variant: "destructive" });
+      toast({ title: "Almost there!", description: "Activity value should be between 0-50000 for accurate tracking." });
       return;
     }
 
@@ -168,9 +168,8 @@ export default function HardgainerHome() {
   const handleGenerateTdeeAnalysis = () => {
     if (progress.weightEntries < 7 || progress.calorieEntries < 7) {
       toast({
-        title: "Insufficient Data",
-        description: `You need at least 7 days of data. Current: ${progress.weightEntries} weight entries, ${progress.calorieEntries} calorie entries.`,
-        variant: "destructive"
+        title: "🚀 Building your foundation!",
+        description: `You're on track! ${Math.max(7 - progress.weightEntries, 7 - progress.calorieEntries)} more days of data will unlock your personalized analysis.`
       });
       return;
     }
@@ -196,7 +195,7 @@ export default function HardgainerHome() {
 
   const handleGenerateMealPlan = async () => {
     if (!currentTdeeAnalysis) {
-      toast({ title: "Generate TDEE analysis first", variant: "destructive" });
+      toast({ title: "🎯 One step closer!", description: "Generate your TDEE analysis first to unlock personalized meal plans." });
       return;
     }
 
@@ -222,9 +221,8 @@ export default function HardgainerHome() {
       toast({ title: "Meal plan generated successfully!" });
     } catch (error: any) {
       toast({
-        title: "Failed to generate meal plan",
-        description: error.message,
-        variant: "destructive"
+        title: "Let's try that again!",
+        description: "Meal plan generation didn't work this time. Your data is safe - ready for another attempt?"
       });
     } finally {
       setIsGeneratingMealPlan(false);

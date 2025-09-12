@@ -44,8 +44,8 @@ export default function HardgainerProfileSetup() {
         !formData.weight || !formData.sex || !formData.activityDescription || 
         !formData.goalWeight) {
       toast({ 
-        title: "Please fill in all required fields", 
-        variant: "destructive" 
+        title: "🚀 Almost ready to start!", 
+        description: "Complete all fields to unlock your personalized journey." 
       });
       return;
     }
@@ -58,32 +58,32 @@ export default function HardgainerProfileSetup() {
 
     if (age < 16 || age > 100) {
       toast({ 
-        title: "Age must be between 16 and 100", 
-        variant: "destructive" 
+        title: "Perfect age range!", 
+        description: "Age should be between 16-100 for personalized recommendations." 
       });
       return;
     }
 
     if (height < 120 || height > 250) {
       toast({ 
-        title: "Height must be between 120 and 250 cm", 
-        variant: "destructive" 
+        title: "Great height range!", 
+        description: "Height should be between 120-250 cm for accurate calculations." 
       });
       return;
     }
 
     if (weight < 40 || weight > 200) {
       toast({ 
-        title: "Weight must be between 40 and 200 kg", 
-        variant: "destructive" 
+        title: "Perfect weight range!", 
+        description: "Current weight should be between 40-200 kg for best results." 
       });
       return;
     }
 
     if (goalWeight <= weight) {
       toast({ 
-        title: "Goal weight must be higher than current weight", 
-        variant: "destructive" 
+        title: "🎯 Great goal mindset!", 
+        description: "Your goal weight should be higher than your current weight to track your gains!" 
       });
       return;
     }
