@@ -121,7 +121,7 @@ export default function MobileAICoach() {
               AI COACH
             </span>
           </h1>
-          <p className="text-purple-400/70">Intelligent metabolic analysis & guidance</p>
+          <p className="text-purple-400/70">Nutrition guidance & recommendations</p>
         </div>
 
         {/* Data Status */}

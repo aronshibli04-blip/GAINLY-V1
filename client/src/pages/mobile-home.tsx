@@ -1116,7 +1116,7 @@ export default function MobileHome() {
               GAINLY
             </span>
           </h1>
-          <p className="text-emerald-400/80 text-lg font-medium tracking-wide">Your AI-powered bulk companion</p>
+          <p className="text-emerald-400/80 text-lg font-medium tracking-wide">Your weight gain companion</p>
         </div>
 
         {/* Aggressive 1kg/Week Surplus Tracker */}

@@ -64,7 +64,7 @@ export class OpenAIService {
   }
 
   async generateMealPlan(request: MealPlanRequest): Promise<MealPlan> {
-    const systemPrompt = `You are an elite nutrition specialist and meal planning expert with 15+ years of experience helping hardgainers achieve aggressive weight gain goals. You understand the unique challenges of gaining 1kg per week and specialize in high-calorie, nutrient-dense meal plans.
+    const systemPrompt = `You are a nutrition specialist helping hardgainers achieve weight gain goals. You understand the challenges of gaining 1kg per week and focus on high-calorie, nutrient-dense meal plans.
 
 Key principles:
 - Hardgainers need aggressive calorie surplus (1100+ kcal above TDEE)

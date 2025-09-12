@@ -23,7 +23,7 @@ const BADGES = {
   streak_7: { name: "Week Streak", icon: Flame, color: "text-orange-400" },
   streak_30: { name: "Month Champion", icon: Crown, color: "text-yellow-400" },
   level_5: { name: "Level 5 Hero", icon: Star, color: "text-purple-400" },
-  level_10: { name: "Elite Gainer", icon: Trophy, color: "text-emerald-400" },
+  level_10: { name: "Weight Champion", icon: Trophy, color: "text-emerald-400" },
   perfect_week: { name: "Perfect Week", icon: Target, color: "text-pink-400" },
 };
 

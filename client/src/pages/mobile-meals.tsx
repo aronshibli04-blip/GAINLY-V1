@@ -316,7 +316,7 @@ export default function MobileMeals() {
               <div>
                 <h3 className="font-semibold text-white">Food Logger Mode</h3>
                 <p className="text-sm text-muted-foreground">
-                  {useUltraFast ? "⚡ Ultra-Fast (3 taps)" : "🔧 Advanced (10+ taps)"}
+                  {useUltraFast ? "⚡ Quick (3 taps)" : "🔧 Detailed (10+ taps)"}
                 </p>
               </div>
               <div className="flex gap-2">
@@ -326,7 +326,7 @@ export default function MobileMeals() {
                   size="sm"
                   className={useUltraFast ? "bg-green-500 text-black" : "border-green-500/50 text-green-400"}
                 >
-                  ⚡ Ultra-Fast
+                  ⚡ Quick
                 </Button>
                 <Button
                   onClick={() => setUseUltraFast(false)}
@@ -334,7 +334,7 @@ export default function MobileMeals() {
                   size="sm"
                   className={!useUltraFast ? "bg-orange-400 text-black" : "border-orange-400/50 text-orange-400"}
                 >
-                  🔧 Advanced
+                  🔧 Detailed
                 </Button>
               </div>
             </div>

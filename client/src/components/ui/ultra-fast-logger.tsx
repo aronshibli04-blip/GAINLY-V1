@@ -292,8 +292,8 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
               </div>
               <div>
-                <h3 className="font-bold text-green-400">⚡ Ultra-Fast Logger</h3>
-                <p className="text-xs text-green-300">Beats MacroFactor's 10 taps!</p>
+                <h3 className="font-bold text-green-400">⚡ Quick Logger</h3>
+                <p className="text-xs text-green-300">Simple and fast</p>
               </div>
             </div>
             {currentMeal.length > 0 && (
@@ -459,7 +459,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
         </Card>
       )}
 
-      {/* Smart Recent Foods (Learning Algorithm) */}
+      {/* Recent Foods */}
       {recentFoods.length > 0 && (
         <Card className="border-yellow-400/30">
           <CardHeader className="pb-3">
