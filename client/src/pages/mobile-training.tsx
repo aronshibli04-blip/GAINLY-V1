@@ -159,10 +159,10 @@ export default function MobileTraining() {
               <div className="bg-red-500/20 border border-red-500/40 p-3 rounded-lg">
                 <div className="flex items-center mb-2">
                   <AlertTriangle className="h-4 w-4 text-red-400 mr-2" />
-                  <span className="text-red-400 font-medium text-sm">MUSCLE LOSS RISK</span>
+                  <span className="text-orange-400 font-medium text-sm">Focus area</span>
                 </div>
                 <p className="text-red-300 text-xs">
-                  {daysSinceLastTraining} days without training! Without resistance training, weight gain will be mostly fat instead of muscle.
+                  Ready to start your journey? Resistance training helps ensure your weight gain becomes strong, lean muscle.
                 </p>
               </div>
             )}

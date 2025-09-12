@@ -13,7 +13,7 @@ interface SleepQualityTrackerProps {
 }
 
 const QUALITY_LEVELS = [
-  { value: 1, label: "Poor", emoji: "😴", color: "text-red-400 border-red-400/30" },
+  { value: 1, label: "Restless", emoji: "😴", color: "text-orange-400 border-orange-400/30" },
   { value: 2, label: "Fair", emoji: "😪", color: "text-orange-400 border-orange-400/30" },
   { value: 3, label: "Good", emoji: "😊", color: "text-yellow-400 border-yellow-400/30" },
   { value: 4, label: "Great", emoji: "😌", color: "text-green-400 border-green-400/30" },
@@ -193,7 +193,7 @@ export function SleepQualityTracker({ userId }: SleepQualityTrackerProps) {
           <div className="text-xs text-indigo-300/80 space-y-1">
             <div className="flex items-center gap-1">
               <Zap className="h-3 w-3" />
-              Poor sleep may increase calorie needs
+              Improving sleep can optimize your gains
             </div>
             <div className="flex items-center gap-1">
               <Star className="h-3 w-3" />

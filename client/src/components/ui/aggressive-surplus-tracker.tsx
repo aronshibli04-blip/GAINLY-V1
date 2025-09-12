@@ -263,11 +263,11 @@ export function AggressiveSurplusTracker() {
           <div className="bg-red-500/30 border border-red-500/50 p-3 rounded-lg">
             <div className="flex items-center mb-2">
               <AlertTriangle className="h-4 w-4 text-red-400 mr-2" />
-              <span className="text-red-400 font-medium text-sm">CRITICAL DEFICIT</span>
+              <span className="text-orange-400 font-medium text-sm">Time for your next meal</span>
             </div>
             <p className="text-red-300 text-xs mb-3">
               It's {currentHour}:00 and you need {caloriesRemaining} more calories! 
-              Emergency protocol needed to hit your 1kg/week target.
+              Let's get you back on track to hit your 1kg/week target.
             </p>
           </div>
         )}
@@ -276,7 +276,7 @@ export function AggressiveSurplusTracker() {
           <div className="bg-orange-500/30 border border-orange-500/50 p-3 rounded-lg">
             <div className="flex items-center mb-2">
               <Clock className="h-4 w-4 text-orange-400 mr-2" />
-              <span className="text-orange-400 font-medium text-sm">FALLING BEHIND</span>
+              <span className="text-orange-400 font-medium text-sm">Let's catch up</span>
             </div>
             <p className="text-orange-300 text-xs mb-3">
               You need {caloriesRemaining} more calories today. Time to start eating bigger portions!

@@ -265,7 +265,7 @@ function DailyRoutinesQuickChecker() {
       
       toast({
         title: "Error",
-        description: "Failed to delete routine. Please try again.",
+        description: "Let's try that again - routine deletion didn't complete this time.",
         variant: "destructive"
       });
     }
@@ -304,7 +304,7 @@ function DailyRoutinesQuickChecker() {
       
       toast({
         title: "Error",
-        description: "Failed to delete all routines. Please try again.",
+        description: "Let's try that again - routine cleanup didn't complete this time.",
         variant: "destructive"
       });
     }

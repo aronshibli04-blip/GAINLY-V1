@@ -136,8 +136,8 @@ export function SmartNotifications() {
       newNotifications.push({
         id: `critical-deficit-${today}`,
         type: 'urgent',
-        title: '🚨 CRITICAL DEFICIT ALERT',
-        message: `You need ${caloriesRemaining} calories to hit your 1kg/week target! Emergency protocol needed.`,
+        title: '🍽️ Time for your next meal',
+        message: `You need ${caloriesRemaining} calories to hit your 1kg/week target! Let's keep you on track.`,
         icon: AlertTriangle,
         color: 'text-red-400',
         priority: 'critical',
@@ -154,7 +154,7 @@ export function SmartNotifications() {
       newNotifications.push({
         id: `afternoon-warning-${today}`,
         type: 'warning',
-        title: 'Falling Behind Calorie Target',
+        title: 'Let\'s catch up on your nutrition',
         message: `You need ${caloriesRemaining} more calories today. Start eating bigger portions now!`,
         icon: Clock,
         color: 'text-orange-400',

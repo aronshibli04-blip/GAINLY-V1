@@ -20,7 +20,7 @@ export const defaultRoutines = [
   },
   {
     title: "Post-Workout Meal",
-    description: "Critical recovery window - big meal within 2 hours",
+    description: "Perfect recovery window - big meal within 2 hours",
     category: "nutrition" as const,
     points: 50
   },
