@@ -2,26 +2,30 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
-import { SmartMealLogger } from "@/components/ui/smart-meal-logger";
 import { UltraFastLogger } from "@/components/ui/ultra-fast-logger";
 import { PremiumLoggedMeals } from "@/components/ui/premium-logged-meals";
-import { PhotoNutritionScanner } from "@/components/ui/photo-nutrition-scanner";
+import { DailyProgressRing } from "@/components/ui/daily-progress-ring";
+import { MealTypeTabsComponent, MealType } from "@/components/ui/meal-type-tabs";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { calculateTdee } from "@/utils/tdee";
-import { Utensils, Sparkles, Plus, Clock } from "lucide-react";
+import { Utensils, Sparkles, Plus, Clock, ChevronDown, ChevronUp, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export default function MobileMeals() {
   const { toast } = useToast();
   const { openMenu } = useSideMenu();
   const [isGenerating, setIsGenerating] = useState(false);
   const [preferences, setPreferences] = useState("");
-  const [useUltraFast, setUseUltraFast] = useState(true); // Default to ultra-fast logger
+  const [selectedMealType, setSelectedMealType] = useState<MealType>('breakfast');
+  const [showMealPlanSection, setShowMealPlanSection] = useState(false);
+  const [showLoggedMeals, setShowLoggedMeals] = useState(false);
+  const [showUltraFastLogger, setShowUltraFastLogger] = useState(false);
   const { 
     currentTdeeAnalysis,
     mealPlans,
@@ -99,261 +103,288 @@ export default function MobileMeals() {
     }
   };
 
-  const handleMealLogged = (calories: number) => {
-    // Update today's calorie count in the store
+  const handleMealLogged = (calories: number, foodName?: string) => {
+    // Update today's calorie count in the store with meal type
     const today = new Date().toISOString().split('T')[0];
+    const description = foodName 
+      ? `${selectedMealType}: ${foodName}` 
+      : `${selectedMealType}: Quick logged meal`;
+    
     addCalorieEntry({
       userId: 'user1',
       calories,
-      description: `Quick logged meal`,
+      description,
       date: today
     });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900/20 to-slate-900 text-white pb-24">
-      {/* Mobile Header with Menu Toggle */}
+      {/* Mobile Header */}
       <MobileHeader 
         title="Meals" 
         onOpenMenu={openMenu}
       />
       
-      {/* Animated Background */}
+      {/* Simplified Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(35)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-orange-400/20 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
-            }}
-          />
-        ))}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-amber-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
       
-      <div className="relative z-10 container mx-auto px-4 pt-20 py-6">
+      <div className="relative z-10 px-4 pt-20 py-6 max-w-md mx-auto">
         
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
-            <div className="absolute inset-0 rounded-full border-2 border-orange-400/30 animate-spin" 
-                 style={{ animationDuration: '12s' }} />
-            <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-r from-orange-400 to-amber-400 flex items-center justify-center shadow-xl">
-              <Utensils className="h-8 w-8 text-black" />
-            </div>
-          </div>
-          
-          <h1 className="text-3xl font-black mb-2">
-            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-400 bg-clip-text text-transparent">
-              MEAL PLANS
-            </span>
-          </h1>
-          <p className="text-orange-400/70">Nutrition for hardgainers</p>
+        {/* 1. DAILY PROGRESS RING - Hero Section */}
+        <DailyProgressRing />
+        
+        {/* 2. MEAL TYPE TABS */}
+        <MealTypeTabsComponent 
+          selectedMealType={selectedMealType}
+          onMealTypeChange={setSelectedMealType}
+        />
+        
+        {/* 3. PRIMARY CTA - LOG MEAL */}
+        <div className="mb-6">
+          <Button 
+            onClick={() => setShowUltraFastLogger(!showUltraFastLogger)}
+            className="w-full h-16 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-bold text-lg shadow-lg"
+            data-testid="button-log-meal"
+          >
+            <Plus className="h-6 w-6 mr-3" />
+            LOG MEAL
+          </Button>
         </div>
-
-        {/* No Analysis Warning - Moved to Top */}
-        {!canGenerateMealPlan && (
-          <Card className="border-yellow-500/20 bg-yellow-500/5 mb-6">
-            <CardContent className="p-4 text-center">
-              <Sparkles className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-              <p className="text-sm text-yellow-400 font-medium mb-1">
-                Complete Setup Required
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {totalDays < 7 
-                  ? `Track for ${7 - totalDays} more days, then generate TDEE analysis to unlock meal plans`
-                  : "Generate your TDEE analysis in Coach to unlock meal plans"
-                }
-              </p>
-            </CardContent>
-          </Card>
+        
+        {/* 4. ULTRA FAST LOGGER - Expandable */}
+        {showUltraFastLogger && (
+          <div className="mb-6">
+            <UltraFastLogger 
+              userId="974acc79-f202-4202-bdab-80c4ef55f534" 
+              onMealLogged={handleMealLogged}
+              selectedMealType={selectedMealType}
+            />
+          </div>
         )}
-
-        {/* Meal Plan Generation */}
-        {canGenerateMealPlan && (
-          <Card className="meals-glow-hover">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg text-white flex items-center">
-                <Sparkles className="h-5 w-5 mr-2 text-orange-400" />
-                Generate Hardgainer Meal Plan
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label className="text-sm text-muted-foreground">
-                  Dietary preferences (optional)
-                </Label>
-                <Textarea
-                  placeholder="Any food allergies, dislikes, or preferences..."
-                  value={preferences}
-                  onChange={(e) => setPreferences(e.target.value)}
-                  className="grok-input mt-1 resize-none"
-                  rows={3}
-                  data-testid="textarea-preferences"
-                />
-              </div>
-
-              <Button 
-                onClick={handleGenerateMealPlan}
-                disabled={isGenerating}
-                className="w-full grok-gradient h-12"
-                data-testid="button-generate-meal-plan"
-              >
-                <Sparkles className="h-5 w-5 mr-2 text-black" />
-                {isGenerating ? "Generating..." : "Generate Meal Plan"}
-              </Button>
-
-              {currentTdeeAnalysis && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 rounded-lg bg-muted/20">
-                    <p className="text-xs text-muted-foreground">Your TDEE</p>
-                    <p className="text-lg font-bold text-white">
-                      {currentTdeeAnalysis.tdee} kcal
-                    </p>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-orange-400/10 border border-orange-400/20">
-                    <p className="text-xs text-muted-foreground">Target (+1100)</p>
-                    <p className="text-lg font-bold text-orange-400">
-                      {currentTdeeAnalysis.tdee + 1100} kcal
-                    </p>
-                  </div>
-                </div>
-              )}
-              
-              <div className="text-xs text-center text-muted-foreground">
-                Meal plans optimized for 1kg/week weight gain
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Latest Meal Plan */}
-        {latestMealPlan && (
-          <Card className="meals-glow-hover">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg text-white flex items-center justify-between">
-                <div className="flex items-center">
-                  <Utensils className="h-5 w-5 mr-2 text-orange-400" />
-                  Your Meal Plan
-                </div>
-                <Badge variant="secondary">
-                  {latestMealPlan.totalCalories} kcal
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {latestMealPlan.meals.map((meal) => (
-                <div 
-                  key={meal.id}
-                  className="p-4 rounded-lg bg-muted/20 space-y-3"
-                >
-                  <div className="flex justify-between items-center">
-                    <h4 className="font-semibold text-white capitalize">
-                      {meal.type}: {meal.name}
-                    </h4>
-                    <Badge variant="outline">
-                      {meal.calories} cal
-                    </Badge>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground font-medium">
-                      Ingredients:
-                    </p>
-                    <div className="space-y-1">
-                      {meal.ingredients.map((ingredient) => (
-                        <div 
-                          key={ingredient.id}
-                          className="flex justify-between text-xs"
-                        >
-                          <span className="text-white">
-                            {ingredient.name} ({ingredient.amount}{ingredient.unit})
-                          </span>
-                          <span className="text-muted-foreground">
-                            {ingredient.calories} cal
-                          </span>
-                        </div>
-                      ))}
+        
+        {/* 5. TODAY'S LOGGED MEALS - Collapsible */}
+        <Collapsible open={showLoggedMeals} onOpenChange={setShowLoggedMeals}>
+          <CollapsibleTrigger asChild>
+            <Card className="mb-4 cursor-pointer hover:bg-slate-800/60 transition-colors">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Utensils className="h-5 w-5 mr-3 text-orange-400" />
+                    <div>
+                      <h3 className="font-semibold text-white">Today's Meals</h3>
+                      <p className="text-xs text-gray-400">View and edit logged meals</p>
                     </div>
                   </div>
-
-                  <div className="pt-2 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground">
-                      {meal.instructions}
-                    </p>
+                  {showLoggedMeals ? (
+                    <ChevronUp className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-gray-400" />
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="mb-6">
+              <PremiumLoggedMeals />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+        
+        {/* 6. AI MEAL PLANNING - Collapsible Bottom Section */}
+        <Collapsible open={showMealPlanSection} onOpenChange={setShowMealPlanSection}>
+          <CollapsibleTrigger asChild>
+            <Card className="mb-4 cursor-pointer hover:bg-slate-800/60 transition-colors">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Sparkles className="h-5 w-5 mr-3 text-purple-400" />
+                    <div>
+                      <h3 className="font-semibold text-white">Meal Planning</h3>
+                      <p className="text-xs text-gray-400">Generate personalized meal plans</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    {canGenerateMealPlan && (
+                      <Badge variant="outline" className="text-green-400 border-green-400/50 bg-green-500/10 mr-2">
+                        Ready
+                      </Badge>
+                    )}
+                    {showMealPlanSection ? (
+                      <ChevronUp className="h-5 w-5 text-gray-400" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-gray-400" />
+                    )}
                   </div>
                 </div>
-              ))}
+              </CardContent>
+            </Card>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="space-y-4 mb-6">
+              
+              {/* Setup Warning */}
+              {!canGenerateMealPlan && (
+                <Card className="border-yellow-500/20 bg-yellow-500/5">
+                  <CardContent className="p-4 text-center">
+                    <Sparkles className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
+                    <p className="text-sm text-yellow-400 font-medium mb-1">
+                      Setup Required
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {totalDays < 7 
+                        ? `Track for ${7 - totalDays} more days, then generate TDEE analysis to unlock meal plans`
+                        : "Generate your TDEE analysis in Coach to unlock meal plans"
+                      }
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
 
-              <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
-                <div className="flex items-center">
-                  <Clock className="h-3 w-3 mr-1" />
-                  {new Date(latestMealPlan.createdAt).toLocaleDateString()}
-                </div>
-                <Button 
-                  onClick={handleGenerateMealPlan}
-                  disabled={isGenerating}
-                  variant="outline"
-                  size="sm"
-                  data-testid="button-regenerate-plan"
-                >
-                  <Plus className="h-3 w-3 mr-1" />
-                  New Plan
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              {/* Meal Plan Generation */}
+              {canGenerateMealPlan && (
+                <Card className="bg-slate-800/40 border-purple-500/20">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg text-white flex items-center">
+                      <Zap className="h-5 w-5 mr-2 text-purple-400" />
+                      Generate Meal Plan
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label className="text-sm text-muted-foreground">
+                        Dietary preferences (optional)
+                      </Label>
+                      <Textarea
+                        placeholder="Any food allergies, dislikes, or preferences..."
+                        value={preferences}
+                        onChange={(e) => setPreferences(e.target.value)}
+                        className="mt-1 resize-none bg-slate-900/50 border-slate-600"
+                        rows={3}
+                        data-testid="textarea-preferences"
+                      />
+                    </div>
 
-        {/* Logger Toggle */}
-        <Card className="meals-glow-hover mb-6">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-white">Food Logger Mode</h3>
-                <p className="text-sm text-muted-foreground">
-                  {useUltraFast ? "⚡ Quick (3 taps)" : "🔧 Detailed (10+ taps)"}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => setUseUltraFast(true)}
-                  variant={useUltraFast ? "default" : "outline"}
-                  size="sm"
-                  className={useUltraFast ? "bg-green-500 text-black" : "border-green-500/50 text-green-400"}
-                >
-                  ⚡ Quick
-                </Button>
-                <Button
-                  onClick={() => setUseUltraFast(false)}
-                  variant={!useUltraFast ? "default" : "outline"}
-                  size="sm"
-                  className={!useUltraFast ? "bg-orange-400 text-black" : "border-orange-400/50 text-orange-400"}
-                >
-                  🔧 Detailed
-                </Button>
-              </div>
+                    <Button 
+                      onClick={handleGenerateMealPlan}
+                      disabled={isGenerating}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white h-12"
+                      data-testid="button-generate-meal-plan"
+                    >
+                      <Sparkles className="h-5 w-5 mr-2" />
+                      {isGenerating ? "Generating..." : "Generate Meal Plan"}
+                    </Button>
+
+                    {currentTdeeAnalysis && (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center p-3 rounded-lg bg-slate-900/50">
+                          <p className="text-xs text-muted-foreground">Your TDEE</p>
+                          <p className="text-lg font-bold text-white">
+                            {currentTdeeAnalysis.tdee} kcal
+                          </p>
+                        </div>
+                        <div className="text-center p-3 rounded-lg bg-orange-400/10 border border-orange-400/20">
+                          <p className="text-xs text-muted-foreground">Target (+1100)</p>
+                          <p className="text-lg font-bold text-orange-400">
+                            {currentTdeeAnalysis.tdee + 1100} kcal
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="text-xs text-center text-muted-foreground">
+                      Meal plans optimized for 1kg/week weight gain
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Latest Meal Plan Display */}
+              {latestMealPlan && (
+                <Card className="bg-slate-800/40 border-green-500/20">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg text-white flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Utensils className="h-5 w-5 mr-2 text-green-400" />
+                        Your Meal Plan
+                      </div>
+                      <Badge variant="outline" className="text-green-400 border-green-400/50">
+                        {latestMealPlan.totalCalories} kcal
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {latestMealPlan.meals.map((meal) => (
+                      <div 
+                        key={meal.id}
+                        className="p-4 rounded-lg bg-slate-900/50 space-y-3"
+                      >
+                        <div className="flex justify-between items-center">
+                          <h4 className="font-semibold text-white capitalize">
+                            {meal.type}: {meal.name}
+                          </h4>
+                          <Badge variant="outline" className="text-orange-400 border-orange-400/50">
+                            {meal.calories} cal
+                          </Badge>
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-xs text-muted-foreground font-medium">
+                            Ingredients:
+                          </p>
+                          <div className="space-y-1">
+                            {meal.ingredients.map((ingredient) => (
+                              <div 
+                                key={ingredient.id}
+                                className="flex justify-between text-xs"
+                              >
+                                <span className="text-white">
+                                  {ingredient.name} ({ingredient.amount}{ingredient.unit})
+                                </span>
+                                <span className="text-muted-foreground">
+                                  {ingredient.calories} cal
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="pt-2 border-t border-slate-600">
+                          <p className="text-xs text-muted-foreground">
+                            {meal.instructions}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+                      <div className="flex items-center">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {new Date(latestMealPlan.createdAt).toLocaleDateString()}
+                      </div>
+                      <Button 
+                        onClick={handleGenerateMealPlan}
+                        disabled={isGenerating}
+                        variant="outline"
+                        size="sm"
+                        className="border-purple-400/50 text-purple-400 hover:bg-purple-500/10"
+                        data-testid="button-regenerate-plan"
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        New Plan
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Conditional Logger */}
-        {useUltraFast ? (
-          <UltraFastLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" onMealLogged={handleMealLogged} />
-        ) : (
-          <SmartMealLogger userId="974acc79-f202-4202-bdab-80c4ef55f534" />
-        )}
-
-        {/* AI Photo Nutrition Scanner */}
-        <PhotoNutritionScanner onFoodCreated={() => {}} />
-
-        {/* Today's Logged Meals - Premium Design */}
-        <PremiumLoggedMeals />
-
-
+          </CollapsibleContent>
+        </Collapsible>
 
       </div>
 

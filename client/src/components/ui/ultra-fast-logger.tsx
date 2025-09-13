@@ -72,10 +72,11 @@ function getCurrentMealTime(): 'breakfast' | 'lunch' | 'dinner' | 'snack' {
 
 interface UltraFastLoggerProps {
   userId: string;
-  onMealLogged?: (calories: number) => void;
+  onMealLogged?: (calories: number, foodName?: string) => void;
+  selectedMealType?: 'breakfast' | 'lunch' | 'dinner' | 'snack';
 }
 
-export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) {
+export function UltraFastLogger({ userId, onMealLogged, selectedMealType }: UltraFastLoggerProps) {
   const [currentMeal, setCurrentMeal] = useState<Array<{food: QuickFood, multiplier: number}>>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -88,8 +89,8 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
 
   // Auto-detect meal type based on time and load recent foods
   useEffect(() => {
-    // Smart meal time detection
-    const detectedMealType = getCurrentMealTime();
+    // Use passed selectedMealType or auto-detect based on time
+    const detectedMealType = selectedMealType || getCurrentMealTime();
     setMealType(detectedMealType);
     
     // Load recent foods from localStorage
@@ -102,7 +103,7 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
         
       }
     }
-  }, []);
+  }, [selectedMealType]);
 
   // Save recent foods to localStorage
   const saveRecentFoods = (foods: RecentFood[]) => {
@@ -255,7 +256,8 @@ export function UltraFastLogger({ userId, onMealLogged }: UltraFastLoggerProps) 
         title: "⚡ Måltid registrert øyeblikkelig!",
         description: `${Math.round(totals.calories)} kalorier lagret på rekordtid`,
       });
-      onMealLogged?.(totals.calories);
+      const foodNames = currentMeal.map(m => m.food.name).join(', ');
+      onMealLogged?.(totals.calories, foodNames);
       setCurrentMeal([]);
       setShowSearch(false);
       setSearchQuery("");
