@@ -95,6 +95,12 @@ export const useUserStore = create<UserState>()(
       isLoading: false,
       currentPhase: 'onboarding',
 
+      // Helper method to safely access user properties
+      getUserProperty: (property: string) => {
+        const state = get();
+        return state.user?.[property as keyof User] || null;
+      },
+
       // Actions
       setUser: (user) => {
         set({ user });
