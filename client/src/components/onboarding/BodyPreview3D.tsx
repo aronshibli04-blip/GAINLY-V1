@@ -22,7 +22,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
   const [currentView, setCurrentView] = useState<'current' | 'future'>('current');
   const [isLoading, setIsLoading] = useState(true);
   const features = getFeatureAccess(subscription);
-  
+
   useEffect(() => {
     // Simulate 3D model loading
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -63,7 +63,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
               </span>
             )}
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -128,7 +128,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                             transform: currentView === 'future' ? 'scaleX(1.1) scaleY(1.05)' : 'scale(1)'
                           }}
                         />
-                        
+
                         {/* Premium overlay for future body */}
                         {currentView === 'future' && !features.realisticBodyPreview && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
@@ -147,8 +147,8 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
                             <p className="text-slate-400">Weight</p>
-                            <p className="font-bold text-white">
-                              {currentView === 'current' ? `${userData.weight}kg` : `${userData.goalWeight}kg`}
+                            <p className="text-xl font-bold text-white">
+                              {currentView === 'current' ? `${userData?.weight || 0}kg` : `${userData?.goalWeight || 0}kg`}
                             </p>
                           </div>
                           <div>
@@ -184,7 +184,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                   <Eye className="h-5 w-5 mr-2 text-purple-400" />
                   Body Analysis
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400">Current Status</span>
@@ -192,19 +192,19 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                       {currentBodyType.type}
                     </Badge>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400">Goal Status</span>
                     <Badge variant="outline" className={`${goalBodyType.color} border-current`}>
                       {goalBodyType.type}
                     </Badge>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400">Weight to Gain</span>
                     <span className="text-emerald-400 font-bold">+{weightToGain.toFixed(1)}kg</span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400">Est. Timeline</span>
                     <span className="text-white font-bold">{Math.ceil(weightToGain / 0.5)} weeks</span>
@@ -217,7 +217,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
             <Card className="bg-slate-800/50 border-slate-700">
               <CardContent className="p-6">
                 <h3 className="text-xl font-bold mb-4 text-emerald-400">Your Journey Ahead</h3>
-                
+
                 <div className="space-y-3">
                   <div className="flex items-center">
                     <div className="w-3 h-3 rounded-full bg-emerald-400 mr-3"></div>
@@ -246,7 +246,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                 {currentView === 'future' ? 'I Want This' : 'See My Future'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              
+
               {!features.realisticBodyPreview && onUpgrade && (
                 <Button
                   onClick={onUpgrade}
