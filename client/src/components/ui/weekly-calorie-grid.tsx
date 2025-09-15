@@ -78,7 +78,7 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
         </div>
 
         {/* Calorie Grid */}
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {weekDates.map((date, index) => {
             const dayCalories = getDayCalories(date);
             const isToday = date === today;
@@ -89,14 +89,14 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
               <div
                 key={date}
                 className={cn(
-                  "relative h-20 rounded-lg p-2 transition-all duration-200 hover:scale-105 cursor-pointer",
+                  "relative h-16 sm:h-20 rounded-md sm:rounded-lg p-1 sm:p-2 transition-all duration-200 hover:scale-105 cursor-pointer",
                   "bg-slate-900/50 border border-slate-600/50",
-                  isToday && "ring-2 ring-emerald-400 ring-opacity-50"
+                  isToday && "ring-1 sm:ring-2 ring-emerald-400 ring-opacity-50"
                 )}
                 data-testid={`day-${index}`}
               >
                 {/* Progress Bar Background */}
-                <div className="absolute inset-2 bg-slate-700/30 rounded-md overflow-hidden">
+                <div className="absolute inset-1 sm:inset-2 bg-slate-700/30 rounded-sm sm:rounded-md overflow-hidden">
                   {/* Progress Fill */}
                   <div 
                     className={cn("h-full transition-all duration-500", statusColor)}
@@ -107,12 +107,12 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
                 {/* Content */}
                 <div className="relative z-10 h-full flex flex-col justify-between text-center">
                   {/* Calories */}
-                  <div className="text-xs font-bold text-white">
-                    {dayCalories > 0 ? dayCalories : '---'}
+                  <div className="text-xs sm:text-xs font-bold text-white">
+                    {dayCalories > 0 ? (dayCalories > 999 ? `${Math.round(dayCalories/1000)}k` : dayCalories) : '---'}
                   </div>
                   
                   {/* Percentage */}
-                  <div className="text-xs text-gray-300">
+                  <div className="text-xs sm:text-xs text-gray-300">
                     {dayCalories > 0 ? `${Math.round(progressPercent)}%` : '0%'}
                   </div>
                 </div>

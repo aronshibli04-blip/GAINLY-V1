@@ -45,48 +45,47 @@ export default function MobileDashboardNew() {
       </div>
       
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-20 py-6 space-y-6 max-w-6xl">
+      <div className="relative z-10 px-4 pt-20 py-6 space-y-4 max-w-md mx-auto">
 
         {/* Date Header */}
-        <div className="text-center mb-6">
-          <p className="text-sm text-gray-400 uppercase tracking-wider">
+        <div className="text-center mb-4">
+          <p className="text-xs text-gray-400 uppercase tracking-wider">
             {new Date().toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
+              weekday: 'short', 
+              month: 'short', 
               day: 'numeric' 
             })}
           </p>
-          <h1 className="text-2xl font-bold text-white mt-1">Dashboard</h1>
+          <h1 className="text-xl font-bold text-white mt-1">Dashboard</h1>
         </div>
 
         {/* 1. HERO SECTION - Weekly Calorie Grid */}
-        <div className="mb-8">
+        <div className="mb-6">
           <WeeklyCalorieGrid targetCalories={targetCalories} />
         </div>
 
-        {/* 2. ANALYTICS CARDS - 2 Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* 2. ANALYTICS CARDS - Single Column on Mobile */}
+        <div className="space-y-4 mb-6">
           <WeightTrendCard />
           <CalorieTrendCard targetCalories={targetCalories} />
         </div>
 
-        {/* 3. HABIT TRACKING - 2 Column Layout */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        {/* 3. HABIT TRACKING - Single Column on Mobile */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-white">Habits</h2>
             <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
               See All
             </Button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
             <MealLoggingHabitCard />
             <WeightTrackingHabitCard />
           </div>
         </div>
 
-        {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - 2 Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - Single Column on Mobile */}
+        <div className="space-y-4 mb-6">
           {/* Today's Progress Card */}
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
             <CardHeader className="pb-3">
@@ -176,7 +175,7 @@ export default function MobileDashboardNew() {
         <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
-              <span>Insights & Analytics</span>
+              <span>Weekly Stats</span>
               <Link href="/progress">
                 <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
                   See All
@@ -185,10 +184,10 @@ export default function MobileDashboardNew() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {/* Weekly Summary */}
-              <div className="text-center p-4 bg-slate-900/50 rounded-lg">
-                <div className="text-xl font-bold text-emerald-400">
+              <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+                <div className="text-lg font-bold text-emerald-400">
                   {Math.round(
                     calorieEntries
                       .filter(entry => {
@@ -200,12 +199,12 @@ export default function MobileDashboardNew() {
                       .reduce((sum, entry) => sum + entry.calories, 0) / 7
                   )}
                 </div>
-                <div className="text-xs text-gray-400">Avg Calories/Day</div>
+                <div className="text-xs text-gray-400">Avg Calories</div>
               </div>
 
               {/* Streak */}
-              <div className="text-center p-4 bg-slate-900/50 rounded-lg">
-                <div className="text-xl font-bold text-blue-400">
+              <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+                <div className="text-lg font-bold text-blue-400">
                   {calorieEntries.filter(entry => {
                     const entryDate = new Date(entry.date);
                     const oneWeekAgo = new Date();
