@@ -9,6 +9,9 @@ interface WeeklyCalorieGridProps {
 export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridProps) {
   const { calorieEntries } = useUserStore();
   
+  // Safety check for calorieEntries
+  const safeCalorieEntries = calorieEntries || [];
+  
   // Get current week dates (Monday to Sunday)
   const getWeekDates = () => {
     const today = new Date();
@@ -31,9 +34,9 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
 
   // Calculate calories for each day
   const getDayCalories = (date: string) => {
-    return calorieEntries
-      .filter(entry => entry.date === date)
-      .reduce((sum, entry) => sum + entry.calories, 0);
+    return safeCalorieEntries
+      .filter(entry => entry && entry.date === date)
+      .reduce((sum, entry) => sum + (entry.calories || 0), 0);
   };
 
   // Calculate progress percentage
