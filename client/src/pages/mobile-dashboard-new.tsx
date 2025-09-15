@@ -5,7 +5,7 @@ import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 // import { WeeklyCalorieGrid } from "@/components/ui/weekly-calorie-grid";
 // import { WeightTrendCard, CalorieTrendCard } from "@/components/ui/analytics-cards";
-// import { MealLoggingHabitCard, WeightTrackingHabitCard } from "@/components/ui/habit-tracking-cards";
+import { MealLoggingHabitCard, WeightTrackingHabitCard } from "@/components/ui/habit-tracking-cards";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -96,14 +96,8 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {/* <MealLoggingHabitCard /> */}
-            {/* <WeightTrackingHabitCard /> */}
-            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
-              Habit cards temporarily disabled
-            </div>
-            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
-              Fixing components...
-            </div>
+            <MealLoggingHabitCard />
+            <WeightTrackingHabitCard />
           </div>
         </div>
 
