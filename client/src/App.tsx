@@ -9,6 +9,8 @@ import { SideMenuProvider, useSideMenu } from "@/hooks/use-side-menu";
 import { OnboardingFlow } from "@/components/ui/onboarding-flow";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { InstallPrompt } from "@/components/install-prompt";
+import { AnimatedPresenceWrapper } from "@/components/ui/page-transition";
+import { useLocation } from "wouter";
 
 // Enhanced Onboarding Flow
 import { EnhancedOnboardingFlow } from "@/components/onboarding/EnhancedOnboardingFlow";
@@ -28,6 +30,7 @@ import { MobileGoals } from "@/pages/mobile-goals";
 import MobileProgress from "@/pages/mobile-progress";
 import MobileAbout from "@/pages/mobile-about";
 import MobileDemo from "./pages/MobileDemo";
+import MobileHomeDemo from "./pages/mobile-home-demo";
 
 
 // Setup pages
@@ -106,39 +109,42 @@ function AppContent() {
       />
       
       <ErrorBoundary>
-        <Switch>
-          <Route path="/" component={MobileDashboardNew} />
-          <Route path="/calories" component={MobileCalories} />
-          <Route path="/training" component={MobileTraining} />
-          <Route path="/ai-coach" component={MobileAICoach} />
-          <Route path="/meals" component={MobileMeals} />
-          <Route path="/profile" component={MobileProfile} />
-          <Route path="/measurements" component={MobileMeasurements} />
-          <Route path="/achievements" component={MobileAchievements} />
-          <Route path="/goals" component={MobileGoals} />
-          <Route path="/progress" component={MobileProgress} />
-          <Route path="/about" component={MobileAbout} />
-          <Route path="/mobile-demo" component={MobileDemo} />
-          <Route path="/futuristic-demo">
-            {() => {
-              const FuturisticDemo = React.lazy(() => import('./pages/FuturisticDemo'));
-              return (
-                <React.Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center">
-                  <div className="text-emerald-400">Loading...</div>
-                </div>}>
-                  <FuturisticDemo />
-                </React.Suspense>
-              );
-            }}
-          </Route>
+        <AnimatedPresenceWrapper>
+          <Switch>
+            <Route path="/" component={MobileDashboardNew} />
+            <Route path="/calories" component={MobileCalories} />
+            <Route path="/training" component={MobileTraining} />
+            <Route path="/ai-coach" component={MobileAICoach} />
+            <Route path="/meals" component={MobileMeals} />
+            <Route path="/profile" component={MobileProfile} />
+            <Route path="/measurements" component={MobileMeasurements} />
+            <Route path="/achievements" component={MobileAchievements} />
+            <Route path="/goals" component={MobileGoals} />
+            <Route path="/progress" component={MobileProgress} />
+            <Route path="/about" component={MobileAbout} />
+            <Route path="/mobile-demo" component={MobileDemo} />
+            <Route path="/home-demo" component={MobileHomeDemo} />
+            <Route path="/futuristic-demo">
+              {() => {
+                const FuturisticDemo = React.lazy(() => import('./pages/FuturisticDemo'));
+                return (
+                  <React.Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                    <div className="text-emerald-400">Loading...</div>
+                  </div>}>
+                    <FuturisticDemo />
+                  </React.Suspense>
+                );
+              }}
+            </Route>
 
-          <Route path="/setup" component={HardgainerProfileSetup} />
-          
-          {/* Fallback */}
-          <Route>
-            <MobileHome />
-          </Route>
-        </Switch>
+            <Route path="/setup" component={HardgainerProfileSetup} />
+            
+            {/* Fallback */}
+            <Route>
+              <MobileHome />
+            </Route>
+          </Switch>
+        </AnimatedPresenceWrapper>
       </ErrorBoundary>
     </div>
   );

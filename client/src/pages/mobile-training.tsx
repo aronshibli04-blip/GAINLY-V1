@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageTransition } from "@/components/ui/page-transition";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -90,7 +91,8 @@ export default function MobileTraining() {
     : 999;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/20 to-slate-900 text-white pb-24">
+    <PageTransition>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header with Menu Toggle */}
       <MobileHeader 
         title="Training" 
@@ -350,7 +352,8 @@ export default function MobileTraining() {
 
       </div>
 
-      <BottomNav />
-    </div>
+        <BottomNav />
+      </div>
+    </PageTransition>
   );
 }

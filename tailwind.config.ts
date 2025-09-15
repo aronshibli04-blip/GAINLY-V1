@@ -24,10 +24,12 @@ export default {
         primary: {
           DEFAULT: "var(--primary)",
           foreground: "var(--primary-foreground)",
+          cyan: "var(--primary-cyan)",
         },
         secondary: {
           DEFAULT: "var(--secondary)",
           foreground: "var(--secondary-foreground)",
+          magenta: "var(--secondary-magenta)",
         },
         muted: {
           DEFAULT: "var(--muted)",
@@ -36,6 +38,7 @@ export default {
         accent: {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
+          mint: "var(--accent-mint)",
         },
         destructive: {
           DEFAULT: "var(--destructive)",

@@ -8,10 +8,10 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: "border bg-card text-card-foreground shadow-sm",
+        default: "glass-card",
         premium: "glass-card border-premium card-premium-hover",
         "premium-strong": "glass-card-strong border-premium card-premium-hover",
-        "premium-emerald": "bg-premium-emerald border-emerald-400/20 shadow-premium-lg"
+        outline: "border border-border bg-background/50 backdrop-blur-sm"
       }
     },
     defaultVariants: {
@@ -41,7 +41,7 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn("flex flex-col space-y-grid-1 p-grid-3", className)}
     {...props}
   />
 ))
@@ -54,7 +54,7 @@ const CardTitle = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "heading-2",
       className
     )}
     {...props}
@@ -68,7 +68,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("body-text-secondary", className)}
     {...props}
   />
 ))

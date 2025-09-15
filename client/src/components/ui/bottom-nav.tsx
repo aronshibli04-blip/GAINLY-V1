@@ -14,29 +14,33 @@ export function BottomNav() {
   const [location] = useLocation();
 
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[428px] bg-card/95 backdrop-blur-lg border-t border-border z-50">
-      <div className="flex items-center justify-around py-2">
+    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[428px] bg-card backdrop-blur-xl border-t border-border z-50 glass-card"
+         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div className="flex items-center justify-around py-grid-1">
         {navItems.map((item) => {
           const isActive = location === item.path;
           return (
             <Link key={item.path} href={item.path}>
               <button
                 className={cn(
-                  "flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200",
-                  "min-w-[80px] h-16 touch-manipulation",
+                  "flex flex-col items-center justify-center p-grid-2 rounded-xl transition-all duration-300",
+                  "min-w-[80px] min-h-[44px] touch-target touch-feedback focus-ring",
                   isActive
-                    ? "text-primary grok-glow"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-primary scale-105 bg-primary/10 shadow-lg"
+                    : "text-muted-foreground hover:text-foreground hover:bg-card/50 hover:scale-105"
                 )}
                 data-testid={`nav-${item.label.toLowerCase()}`}
+                aria-label={`Navigate to ${item.label}`}
+                aria-current={isActive ? "page" : undefined}
+                role="button"
               >
                 <item.icon 
                   className={cn(
                     "h-6 w-6 mb-1",
-                    isActive && "grok-glow"
+                    isActive && "drop-shadow-lg"
                   )} 
                 />
-                <span className="text-xs font-medium">{item.label}</span>
+                <span className="text-xs font-medium caption-text">{item.label}</span>
               </button>
             </Link>
           );

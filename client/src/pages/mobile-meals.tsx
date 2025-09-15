@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageTransition } from "@/components/ui/page-transition";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { UltraFastLogger } from "@/components/ui/ultra-fast-logger";
@@ -162,7 +163,8 @@ export default function MobileMeals() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900/20 to-slate-900 text-white pb-24">
+    <PageTransition>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900/20 to-slate-900 text-white pb-24">
       {/* Mobile Header */}
       <MobileHeader 
         title="Meals" 
@@ -530,7 +532,8 @@ export default function MobileMeals() {
 
       </div>
 
-      <BottomNav />
-    </div>
+        <BottomNav />
+      </div>
+    </PageTransition>
   );
 }
