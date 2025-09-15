@@ -64,7 +64,7 @@ export default function MobileDashboardNew() {
           <WeeklyCalorieGrid targetCalories={targetCalories} />
         </div>
 
-        {/* 2. ANALYTICS CARDS - Single Column on Mobile */}
+        {/* 2. ANALYTICS CARDS - 2 Column Grid */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-white">Insights & Analytics</h2>
@@ -72,13 +72,13 @@ export default function MobileDashboardNew() {
               See All
             </Button>
           </div>
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             <WeightTrendCard />
             <CalorieTrendCard targetCalories={targetCalories} />
           </div>
         </div>
 
-        {/* 3. HABIT TRACKING - Single Column on Mobile */}
+        {/* 3. HABIT TRACKING - 2 Column Grid */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-white">Habits</h2>
@@ -86,18 +86,18 @@ export default function MobileDashboardNew() {
               See All
             </Button>
           </div>
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             <MealLoggingHabitCard />
             <WeightTrackingHabitCard />
           </div>
         </div>
 
-        {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - Single Column on Mobile */}
+        {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - 2 Column Grid */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-white">Today</h2>
           </div>
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
           {/* Today's Progress Card */}
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
             <CardHeader className="pb-4">
