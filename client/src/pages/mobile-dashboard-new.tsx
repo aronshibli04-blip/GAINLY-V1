@@ -61,7 +61,10 @@ export default function MobileDashboardNew() {
 
         {/* 1. HERO SECTION - Weekly Calorie Grid */}
         <div className="mb-6">
-          <WeeklyCalorieGrid targetCalories={targetCalories} />
+          {/* <WeeklyCalorieGrid targetCalories={targetCalories} /> */}
+          <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
+            Weekly grid temporarily disabled for debugging
+          </div>
         </div>
 
         {/* 2. ANALYTICS CARDS - 2 Column Grid */}
@@ -73,8 +76,14 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <WeightTrendCard />
-            <CalorieTrendCard targetCalories={targetCalories} />
+            {/* <WeightTrendCard /> */}
+            {/* <CalorieTrendCard targetCalories={targetCalories} /> */}
+            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
+              Analytics cards disabled
+            </div>
+            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
+              Debugging components...
+            </div>
           </div>
         </div>
 
