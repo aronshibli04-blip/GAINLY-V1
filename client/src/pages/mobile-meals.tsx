@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { UltraFastLogger } from "@/components/ui/ultra-fast-logger";
+import { SmartMealLogger } from "@/components/ui/smart-meal-logger";
+import { PhotoNutritionScanner } from "@/components/ui/photo-nutrition-scanner";
 import { PremiumLoggedMeals } from "@/components/ui/premium-logged-meals";
 import { DailyProgressRing } from "@/components/ui/daily-progress-ring";
 import { MealTypeTabsComponent, MealType } from "@/components/ui/meal-type-tabs";
@@ -11,7 +13,7 @@ import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { calculateTdee } from "@/utils/tdee";
-import { Utensils, Sparkles, Plus, Clock, ChevronDown, ChevronUp, Zap } from "lucide-react";
+import { Utensils, Sparkles, Plus, Clock, ChevronDown, ChevronUp, Zap, Camera, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -25,7 +27,8 @@ export default function MobileMeals() {
   const [selectedMealType, setSelectedMealType] = useState<MealType>('breakfast');
   const [showMealPlanSection, setShowMealPlanSection] = useState(false);
   const [showLoggedMeals, setShowLoggedMeals] = useState(false);
-  const [showUltraFastLogger, setShowUltraFastLogger] = useState(false);
+  const [loggerMode, setLoggerMode] = useState<'ultra' | 'advanced' | 'ai' | null>(null);
+  const [showModePicker, setShowModePicker] = useState(false);
   const { 
     currentTdeeAnalysis,
     mealPlans,
@@ -103,6 +106,23 @@ export default function MobileMeals() {
     }
   };
 
+  // localStorage functions for last-used mode
+  const getLastUsedMode = (): 'ultra' | 'advanced' | 'ai' | null => {
+    try {
+      return localStorage.getItem('meal-logger-mode') as 'ultra' | 'advanced' | 'ai' | null;
+    } catch {
+      return null;
+    }
+  };
+
+  const setLastUsedMode = (mode: 'ultra' | 'advanced' | 'ai') => {
+    try {
+      localStorage.setItem('meal-logger-mode', mode);
+    } catch {
+      // Silent fail if localStorage not available
+    }
+  };
+
   const handleMealLogged = (calories: number, foodName?: string) => {
     // Update today's calorie count in the store with meal type
     const today = new Date().toISOString().split('T')[0];
@@ -116,6 +136,29 @@ export default function MobileMeals() {
       description,
       date: today
     });
+
+    // Close the logger after successful logging
+    setLoggerMode(null);
+  };
+
+  const handleLogMealClick = () => {
+    const lastMode = getLastUsedMode();
+    if (lastMode) {
+      setLoggerMode(lastMode);
+    } else {
+      setShowModePicker(true);
+    }
+  };
+
+  const handleModeSelect = (mode: 'ultra' | 'advanced' | 'ai') => {
+    setLastUsedMode(mode);
+    setLoggerMode(mode);
+    setShowModePicker(false);
+  };
+
+  const handleChangeMode = () => {
+    setLoggerMode(null);
+    setShowModePicker(true);
   };
 
   return (
@@ -146,7 +189,7 @@ export default function MobileMeals() {
         {/* 3. PRIMARY CTA - LOG MEAL */}
         <div className="mb-6">
           <Button 
-            onClick={() => setShowUltraFastLogger(!showUltraFastLogger)}
+            onClick={handleLogMealClick}
             className="w-full h-16 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-bold text-lg shadow-lg"
             data-testid="button-log-meal"
           >
@@ -155,14 +198,113 @@ export default function MobileMeals() {
           </Button>
         </div>
         
-        {/* 4. ULTRA FAST LOGGER - Expandable */}
-        {showUltraFastLogger && (
+        {/* 4. LOGGER MODES - Based on selection */}
+        {loggerMode && (
           <div className="mb-6">
-            <UltraFastLogger 
-              userId="974acc79-f202-4202-bdab-80c4ef55f534" 
-              onMealLogged={handleMealLogged}
-              selectedMealType={selectedMealType}
-            />
+            {/* Change Mode Link */}
+            <div className="flex justify-end mb-2">
+              <Button 
+                onClick={handleChangeMode}
+                variant="ghost" 
+                size="sm"
+                className="text-xs text-orange-400 hover:text-orange-300"
+              >
+                Change mode
+              </Button>
+            </div>
+
+            {/* Render Selected Logger */}
+            {loggerMode === 'ultra' && (
+              <UltraFastLogger 
+                userId="974acc79-f202-4202-bdab-80c4ef55f534" 
+                onMealLogged={handleMealLogged}
+                selectedMealType={selectedMealType}
+              />
+            )}
+            
+            {loggerMode === 'advanced' && (
+              <SmartMealLogger 
+                userId="974acc79-f202-4202-bdab-80c4ef55f534"
+                onMealLogged={handleMealLogged}
+                selectedMealType={selectedMealType}
+              />
+            )}
+            
+            {loggerMode === 'ai' && (
+              <PhotoNutritionScanner 
+                onFoodCreated={() => {}} 
+                onMealLogged={handleMealLogged}
+                selectedMealType={selectedMealType}
+              />
+            )}
+          </div>
+        )}
+
+        {/* MODE PICKER BOTTOM SHEET */}
+        {showModePicker && (
+          <div className="fixed inset-0 bg-black/50 flex items-end z-50">
+            <div className="w-full bg-slate-800 rounded-t-2xl p-6 space-y-4 animate-slide-up">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-white mb-2">Choose Logging Mode</h3>
+                <p className="text-sm text-gray-400">Pick your preferred way to log meals</p>
+              </div>
+              
+              <div className="space-y-3">
+                {/* Ultra Fast Mode */}
+                <Button
+                  onClick={() => handleModeSelect('ultra')}
+                  className="w-full h-16 bg-green-600 hover:bg-green-700 text-white justify-start text-left"
+                  data-testid="option-mode-ultra"
+                >
+                  <div className="flex items-center">
+                    <Zap className="h-6 w-6 mr-4 text-green-300" />
+                    <div>
+                      <div className="font-semibold">⚡ Ultra Fast</div>
+                      <div className="text-xs text-green-200">Log meals in just 3 taps</div>
+                    </div>
+                  </div>
+                </Button>
+
+                {/* Advanced Mode */}
+                <Button
+                  onClick={() => handleModeSelect('advanced')}
+                  className="w-full h-16 bg-blue-600 hover:bg-blue-700 text-white justify-start text-left"
+                  data-testid="option-mode-advanced"
+                >
+                  <div className="flex items-center">
+                    <Settings className="h-6 w-6 mr-4 text-blue-300" />
+                    <div>
+                      <div className="font-semibold">🔧 Advanced</div>
+                      <div className="text-xs text-blue-200">Detailed nutrition tracking</div>
+                    </div>
+                  </div>
+                </Button>
+
+                {/* AI Photo Mode */}
+                <Button
+                  onClick={() => handleModeSelect('ai')}
+                  className="w-full h-16 bg-purple-600 hover:bg-purple-700 text-white justify-start text-left"
+                  data-testid="option-mode-ai"
+                >
+                  <div className="flex items-center">
+                    <Camera className="h-6 w-6 mr-4 text-purple-300" />
+                    <div>
+                      <div className="font-semibold">📸 AI Scanner</div>
+                      <div className="text-xs text-purple-200">Scan nutrition labels with camera</div>
+                    </div>
+                  </div>
+                </Button>
+              </div>
+
+              {/* Cancel Button */}
+              <Button
+                onClick={() => setShowModePicker(false)}
+                variant="outline"
+                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         )}
         

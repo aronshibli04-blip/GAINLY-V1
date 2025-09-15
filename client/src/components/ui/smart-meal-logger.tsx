@@ -24,12 +24,15 @@ interface SelectedFood {
 
 interface SmartMealLoggerProps {
   userId: string;
+  onMealLogged?: (calories: number, foodName?: string) => void;
+  selectedMealType?: 'breakfast' | 'lunch' | 'dinner' | 'snack';
 }
 
-export function SmartMealLogger({ userId }: SmartMealLoggerProps) {
+export function SmartMealLogger({ userId, onMealLogged, selectedMealType }: SmartMealLoggerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
-  const [mealType, setMealType] = useState<'breakfast' | 'lunch' | 'dinner' | 'snack'>('lunch');
+  const [localMealType, setLocalMealType] = useState<'breakfast' | 'lunch' | 'dinner' | 'snack'>('lunch');
+  const mealType = selectedMealType || localMealType;
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -122,6 +125,11 @@ export function SmartMealLogger({ userId }: SmartMealLoggerProps) {
         title: "Meal Logged Successfully!",
         description: `Added ${selectedFoods.length} foods (${Math.round(totals.calories)} calories)`
       });
+      
+      // Call parent callback with total calories and food names
+      const foodNames = selectedFoods.map(f => f.item.name).join(', ');
+      onMealLogged?.(Math.round(totals.calories), foodNames);
+      
       setSelectedFoods([]);
       setSearchQuery("");
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
@@ -193,7 +201,7 @@ export function SmartMealLogger({ userId }: SmartMealLoggerProps) {
           {(['breakfast', 'lunch', 'dinner', 'snack'] as const).map((type) => (
             <Button
               key={type}
-              onClick={() => setMealType(type)}
+              onClick={() => setLocalMealType(type)}
               variant={mealType === type ? "default" : "outline"}
               size="sm"
               className={mealType === type ? "bg-orange-400 text-black" : ""}

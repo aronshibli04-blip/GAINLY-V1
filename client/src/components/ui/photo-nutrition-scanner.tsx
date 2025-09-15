@@ -18,9 +18,11 @@ interface NutritionData {
 
 interface PhotoNutritionScannerProps {
   onFoodCreated?: () => void;
+  onMealLogged?: (calories: number, foodName?: string) => void;
+  selectedMealType?: 'breakfast' | 'lunch' | 'dinner' | 'snack';
 }
 
-export function PhotoNutritionScanner({ onFoodCreated }: PhotoNutritionScannerProps) {
+export function PhotoNutritionScanner({ onFoodCreated, onMealLogged, selectedMealType }: PhotoNutritionScannerProps) {
   const [isScanning, setIsScanning] = useState(false);
   const [extractedData, setExtractedData] = useState<NutritionData | null>(null);
   const [dishName, setDishName] = useState("");
@@ -126,9 +128,14 @@ export function PhotoNutritionScanner({ onFoodCreated }: PhotoNutritionScannerPr
     },
     onSuccess: () => {
       toast({
-        title: "Custom Meal Created!",
-        description: `${dishName} has been added to your food database.`,
+        title: "Custom Meal Created & Logged!",
+        description: `${dishName} (${extractedData?.calories} cal) added to ${selectedMealType || 'today'}`,
       });
+      
+      // Call parent callback to log the meal to daily intake
+      if (extractedData) {
+        onMealLogged?.(extractedData.calories, dishName);
+      }
       
       // Reset form
       setExtractedData(null);
