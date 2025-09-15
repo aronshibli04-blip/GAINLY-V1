@@ -100,13 +100,13 @@ export default function MobileDashboardNew() {
           <div className="grid grid-cols-2 gap-3">
           {/* Today's Progress Card */}
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
-            <CardHeader className="pb-2">
+            <CardHeader className="pb-1">
               <CardTitle className="text-sm font-medium text-white flex items-center">
                 <Target className="h-4 w-4 mr-2 text-emerald-400" />
                 Today's Progress
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-1">
               {/* Calorie Progress */}
               <div className="flex items-center justify-between">
                 <div>
@@ -146,13 +146,13 @@ export default function MobileDashboardNew() {
 
           {/* Quick Actions Card */}
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
-            <CardHeader className="pb-2">
+            <CardHeader className="pb-1">
               <CardTitle className="text-sm font-medium text-white flex items-center">
                 <Zap className="h-4 w-4 mr-2 text-orange-400" />
                 Quick Actions
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-1">
               {/* Log Meal Button */}
               <Link href="/meals">
                 <Button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-semibold h-12">
@@ -195,7 +195,7 @@ export default function MobileDashboardNew() {
             </Link>
           </div>
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-1">
             <CardTitle className="text-sm font-medium text-white">
               Overview
             </CardTitle>

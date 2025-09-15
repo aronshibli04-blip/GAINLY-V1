@@ -28,16 +28,16 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
           <span>Weight Trend</span>
           <Calendar className="h-3 w-3 text-gray-400" />
         </CardTitle>
         <p className="text-xs text-gray-400">Last 7 Days</p>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         {/* Mini Chart */}
-        <div className="relative h-8 w-full">
+        <div className="relative h-5 w-full">
           <svg viewBox="0 0 100 40" className="w-full h-full">
             {/* Trend Line */}
             <polyline
@@ -122,16 +122,16 @@ export function CalorieTrendCard({ className, targetCalories = 3200 }: CalorieTr
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
           <span>Calorie Average</span>
           <Calendar className="h-3 w-3 text-gray-400" />
         </CardTitle>
         <p className="text-xs text-gray-400">Last 7 Days</p>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         {/* Mini Chart */}
-        <div className="relative h-8 w-full">
+        <div className="relative h-5 w-full">
           <svg viewBox="0 0 100 40" className="w-full h-full">
             {/* Target Line */}
             <line

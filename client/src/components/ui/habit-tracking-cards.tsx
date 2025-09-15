@@ -67,16 +67,16 @@ export function MealLoggingHabitCard({ className }: HabitTrackingCardProps) {
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
           <span>Meal Logging</span>
           <Utensils className="h-3 w-3 text-emerald-400" />
         </CardTitle>
         <p className="text-xs text-gray-400">Last 30 Days</p>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         {/* Dot Grid */}
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {createDotGrid()}
         </div>
 
@@ -162,16 +162,16 @@ export function WeightTrackingHabitCard({ className }: HabitTrackingCardProps) {
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
           <span>Weight Check-ins</span>
           <Scale className="h-3 w-3 text-blue-400" />
         </CardTitle>
         <p className="text-xs text-gray-400">Last 30 Days</p>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         {/* Dot Grid */}
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {createDotGrid()}
         </div>
 
