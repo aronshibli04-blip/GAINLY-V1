@@ -20,8 +20,29 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
   const weightChange = currentWeight - previousWeight;
   const isPositiveChange = weightChange > 0;
 
-  // Create mini trend line data
+  // Create mini trend line data - with safety checks
   const trendData = last7Days.reverse().map(entry => entry.weight);
+  
+  // Safety checks for empty or single data points
+  if (trendData.length === 0) {
+    return (
+      <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
+        <CardHeader className="pb-1">
+          <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
+            <span>Weight Trend</span>
+            <Calendar className="h-3 w-3 text-gray-400" />
+          </CardTitle>
+          <p className="text-xs text-gray-400">Last 7 Days</p>
+        </CardHeader>
+        <CardContent className="space-y-1">
+          <div className="text-center text-gray-400 text-sm py-4">
+            No weight data available
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
   const maxWeight = Math.max(...trendData);
   const minWeight = Math.min(...trendData);
   const range = maxWeight - minWeight || 1;
@@ -39,20 +60,22 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
         {/* Mini Chart */}
         <div className="relative h-5 w-full">
           <svg viewBox="0 0 100 40" className="w-full h-full">
-            {/* Trend Line */}
-            <polyline
-              fill="none"
-              stroke="#10b981"
-              strokeWidth="2"
-              points={trendData.map((weight, index) => {
-                const x = (index / (trendData.length - 1)) * 100;
-                const y = 40 - ((weight - minWeight) / range) * 40;
-                return `${x},${y}`;
-              }).join(' ')}
-            />
+            {/* Trend Line - only render if we have multiple points */}
+            {trendData.length > 1 && (
+              <polyline
+                fill="none"
+                stroke="#10b981"
+                strokeWidth="2"
+                points={trendData.map((weight, index) => {
+                  const x = trendData.length === 1 ? 50 : (index / (trendData.length - 1)) * 100;
+                  const y = 40 - ((weight - minWeight) / range) * 40;
+                  return `${x},${y}`;
+                }).join(' ')}
+              />
+            )}
             {/* Data Points */}
             {trendData.map((weight, index) => {
-              const x = (index / (trendData.length - 1)) * 100;
+              const x = trendData.length === 1 ? 50 : (index / (trendData.length - 1)) * 100;
               const y = 40 - ((weight - minWeight) / range) * 40;
               return (
                 <circle
