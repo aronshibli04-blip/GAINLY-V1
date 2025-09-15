@@ -11,7 +11,7 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
   const { weightEntries } = useUserStore();
   
   // Get last 7 days of weight data
-  const last7Days = weightEntries
+  const last7Days = [...weightEntries]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 7);
     
@@ -28,14 +28,14 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-medium text-white flex items-center justify-between">
           <span>Weight Trend</span>
           <Calendar className="h-4 w-4 text-gray-400" />
         </CardTitle>
-        <p className="text-xs text-gray-400">Last 7 Days</p>
+        <p className="text-xs text-gray-400 mt-1">Last 7 Days</p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* Mini Chart */}
         <div className="relative h-12 w-full">
           <svg viewBox="0 0 100 40" className="w-full h-full">
@@ -69,18 +69,16 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
         </div>
 
         {/* Current Weight */}
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-2xl font-bold text-white">
-              {currentWeight.toFixed(1)} kg
-            </div>
-            <div className={cn(
-              "flex items-center text-sm font-medium",
-              isPositiveChange ? "text-emerald-400" : "text-red-400"
-            )}>
-              {isPositiveChange ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
-              {isPositiveChange ? '+' : ''}{weightChange.toFixed(1)}kg this week
-            </div>
+        <div>
+          <div className="text-xl font-bold text-white">
+            {currentWeight.toFixed(1)} kg
+          </div>
+          <div className={cn(
+            "flex items-center text-sm font-medium mt-1",
+            isPositiveChange ? "text-emerald-400" : "text-red-400"
+          )}>
+            {isPositiveChange ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+            {isPositiveChange ? '+' : ''}{weightChange.toFixed(1)}kg this week
           </div>
         </div>
       </CardContent>
@@ -124,14 +122,14 @@ export function CalorieTrendCard({ className, targetCalories = 3200 }: CalorieTr
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-medium text-white flex items-center justify-between">
           <span>Calorie Average</span>
           <Calendar className="h-4 w-4 text-gray-400" />
         </CardTitle>
-        <p className="text-xs text-gray-400">Last 7 Days</p>
+        <p className="text-xs text-gray-400 mt-1">Last 7 Days</p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* Mini Chart */}
         <div className="relative h-12 w-full">
           <svg viewBox="0 0 100 40" className="w-full h-full">
@@ -179,24 +177,20 @@ export function CalorieTrendCard({ className, targetCalories = 3200 }: CalorieTr
         </div>
 
         {/* Average Calories */}
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-2xl font-bold text-white">
-              {Math.round(avgCalories)} kcal
-            </div>
-            <div className={cn(
-              "flex items-center text-sm font-medium",
-              isPositiveSurplus ? "text-emerald-400" : "text-orange-400"
-            )}>
-              {isPositiveSurplus ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
-              {isPositiveSurplus ? '+' : ''}{Math.round(surplus)} surplus
-            </div>
+        <div>
+          <div className="text-xl font-bold text-white">
+            {Math.round(avgCalories)} kcal
           </div>
-        </div>
-
-        {/* Target Info */}
-        <div className="text-xs text-gray-400">
-          Target: {targetCalories} kcal/day
+          <div className={cn(
+            "flex items-center text-sm font-medium mt-1",
+            isPositiveSurplus ? "text-emerald-400" : "text-orange-400"
+          )}>
+            {isPositiveSurplus ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+            {isPositiveSurplus ? '+' : ''}{Math.round(surplus)} surplus
+          </div>
+          <div className="text-xs text-gray-400 mt-1">
+            Target: {targetCalories} kcal/day
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -45,10 +45,10 @@ export default function MobileDashboardNew() {
       </div>
       
       {/* Main Content */}
-      <div className="relative z-10 px-4 pt-20 py-6 space-y-4 max-w-md mx-auto">
+      <div className="relative z-10 px-4 pt-20 pb-6 max-w-md mx-auto">
 
         {/* Date Header */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-8">
           <p className="text-xs text-gray-400 uppercase tracking-wider">
             {new Date().toLocaleDateString('en-US', { 
               weekday: 'short', 
@@ -60,19 +60,27 @@ export default function MobileDashboardNew() {
         </div>
 
         {/* 1. HERO SECTION - Weekly Calorie Grid */}
-        <div className="mb-6">
+        <div className="mb-8">
           <WeeklyCalorieGrid targetCalories={targetCalories} />
         </div>
 
         {/* 2. ANALYTICS CARDS - Single Column on Mobile */}
-        <div className="space-y-4 mb-6">
-          <WeightTrendCard />
-          <CalorieTrendCard targetCalories={targetCalories} />
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">Insights & Analytics</h2>
+            <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
+              See All
+            </Button>
+          </div>
+          <div className="space-y-4">
+            <WeightTrendCard />
+            <CalorieTrendCard targetCalories={targetCalories} />
+          </div>
         </div>
 
         {/* 3. HABIT TRACKING - Single Column on Mobile */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-white">Habits</h2>
             <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
               See All
@@ -85,29 +93,33 @@ export default function MobileDashboardNew() {
         </div>
 
         {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - Single Column on Mobile */}
-        <div className="space-y-4 mb-6">
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">Today</h2>
+          </div>
+          <div className="space-y-4">
           {/* Today's Progress Card */}
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg font-semibold text-white flex items-center">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base font-medium text-white flex items-center">
                 <Target className="h-5 w-5 mr-2 text-emerald-400" />
                 Today's Progress
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               {/* Calorie Progress */}
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-xl font-bold text-white">
                     {todayCalories.toLocaleString()} / {targetCalories.toLocaleString()}
                   </div>
-                  <div className="text-sm text-gray-400">kcal consumed</div>
+                  <div className="text-sm text-gray-400 mt-1">kcal consumed</div>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-semibold text-emerald-400">
                     {Math.round((todayCalories / targetCalories) * 100)}%
                   </div>
-                  <div className="text-xs text-gray-400">of target</div>
+                  <div className="text-xs text-gray-400 mt-1">of target</div>
                 </div>
               </div>
 
@@ -134,8 +146,8 @@ export default function MobileDashboardNew() {
 
           {/* Quick Actions Card */}
           <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg font-semibold text-white flex items-center">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base font-medium text-white flex items-center">
                 <Zap className="h-5 w-5 mr-2 text-orange-400" />
                 Quick Actions
               </CardTitle>
@@ -169,18 +181,23 @@ export default function MobileDashboardNew() {
               </Link>
             </CardContent>
           </Card>
+          </div>
         </div>
 
-        {/* 5. INSIGHTS & ANALYTICS PREVIEW */}
-        <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
-              <span>Weekly Stats</span>
-              <Link href="/progress">
-                <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
-                  See All
-                </Button>
-              </Link>
+        {/* 5. WEEKLY STATS */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">Weekly Stats</h2>
+            <Link href="/progress">
+              <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
+                See All
+              </Button>
+            </Link>
+          </div>
+          <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base font-medium text-white">
+              Overview
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -216,7 +233,8 @@ export default function MobileDashboardNew() {
               </div>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </div>
 
       </div>
 

@@ -67,14 +67,14 @@ export function MealLoggingHabitCard({ className }: HabitTrackingCardProps) {
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-medium text-white flex items-center justify-between">
           <span>Meal Logging</span>
           <Utensils className="h-4 w-4 text-emerald-400" />
         </CardTitle>
-        <p className="text-xs text-gray-400">Last 30 Days</p>
+        <p className="text-xs text-gray-400 mt-1">Last 30 Days</p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* Dot Grid */}
         <div className="space-y-1">
           {createDotGrid()}
@@ -83,7 +83,7 @@ export function MealLoggingHabitCard({ className }: HabitTrackingCardProps) {
         {/* Weekly Summary */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xl font-bold text-white">
+            <div className="text-lg font-bold text-white">
               {currentWeekLogged}/7
             </div>
             <div className="text-xs text-gray-400">this week</div>
@@ -162,14 +162,14 @@ export function WeightTrackingHabitCard({ className }: HabitTrackingCardProps) {
 
   return (
     <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-medium text-white flex items-center justify-between">
           <span>Weight Check-ins</span>
           <Scale className="h-4 w-4 text-blue-400" />
         </CardTitle>
-        <p className="text-xs text-gray-400">Last 30 Days</p>
+        <p className="text-xs text-gray-400 mt-1">Last 30 Days</p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {/* Dot Grid */}
         <div className="space-y-1">
           {createDotGrid()}
@@ -178,7 +178,7 @@ export function WeightTrackingHabitCard({ className }: HabitTrackingCardProps) {
         {/* Weekly Summary */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xl font-bold text-white">
+            <div className="text-lg font-bold text-white">
               {currentWeekWeighed}/7
             </div>
             <div className="text-xs text-gray-400">this week</div>
