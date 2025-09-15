@@ -54,7 +54,7 @@ export function AICoachIntro({ onComplete }: AICoachIntroProps) {
             key={i}
             className="absolute text-emerald-400 font-mono text-xs"
             animate={{
-              y: [-20, window.innerHeight + 20],
+              y: [-20, (window?.innerHeight ?? 800) + 20],
               opacity: [0, 1, 0],
             }}
             transition={{
