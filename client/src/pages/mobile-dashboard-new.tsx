@@ -87,8 +87,14 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <MealLoggingHabitCard />
-            <WeightTrackingHabitCard />
+            {/* <MealLoggingHabitCard /> */}
+            {/* <WeightTrackingHabitCard /> */}
+            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
+              Habit cards temporarily disabled
+            </div>
+            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
+              Fixing components...
+            </div>
           </div>
         </div>
 
