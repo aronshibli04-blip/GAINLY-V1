@@ -15,6 +15,7 @@ import { EnhancedOnboardingFlow } from "@/components/onboarding/EnhancedOnboardi
 
 // Mobile pages
 import MobileHome from "@/pages/mobile-home";
+import MobileDashboardNew from "@/pages/mobile-dashboard-new";
 import MobileCalories from "@/pages/mobile-calories";
 import MobileTraining from "@/pages/mobile-training";
 import MobileAICoach from "@/pages/mobile-ai-coach";
@@ -106,7 +107,7 @@ function AppContent() {
       
       <ErrorBoundary>
         <Switch>
-          <Route path="/" component={MobileHome} />
+          <Route path="/" component={MobileDashboardNew} />
           <Route path="/calories" component={MobileCalories} />
           <Route path="/training" component={MobileTraining} />
           <Route path="/ai-coach" component={MobileAICoach} />
