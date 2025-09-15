@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-// import { WeeklyCalorieGrid } from "@/components/ui/weekly-calorie-grid";
-// import { WeightTrendCard, CalorieTrendCard } from "@/components/ui/analytics-cards";
+import { WeeklyCalorieGrid } from "@/components/ui/weekly-calorie-grid";
+import { WeightTrendCard, CalorieTrendCard } from "@/components/ui/analytics-cards";
 import { MealLoggingHabitCard, WeightTrackingHabitCard } from "@/components/ui/habit-tracking-cards";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
@@ -61,10 +61,7 @@ export default function MobileDashboardNew() {
 
         {/* 1. HERO SECTION - Weekly Calorie Grid */}
         <div className="mb-6">
-          {/* <WeeklyCalorieGrid targetCalories={targetCalories} /> */}
-          <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
-            Weekly grid temporarily disabled for debugging
-          </div>
+          <WeeklyCalorieGrid targetCalories={targetCalories} />
         </div>
 
         {/* 2. ANALYTICS CARDS - 2 Column Grid */}
@@ -76,14 +73,8 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {/* <WeightTrendCard /> */}
-            {/* <CalorieTrendCard targetCalories={targetCalories} /> */}
-            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
-              Analytics cards disabled
-            </div>
-            <div className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm rounded-lg p-4 text-center text-gray-400">
-              Debugging components...
-            </div>
+            <WeightTrendCard />
+            <CalorieTrendCard targetCalories={targetCalories} />
           </div>
         </div>
 
