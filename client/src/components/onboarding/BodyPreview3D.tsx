@@ -29,9 +29,9 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
     return () => clearTimeout(timer);
   }, []);
 
-  const bmi = userData.weight / Math.pow(userData.height / 100, 2);
-  const goalBmi = userData.goalWeight / Math.pow(userData.height / 100, 2);
-  const weightToGain = userData.goalWeight - userData.weight;
+  const bmi = userData?.weight && userData?.height ? userData.weight / Math.pow(userData.height / 100, 2) : 0;
+  const goalBmi = userData?.goalWeight && userData?.height ? userData.goalWeight / Math.pow(userData.height / 100, 2) : 0;
+  const weightToGain = userData?.goalWeight && userData?.weight ? userData.goalWeight - userData.weight : 0;
 
   const getBodyType = (bmi: number) => {
     if (bmi < 18.5) return { type: "Underweight", color: "text-blue-400" };

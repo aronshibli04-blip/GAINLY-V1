@@ -17,6 +17,9 @@ interface UserState {
   user: User | null;
   isOnboarded: boolean;
   
+  // Helper method to safely access user properties
+  getUserProperty: (property: string) => any;
+  
   // Tracking data
   weightEntries: WeightEntry[];
   calorieEntries: CalorieEntry[];

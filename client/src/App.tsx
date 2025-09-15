@@ -63,8 +63,8 @@ function App() {
     );
   }
 
-  // If no user profile, show enhanced onboarding
-  if (!user || !isOnboarded) {
+  // If no user profile or still loading, show enhanced onboarding
+  if (!user || !isOnboarded || user === undefined) {
     return (
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary fallback={<div className="min-h-screen bg-slate-900 text-white flex items-center justify-center"><h1>Loading GAINLY...</h1></div>}>

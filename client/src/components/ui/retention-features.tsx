@@ -185,7 +185,8 @@ export function RetentionFeatures() {
             </div>
             
             <div className="space-y-3">
-              {PROGRESS_PREVIEWS.map((preview, index) => {
+              {PROGRESS_PREVIEWS?.map((preview, index) => {
+                if (!preview) return null;
                 const isCurrentWeek = preview.week <= Math.ceil(currentStreak / 7);
                 
                 return (
