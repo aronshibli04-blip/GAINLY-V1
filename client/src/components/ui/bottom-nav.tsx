@@ -14,8 +14,9 @@ export function BottomNav() {
   const [location] = useLocation();
 
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[428px] bg-card backdrop-blur-xl border-t border-border z-50 glass-card"
+    <div className="fixed bottom-0 left-0 right-0 bg-card backdrop-blur-xl border-t border-border z-50 glass-card"
          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div className="mx-auto w-full max-w-[428px]">
       <div className="flex items-center justify-around py-grid-1">
         {navItems.map((item) => {
           const isActive = location === item.path;
@@ -45,6 +46,7 @@ export function BottomNav() {
             </Link>
           );
         })}
+      </div>
       </div>
     </div>
   );
