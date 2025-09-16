@@ -238,9 +238,6 @@
 .neural-input:focus {
   background-color: rgba(51, 65, 85, 0.5);
   border-color: rgba(34, 197, 94, 1);
-}
-
-.neural-input:focus {
   box-shadow: 0 0 20px 2px rgba(34, 197, 94, 0.3);
   animation: input-glow 1.5s ease-in-out infinite alternate;
 }
@@ -299,16 +296,19 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@media (hover: hover) {
-  .glass-card {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
+.glass-card {
   border-radius: 16px;
   box-shadow: 
     0 8px 32px 0 rgba(0, 0, 0, 0.4),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .glass-card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
 
 @media (hover: hover) {
@@ -334,15 +334,18 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+.glass-card-strong {
+  border-radius: 16px;
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 0 rgba(255, 255, 255, 0.15);
+}
+
 @media (hover: hover) {
   .glass-card-strong {
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
   }
-  border-radius: 16px;
-  box-shadow: 
-    0 12px 40px 0 rgba(0, 0, 0, 0.5),
-    inset 0 2px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 /* Enhanced Shadow System */
@@ -441,8 +444,13 @@
     0 4px 14px 0 rgba(0, 245, 255, 0.39),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (hover: hover) {
+  .btn-primary {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 }
 
 .btn-primary:hover {
@@ -485,9 +493,14 @@
   font-weight: 500;
   min-height: 44px; /* Mobile touch target */
   border-radius: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .btn-ghost {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 }
 
 .btn-ghost:hover {
@@ -754,8 +767,13 @@
   font-size: 1rem;
   min-height: 44px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+}
+
+@media (hover: hover) {
+  .form-input {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
 
 .form-input:focus {
@@ -1135,5 +1153,19 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable specific animation classes */
+  .skeleton,
+  .modern-skeleton,
+  .loading-pulse,
+  .animate-success-glow,
+  .pulse-glow {
+    animation: none !important;
+  }
+  
+  .neural-button:hover {
+    animation: none !important;
   }
 }
