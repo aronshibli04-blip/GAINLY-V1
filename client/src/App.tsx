@@ -51,16 +51,28 @@ function App() {
       <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">GAINLY</h1>
-          <p className="text-gray-300 mb-4">Starting app...</p>
-          <button 
-            onClick={() => {
-              localStorage.clear();
-              window.location.reload();
-            }}
-            className="bg-emerald-500 text-white px-4 py-2 rounded"
-          >
-            Reset & Try Again
-          </button>
+          <p className="text-gray-300 mb-4">Something went wrong. Let's get you back on track.</p>
+          <div className="space-y-2">
+            <button 
+              onClick={() => {
+                setHasError(false);
+                window.location.reload();
+              }}
+              className="bg-emerald-500 text-white px-4 py-2 rounded mr-2"
+            >
+              Reload App
+            </button>
+            <button 
+              onClick={() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.reload();
+              }}
+              className="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              Reset & Try Again
+            </button>
+          </div>
         </div>
       </div>
     );
