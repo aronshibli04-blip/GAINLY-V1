@@ -99,11 +99,11 @@ export default function MobileDashboardNew() {
           </div>
           <div className="grid grid-cols-2 gap-3">
           {/* Today's Progress Card */}
-          <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
+          <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
             <CardHeader className="pb-1">
-              <CardTitle className="text-sm font-medium text-white flex items-center">
-                <Target className="h-4 w-4 mr-2 text-emerald-400" />
-                Today's Progress
+              <CardTitle className="heading-3 text-white flex items-center">
+                <Target className="h-4 w-4 mr-2 text-accent-mint pulse-glow" />
+                <span className="premium-subtitle">Today's Progress</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-1">
@@ -113,13 +113,13 @@ export default function MobileDashboardNew() {
                   <div className="text-base font-bold text-white">
                     {todayCalories.toLocaleString()} / {targetCalories.toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-400">kcal consumed</div>
+                  <div className="caption-text text-text-secondary">kcal consumed</div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-semibold text-emerald-400">
                     {Math.round((todayCalories / targetCalories) * 100)}%
                   </div>
-                  <div className="text-xs text-gray-400">of target</div>
+                  <div className="caption-text text-text-secondary">of target</div>
                 </div>
               </div>
 
@@ -134,8 +134,8 @@ export default function MobileDashboardNew() {
 
               {/* Weight */}
               {todayWeight && (
-                <div className="flex items-center justify-between pt-3 border-t border-slate-600/30">
-                  <div className="text-sm text-gray-400">Today's Weight</div>
+                <div className="flex items-center justify-between pt-3 border-t border-primary-cyan/30">
+                  <div className="body-text-secondary text-text-secondary">Today's Weight</div>
                   <div className="text-lg font-semibold text-white">
                     {todayWeight.weight} kg
                   </div>
@@ -145,18 +145,18 @@ export default function MobileDashboardNew() {
           </Card>
 
           {/* Quick Actions Card */}
-          <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
+          <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
             <CardHeader className="pb-1">
-              <CardTitle className="text-sm font-medium text-white flex items-center">
-                <Zap className="h-4 w-4 mr-2 text-orange-400" />
-                Quick Actions
+              <CardTitle className="heading-3 text-white flex items-center">
+                <Zap className="h-4 w-4 mr-2 text-secondary-magenta pulse-glow" />
+                <span className="premium-subtitle">Quick Actions</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-1">
               {/* Log Meal Button */}
               <Link href="/meals">
-                <Button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-semibold h-12">
-                  <Plus className="h-5 w-5 mr-2" />
+                <Button className="w-full btn-future ultra-smooth touch-haptic">
+                  <Plus className="h-4 w-4 mr-2" />
                   Log Meal
                 </Button>
               </Link>
@@ -194,17 +194,17 @@ export default function MobileDashboardNew() {
               </Button>
             </Link>
           </div>
-          <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
+          <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-medium text-white">
-              Overview
+            <CardTitle className="heading-3 text-white">
+              <span className="premium-subtitle">Overview</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
               {/* Weekly Summary */}
-              <div className="text-center p-2 bg-slate-900/50 rounded-lg">
-                <div className="text-base font-bold text-emerald-400">
+              <div className="text-center p-3 glass-card rounded-lg touch-haptic">
+                <div className="text-base font-bold text-accent-mint">
                   {Math.round(
                     calorieEntries
                       .filter(entry => {
@@ -216,12 +216,12 @@ export default function MobileDashboardNew() {
                       .reduce((sum, entry) => sum + entry.calories, 0) / 7
                   )}
                 </div>
-                <div className="text-xs text-gray-400">Avg Calories</div>
+                <div className="caption-text text-text-secondary">Avg Calories</div>
               </div>
 
               {/* Streak */}
-              <div className="text-center p-2 bg-slate-900/50 rounded-lg">
-                <div className="text-base font-bold text-blue-400">
+              <div className="text-center p-3 glass-card rounded-lg touch-haptic">
+                <div className="text-base font-bold text-primary-cyan">
                   {calorieEntries.filter(entry => {
                     const entryDate = new Date(entry.date);
                     const oneWeekAgo = new Date();
@@ -229,7 +229,7 @@ export default function MobileDashboardNew() {
                     return entryDate >= oneWeekAgo && entry.calories > 0;
                   }).length}
                 </div>
-                <div className="text-xs text-gray-400">Days Logged</div>
+                <div className="caption-text text-text-secondary">Days Logged</div>
               </div>
             </div>
           </CardContent>

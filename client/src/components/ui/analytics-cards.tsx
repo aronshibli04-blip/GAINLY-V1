@@ -26,16 +26,16 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
   // Safety checks for empty or single data points
   if (trendData.length === 0) {
     return (
-      <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
+      <Card className={cn("glass-ultra card-float ultra-smooth magnetic-hover border-premium", className)}>
         <CardHeader className="pb-1">
-          <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
-            <span>Weight Trend</span>
-            <Calendar className="h-3 w-3 text-gray-400" />
+          <CardTitle className="heading-3 text-white flex items-center justify-between">
+            <span className="premium-subtitle">Weight Trend</span>
+            <Calendar className="h-4 w-4 text-primary-cyan pulse-glow" />
           </CardTitle>
-          <p className="text-xs text-gray-400">Last 7 Days</p>
+          <p className="caption-text text-text-secondary">Last 7 Days</p>
         </CardHeader>
         <CardContent className="space-y-1">
-          <div className="text-center text-gray-400 text-sm py-4">
+          <div className="text-center text-text-secondary text-sm py-4">
             No weight data available
           </div>
         </CardContent>
@@ -48,13 +48,13 @@ export function WeightTrendCard({ className }: WeightTrendCardProps) {
   const range = maxWeight - minWeight || 1;
 
   return (
-    <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
+    <Card className={cn("glass-ultra card-float ultra-smooth magnetic-hover", className)}>
       <CardHeader className="pb-1">
-        <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
-          <span>Weight Trend</span>
-          <Calendar className="h-3 w-3 text-gray-400" />
+        <CardTitle className="heading-3 text-white flex items-center justify-between">
+          <span className="premium-subtitle">Weight Trend</span>
+          <Calendar className="h-4 w-4 text-primary-cyan pulse-glow" />
         </CardTitle>
-        <p className="text-xs text-gray-400">Last 7 Days</p>
+        <p className="caption-text text-text-secondary">Last 7 Days</p>
       </CardHeader>
       <CardContent className="space-y-1">
         {/* Mini Chart */}
@@ -144,16 +144,16 @@ export function CalorieTrendCard({ className, targetCalories = 3200 }: CalorieTr
   // Safety checks for empty data
   if (nonZeroCalories.length === 0) {
     return (
-      <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
+      <Card className={cn("glass-ultra card-float ultra-smooth magnetic-hover border-premium", className)}>
         <CardHeader className="pb-1">
-          <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
-            <span>Calorie Average</span>
-            <Calendar className="h-3 w-3 text-gray-400" />
+          <CardTitle className="heading-3 text-white flex items-center justify-between">
+            <span className="premium-subtitle">Calorie Average</span>
+            <Calendar className="h-4 w-4 text-secondary-magenta pulse-glow" />
           </CardTitle>
-          <p className="text-xs text-gray-400">Last 7 Days</p>
+          <p className="caption-text text-text-secondary">Last 7 Days</p>
         </CardHeader>
         <CardContent className="space-y-1">
-          <div className="text-center text-gray-400 text-sm py-4">
+          <div className="text-center text-text-secondary text-sm py-4">
             No calorie data available
           </div>
         </CardContent>
@@ -166,13 +166,13 @@ export function CalorieTrendCard({ className, targetCalories = 3200 }: CalorieTr
   const range = maxCalories - minCalories || 1;
 
   return (
-    <Card className={cn("bg-slate-800/40 border-slate-600/30 backdrop-blur-sm", className)}>
+    <Card className={cn("glass-ultra card-float ultra-smooth magnetic-hover", className)}>
       <CardHeader className="pb-1">
-        <CardTitle className="text-sm font-medium text-white flex items-center justify-between">
-          <span>Calorie Average</span>
-          <Calendar className="h-3 w-3 text-gray-400" />
+        <CardTitle className="heading-3 text-white flex items-center justify-between">
+          <span className="premium-subtitle">Calorie Average</span>
+          <Calendar className="h-4 w-4 text-secondary-magenta pulse-glow" />
         </CardTitle>
-        <p className="text-xs text-gray-400">Last 7 Days</p>
+        <p className="caption-text text-text-secondary">Last 7 Days</p>
       </CardHeader>
       <CardContent className="space-y-1">
         {/* Mini Chart */}
@@ -235,7 +235,7 @@ export function CalorieTrendCard({ className, targetCalories = 3200 }: CalorieTr
             {isPositiveSurplus ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
             {isPositiveSurplus ? '+' : ''}{Math.round(surplus)} surplus
           </div>
-          <div className="text-xs text-gray-400">
+          <div className="caption-text text-text-secondary">
             Target: {targetCalories} kcal/day
           </div>
         </div>

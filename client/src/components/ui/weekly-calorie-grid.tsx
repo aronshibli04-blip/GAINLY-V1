@@ -63,11 +63,11 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
   };
 
   return (
-    <Card className="bg-slate-800/40 border-slate-600/30 backdrop-blur-sm">
+    <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg font-semibold text-white flex items-center justify-between">
-          <span>Weekly Nutrition Progress</span>
-          <span className="text-sm font-normal text-gray-400">Target: {targetCalories} kcal</span>
+        <CardTitle className="heading-premium text-white flex items-center justify-between">
+          <span className="premium-subtitle">Weekly Nutrition Progress</span>
+          <span className="caption-text text-accent-mint">Target: {targetCalories} kcal</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -92,9 +92,9 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
               <div
                 key={date}
                 className={cn(
-                  "relative h-12 rounded-md p-1 transition-all duration-200 hover:scale-105 cursor-pointer",
-                  "bg-slate-900/50 border border-slate-600/50",
-                  isToday && "ring-1 ring-emerald-400 ring-opacity-50"
+                  "relative h-12 rounded-md p-1 ultra-smooth hover:scale-105 cursor-pointer touch-haptic",
+                  "glass-card border-premium",
+                  isToday && "ring-2 ring-primary-cyan ring-opacity-70 pulse-glow"
                 )}
                 data-testid={`day-${index}`}
               >
@@ -130,11 +130,11 @@ export function WeeklyCalorieGrid({ targetCalories = 3200 }: WeeklyCalorieGridPr
         </div>
 
         {/* Weekly Summary */}
-        <div className="flex justify-between items-center pt-2 border-t border-slate-600/30">
-          <div className="text-xs text-gray-400">
+        <div className="flex justify-between items-center pt-2 border-t border-primary-cyan/30">
+          <div className="caption-text text-text-secondary">
             Week Average
           </div>
-          <div className="text-xs font-semibold text-white">
+          <div className="text-sm font-bold text-primary-cyan">
             {Math.round(
               weekDates.reduce((sum, date) => sum + getDayCalories(date), 0) / 7
             )} kcal/day
