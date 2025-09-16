@@ -6,7 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { TrendingUp, User, Activity, Target, Utensils } from 'lucide-react';
+import { BodyFatSelector } from '@/components/ui/body-fat-selector';
+import { FFMIGoalSelector } from '@/components/ui/ffmi-goal-selector';
+import { TrendingUp, User, Activity, Target, Utensils, Zap } from 'lucide-react';
 
 interface UserBasicData {
   firstName: string;
@@ -15,7 +17,11 @@ interface UserBasicData {
   weight: number;
   sex: 'male' | 'female';
   activityLevel: string;
-  goalWeight: number;
+  // FFMI-based goal system (replaces arbitrary goalWeight)
+  bodyFatPercentage: number;
+  targetFFMI: number;
+  calculatedTargetWeight: number;
+  timelineMonths: number;
 }
 
 interface InstantDataCollectionProps {
@@ -24,7 +30,7 @@ interface InstantDataCollectionProps {
 
 export function InstantDataCollection({ onComplete }: InstantDataCollectionProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const totalSteps = 5; // Updated to include body fat and FFMI goal steps
   
   const [formData, setFormData] = useState({
     firstName: '',
@@ -33,7 +39,10 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     weight: '',
     sex: '',
     activityDescription: '',
-    goalWeight: '',
+    bodyFatPercentage: null as number | null,
+    targetFFMI: null as number | null,
+    calculatedTargetWeight: null as number | null,
+    timelineMonths: null as number | null,
     dietaryPreferences: [] as string[],
   });
 
@@ -67,7 +76,8 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
 
   const handleSubmit = () => {
     if (!formData.firstName || !formData.age || !formData.height || 
-        !formData.weight || !formData.sex || !formData.goalWeight) {
+        !formData.weight || !formData.sex || !formData.bodyFatPercentage ||
+        !formData.targetFFMI || !formData.calculatedTargetWeight) {
       return;
     }
 
@@ -78,7 +88,10 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
       weight: parseFloat(formData.weight),
       sex: formData.sex as 'male' | 'female',
       activityLevel: formData.activityDescription || 'moderate',
-      goalWeight: parseFloat(formData.goalWeight)
+      bodyFatPercentage: formData.bodyFatPercentage,
+      targetFFMI: formData.targetFFMI,
+      calculatedTargetWeight: formData.calculatedTargetWeight,
+      timelineMonths: formData.timelineMonths || 12
     };
 
     onComplete(data);
@@ -89,11 +102,13 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
       case 1:
         return formData.firstName && formData.age;
       case 2:
-        return formData.sex && formData.height && formData.weight && formData.goalWeight;
+        return formData.sex && formData.height && formData.weight;
       case 3:
-        return true; // Activity description is optional
+        return formData.bodyFatPercentage !== null;
       case 4:
-        return true; // Dietary preferences are optional
+        return formData.targetFFMI !== null && formData.calculatedTargetWeight !== null;
+      case 5:
+        return true; // Activity description and dietary preferences are optional
       default:
         return false;
     }
@@ -103,19 +118,32 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     switch (step) {
       case 1: return <User className="w-8 h-8 text-white" />;
       case 2: return <Activity className="w-8 h-8 text-white" />;
-      case 3: return <Target className="w-8 h-8 text-white" />;
-      case 4: return <Utensils className="w-8 h-8 text-white" />;
+      case 3: return <TrendingUp className="w-8 h-8 text-white" />;
+      case 4: return <Target className="w-8 h-8 text-white" />;
+      case 5: return <Utensils className="w-8 h-8 text-white" />;
       default: return <User className="w-8 h-8 text-white" />;
     }
   };
 
   const getStepTitle = (step: number) => {
     switch (step) {
-      case 1: return 'Personal Info';
-      case 2: return 'Body Stats';
-      case 3: return 'Activity Level';
-      case 4: return 'Diet Preferences';
-      default: return 'Personal Info';
+      case 1: return "Personal Info";
+      case 2: return "Body Stats";
+      case 3: return "Body Composition";
+      case 4: return "Fitness Goals";
+      case 5: return "Preferences";
+      default: return "Setup";
+    }
+  };
+
+  const getStepDescription = (step: number) => {
+    switch (step) {
+      case 1: return 'Tell us about yourself';
+      case 2: return 'Your current measurements';
+      case 3: return 'Your body fat percentage';
+      case 4: return 'Set your fitness goal scientifically';
+      case 5: return 'Activity level and preferences';
+      default: return 'Setup';
     }
   };
 
@@ -205,33 +233,18 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 />
               </div>
 
-              <div>
-                <Label className="text-emerald-400 text-sm font-medium">GOAL WEIGHT (KG)</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  value={formData.goalWeight}
-                  onChange={(e) => setFormData(prev => ({ ...prev, goalWeight: e.target.value }))}
-                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Målvekt (kg)"
-                  data-testid="input-goal-weight"
-                />
+              <div className="bg-emerald-500/10 rounded-xl border border-emerald-500/20 p-4">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Target className="h-5 w-5 text-emerald-400" />
+                    <span className="text-emerald-400 font-medium">Scientific Goal Setting</span>
+                  </div>
+                  <p className="text-sm text-white/70">
+                    We'll calculate your optimal target weight scientifically in the next steps 
+                    based on your body composition and FFMI goals!
+                  </p>
+                </div>
               </div>
-
-              {formData.weight && formData.goalWeight && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/30"
-                >
-                  <p className="text-emerald-400 font-medium text-center">
-                    Target gain: +{(parseFloat(formData.goalWeight) - parseFloat(formData.weight)).toFixed(1)}kg
-                  </p>
-                  <p className="text-slate-400 text-sm text-center mt-1">
-                    Optimal for hardgainer protocol
-                  </p>
-                </motion.div>
-              )}
             </div>
           </motion.div>
         );
@@ -240,6 +253,59 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
         return (
           <motion.div
             key="step3"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            <BodyFatSelector
+              gender={formData.sex as 'male' | 'female'}
+              selectedPercentage={formData.bodyFatPercentage}
+              onSelect={(percentage) => setFormData(prev => ({ 
+                ...prev, 
+                bodyFatPercentage: percentage 
+              }))}
+            />
+          </motion.div>
+        );
+
+      case 4:
+        return (
+          <motion.div
+            key="step4"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            className="space-y-6"
+          >
+            {formData.weight && formData.height && formData.bodyFatPercentage && formData.sex ? (
+              <FFMIGoalSelector
+                currentWeight={parseFloat(formData.weight)}
+                height={parseFloat(formData.height)}
+                bodyFatPercentage={formData.bodyFatPercentage}
+                age={parseInt(formData.age) || 25}
+                gender={formData.sex as 'male' | 'female'}
+                selectedFFMI={formData.targetFFMI}
+                selectedTargetWeight={formData.calculatedTargetWeight}
+                onGoalSelect={(ffmi, targetWeight, timeline) => setFormData(prev => ({
+                  ...prev,
+                  targetFFMI: ffmi,
+                  calculatedTargetWeight: targetWeight,
+                  timelineMonths: timeline
+                }))}
+              />
+            ) : (
+              <div className="text-center p-6 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                <p className="text-amber-400">Please complete the previous steps first</p>
+              </div>
+            )}
+          </motion.div>
+        );
+
+      case 5:
+        return (
+          <motion.div
+            key="step5"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
