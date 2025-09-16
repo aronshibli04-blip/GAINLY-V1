@@ -20,6 +20,8 @@ import {
   type InsertSleepLog,
   type StressLog,
   type InsertStressLog,
+  type FFMICalculation,
+  type InsertFFMICalculation,
   users,
   weightLogs,
   mealLogs,
@@ -30,7 +32,8 @@ import {
   dailyRoutineCompletions,
   userStats,
   sleepLogs,
-  stressLogs
+  stressLogs,
+  ffmiCalculations
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -108,6 +111,25 @@ export interface IStorage {
   createStressLog(stressLog: InsertStressLog): Promise<StressLog>;
   getStressLogsByUser(userId: string, limit?: number): Promise<StressLog[]>;
   getStressLogByDate(userId: string, date: string): Promise<StressLog | undefined>;
+
+  // FFMI methods
+  getUserFFMIData(userId: string): Promise<{
+    gender: string | null;
+    bodyFatPercentage: string | null;
+    targetFFMI: string | null;
+    calculatedTargetWeight: string | null;
+    currentWeight: string | null;
+    height: string | null;
+  } | null>;
+  updateUserFFMIProfile(userId: string, updates: {
+    gender?: string;
+    bodyFatPercentage?: string;
+    targetFFMI?: string;
+    calculatedTargetWeight?: string;
+  }): Promise<User | undefined>;
+  saveFFMICalculation(calculation: InsertFFMICalculation): Promise<FFMICalculation>;
+  getFFMICalculationHistory(userId: string, limit?: number): Promise<FFMICalculation[]>;
+  getLatestFFMICalculation(userId: string): Promise<FFMICalculation | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -561,11 +583,15 @@ export class DatabaseStorage implements IStorage {
       await db.delete(aiAnalysis)
         .where(eq(aiAnalysis.userId, userId));
       
-      // 5. Clear user stats (level, XP, streaks, points) - THIS IS THE KEY ONE!
+      // 5. Clear FFMI calculation history
+      await db.delete(ffmiCalculations)
+        .where(eq(ffmiCalculations.userId, userId));
+      
+      // 6. Clear user stats (level, XP, streaks, points) - THIS IS THE KEY ONE!
       await db.delete(userStats)
         .where(eq(userStats.userId, userId));
       
-      // 6. Finally clear the user record itself
+      // 7. Finally clear the user record itself
       await db.delete(users)
         .where(eq(users.id, userId));
         
@@ -591,6 +617,73 @@ export class DatabaseStorage implements IStorage {
       .from(stressLogs)
       .where(and(eq(stressLogs.userId, userId), eq(stressLogs.logDate, date)));
     return log || undefined;
+  }
+
+  // FFMI method implementations
+  async getUserFFMIData(userId: string): Promise<{
+    gender: string | null;
+    bodyFatPercentage: string | null;
+    targetFFMI: string | null;
+    calculatedTargetWeight: string | null;
+    currentWeight: string | null;
+    height: string | null;
+  } | null> {
+    const user = await this.getUser(userId);
+    if (!user) return null;
+
+    // Get latest weight
+    const latestWeights = await this.getWeightLogsByUser(userId, 1);
+    const currentWeight = latestWeights.length > 0 ? latestWeights[0].weight : null;
+
+    return {
+      gender: user.gender,
+      bodyFatPercentage: user.bodyFatPercentage,
+      targetFFMI: user.targetFFMI,
+      calculatedTargetWeight: user.calculatedTargetWeight,
+      currentWeight: currentWeight,
+      height: user.height,
+    };
+  }
+
+  async updateUserFFMIProfile(userId: string, updates: {
+    gender?: string;
+    bodyFatPercentage?: string;
+    targetFFMI?: string;
+    calculatedTargetWeight?: string;
+  }): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set(updates)
+      .where(eq(users.id, userId))
+      .returning();
+    return user || undefined;
+  }
+
+  async saveFFMICalculation(calculation: InsertFFMICalculation): Promise<FFMICalculation> {
+    const [result] = await db
+      .insert(ffmiCalculations)
+      .values(calculation)
+      .returning();
+    return result;
+  }
+
+  async getFFMICalculationHistory(userId: string, limit: number = 30): Promise<FFMICalculation[]> {
+    return await db
+      .select()
+      .from(ffmiCalculations)
+      .where(eq(ffmiCalculations.userId, userId))
+      .orderBy(desc(ffmiCalculations.calculationDate))
+      .limit(limit);
+  }
+
+  async getLatestFFMICalculation(userId: string): Promise<FFMICalculation | undefined> {
+    const [calculation] = await db
+      .select()
+      .from(ffmiCalculations)
+      .where(eq(ffmiCalculations.userId, userId))
+      .orderBy(desc(ffmiCalculations.calculationDate))
+      .limit(1);
+    return calculation || undefined;
   }
 }
 
