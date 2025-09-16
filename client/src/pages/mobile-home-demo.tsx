@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
+import { getTargetWeight } from '@/utils/weight-utils';
 
 export default function MobileHomeDemo() {
   const { openMenu } = useSideMenu();
@@ -57,7 +58,7 @@ export default function MobileHomeDemo() {
   const todayCalories = 2400;
   const targetCalories = 2800;
   const currentWeight = user?.weight || 70;
-  const goalWeight = user?.calculatedTargetWeight || user?.goalWeight || 80;
+  const goalWeight = getTargetWeight(user);
   const weightProgress = ((currentWeight - 70) / (goalWeight - 70)) * 100;
 
   const handleCelebration = (type: "achievement" | "milestone" | "streak" | "goal") => {

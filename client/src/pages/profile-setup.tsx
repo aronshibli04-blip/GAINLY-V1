@@ -26,7 +26,7 @@ export default function ProfileSetup() {
       firstName: "",
       age: 25,
       height: "70",
-      goalWeight: "165",
+      calculatedTargetWeight: "165",
       activityLevel: "moderately_active",
     },
   });
@@ -157,16 +157,17 @@ export default function ProfileSetup() {
 
                 <FormField
                   control={form.control}
-                  name="goalWeight"
+                  name="calculatedTargetWeight"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Goal Weight (lbs)</FormLabel>
+                      <FormLabel>Initial Target Weight (lbs)</FormLabel>
                       <FormControl>
                         <Input 
                           type="number" 
                           step="0.1"
                           placeholder="165"
-                          {...field} 
+                          {...field}
+                          value={field.value || ""} 
                         />
                       </FormControl>
                       <FormMessage />

@@ -26,10 +26,11 @@ export function GoalWeightCard() {
 
   // Navigate to setup if no FFMI goal is set
   const handleSetupFFMIGoal = () => {
-    // Could navigate to onboarding flow or FFMI setup page
+    // Navigate to FFMI onboarding setup flow
+    window.location.href = '/setup';
     toast({
-      title: "🧬 Set your scientific goal",
-      description: "Complete your FFMI-based goal setting for optimal results!",
+      title: "🧬 Starting FFMI Setup",
+      description: "Setting up your scientific body composition goals!",
     });
   };
 

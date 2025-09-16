@@ -24,6 +24,7 @@ import { WeeklyWeightAnalysis } from "@/components/ui/weekly-weight-analysis";
 import { TdeeAnalysisCard } from "@/components/ui/tdee-analysis-card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Tooltip } from "recharts";
 import { calculateTdee } from "@/utils/tdee";
+import { getTargetWeight } from '@/utils/weight-utils';
 
 export default function MobileStatistics() {
   const { 
@@ -43,7 +44,7 @@ export default function MobileStatistics() {
     const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : (user?.weight || 70);
     const startWeight = weightEntries.length > 0 ? weightEntries[weightEntries.length - 1].weight : (user?.weight || 70);
     const weightGained = currentWeight - startWeight;
-    const goalWeight = user?.calculatedTargetWeight || user?.goalWeight || currentWeight + 10;
+    const goalWeight = getTargetWeight(user);
     
     const totalDaysTracked = new Set([
       ...weightEntries.map(w => w.date),

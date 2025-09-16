@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import type { User, WeightLog, MealLog, ActivityLog, AiAnalysis } from "@shared/schema";
+import { getTargetWeight } from "@/utils/weight-utils";
 
 // API Response Types
 interface ProgressData {
@@ -63,10 +64,22 @@ export default function Home() {
   const today = format(new Date(), 'yyyy-MM-dd');
 
   // Queries
-  const { data: user } = useQuery<User>({
+  const { data: userData } = useQuery<any>({
     queryKey: ["/api/users", userId],
     enabled: !!userId,
   });
+
+  // Convert user data to proper types (Drizzle returns decimals as strings)
+  const user: User | undefined = userData ? {
+    ...userData,
+    height: typeof userData.height === 'string' ? Number(userData.height) : userData.height,
+    bodyFatPercentage: userData.bodyFatPercentage ? 
+      (typeof userData.bodyFatPercentage === 'string' ? Number(userData.bodyFatPercentage) : userData.bodyFatPercentage) : null,
+    targetFFMI: userData.targetFFMI ? 
+      (typeof userData.targetFFMI === 'string' ? Number(userData.targetFFMI) : userData.targetFFMI) : null,
+    calculatedTargetWeight: userData.calculatedTargetWeight ? 
+      (typeof userData.calculatedTargetWeight === 'string' ? Number(userData.calculatedTargetWeight) : userData.calculatedTargetWeight) : null,
+  } : undefined;
 
   const { data: progress } = useQuery<ProgressData>({
     queryKey: ["/api/progress", userId],
@@ -235,8 +248,8 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="bg-white/20 rounded-lg px-3 py-2">
-                    <span className="text-sm font-medium">Goal Weight</span>
-                    <p className="text-xl font-bold">{user.calculatedTargetWeight ? Number(user.calculatedTargetWeight) : Number(user.goalWeight)} lbs</p>
+                    <span className="text-sm font-medium">Target Weight</span>
+                    <p className="text-xl font-bold">{getTargetWeight(user)} lbs</p>
                   </div>
                 </div>
               </div>

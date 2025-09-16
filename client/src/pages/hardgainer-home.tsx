@@ -12,6 +12,7 @@ import { useUserStore, useUserProgress } from "@/store/userStore";
 import { CalendarDays, Scale, Utensils, Activity, TrendingUp, Target, Plus, Settings, Sparkles, FastForward } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
+import { getTargetWeight } from '@/utils/weight-utils';
 import { calculateTdee, generateTdeeAnalysis, getProgressInsights } from "@/utils/tdee";
 import { openAIService } from "@/api/openai";
 import { MealPlanRequest, DietaryPreference } from "@/types";
@@ -94,7 +95,7 @@ export default function HardgainerHome() {
   const todayActivity = activityEntries.find(a => a.date === selectedDate);
 
   const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : (user.weight || 0);
-  const targetWeight = user.calculatedTargetWeight || user.goalWeight || (currentWeight + 10); // Prioritize FFMI-calculated target
+  const targetWeight = getTargetWeight(user); // Use utility function for target weight
   const weightProgress = ((currentWeight - (user.weight || 0)) / (targetWeight - (user.weight || 0))) * 100;
 
   const handleLogWeight = () => {

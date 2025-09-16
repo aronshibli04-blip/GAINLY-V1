@@ -13,7 +13,6 @@ export const users = pgTable("users", {
   gender: text("gender"), // 'male' | 'female' - nullable for migration
   height: decimal("height", { precision: 5, scale: 2 }).notNull(), // in cm
   bodyFatPercentage: decimal("body_fat_percentage", { precision: 4, scale: 1 }), // e.g., 15.5%
-  goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }).notNull(), // in kg - DEPRECATED, will be calculated
   targetFFMI: decimal("target_ffmi", { precision: 4, scale: 1 }), // e.g., 22.5
   calculatedTargetWeight: decimal("calculated_target_weight", { precision: 5, scale: 1 }), // in kg
   activityLevel: text("activity_level").notNull(), // sedentary, lightly_active, moderately_active, very_active

@@ -30,6 +30,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarC
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { calculateTdee } from "@/utils/tdee";
+import { getTargetWeight } from '@/utils/weight-utils';
 
 export default function MobileProgress() {
   const { 
@@ -94,7 +95,7 @@ export default function MobileProgress() {
     const currentWeight = weightEntries?.length > 0 ? weightEntries[0]?.weight || user.weight : user.weight;
     const startWeight = weightEntries?.length > 0 ? weightEntries[weightEntries.length - 1]?.weight || user.weight : user.weight;
     const weightGained = (currentWeight || 0) - (startWeight || 0);
-    const goalWeight = user.calculatedTargetWeight || user.goalWeight || (currentWeight || 0) + 10;
+    const goalWeight = getTargetWeight(user);
     
     const totalDaysTracked = new Set([
       ...weightEntries.map(w => w.date),

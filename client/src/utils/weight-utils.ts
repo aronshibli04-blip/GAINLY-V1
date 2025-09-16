@@ -1,4 +1,4 @@
-import type { User } from '@/types';
+import type { User } from '@shared/schema';
 
 /**
  * Safely get the target weight prioritizing FFMI-calculated target over manual goal
@@ -10,12 +10,6 @@ export function getTargetWeight(user: User | null | undefined): number {
   const calculatedTarget = user.calculatedTargetWeight ? Number(user.calculatedTargetWeight) : 0;
   if (calculatedTarget > 0) {
     return calculatedTarget;
-  }
-  
-  // Fallback to manual goal weight
-  const manualGoal = user.goalWeight ? Number(user.goalWeight) : 0;
-  if (manualGoal > 0) {
-    return manualGoal;
   }
   
   // Final fallback - height-based estimate (BMI ~23)
@@ -90,8 +84,8 @@ export function getFFMIStatusText(user: User | null | undefined): string {
     return `FFMI ${targetFFMI.toFixed(1)} target • Scientific plan`;
   }
   
-  if (user.goalWeight) {
-    return 'Manual goal set • Consider scientific FFMI setup';
+  if (user.calculatedTargetWeight && Number(user.calculatedTargetWeight) > 0) {
+    return 'Target set • Complete FFMI setup for optimal results';
   }
   
   return 'No goals set • Setup FFMI for optimal results';

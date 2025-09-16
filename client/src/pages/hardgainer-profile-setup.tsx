@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, User, Scale, ArrowLeft, Brain, Target, BarChart3, Zap } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 import { User as UserType, DietaryPreference } from "@/types";
+import { getTargetWeight } from "@/utils/weight-utils";
 import { FuturisticCalibrationFlow } from "@/components/futuristic-calibration/FuturisticCalibrationFlow";
 
 export default function HardgainerProfileSetup() {
@@ -24,7 +25,7 @@ export default function HardgainerProfileSetup() {
     weight: user?.weight?.toString() || '',
     sex: user?.sex || '',
     activityDescription: user?.activityLevel || '',
-    goalWeight: (user?.calculatedTargetWeight || user?.goalWeight)?.toString() || ''
+    targetWeight: getTargetWeight(user)?.toString() || ''
   });
 
   const [dietaryPreferences, setDietaryPreferences] = useState<string[]>(
@@ -42,7 +43,7 @@ export default function HardgainerProfileSetup() {
     // Validate required fields
     if (!formData.firstName || !formData.age || !formData.height || 
         !formData.weight || !formData.sex || !formData.activityDescription || 
-        !formData.goalWeight) {
+        !formData.targetWeight) {
       toast({ 
         title: "🚀 Almost ready to start!", 
         description: "Complete all fields to unlock your personalized journey." 
@@ -54,7 +55,7 @@ export default function HardgainerProfileSetup() {
     const age = parseInt(formData.age);
     const height = parseFloat(formData.height);
     const weight = parseFloat(formData.weight);
-    const goalWeight = parseFloat(formData.goalWeight);
+    const targetWeight = parseFloat(formData.targetWeight);
 
     if (age < 16 || age > 100) {
       toast({ 
@@ -80,10 +81,10 @@ export default function HardgainerProfileSetup() {
       return;
     }
 
-    if (goalWeight <= weight) {
+    if (targetWeight <= weight) {
       toast({ 
-        title: "🎯 Great goal mindset!", 
-        description: "Your goal weight should be higher than your current weight to track your gains!" 
+        title: "🎯 Great scientific target!", 
+        description: "Your target weight should be higher than your current weight for optimal muscle building!" 
       });
       return;
     }
@@ -104,7 +105,7 @@ export default function HardgainerProfileSetup() {
       sex: formData.sex as 'male' | 'female',
       height,
       weight,
-      goalWeight,
+      calculatedTargetWeight: targetWeight,
       activityLevel: formData.activityDescription,
       dietaryPreferences: preferences,
       createdAt: user?.createdAt || new Date().toISOString(),
@@ -350,20 +351,20 @@ export default function HardgainerProfileSetup() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="goalWeight" className="text-sm font-medium text-primary uppercase tracking-wider">Målvekt (kg)</Label>
+                        <Label htmlFor="targetWeight" className="text-sm font-medium text-primary uppercase tracking-wider">Target Weight (kg)</Label>
                         <div className="relative">
                           <Input
-                            id="goalWeight"
+                            id="targetWeight"
                             type="number"
                             step="0.1"
                             min="40"
                             max="200"
-                            value={formData.goalWeight}
-                            onChange={(e) => setFormData({...formData, goalWeight: e.target.value})}
+                            value={formData.targetWeight}
+                            onChange={(e) => setFormData({...formData, targetWeight: e.target.value})}
                             required
                             className="grok-input pl-4 pr-10 h-12 bg-muted/20 border-primary/20 focus:border-primary text-white"
-                            placeholder="Målvekt (kg)"
-                            data-testid="input-goal-weight"
+                            placeholder="Scientific target (kg)"
+                            data-testid="input-target-weight"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                             <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />

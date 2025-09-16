@@ -14,7 +14,6 @@ export interface User {
   sex?: 'male' | 'female'; // Optional for frontend
   height: number; // cm (converted from backend)
   weight?: number; // kg (frontend working weight)
-  goalWeight: number; // kg (converted from backend) - DEPRECATED: Use calculatedTargetWeight
   activityLevel: string; // Free text description of activity level
   dietaryPreferences?: DietaryPreference[]; // Optional for frontend
   createdAt: string;

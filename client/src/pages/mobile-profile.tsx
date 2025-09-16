@@ -38,6 +38,7 @@ import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { calculateTdee } from "@/utils/tdee";
+import { getTargetWeight } from "@/utils/weight-utils";
 
 export default function MobileProfile() {
   const { toast } = useToast();
@@ -45,7 +46,7 @@ export default function MobileProfile() {
   const { 
     user, 
     setUser, 
-    setGoalWeight,
+    setTargetWeight,
     weightEntries, 
     calorieEntries,
     currentTdeeAnalysis,
@@ -58,7 +59,7 @@ export default function MobileProfile() {
     age: user?.age?.toString() || '',
     height: user?.height?.toString() || '',
     weight: user?.weight?.toString() || '',
-    goalWeight: (user?.calculatedTargetWeight || user?.goalWeight)?.toString() || '',
+    targetWeight: getTargetWeight(user)?.toString() || '',
     activityLevel: user?.activityLevel || 'moderately_active'
   });
 
@@ -70,9 +71,9 @@ export default function MobileProfile() {
   const currentWeight = weightEntries?.length > 0 ? weightEntries[0]?.weight || user.weight : user.weight;
   const startWeight = weightEntries?.length > 0 ? weightEntries[weightEntries.length - 1]?.weight || user.weight : user.weight;
   const weightGained = (currentWeight || 0) - (startWeight || 0);
-  const goalWeight = user.calculatedTargetWeight || user.goalWeight || (currentWeight || 0) + 10;
-  const progressToGoal = goalWeight && startWeight && currentWeight && goalWeight > startWeight && currentWeight > startWeight 
-    ? ((currentWeight - startWeight) / (goalWeight - startWeight)) * 100
+  const targetWeight = getTargetWeight(user);
+  const progressToGoal = targetWeight && startWeight && currentWeight && targetWeight > startWeight && currentWeight > startWeight 
+    ? ((currentWeight - startWeight) / (targetWeight - startWeight)) * 100
     : 0;
   
   const totalDaysTracked = Array.from(new Set([
@@ -175,8 +176,8 @@ export default function MobileProfile() {
 
     setUser(updatedUser);
     
-    if (editData.goalWeight && parseFloat(editData.goalWeight) !== (user.calculatedTargetWeight || user.goalWeight)) {
-      setGoalWeight(parseFloat(editData.goalWeight));
+    if (editData.targetWeight && parseFloat(editData.targetWeight) !== getTargetWeight(user)) {
+      setTargetWeight(parseFloat(editData.targetWeight));
     }
 
     setIsEditing(false);
@@ -456,7 +457,7 @@ export default function MobileProfile() {
               <div className="flex justify-between text-sm">
                 <span>Start: {(startWeight || 0).toFixed(1)}kg</span>
                 <span>Nå: {(currentWeight || 0).toFixed(1)}kg</span>
-                <span>Mål: {(goalWeight || 0).toFixed(1)}kg</span>
+                <span>Target: {(targetWeight || 0).toFixed(1)}kg</span>
               </div>
               <Progress 
                 value={Math.max(0, Math.min(100, progressToGoal || 0))} 
@@ -487,7 +488,7 @@ export default function MobileProfile() {
                     age: user.age?.toString() || '',
                     height: user.height?.toString() || '',
                     weight: user.weight?.toString() || '',
-                    goalWeight: (user.calculatedTargetWeight || user.goalWeight)?.toString() || '',
+                    targetWeight: getTargetWeight(user)?.toString() || '',
                     activityLevel: user.activityLevel || 'moderately_active'
                   });
                 }
@@ -552,15 +553,15 @@ export default function MobileProfile() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-goal-weight" className="text-indigo-400">Målvekt (kg)</Label>
+                    <Label htmlFor="edit-target-weight" className="text-indigo-400">Target Weight (kg)</Label>
                     <Input
-                      id="edit-goal-weight"
+                      id="edit-target-weight"
                       type="number"
                       step="0.1"
-                      value={editData.goalWeight}
-                      onChange={(e) => setEditData({...editData, goalWeight: e.target.value})}
+                      value={editData.targetWeight}
+                      onChange={(e) => setEditData({...editData, targetWeight: e.target.value})}
                       className="bg-slate-700/50 border-slate-600 text-white"
-                      data-testid="input-edit-goal-weight"
+                      data-testid="input-edit-target-weight"
                     />
                   </div>
                 </div>
@@ -603,8 +604,8 @@ export default function MobileProfile() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="text-sm text-slate-400">Målvekt</div>
-                    <div className="text-white font-semibold">{(goalWeight || 0).toFixed(1)} kg</div>
+                    <div className="text-sm text-slate-400">Target Weight</div>
+                    <div className="text-white font-semibold">{(targetWeight || 0).toFixed(1)} kg</div>
                   </div>
                   <div>
                     <div className="text-sm text-slate-400">Aktivitetsnivå</div>
