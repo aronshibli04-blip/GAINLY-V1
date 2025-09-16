@@ -15,6 +15,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 32867
+externalPort = 6000
+
+[[ports]]
 localPort = 33031
 externalPort = 3002
 
@@ -46,7 +50,7 @@ externalPort = 5173
 PORT = "5000"
 
 [workflows]
-runButton = "Start Dev Server"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
@@ -65,14 +69,5 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Start Dev Server"
-author = 45935207
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
 
 [agent]
