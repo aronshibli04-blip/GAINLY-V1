@@ -24,10 +24,10 @@ export function BottomNav() {
               <button
                 className={cn(
                   "flex flex-col items-center justify-center p-grid-2 rounded-xl transition-all duration-300",
-                  "min-w-[80px] min-h-[44px] touch-target touch-feedback focus-ring",
+                  "min-w-[80px] min-h-[44px] touch-target touch-feedback focus-ring nav-hover-glow",
                   isActive
-                    ? "text-primary scale-105 bg-primary/10 shadow-lg"
-                    : "text-muted-foreground hover:text-foreground hover:bg-card/50 hover:scale-105"
+                    ? "text-primary bg-primary/10 shadow-lg"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
                 )}
                 data-testid={`nav-${item.label.toLowerCase()}`}
                 aria-label={`Navigate to ${item.label}`}
@@ -36,11 +36,11 @@ export function BottomNav() {
               >
                 <item.icon 
                   className={cn(
-                    "h-6 w-6 mb-1",
-                    isActive && "drop-shadow-lg"
+                    "h-6 w-6 mb-1 transition-colors duration-300",
+                    isActive ? "nav-icon-active" : "group-hover:text-primary"
                   )} 
                 />
-                <span className="text-xs font-medium caption-text">{item.label}</span>
+                <span className="text-xs font-medium caption-text transition-colors duration-300">{item.label}</span>
               </button>
             </Link>
           );

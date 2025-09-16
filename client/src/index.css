@@ -745,6 +745,25 @@
   transform: scale(0.95);
 }
 
+/* Premium Navigation Effects */
+.nav-hover-glow { 
+  transition: box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  will-change: box-shadow, background-color;
+}
+
+@media (hover: hover) {
+  .nav-hover-glow:hover { 
+    box-shadow: 0 0 18px rgba(0, 245, 255, 0.35); 
+    background: rgba(0, 245, 255, 0.06) !important; 
+  }
+}
+
+/* Active icon glow without scaling */
+.nav-icon-active { 
+  color: var(--primary-cyan); 
+  filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.45)); 
+}
+
 /* Professional Form Elements */
 .form-input {
   background: var(--input);
