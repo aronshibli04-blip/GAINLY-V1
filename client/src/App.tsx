@@ -29,8 +29,8 @@ import { MobileAchievements } from "@/pages/mobile-achievements";
 import { MobileGoals } from "@/pages/mobile-goals";
 import MobileProgress from "@/pages/mobile-progress";
 import MobileAbout from "@/pages/mobile-about";
-import MobileDemo from "./pages/MobileDemo";
-import MobileHomeDemo from "./pages/mobile-home-demo";
+import MobileDemo from "@/pages/MobileDemo";
+import MobileHomeDemo from "@/pages/mobile-home-demo";
 
 
 // Setup pages

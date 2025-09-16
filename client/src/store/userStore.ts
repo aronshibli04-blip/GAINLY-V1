@@ -9,7 +9,7 @@ import {
   TdeeAnalysis, 
   MealPlan,
   UserPhase
-} from '../types';
+} from '../types/index';
 import { SubscriptionStatus, mockSubscriptionService, SubscriptionType } from '@/utils/tiers';
 
 interface UserState {
