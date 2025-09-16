@@ -20,7 +20,7 @@ export function MobileGoals() {
     ? weightEntries[weightEntries.length - 1].weight 
     : 70;
     
-  const targetWeight = user?.goalWeight || 85;
+  const targetWeight = user?.calculatedTargetWeight || user?.goalWeight || 85;
 
   const updateReward = (goalWeight: number, newReward: string) => {
     setCustomRewards(prev => ({ ...prev, [goalWeight]: newReward }));
@@ -83,7 +83,7 @@ export function MobileGoals() {
   const nextGoal = microGoals.find(goal => !goal.completed);
   const completedGoals = microGoals.filter(goal => goal.completed).length;
   const progressPercentage = (completedGoals / microGoals.length) * 100;
-  const weightProgress = ((currentWeight - 70) / ((user?.goalWeight || 85) - 70)) * 100;
+  const weightProgress = ((currentWeight - 70) / ((user?.calculatedTargetWeight || user?.goalWeight || 85) - 70)) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900 text-white pb-24">

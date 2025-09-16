@@ -7,9 +7,10 @@ import { Progress } from "@/components/ui/progress";
 import { useUserStore } from "@/store/userStore";
 import { Target, Edit2, Check, X, TrendingUp, Zap, Brain } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getTargetWeight, safeProgressCalculation, getWeeksToTarget, hasFFMIGoals, getFFMIStatusText } from "@/utils/weight-utils";
 
 export function GoalWeightCard() {
-  const { user, setGoalWeight, weightEntries } = useUserStore();
+  const { user, weightEntries } = useUserStore();
   const { toast } = useToast();
 
   if (!user) return null;
@@ -18,11 +19,10 @@ export function GoalWeightCard() {
     ? weightEntries[0].weight // Most recent weight
     : user.weight;
 
-  // FFMI-based scientific goal system
-  const targetWeight = user.calculatedTargetWeight;
-  const targetFFMI = user.targetFFMI;
-  const timelineMonths = user.timelineMonths;
-  const hasFFMIGoal = targetWeight && targetFFMI;
+  // FFMI-based scientific goal system using utility functions
+  const targetWeight = getTargetWeight(user);
+  const hasFFMIGoal = hasFFMIGoals(user);
+  const statusText = getFFMIStatusText(user);
 
   // Navigate to setup if no FFMI goal is set
   const handleSetupFFMIGoal = () => {
@@ -33,22 +33,10 @@ export function GoalWeightCard() {
     });
   };
 
-  const calculateProgress = () => {
-    if (!hasFFMIGoal || !targetWeight || !user.weight || !currentWeight) return 0;
-    const totalGain = targetWeight - user.weight; // Total weight to gain from starting weight
-    const currentGain = currentWeight - user.weight; // Current weight gained
-    return Math.max(0, Math.min(100, (currentGain / totalGain) * 100));
-  };
-
-  const getTimeToGoal = () => {
-    if (!hasFFMIGoal || !targetWeight || !currentWeight) return null;
-    const remainingWeight = targetWeight - currentWeight;
-    const weeksToGoal = remainingWeight / 1.0; // 1kg per week target
-    return Math.max(0, Math.ceil(weeksToGoal));
-  };
-
-  const progress = calculateProgress();
-  const weeksToGoal = getTimeToGoal();
+  // Use utility functions for safe calculations
+  const startWeight = user.weight ? Number(user.weight) : null;
+  const progress = safeProgressCalculation(startWeight, currentWeight, targetWeight);
+  const weeksToGoal = getWeeksToTarget(currentWeight, targetWeight);
 
   return (
     <Card className="grok-glow-hover border-primary/20">
@@ -60,13 +48,9 @@ export function GoalWeightCard() {
               <div className="flex items-center gap-2">
                 <Brain className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium text-white">Scientific Goal</span>
-                <div className="flex items-center gap-1">
-                  <Zap className="h-3 w-3 text-yellow-400" />
-                  <span className="text-xs text-yellow-400 font-medium">FFMI {targetFFMI}</span>
-                </div>
               </div>
               <div className="text-xs text-emerald-400 font-medium">
-                {timelineMonths}mo plan
+                {statusText}
               </div>
             </div>
 

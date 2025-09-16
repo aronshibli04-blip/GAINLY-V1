@@ -5,7 +5,8 @@ const demoData = {
   user: {
     name: 'Alex',
     currentWeight: 72.5,
-    goalWeight: 85,
+    calculatedTargetWeight: 85, // FFMI-based target weight
+    goalWeight: 82, // Old manual goal for fallback
     startWeight: 68
   },
   todayStats: {
@@ -48,7 +49,7 @@ function LoadingScreen() {
 
 function DashboardContent() {
   const progressPercentage = (demoData.user.currentWeight - demoData.user.startWeight) / 
-                            (demoData.user.goalWeight - demoData.user.startWeight) * 100;
+                            ((demoData.user.calculatedTargetWeight || demoData.user.goalWeight) - demoData.user.startWeight) * 100;
   
   return (
     <div className="flex-1 p-4 space-y-4 overflow-y-auto">
@@ -76,7 +77,7 @@ function DashboardContent() {
         <h3 className="text-lg font-bold text-white mb-3">🎯 Weight Goal Progress</h3>
         <div className="mb-4">
           <p className="text-white font-medium">
-            {demoData.user.currentWeight}kg → {demoData.user.goalWeight}kg
+            {demoData.user.currentWeight}kg → {demoData.user.calculatedTargetWeight || demoData.user.goalWeight}kg
           </p>
           <p className="text-emerald-500 text-sm">
             +{(demoData.user.currentWeight - demoData.user.startWeight).toFixed(1)}kg gained

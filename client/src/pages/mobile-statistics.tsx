@@ -43,7 +43,7 @@ export default function MobileStatistics() {
     const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : (user?.weight || 70);
     const startWeight = weightEntries.length > 0 ? weightEntries[weightEntries.length - 1].weight : (user?.weight || 70);
     const weightGained = currentWeight - startWeight;
-    const goalWeight = user?.goalWeight || currentWeight + 10;
+    const goalWeight = user?.calculatedTargetWeight || user?.goalWeight || currentWeight + 10;
     
     const totalDaysTracked = new Set([
       ...weightEntries.map(w => w.date),

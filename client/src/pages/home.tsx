@@ -27,6 +27,20 @@ import {
   Clock
 } from "lucide-react";
 import { format } from "date-fns";
+import type { User, WeightLog, MealLog, ActivityLog, AiAnalysis } from "@shared/schema";
+
+// API Response Types
+interface ProgressData {
+  weightLogs: number;
+  mealDays: number;
+  activityLogs: number;
+  totalDays: number;
+}
+
+interface DailyCaloriesData {
+  logDate: string;
+  totalCalories: number;
+}
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -49,42 +63,42 @@ export default function Home() {
   const today = format(new Date(), 'yyyy-MM-dd');
 
   // Queries
-  const { data: user } = useQuery({
+  const { data: user } = useQuery<User>({
     queryKey: ["/api/users", userId],
     enabled: !!userId,
   });
 
-  const { data: progress } = useQuery({
+  const { data: progress } = useQuery<ProgressData>({
     queryKey: ["/api/progress", userId],
     enabled: !!userId,
   });
 
-  const { data: weightLogs } = useQuery({
+  const { data: weightLogs } = useQuery<WeightLog[]>({
     queryKey: ["/api/weight-logs", userId],
     enabled: !!userId,
   });
 
-  const { data: dailyCalories } = useQuery({
+  const { data: dailyCalories } = useQuery<DailyCaloriesData[]>({
     queryKey: ["/api/daily-calories", userId],
     enabled: !!userId,
   });
 
-  const { data: todayWeight } = useQuery({
+  const { data: todayWeight } = useQuery<WeightLog>({
     queryKey: ["/api/weight-logs", userId, today],
     enabled: !!userId,
   });
 
-  const { data: todayMeals } = useQuery({
+  const { data: todayMeals } = useQuery<MealLog[]>({
     queryKey: ["/api/meal-logs", userId, today],
     enabled: !!userId,
   });
 
-  const { data: todayActivity } = useQuery({
+  const { data: todayActivity } = useQuery<ActivityLog>({
     queryKey: ["/api/activity-logs", userId, today],
     enabled: !!userId,
   });
 
-  const { data: aiAnalysis } = useQuery({
+  const { data: aiAnalysis } = useQuery<AiAnalysis>({
     queryKey: ["/api/ai-analysis", userId],
     enabled: !!userId,
   });
@@ -196,7 +210,7 @@ export default function Home() {
     );
   }
 
-  const todayCalories = todayMeals?.reduce((sum: number, meal: any) => sum + meal.calories, 0) || 0;
+  const todayCalories = todayMeals?.reduce((sum: number, meal: MealLog) => sum + Number(meal.calories), 0) || 0;
   const progressPercentage = progress ? Math.round(((progress.weightLogs + progress.mealDays + progress.activityLogs) / (progress.totalDays * 3)) * 100) : 0;
   const canAnalyze = progress && progress.weightLogs >= 7 && progress.mealDays >= 7;
   const daysUntilAnalysis = progress ? Math.max(0, 7 - Math.min(progress.weightLogs, progress.mealDays)) : 7;
@@ -217,12 +231,12 @@ export default function Home() {
                   <div className="bg-white/20 rounded-lg px-3 py-2">
                     <span className="text-sm font-medium">Current Weight</span>
                     <p className="text-xl font-bold">
-                      {todayWeight?.weight || weightLogs?.[0]?.weight || "—"} lbs
+                      {todayWeight?.weight ? Number(todayWeight.weight) : (weightLogs?.[0]?.weight ? Number(weightLogs[0].weight) : "—")} lbs
                     </p>
                   </div>
                   <div className="bg-white/20 rounded-lg px-3 py-2">
                     <span className="text-sm font-medium">Goal Weight</span>
-                    <p className="text-xl font-bold">{user.goalWeight} lbs</p>
+                    <p className="text-xl font-bold">{user.calculatedTargetWeight ? Number(user.calculatedTargetWeight) : Number(user.goalWeight)} lbs</p>
                   </div>
                 </div>
               </div>
@@ -338,7 +352,7 @@ export default function Home() {
                     {todayWeight ? (
                       <>
                         <Check className="w-4 h-4 mr-2" />
-                        Weight Logged ({todayWeight.weight} lbs)
+                        Weight Logged ({Number(todayWeight.weight)} lbs)
                       </>
                     ) : (
                       <>
@@ -462,11 +476,11 @@ export default function Home() {
                     <div className="flex items-center space-x-4">
                       <div className="bg-white/20 rounded-lg px-4 py-2">
                         <span className="text-sm font-medium">Calculated TDEE</span>
-                        <p className="text-xl font-bold">{aiAnalysis.calculatedTdee} kcal</p>
+                        <p className="text-xl font-bold">{Number(aiAnalysis.calculatedTdee)} kcal</p>
                       </div>
                       <div className="bg-white/20 rounded-lg px-4 py-2">
                         <span className="text-sm font-medium">Target Calories</span>
-                        <p className="text-xl font-bold">{aiAnalysis.targetCalories} kcal</p>
+                        <p className="text-xl font-bold">{Number(aiAnalysis.targetCalories)} kcal</p>
                       </div>
                     </div>
                   </div>

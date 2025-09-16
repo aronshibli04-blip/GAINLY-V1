@@ -24,7 +24,7 @@ export default function HardgainerProfileSetup() {
     weight: user?.weight?.toString() || '',
     sex: user?.sex || '',
     activityDescription: user?.activityLevel || '',
-    goalWeight: user?.goalWeight?.toString() || ''
+    goalWeight: (user?.calculatedTargetWeight || user?.goalWeight)?.toString() || ''
   });
 
   const [dietaryPreferences, setDietaryPreferences] = useState<string[]>(

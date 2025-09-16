@@ -94,7 +94,7 @@ export default function MobileProgress() {
     const currentWeight = weightEntries?.length > 0 ? weightEntries[0]?.weight || user.weight : user.weight;
     const startWeight = weightEntries?.length > 0 ? weightEntries[weightEntries.length - 1]?.weight || user.weight : user.weight;
     const weightGained = (currentWeight || 0) - (startWeight || 0);
-    const goalWeight = user.goalWeight || (currentWeight || 0) + 10;
+    const goalWeight = user.calculatedTargetWeight || user.goalWeight || (currentWeight || 0) + 10;
     
     const totalDaysTracked = new Set([
       ...weightEntries.map(w => w.date),
