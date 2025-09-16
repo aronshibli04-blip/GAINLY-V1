@@ -123,9 +123,9 @@ export interface IStorage {
   } | null>;
   updateUserFFMIProfile(userId: string, updates: {
     gender?: string;
-    bodyFatPercentage?: string;
-    targetFFMI?: string;
-    calculatedTargetWeight?: string;
+    bodyFatPercentage?: string | null;
+    targetFFMI?: string | null;
+    calculatedTargetWeight?: string | null;
   }): Promise<User | undefined>;
   saveFFMICalculation(calculation: InsertFFMICalculation): Promise<FFMICalculation>;
   getFFMICalculationHistory(userId: string, limit?: number): Promise<FFMICalculation[]>;
@@ -647,9 +647,9 @@ export class DatabaseStorage implements IStorage {
 
   async updateUserFFMIProfile(userId: string, updates: {
     gender?: string;
-    bodyFatPercentage?: string;
-    targetFFMI?: string;
-    calculatedTargetWeight?: string;
+    bodyFatPercentage?: string | null;
+    targetFFMI?: string | null;
+    calculatedTargetWeight?: string | null;
   }): Promise<User | undefined> {
     const [user] = await db
       .update(users)
