@@ -11,10 +11,13 @@ import {
   insertDailyRoutineSchema,
   insertDailyRoutineCompletionSchema,
   insertSleepLogSchema,
-  insertStressLogSchema
+  insertStressLogSchema,
+  insertFFMICalculationSchema,
+  updateFFMIProfileSchema
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
 import { OpenAIService } from "./openai-service";
+import { FFMICalculatorService } from "./ffmi-calculator";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User routes
@@ -803,6 +806,102 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: "Failed to clear user data", 
         error: error.message 
       });
+    }
+  });
+
+  // FFMI API Routes
+  // Get user's current FFMI data including current weight, body fat %, target FFMI, etc.
+  app.get("/api/users/:id/ffmi", async (req, res) => {
+    try {
+      const ffmiData = await storage.getUserFFMIData(req.params.id);
+      if (!ffmiData) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json(ffmiData);
+    } catch (error: any) {
+      console.error("Error getting FFMI data:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Update user's FFMI profile (gender, body fat percentage, target FFMI, calculated target weight)
+  app.put("/api/users/:id/ffmi-profile", async (req, res) => {
+    try {
+      // Validate request body with proper Zod schema
+      const validatedUpdates = updateFFMIProfileSchema.parse(req.body);
+
+      const user = await storage.updateUserFFMIProfile(req.params.id, validatedUpdates);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json(user);
+    } catch (error: any) {
+      console.error("Error updating FFMI profile:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Calculate FFMI and save calculation to history
+  app.post("/api/ffmi/calculate", async (req, res) => {
+    try {
+      const calculationData = insertFFMICalculationSchema.parse(req.body);
+      
+      // Save calculation to database
+      const calculation = await storage.saveFFMICalculation(calculationData);
+      
+      res.json(calculation);
+    } catch (error: any) {
+      console.error("Error saving FFMI calculation:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Get user's FFMI calculation history
+  app.get("/api/users/:id/ffmi-history", async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const history = await storage.getFFMICalculationHistory(req.params.id, limit);
+      res.json(history);
+    } catch (error: any) {
+      console.error("Error getting FFMI history:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get FFMI recommendations based on user's current stats
+  app.get("/api/ffmi/recommendations", async (req, res) => {
+    try {
+      const { age, gender, currentFFMI } = req.query;
+      
+      if (!age || !gender || !currentFFMI) {
+        return res.status(400).json({ 
+          message: "Missing required parameters: age, gender, currentFFMI" 
+        });
+      }
+
+      const ageNum = parseInt(age as string);
+      const currentFFMINum = parseFloat(currentFFMI as string);
+
+      // Validate inputs
+      const validation = FFMICalculatorService.validateInputs(70, 175, 15, ageNum); // dummy weight/height for age validation
+      if (!validation.isValid) {
+        return res.status(400).json({ 
+          message: "Invalid input parameters", 
+          errors: validation.errors 
+        });
+      }
+
+      // Get recommendations
+      const recommendations = FFMICalculatorService.getRecommendedFFMI(
+        ageNum, 
+        gender as 'male' | 'female', 
+        currentFFMINum
+      );
+
+      res.json(recommendations);
+    } catch (error: any) {
+      console.error("Error getting FFMI recommendations:", error);
+      res.status(500).json({ message: error.message });
     }
   });
 

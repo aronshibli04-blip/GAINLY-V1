@@ -332,6 +332,20 @@ export const insertUserSchemaEnhanced = insertUserSchema.extend({
   ).optional(),
 });
 
+// FFMI Profile Update Schema - for API validation
+export const updateFFMIProfileSchema = z.object({
+  gender: z.enum(['male', 'female']).optional(),
+  bodyFatPercentage: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  targetFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  calculatedTargetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -358,3 +372,4 @@ export type StressLog = typeof stressLogs.$inferSelect;
 export type InsertFFMICalculation = z.infer<typeof insertFFMICalculationSchema>;
 export type FFMICalculation = typeof ffmiCalculations.$inferSelect;
 export type InsertUserEnhanced = z.infer<typeof insertUserSchemaEnhanced>;
+export type UpdateFFMIProfile = z.infer<typeof updateFFMIProfileSchema>;
