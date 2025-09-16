@@ -4,7 +4,7 @@ import { Router, Route, Switch } from 'wouter';
 
 import { queryClient } from "@/lib/queryClient";
 import { SideMenu } from "@/components/ui/side-menu";
-import { SideMenuProvider, useSideMenu } from "@/hooks/use-side-menu";
+import { SideMenuProvider } from "@/hooks/use-side-menu";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { InstallPrompt } from "@/components/install-prompt";
 import { AnimatedPresenceWrapper } from "@/components/ui/page-transition";
@@ -22,8 +22,8 @@ import MobileProfile from "@/pages/mobile-profile";
 import MobileTraining from "@/pages/mobile-training";
 import MobileMeasurements from "@/pages/mobile-measurements";
 import MobileStatistics from "@/pages/mobile-statistics";
-import { MobileGoals } from "@/pages/mobile-goals";
-import { MobileAchievements } from "@/pages/mobile-achievements";
+import MobileGoals from "@/pages/mobile-goals";
+import MobileAchievements from "@/pages/mobile-achievements";
 import MobileAiCoach from "@/pages/mobile-ai-coach";
 import MobileDailyRoutines from "@/pages/mobile-daily-routines";
 import MobileAbout from "@/pages/mobile-about";
@@ -33,13 +33,14 @@ import HardgainerHome from "@/pages/hardgainer-home";
 import CalibrationMode from "@/pages/calibration-mode";
 import NotFound from "@/pages/not-found";
 
-function AppContent() {
-  const { isOpen, closeMenu, openMenu } = useSideMenu();
-  
+function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-slate-900">
-        <SideMenu isOpen={isOpen} onClose={closeMenu} onOpenMenu={openMenu} />
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <SideMenuProvider>
+          <Router>
+            <div className="min-h-screen bg-slate-900">
+              <SideMenu />
               <InstallPrompt />
 
               <AnimatedPresenceWrapper>
@@ -68,15 +69,6 @@ function AppContent() {
               </AnimatedPresenceWrapper>
             </div>
           </Router>
-  );
-}
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <SideMenuProvider>
-          <AppContent />
         </SideMenuProvider>
       </QueryClientProvider>
     </ErrorBoundary>
