@@ -45,14 +45,14 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         { 
           icon: Utensils, 
           label: "Meals", 
-          path: "/meals", 
+          path: "/mobile/meals", 
           description: "Log food & track calories",
           badge: null
         },
         { 
           icon: TrendingUp, 
           label: "Mikro Mål", 
-          path: "/goals", 
+          path: "/mobile/goals", 
           description: "Weight milestones & rewards",
           badge: "Rewards"
         }
@@ -64,21 +64,21 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         { 
           icon: Target, 
           label: "Progress", 
-          path: "/progress", 
+          path: "/mobile/progress", 
           description: "Charts, photos & detailed tracking",
           badge: "New"
         },
         { 
           icon: Calendar, 
           label: "Training", 
-          path: "/training", 
+          path: "/mobile/training", 
           description: "Workout planning & logging",
           badge: null
         },
         { 
           icon: Trophy, 
           label: "Achievements", 
-          path: "/achievements", 
+          path: "/mobile/achievements", 
           description: "Gamification & rewards",
           badge: "Fun"
         }
@@ -90,14 +90,14 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         { 
           icon: Brain, 
           label: "Coach", 
-          path: "/ai-coach", 
+          path: "/mobile/ai-coach", 
           description: "Nutrition guidance",
           badge: "Enhanced"
         },
         { 
           icon: Ruler, 
           label: "Measurements", 
-          path: "/measurements", 
+          path: "/mobile/measurements", 
           description: "Body measurements tracking",
           badge: null
         }
@@ -109,21 +109,14 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         { 
           icon: User, 
           label: "Profile", 
-          path: "/profile", 
+          path: "/mobile/profile", 
           description: "Personal info & preferences",
-          badge: null
-        },
-        { 
-          icon: Settings, 
-          label: "Settings", 
-          path: "/settings", 
-          description: "App configuration",
           badge: null
         },
         { 
           icon: Apple, 
           label: "About", 
-          path: "/about", 
+          path: "/mobile/about", 
           description: "About Gainly",
           badge: null
         }
@@ -266,7 +259,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
             <Button 
               size="sm" 
               className="w-full bg-primary hover:bg-primary/90 text-black font-medium"
-              onClick={() => handleNavigation('/ai-coach')}
+              onClick={() => handleNavigation('/mobile/ai-coach')}
             >
               Generate Meal Plan
             </Button>
