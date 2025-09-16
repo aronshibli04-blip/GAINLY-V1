@@ -1,0 +1,98 @@
+ASE 1: Backend & FFMI-kalkulasjoner
+
+Mål: Beregn og lagre FFMI-basert målvekt.
+Oppgaver:
+
+Opprett FFMICalculatorService med metoder:
+
+calculateCurrentFFMI(weight, height, bodyFat)
+
+calculateTargetWeight(targetFFMI, height, bodyFat)
+
+getRecommendedFFMI(age, gender, experience)
+
+estimateTimeline(currentFFMI, targetFFMI, age)
+
+Oppdater users-tabell:
+
+target_ffmi FLOAT
+
+calculated_target_weight FLOAT
+
+Opprett ffmi_calculations tabell for historikk.
+
+Migrer eksisterende brukere til FFMI-systemet.
+
+Valider edge cases: ekstrem høyde, lav/høy fettprosent, kvinner vs menn.
+
+FASE 2: API & Datatilgang
+
+Mål: Gi frontend tilgang til FFMI-data og anbefalinger.
+Oppgaver:
+
+Endepunkter:
+
+POST /api/calculate-ffmi-goals → Beregn mål-alternativer
+
+GET /api/ffmi-recommendations → Anbefalinger basert på profil
+
+PUT /api/user/ffmi-goal → Lagre valgt FFMI
+
+Input-validering og feilhåndtering.
+
+Sjekk at timeline-estimat gir realistiske månedstall.
+
+FASE 3: Frontend – Onboarding & FFMI-selector
+
+Mål: Bruker velger mål via FFMI, ikke vekt.
+Oppgaver:
+
+Fjern vekt-input fra onboarding.
+
+Implementer FFMIGoalSelector:
+
+3 valg: FFMI 20 / 22 / 24
+
+Visualisering: body silhouettes + målvekt
+
+Vis nåværende FFMI (beregnet fra profil).
+
+TimelineDisplay: realistisk progresjon i måneder.
+
+Bekreft valg: «Dette er ditt vitenskapelige mål».
+
+FASE 4: UI/UX-forbedringer
+
+Mål: Gjøre FFMI-mål intuitivt og motiverende.
+Oppgaver:
+
+Progress bar: Current FFMI → Target FFMI
+
+Weight translation: «FFMI 22 = 78kg for deg»
+
+Timeline visualisering: måned-for-måned fremgang
+
+Comparisons: kroppssilhuetter på forskjellige FFMI-nivåer
+
+Minimalistisk, mørk Grok-inspirert stil med sekundærfarge hvit og glass/glow-effekt på knapper.
+
+FASE 5: Testing, migrering og deploy
+
+Mål: Sikre at FFMI-funksjonalitet er korrekt og robust.
+Oppgaver:
+
+Testcases:
+
+Minimum/maximum verdier (ekstrem høyde, lav/høy fett%)
+
+Kvinner vs menn
+
+Eksisterende målvekt migrert korrekt
+
+BodyFat = 0 / 100%
+
+Verifiser at alle FFMI-beregninger matcher forventet vitenskapelig formel.
+
+QA: Onboarding flow og UI fungerer som forventet.
+
+Deploy med overvåkning for edge cases.

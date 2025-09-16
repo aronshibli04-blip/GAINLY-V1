@@ -10,8 +10,12 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   firstName: text("first_name").notNull(),
   age: integer("age").notNull(),
+  gender: text("gender"), // 'male' | 'female' - nullable for migration
   height: decimal("height", { precision: 5, scale: 2 }).notNull(), // in cm
-  goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }).notNull(), // in kg
+  bodyFatPercentage: decimal("body_fat_percentage", { precision: 4, scale: 1 }), // e.g., 15.5%
+  goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }).notNull(), // in kg - DEPRECATED, will be calculated
+  targetFFMI: decimal("target_ffmi", { precision: 4, scale: 1 }), // e.g., 22.5
+  calculatedTargetWeight: decimal("calculated_target_weight", { precision: 5, scale: 1 }), // in kg
   activityLevel: text("activity_level").notNull(), // sedentary, lightly_active, moderately_active, very_active
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -125,6 +129,20 @@ export const stressLogs = pgTable("stress_logs", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const ffmiCalculations = pgTable("ffmi_calculations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  weight: decimal("weight", { precision: 5, scale: 1 }).notNull(), // in kg
+  height: decimal("height", { precision: 5, scale: 2 }).notNull(), // in cm
+  bodyFatPercentage: decimal("body_fat_percentage", { precision: 4, scale: 1 }).notNull(), // e.g., 15.5%
+  calculatedFFMI: decimal("calculated_ffmi", { precision: 4, scale: 1 }).notNull(), // e.g., 22.5
+  targetFFMI: decimal("target_ffmi", { precision: 4, scale: 1 }), // user's goal FFMI
+  targetWeight: decimal("target_weight", { precision: 5, scale: 1 }), // calculated goal weight
+  timelineMonths: integer("timeline_months"), // estimated months to reach goal
+  calculationDate: date("calculation_date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   weightLogs: many(weightLogs),
@@ -136,6 +154,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   userStats: one(userStats),
   sleepLogs: many(sleepLogs),
   stressLogs: many(stressLogs),
+  ffmiCalculations: many(ffmiCalculations),
 }));
 
 export const weightLogsRelations = relations(weightLogs, ({ one }) => ({
@@ -195,6 +214,20 @@ export const userStatsRelations = relations(userStats, ({ one }) => ({
 export const sleepLogsRelations = relations(sleepLogs, ({ one }) => ({
   user: one(users, {
     fields: [sleepLogs.userId],
+    references: [users.id],
+  }),
+}));
+
+export const stressLogsRelations = relations(stressLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [stressLogs.userId],
+    references: [users.id],
+  }),
+}));
+
+export const ffmiCalculationsRelations = relations(ffmiCalculations, ({ one }) => ({
+  user: one(users, {
+    fields: [ffmiCalculations.userId],
     references: [users.id],
   }),
 }));
@@ -266,6 +299,39 @@ export const insertStressLogSchema = createInsertSchema(stressLogs).omit({
   triggers: z.string().nullable().optional(),
 });
 
+export const insertFFMICalculationSchema = createInsertSchema(ffmiCalculations).omit({
+  id: true,
+  createdAt: true,
+}).extend({
+  weight: z.union([z.string(), z.number()]).transform(val => String(val)),
+  height: z.union([z.string(), z.number()]).transform(val => String(val)),
+  bodyFatPercentage: z.union([z.string(), z.number()]).transform(val => String(val)),
+  calculatedFFMI: z.union([z.string(), z.number()]).transform(val => String(val)),
+  targetFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  targetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  timelineMonths: z.number().optional(),
+});
+
+// Enhanced User Schema with FFMI validation
+export const insertUserSchemaEnhanced = insertUserSchema.extend({
+  gender: z.enum(['male', 'female'], { 
+    message: 'Gender must be either male or female' 
+  }),
+  bodyFatPercentage: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  targetFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  calculatedTargetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -289,3 +355,6 @@ export type InsertSleepLog = z.infer<typeof insertSleepLogSchema>;
 export type SleepLog = typeof sleepLogs.$inferSelect;
 export type InsertStressLog = z.infer<typeof insertStressLogSchema>;
 export type StressLog = typeof stressLogs.$inferSelect;
+export type InsertFFMICalculation = z.infer<typeof insertFFMICalculationSchema>;
+export type FFMICalculation = typeof ffmiCalculations.$inferSelect;
+export type InsertUserEnhanced = z.infer<typeof insertUserSchemaEnhanced>;
