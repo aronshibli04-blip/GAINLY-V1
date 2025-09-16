@@ -34,14 +34,14 @@ export function GoalWeightCard() {
   };
 
   const calculateProgress = () => {
-    if (!hasFFMIGoal || !targetWeight || !user.weight) return 0;
+    if (!hasFFMIGoal || !targetWeight || !user.weight || !currentWeight) return 0;
     const totalGain = targetWeight - user.weight; // Total weight to gain from starting weight
     const currentGain = currentWeight - user.weight; // Current weight gained
     return Math.max(0, Math.min(100, (currentGain / totalGain) * 100));
   };
 
   const getTimeToGoal = () => {
-    if (!hasFFMIGoal || !targetWeight) return null;
+    if (!hasFFMIGoal || !targetWeight || !currentWeight) return null;
     const remainingWeight = targetWeight - currentWeight;
     const weeksToGoal = remainingWeight / 1.0; // 1kg per week target
     return Math.max(0, Math.ceil(weeksToGoal));
@@ -81,7 +81,7 @@ export function GoalWeightCard() {
                 <p className="text-xs text-muted-foreground">Target</p>
               </div>
               <div>
-                <p className="text-sm font-bold text-cyan-400">{Math.max(0, targetWeight - currentWeight).toFixed(1)}kg</p>
+                <p className="text-sm font-bold text-cyan-400">{Math.max(0, targetWeight - (currentWeight || 0)).toFixed(1)}kg</p>
                 <p className="text-xs text-muted-foreground">To Go</p>
               </div>
               <div>
