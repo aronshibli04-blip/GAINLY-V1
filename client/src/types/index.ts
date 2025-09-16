@@ -14,12 +14,18 @@ export interface User {
   sex?: 'male' | 'female'; // Optional for frontend
   height: number; // cm (converted from backend)
   weight?: number; // kg (frontend working weight)
-  goalWeight: number; // kg (converted from backend)
+  goalWeight: number; // kg (converted from backend) - DEPRECATED: Use calculatedTargetWeight
   activityLevel: string; // Free text description of activity level
   dietaryPreferences?: DietaryPreference[]; // Optional for frontend
   createdAt: string;
   calibrationStartDate?: string; // When user started 7-day calibration
   hasCompletedCalibration?: boolean; // True after 7 days of data entry
+  
+  // FFMI-based scientific goal setting system
+  bodyFatPercentage?: number; // Body fat percentage (10-25%)
+  targetFFMI?: number; // Target Fat-Free Mass Index (18-25 typically)
+  calculatedTargetWeight?: number; // Scientifically calculated target weight based on FFMI
+  timelineMonths?: number; // Realistic timeline to reach target (6-24 months)
 }
 
 // Tracking Types

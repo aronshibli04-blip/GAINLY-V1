@@ -5,14 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useUserStore } from "@/store/userStore";
-import { Target, Edit2, Check, X, TrendingUp } from "lucide-react";
+import { Target, Edit2, Check, X, TrendingUp, Zap, Brain } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export function GoalWeightCard() {
   const { user, setGoalWeight, weightEntries } = useUserStore();
   const { toast } = useToast();
-  const [isEditing, setIsEditing] = useState(false);
-  const [goalInput, setGoalInput] = useState(user?.goalWeight?.toString() || "");
 
   if (!user) return null;
 
@@ -20,53 +18,31 @@ export function GoalWeightCard() {
     ? weightEntries[0].weight // Most recent weight
     : user.weight;
 
-  const goalWeight = user.goalWeight;
-  const hasGoal = goalWeight && goalWeight > 0;
+  // FFMI-based scientific goal system
+  const targetWeight = user.calculatedTargetWeight;
+  const targetFFMI = user.targetFFMI;
+  const timelineMonths = user.timelineMonths;
+  const hasFFMIGoal = targetWeight && targetFFMI;
 
-  const handleSaveGoal = () => {
-    const newGoal = parseFloat(goalInput);
-    
-    if (isNaN(newGoal) || newGoal <= 0) {
-      toast({
-        title: "Invalid goal weight",
-        description: "Please enter a valid weight greater than 0",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (newGoal <= currentWeight) {
-      toast({
-        title: "Goal too low",
-        description: "Your goal weight should be higher than your current weight for bulking",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setGoalWeight(newGoal);
-    setIsEditing(false);
+  // Navigate to setup if no FFMI goal is set
+  const handleSetupFFMIGoal = () => {
+    // Could navigate to onboarding flow or FFMI setup page
     toast({
-      title: "Goal weight updated!",
-      description: `Your new goal is ${newGoal}kg. Let's get there! 💪`,
+      title: "🧬 Set your scientific goal",
+      description: "Complete your FFMI-based goal setting for optimal results!",
     });
   };
 
-  const handleCancel = () => {
-    setGoalInput(user?.goalWeight?.toString() || "");
-    setIsEditing(false);
-  };
-
   const calculateProgress = () => {
-    if (!hasGoal) return 0;
-    const totalGain = goalWeight - user.weight; // Total weight to gain from starting weight
+    if (!hasFFMIGoal || !targetWeight || !user.weight) return 0;
+    const totalGain = targetWeight - user.weight; // Total weight to gain from starting weight
     const currentGain = currentWeight - user.weight; // Current weight gained
     return Math.max(0, Math.min(100, (currentGain / totalGain) * 100));
   };
 
   const getTimeToGoal = () => {
-    if (!hasGoal) return null;
-    const remainingWeight = goalWeight - currentWeight;
+    if (!hasFFMIGoal || !targetWeight) return null;
+    const remainingWeight = targetWeight - currentWeight;
     const weeksToGoal = remainingWeight / 1.0; // 1kg per week target
     return Math.max(0, Math.ceil(weeksToGoal));
   };
@@ -77,71 +53,35 @@ export function GoalWeightCard() {
   return (
     <Card className="grok-glow-hover border-primary/20">
       <CardContent className="p-4">
-        {isEditing ? (
+        {hasFFMIGoal ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" />
-              <Label htmlFor="goal-weight" className="text-sm font-medium text-white">
-                Set Goal Weight (kg)
-              </Label>
-            </div>
-            <div className="flex gap-2">
-              <Input
-                id="goal-weight"
-                type="number"
-                step="0.1"
-                value={goalInput}
-                onChange={(e) => setGoalInput(e.target.value)}
-                placeholder="e.g. 75"
-                className="grok-input flex-1"
-                data-testid="input-goal-weight"
-              />
-              <Button
-                onClick={handleSaveGoal}
-                className="grok-gradient px-3"
-                data-testid="button-save-goal"
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleCancel}
-                className="px-3"
-                data-testid="button-cancel-goal"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        ) : hasGoal ? (
-          <div className="space-y-3">
-            {/* Compact header row */}
+            {/* FFMI-based scientific goal header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Target className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-white">Goal Weight</span>
+                <Brain className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-white">Scientific Goal</span>
+                <div className="flex items-center gap-1">
+                  <Zap className="h-3 w-3 text-yellow-400" />
+                  <span className="text-xs text-yellow-400 font-medium">FFMI {targetFFMI}</span>
+                </div>
               </div>
-              <button
-                onClick={() => setIsEditing(true)}
-                className="text-xs text-primary hover:text-primary/80 transition-colors"
-                data-testid="button-edit-goal"
-              >
-                Edit Goal
-              </button>
+              <div className="text-xs text-emerald-400 font-medium">
+                {timelineMonths}mo plan
+              </div>
             </div>
 
-            {/* Compact stats in single row */}
+            {/* FFMI-based stats in single row */}
             <div className="grid grid-cols-4 gap-2 text-center">
               <div>
-                <p className="text-sm font-bold text-white">{currentWeight}kg</p>
+                <p className="text-sm font-bold text-white">{currentWeight?.toFixed(1) || '0.0'}kg</p>
                 <p className="text-xs text-muted-foreground">Current</p>
               </div>
               <div>
-                <p className="text-sm font-bold text-primary">{goalWeight}kg</p>
-                <p className="text-xs text-muted-foreground">Goal</p>
+                <p className="text-sm font-bold text-primary">{targetWeight.toFixed(1)}kg</p>
+                <p className="text-xs text-muted-foreground">Target</p>
               </div>
               <div>
-                <p className="text-sm font-bold text-cyan-400">{Math.max(0, goalWeight - currentWeight).toFixed(1)}kg</p>
+                <p className="text-sm font-bold text-cyan-400">{Math.max(0, targetWeight - currentWeight).toFixed(1)}kg</p>
                 <p className="text-xs text-muted-foreground">To Go</p>
               </div>
               <div>
@@ -160,24 +100,38 @@ export function GoalWeightCard() {
             </div>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Target className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-white">Goal Weight</span>
+                <Brain className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium text-white">Scientific Goal</span>
               </div>
               <Button
-                onClick={() => setIsEditing(true)}
+                onClick={handleSetupFFMIGoal}
                 size="sm"
-                className="grok-gradient h-7 px-3 text-xs"
-                data-testid="button-set-goal"
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 h-7 px-3 text-xs text-white"
+                data-testid="button-setup-ffmi"
               >
-                Set Goal
+                <Zap className="h-3 w-3 mr-1" />
+                Setup FFMI
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Set a weight goal to track your progress
-            </p>
+            <div className="bg-amber-500/10 rounded-lg p-3 border border-amber-500/20">
+              <p className="text-xs text-amber-300 font-medium mb-1">🧬 Science-Based Goals</p>
+              <p className="text-xs text-white/80 mb-2">
+                Set your Fat-Free Mass Index (FFMI) goal for scientifically calculated target weight based on your body composition.
+              </p>
+              <div className="flex items-center gap-4 text-xs">
+                <div className="flex items-center gap-1">
+                  <Target className="h-3 w-3 text-emerald-400" />
+                  <span className="text-white/70">Realistic Targets</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <TrendingUp className="h-3 w-3 text-blue-400" />
+                  <span className="text-white/70">Optimal Timeline</span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </CardContent>

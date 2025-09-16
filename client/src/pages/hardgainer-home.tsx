@@ -94,7 +94,8 @@ export default function HardgainerHome() {
   const todayActivity = activityEntries.find(a => a.date === selectedDate);
 
   const currentWeight = weightEntries.length > 0 ? weightEntries[0].weight : (user.weight || 0);
-  const weightProgress = ((currentWeight - (user.weight || 0)) / (user.goalWeight - (user.weight || 0))) * 100;
+  const targetWeight = user.calculatedTargetWeight || user.goalWeight || (currentWeight + 10); // Fallback to old system if FFMI not set
+  const weightProgress = ((currentWeight - (user.weight || 0)) / (targetWeight - (user.weight || 0))) * 100;
 
   const handleLogWeight = () => {
     if (!weightInput) {
