@@ -8,10 +8,10 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: "glass-card",
-        premium: "glass-card border-premium card-premium-hover",
-        "premium-strong": "glass-card-strong border-premium card-premium-hover",
-        outline: "border border-border bg-background/50 backdrop-blur-sm"
+        default: "glass-card card-micro-hover",
+        premium: "glass-card border-premium card-premium-hover card-micro-hover",
+        "premium-strong": "glass-card-strong border-premium card-premium-hover card-micro-hover",
+        outline: "border border-border bg-background/50 backdrop-blur-sm card-micro-hover"
       }
     },
     defaultVariants: {
