@@ -1,169 +1,245 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Target, Trophy, Calendar, TrendingUp, Zap, Clock } from "lucide-react";
+import { Target, Trophy, Calendar, TrendingUp, Zap, Clock, Crown, Lock, Unlock } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { STANDARD_GOALS, ACCELERATED_GOALS } from "@shared/ffmi-goals";
+
+// Calculate FFMI from weight, height, and body fat
+function calculateFFMI(weight: number, height: number, bodyFatPercentage: number): number {
+  const heightInM = height / 100;
+  const fatFreeWeight = weight * (1 - bodyFatPercentage / 100);
+  const ffmi = fatFreeWeight / (heightInM * heightInM);
+  return Math.round(ffmi * 10) / 10;
+}
 
 export function MicroGoalsOverview() {
   const { user, weightEntries } = useUserStore();
+  const [unlockStatus, setUnlockStatus] = useState<{
+    eligible: boolean;
+    progressCriterion: boolean;
+    consistencyCriterion: boolean;
+    currentFFMI: number;
+    targetFFMI: number;
+    consistencyDays: number;
+    progressPercentage: number;
+    daysUntilUnlock?: number;
+  } | null>(null);
   
-  // Get current weight from latest entry
+  // Get current weight and user data
   const currentWeight = weightEntries.length > 0 
     ? weightEntries[weightEntries.length - 1].weight 
     : null;
-    
-  const targetWeight = user?.goalWeight;
-  const startWeight = weightEntries.length > 0 
-    ? weightEntries[0].weight 
+  
+  const userId = localStorage.getItem("userId") || "user1";
+  
+  // Only calculate FFMI if we have all required real data
+  const hasRequiredData = user && currentWeight && user.height && user.bodyFatPercentage;
+  const currentFFMI = hasRequiredData && user.height && user.bodyFatPercentage
+    ? calculateFFMI(currentWeight, user.height, user.bodyFatPercentage)
     : null;
   
-  // Don't show if no weight data
-  if (!currentWeight || !targetWeight || !startWeight) {
+  // Check unlock eligibility
+  useEffect(() => {
+    if (!userId || !hasRequiredData) return;
+    
+    const checkUnlockStatus = async () => {
+      try {
+        const response = await fetch(`/api/users/${userId}/ffmi-unlock-status`);
+        if (response.ok) {
+          const status = await response.json();
+          setUnlockStatus(status);
+        } else {
+          // Handle fetch error silently but set empty state
+          setUnlockStatus({
+            eligible: false,
+            progressCriterion: false,
+            consistencyCriterion: false,
+            currentFFMI: currentFFMI || 0,
+            targetFFMI: 0,
+            consistencyDays: 0,
+            progressPercentage: 0
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch unlock status:', error);
+        // Set fallback state on error
+        setUnlockStatus({
+          eligible: false,
+          progressCriterion: false,
+          consistencyCriterion: false,
+          currentFFMI: currentFFMI || 0,
+          targetFFMI: 0,
+          consistencyDays: 0,
+          progressPercentage: 0
+        });
+      }
+    };
+
+    checkUnlockStatus();
+  }, [userId, hasRequiredData, currentFFMI]);
+  
+  // Don't show if no complete user data
+  if (!hasRequiredData || !currentFFMI) {
     return (
       <Card className="border-slate-600/40 bg-slate-800/40">
         <CardContent className="p-4 text-center">
           <Target className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-          <p className="text-sm text-slate-400 mb-1">No milestone data yet</p>
-          <p className="text-xs text-slate-500">Log your weight and set goals to see progress</p>
+          <p className="text-sm text-slate-400 mb-1">Complete setup to see FFMI goals</p>
+          <p className="text-xs text-slate-500">Add height, body fat %, and weight to track progress</p>
         </CardContent>
       </Card>
     );
   }
 
-  // Generate next major milestone (every 2kg)
-  const nextMajorMilestone = Math.ceil(currentWeight / 2) * 2;
-  const nextMilestoneAdjusted = nextMajorMilestone <= currentWeight 
-    ? nextMajorMilestone + 2 
-    : nextMajorMilestone;
+  // Get all goals sorted by FFMI
+  const allGoals = [...STANDARD_GOALS, ...ACCELERATED_GOALS].sort((a, b) => a.ffmi - b.ffmi);
   
-  // Calculate actual weight trend (kg per week)
-  let actualWeightTrend = 0;
-  if (weightEntries.length >= 2) {
-    const sortedWeights = [...weightEntries].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  // Find previous and next goals for proper progress calculation
+  const prevGoal = allGoals
+    .filter(goal => goal.ffmi <= currentFFMI)
+    .sort((a, b) => b.ffmi - a.ffmi)[0]; // Get highest achieved goal
+  
+  const nextGoal = allGoals
+    .filter(goal => goal.ffmi > currentFFMI)
+    .sort((a, b) => a.ffmi - b.ffmi)[0]; // Get lowest unachieved goal
+  
+  if (!nextGoal) {
+    return (
+      <Card className="border-emerald-600/40 bg-emerald-800/20">
+        <CardContent className="p-4 text-center">
+          <Crown className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
+          <p className="text-sm text-emerald-400 mb-1">Maximum FFMI achieved!</p>
+          <p className="text-xs text-emerald-500">You've reached genetic potential</p>
+        </CardContent>
+      </Card>
     );
-    const firstWeight = sortedWeights[0].weight;
-    const lastWeight = sortedWeights[sortedWeights.length - 1].weight;
-    const daysDiff = Math.abs(
-      new Date(sortedWeights[sortedWeights.length - 1].date).getTime() - 
-      new Date(sortedWeights[0].date).getTime()
-    ) / (1000 * 60 * 60 * 24);
-    
-    if (daysDiff > 0) {
-      actualWeightTrend = ((lastWeight - firstWeight) / daysDiff) * 7; // kg per week
-    }
   }
-
-  // Calculate progress and dates using actual trend if positive, otherwise default
-  const isGoodProgress = actualWeightTrend >= 0.5; // Only show predictions for good progress
-  const trendToUse = isGoodProgress ? actualWeightTrend : 1; // Fallback to 1kg/week
   
-  const totalWeightToGain = targetWeight - currentWeight;
-  const weeksToGoal = totalWeightToGain / trendToUse;
-  const estimatedGoalDate = new Date();
-  estimatedGoalDate.setDate(estimatedGoalDate.getDate() + (weeksToGoal * 7));
+  // Check if next goal is accelerated and unlock status (with loading state)
+  const isNextGoalAccelerated = ACCELERATED_GOALS.some(g => g.ffmi === nextGoal.ffmi);
+  const isUnlockStatusLoading = unlockStatus === null;
+  const hasAcceleratedAccess = unlockStatus?.eligible || false;
+  const isNextGoalLocked = isNextGoalAccelerated && !isUnlockStatusLoading && !hasAcceleratedAccess;
   
-  const weightToNextMilestone = nextMilestoneAdjusted - currentWeight;
-  const weeksToNextMilestone = weightToNextMilestone / trendToUse;
-  const nextMilestoneDate = new Date();
-  nextMilestoneDate.setDate(nextMilestoneDate.getDate() + (weeksToNextMilestone * 7));
-  
-  const progressToNext = ((currentWeight - Math.floor(currentWeight / 2) * 2) / 2) * 100;
-  const totalProgress = ((currentWeight - startWeight) / (targetWeight - startWeight)) * 100;
-  
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('nb-NO', { 
-      day: 'numeric', 
-      month: 'short',
-      year: date.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
-    });
-  };
+  // Fix progress calculation with proper baseline and division guard
+  const baselineFFMI = prevGoal?.ffmi ?? currentFFMI;
+  const denominator = nextGoal.ffmi - baselineFFMI;
+  const ffmiProgress = denominator > 0 
+    ? Math.max(0, Math.min(100, ((currentFFMI - baselineFFMI) / denominator) * 100))
+    : 0;
   
   return (
     <Link href="/goals">
-      <Card className="grok-glow-hover cursor-pointer border-blue-400/20 hover:border-blue-400/40 transition-all">
+      <Card className={`grok-glow-hover cursor-pointer transition-all ${
+        isNextGoalLocked 
+          ? 'border-purple-400/30 hover:border-purple-400/50' 
+          : 'border-emerald-400/30 hover:border-emerald-400/50'
+      }`}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-blue-400" />
-              <span className="text-blue-400">Neste Milepæl</span>
+              {isUnlockStatusLoading && isNextGoalAccelerated ? (
+                <Clock className="h-5 w-5 text-amber-400 animate-pulse" />
+              ) : isNextGoalLocked ? (
+                <Lock className="h-5 w-5 text-purple-400" />
+              ) : (
+                <Target className="h-5 w-5 text-emerald-400" />
+              )}
+              <span className={`${
+                isUnlockStatusLoading && isNextGoalAccelerated 
+                  ? 'text-amber-400' 
+                  : isNextGoalLocked 
+                    ? 'text-purple-400' 
+                    : 'text-emerald-400'
+              }`}>
+                {isUnlockStatusLoading && isNextGoalAccelerated 
+                  ? 'Checking Elite Access...' 
+                  : isNextGoalLocked 
+                    ? 'Locked Elite Goal' 
+                    : 'Next FFMI Goal'}
+              </span>
             </div>
-            <Badge variant="outline" className="text-blue-400 border-blue-400/40 text-xs">
-              {nextMilestoneAdjusted}kg
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className={`text-xs ${
+                isNextGoalLocked 
+                  ? 'text-purple-400 border-purple-400/40' 
+                  : 'text-emerald-400 border-emerald-400/40'
+              }`}>
+                FFMI {nextGoal.ffmi}
+              </Badge>
+              {isNextGoalAccelerated && (
+                <Crown className="h-4 w-4 text-yellow-400" />
+              )}
+            </div>
           </CardTitle>
         </CardHeader>
         
         <CardContent className="space-y-4">
-          {/* Progress to Next Milestone */}
+          {/* Goal Description */}
+          <div className="bg-slate-800/50 rounded-lg p-3">
+            <p className="text-sm text-slate-300 font-medium">{nextGoal.description}</p>
+            <div className="flex items-center gap-2 mt-2">
+              <Badge variant="outline" className="text-xs text-slate-400">
+                {nextGoal.category}
+              </Badge>
+              {isNextGoalAccelerated && (
+                <Badge variant="outline" className="text-xs text-purple-400 border-purple-400/40">
+                  Elite Tier
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          {/* Progress to Next Goal */}
           <div>
             <div className="flex justify-between mb-2">
-              <span className="text-sm text-slate-400">Fremgang til {nextMilestoneAdjusted}kg</span>
-              <span className="text-sm text-blue-400 font-medium">
-                {(nextMilestoneAdjusted - currentWeight).toFixed(1)}kg igjen
+              <span className="text-sm text-slate-400">
+                FFMI Progress ({currentFFMI} → {nextGoal.ffmi})
+              </span>
+              <span className={`text-sm font-medium ${
+                isNextGoalLocked ? 'text-purple-400' : 'text-emerald-400'
+              }`}>
+                {(nextGoal.ffmi - currentFFMI).toFixed(1)} to go
               </span>
             </div>
-            <Progress value={Math.max(0, progressToNext)} className="h-2" />
+            <Progress 
+              value={Math.max(0, Math.min(ffmiProgress, 100))} 
+              className="h-2" 
+            />
           </div>
-          
-          {/* Timeline Predictor - Only show for good progress */}
-          {isGoodProgress && (
-            <div className="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-400/20 rounded-lg p-3 mb-3">
+
+          {/* Unlock Status for Elite Goals */}
+          {isNextGoalLocked && unlockStatus && (
+            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
-                <Clock className="h-4 w-4 text-emerald-400" />
-                <span className="text-sm font-semibold text-emerald-400">Timeline Predictor</span>
-                <Badge variant="outline" className="text-emerald-400 border-emerald-400/40 text-xs">
-                  +{actualWeightTrend.toFixed(1)}kg/uke
-                </Badge>
+                <Lock className="h-4 w-4 text-purple-400" />
+                <span className="text-sm font-semibold text-purple-400">Unlock Progress</span>
               </div>
-              <div className="text-xs text-emerald-300/90">
-                At your current pace, you'll reach <span className="font-semibold text-emerald-300">{targetWeight}kg by {formatDate(estimatedGoalDate)}</span>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <div className="text-xs text-purple-300/70 mb-1">Progress Path</div>
+                  <div className="text-xs text-purple-300 font-medium">
+                    {Math.round(unlockStatus.progressPercentage)}%
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-orange-300/70 mb-1">Consistency</div>
+                  <div className="text-xs text-orange-300 font-medium">
+                    {unlockStatus.consistencyDays}/90 days
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
-          {/* Quick Stats Row */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                <Calendar className="h-3 w-3 text-emerald-400" />
-                <span className="text-xs font-semibold text-emerald-400">
-                  {formatDate(nextMilestoneDate)}
-                </span>
-              </div>
-              <div className="text-xs text-slate-400">Neste belønning</div>
-            </div>
-            
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                <Trophy className="h-3 w-3 text-purple-400" />
-                <span className="text-xs font-semibold text-purple-400">
-                  {isGoodProgress ? formatDate(estimatedGoalDate) : 'Keep logging'}
-                </span>
-              </div>
-              <div className="text-xs text-slate-400">
-                {isGoodProgress ? `Målvekt (${targetWeight}kg)` : 'Build consistency'}
-              </div>
-            </div>
-          </div>
-          
-          {/* Total Progress Bar */}
-          <div>
-            <div className="flex justify-between mb-2">
-              <span className="text-xs text-slate-400">Total fremgang</span>
-              <span className="text-xs text-slate-300">
-                {(currentWeight - startWeight).toFixed(1)}kg / {(targetWeight - startWeight)}kg
-              </span>
-            </div>
-            <Progress value={Math.min(totalProgress, 100)} className="h-1.5" />
-          </div>
-          
           {/* Call to Action */}
           <div className="flex items-center justify-center pt-2">
-            <div className="flex items-center gap-1 text-xs text-blue-400">
+            <div className="flex items-center gap-1 text-xs text-emerald-400">
               <Zap className="h-3 w-3" />
-              <span>Trykk for å se alle milepæler</span>
+              <span>View all FFMI goals</span>
             </div>
           </div>
         </CardContent>
