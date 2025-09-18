@@ -110,7 +110,8 @@ export const UNLOCK_CRITERIA = {
   PROGRESS_THRESHOLD: 1.0,    // Within 1 FFMI point of current goal
   CONSISTENCY_DAYS: 90,       // 90 days of consistent logging  
   MIN_LOGS_PER_WEEK: 5,       // 5+ logs per week to count as consistent
-  WEEKLY_CHECK_PERIOD: 7      // Check consistency over 7-day periods
+  WEEKLY_CHECK_PERIOD: 7,     // Check consistency over 7-day periods
+  UNLOCK_MODE: 'OR' as 'OR' | 'AND'  // 'OR' = progress OR consistency, 'AND' = both required
 } as const;
 
 /**

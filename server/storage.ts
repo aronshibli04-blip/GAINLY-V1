@@ -22,6 +22,8 @@ import {
   type InsertStressLog,
   type FFMICalculation,
   type InsertFFMICalculation,
+  type GoalProgression,
+  type InsertGoalProgression,
   users,
   weightLogs,
   mealLogs,
@@ -33,7 +35,8 @@ import {
   userStats,
   sleepLogs,
   stressLogs,
-  ffmiCalculations
+  ffmiCalculations,
+  goalProgression
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -130,6 +133,11 @@ export interface IStorage {
   saveFFMICalculation(calculation: InsertFFMICalculation): Promise<FFMICalculation>;
   getFFMICalculationHistory(userId: string, limit?: number): Promise<FFMICalculation[]>;
   getLatestFFMICalculation(userId: string): Promise<FFMICalculation | undefined>;
+
+  // Goal progression methods
+  createGoalProgression(progression: InsertGoalProgression): Promise<GoalProgression>;
+  getGoalProgression(userId: string): Promise<GoalProgression | undefined>;
+  updateGoalProgression(userId: string, updates: Partial<InsertGoalProgression>): Promise<GoalProgression>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -684,6 +692,32 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(ffmiCalculations.calculationDate))
       .limit(1);
     return calculation || undefined;
+  }
+
+  // Goal progression method implementations
+  async createGoalProgression(progression: InsertGoalProgression): Promise<GoalProgression> {
+    const [result] = await db
+      .insert(goalProgression)
+      .values(progression)
+      .returning();
+    return result;
+  }
+
+  async getGoalProgression(userId: string): Promise<GoalProgression | undefined> {
+    const [progression] = await db
+      .select()
+      .from(goalProgression)
+      .where(eq(goalProgression.userId, userId));
+    return progression || undefined;
+  }
+
+  async updateGoalProgression(userId: string, updates: Partial<InsertGoalProgression>): Promise<GoalProgression> {
+    const [result] = await db
+      .update(goalProgression)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(goalProgression.userId, userId))
+      .returning();
+    return result;
   }
 }
 
