@@ -22,12 +22,21 @@ export default function Navigation({ user }: NavigationProps) {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="text-gray-500 hover:text-gray-700">
-              <Bell className="w-5 h-5" />
+            <button 
+              className="text-gray-500 hover:text-gray-700"
+              aria-label="View notifications"
+              data-testid="notifications-button"
+            >
+              <Bell className="w-5 h-5" aria-hidden="true" />
             </button>
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">{initials}</span>
-            </div>
+            <button 
+              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/90 transition-colors"
+              aria-label={`User profile: ${user.firstName} ${user.username}`}
+              data-testid="user-avatar"
+              onClick={() => {/* TODO: Open user menu */}}
+            >
+              <span className="text-white text-sm font-medium" aria-hidden="true">{initials}</span>
+            </button>
           </div>
         </div>
       </div>

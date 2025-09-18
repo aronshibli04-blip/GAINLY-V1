@@ -21,28 +21,28 @@ export function BottomNav() {
         {navItems.map((item) => {
           const isActive = location === item.path;
           return (
-            <Link key={item.path} href={item.path}>
-              <button
+            <Link 
+              key={item.path} 
+              href={item.path}
+              className={cn(
+                "flex flex-col items-center justify-center p-grid-2 rounded-xl transition-all duration-300 no-underline",
+                "min-w-[80px] min-h-[44px] touch-target touch-feedback focus-ring nav-hover-glow",
+                isActive
+                  ? "text-primary bg-primary/10 shadow-lg"
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+              )}
+              data-testid={`nav-${item.label.toLowerCase()}`}
+              aria-label={`Navigate to ${item.label}`}
+              aria-current={isActive ? "page" : undefined}
+            >
+              <item.icon 
                 className={cn(
-                  "flex flex-col items-center justify-center p-grid-2 rounded-xl transition-all duration-300",
-                  "min-w-[80px] min-h-[44px] touch-target touch-feedback focus-ring nav-hover-glow",
-                  isActive
-                    ? "text-primary bg-primary/10 shadow-lg"
-                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
-                )}
-                data-testid={`nav-${item.label.toLowerCase()}`}
-                aria-label={`Navigate to ${item.label}`}
-                aria-current={isActive ? "page" : undefined}
-                role="button"
-              >
-                <item.icon 
-                  className={cn(
-                    "h-6 w-6 mb-1 transition-colors duration-300",
-                    isActive ? "nav-icon-active" : "group-hover:text-primary"
-                  )} 
-                />
-                <span className="text-xs font-medium caption-text transition-colors duration-300">{item.label}</span>
-              </button>
+                  "h-6 w-6 mb-1 transition-colors duration-300",
+                  isActive ? "nav-icon-active" : "group-hover:text-primary"
+                )} 
+                aria-hidden="true"
+              />
+              <span className="text-xs font-medium caption-text transition-colors duration-300">{item.label}</span>
             </Link>
           );
         })}
