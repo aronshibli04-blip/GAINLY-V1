@@ -9,8 +9,8 @@ interface PageTransitionProps {
 const pageVariants: Variants = {
   initial: {
     opacity: 0,
-    x: 20,
-    scale: 0.98,
+    x: 12,
+    scale: 0.99,
   },
   in: {
     opacity: 1,
@@ -19,8 +19,8 @@ const pageVariants: Variants = {
   },
   out: {
     opacity: 0,
-    x: -20,
-    scale: 0.98,
+    x: -12,
+    scale: 0.99,
   },
 };
 

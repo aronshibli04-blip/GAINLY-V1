@@ -11,26 +11,26 @@ export default function Navigation({ user }: NavigationProps) {
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-              <Dumbbell className="w-5 h-5 text-white" />
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+              <Dumbbell className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">GAINLY</h1>
-              <p className="text-xs text-gray-500">Weight Gain</p>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">GAINLY</h1>
+              <p className="text-xs text-gray-500 hidden sm:block">Weight Gain</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <button 
-              className="text-gray-500 hover:text-gray-700"
+              className="touch-target-comfortable text-gray-500 hover:text-gray-700 p-2 rounded-lg transition-colors touch-feedback"
               aria-label="View notifications"
               data-testid="notifications-button"
             >
               <Bell className="w-5 h-5" aria-hidden="true" />
             </button>
             <button 
-              className="w-8 h-8 bg-primary rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/90 transition-colors"
+              className="touch-target-comfortable bg-primary rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/90 transition-colors touch-feedback"
               aria-label={`User profile: ${user.firstName} ${user.username}`}
               data-testid="user-avatar"
               onClick={() => {/* TODO: Open user menu */}}

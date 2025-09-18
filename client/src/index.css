@@ -41,6 +41,12 @@
   --spacing-4: 2rem;     /* 32px */
   --spacing-5: 2.5rem;   /* 40px */
   --spacing-6: 3rem;     /* 48px */
+  
+  /* Mobile-First Touch Targets */
+  --touch-target-min: 44px;        /* WCAG minimum touch target */
+  --touch-target-comfortable: 48px; /* Comfortable touch target */
+  --mobile-padding: 1rem;           /* 16px mobile padding */
+  --mobile-margin: 0.75rem;         /* 12px mobile margin */
 }
 
 .dark {
@@ -718,10 +724,19 @@
 .mb-grid-2 { margin-bottom: var(--spacing-2); }
 .mb-grid-3 { margin-bottom: var(--spacing-3); }
 
-/* Mobile-Optimized Interactive Elements */
+/* Enhanced Mobile-First Interactive Elements */
 .touch-target {
-  min-height: 44px;
-  min-width: 44px;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.touch-target-comfortable {
+  min-height: var(--touch-target-comfortable);
+  min-width: var(--touch-target-comfortable);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1128,6 +1143,18 @@
   }
 }
 
+.touch-feedback {
+  -webkit-tap-highlight-color: rgba(0, 245, 255, 0.2);
+  tap-highlight-color: rgba(0, 245, 255, 0.2);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+}
+
+.touch-feedback:active {
+  transform: scale(0.98);
+  opacity: 0.8;
+}
+
 .touch-haptic {
   -webkit-tap-highlight-color: transparent;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1137,6 +1164,15 @@
 .touch-haptic:active {
   transform: scale(0.96);
   filter: brightness(0.95);
+}
+
+/* Mobile spacing utilities */
+.mobile-spacing {
+  padding: var(--mobile-padding);
+}
+
+.mobile-gap {
+  gap: var(--mobile-margin);
 }
 
 /* Enhanced Mobile Container - optimized for mobile performance */

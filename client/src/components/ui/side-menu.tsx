@@ -224,7 +224,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
         ref={navRef}
         id="side-menu"
         className={`
-          fixed top-0 left-0 h-full w-80 bg-slate-900/95 backdrop-blur-xl border-r border-primary/20 
+          fixed top-0 left-0 h-full w-72 sm:w-80 bg-slate-900/95 backdrop-blur-xl border-r border-primary/20 
           transform transition-transform duration-300 ease-in-out z-50
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
@@ -236,7 +236,7 @@ export function SideMenu({ isOpen, onClose, onOpenMenu }: SideMenuProps) {
       >
         
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-primary/20">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-primary/20">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-green-400 rounded-lg flex items-center justify-center">
               <Zap className="h-5 w-5 text-black" aria-hidden="true" />
