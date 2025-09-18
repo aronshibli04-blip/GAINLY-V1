@@ -44,224 +44,219 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
   const goalBodyType = getBodyType(goalBmi);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 text-white p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-black mb-2"
-          >
-            {currentView === 'current' ? (
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Here's You Today
-              </span>
-            ) : (
-              <span className="bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
-                The Future You
-              </span>
-            )}
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg text-slate-300"
-          >
-            {currentView === 'current' 
-              ? "This is your body preview. Together, we'll track your progress week by week."
-              : "This is what's waiting for you at your goal weight. Every log, every meal, every rep brings you closer."}
-          </motion.p>
-        </div>
-
-        {/* View Toggle */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-slate-800/50 p-1 rounded-xl border border-slate-700">
+    <div className="h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 text-white p-4 overflow-hidden">
+      {/* Compact Header */}
+      <div className="text-center mb-4">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-2xl font-black mb-1"
+        >
+          {currentView === 'current' ? (
+            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Here's You Today
+            </span>
+          ) : (
+            <span className="bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
+              The Future You
+            </span>
+          )}
+        </motion.h1>
+        
+        {/* Integrated Toggle */}
+        <div className="flex justify-center">
+          <div className="bg-slate-800/50 p-1 rounded-lg border border-slate-700">
             <Button
               variant={currentView === 'current' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setCurrentView('current')}
-              className={currentView === 'current' ? 'bg-purple-600 hover:bg-purple-700' : ''}
+              className={`text-xs px-3 py-1 ${currentView === 'current' ? 'bg-purple-600 hover:bg-purple-700' : ''}`}
             >
-              Current Body
+              Current
             </Button>
             <Button
               variant={currentView === 'future' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setCurrentView('future')}
-              className={currentView === 'future' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
+              className={`text-xs px-3 py-1 ${currentView === 'future' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`}
             >
-              Future Body
+              Future
             </Button>
           </div>
         </div>
+      </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* 3D Preview */}
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardContent className="p-6">
-              <div className="relative aspect-[3/4] bg-gradient-to-b from-slate-700/50 to-slate-800/50 rounded-xl border border-slate-600 overflow-hidden">
-                {isLoading ? (
+      {/* Mobile 2x2 Grid */}
+      <div className="grid grid-cols-2 gap-3 h-[calc(100%-120px)]">
+        
+        {/* TOP LEFT: Body Image */}
+        <Card className="bg-slate-800/50 border-slate-700 w-full">
+          <CardContent className="p-3 h-full">
+            <div className="relative w-full h-full bg-gradient-to-b from-slate-700/50 to-slate-800/50 rounded-lg border border-slate-600 overflow-hidden">
+              {isLoading ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-8 h-8 border-2 border-purple-400/30 border-t-purple-400 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                <>
+                  {/* Compact Body Silhouette */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 border-4 border-purple-400/30 border-t-purple-400 rounded-full animate-spin mx-auto mb-4"></div>
-                      <p className="text-slate-400">Generating 3D model...</p>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    {/* Placeholder 3D Model */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative">
-                        {/* Basic body silhouette */}
-                        <div 
-                          className={`w-20 h-32 rounded-full ${
-                            currentView === 'current' 
-                              ? 'bg-gradient-to-b from-purple-400/40 to-purple-600/40' 
-                              : features.realisticBodyPreview
-                                ? 'bg-gradient-to-b from-emerald-400/40 to-emerald-600/40'
-                                : 'bg-gradient-to-b from-slate-400/20 to-slate-600/20 blur-sm'
-                          }`}
-                          style={{
-                            transform: currentView === 'future' ? 'scaleX(1.1) scaleY(1.05)' : 'scale(1)'
-                          }}
-                        />
+                    <div className="relative">
+                      <div 
+                        className={`w-16 h-20 rounded-full ${
+                          currentView === 'current' 
+                            ? 'bg-gradient-to-b from-purple-400/40 to-purple-600/40' 
+                            : features.realisticBodyPreview
+                              ? 'bg-gradient-to-b from-emerald-400/40 to-emerald-600/40'
+                              : 'bg-gradient-to-b from-slate-400/20 to-slate-600/20 blur-sm'
+                        }`}
+                        style={{
+                          transform: currentView === 'future' ? 'scaleX(1.1) scaleY(1.05)' : 'scale(1)'
+                        }}
+                      />
 
-                        {/* Premium overlay for future body */}
-                        {currentView === 'future' && !features.realisticBodyPreview && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
-                            <div className="text-center">
-                              <Lock className="h-6 w-6 text-yellow-400 mx-auto mb-2" />
-                              <p className="text-xs text-yellow-400 font-medium">Premium</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Stats overlay */}
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <div className="bg-black/60 backdrop-blur-sm rounded-lg p-3">
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div>
-                            <p className="text-slate-400">Weight</p>
-                            <p className="text-xl font-bold text-white">
-                              {currentView === 'current' ? `${userData?.weight || 0}kg` : `${userData?.goalWeight || 0}kg`}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-slate-400">BMI</p>
-                            <p className={`font-bold ${currentView === 'current' ? currentBodyType.color : goalBodyType.color}`}>
-                              {currentView === 'current' ? bmi.toFixed(1) : goalBmi.toFixed(1)}
-                            </p>
-                          </div>
+                      {/* Premium overlay */}
+                      {currentView === 'future' && !features.realisticBodyPreview && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
+                          <Lock className="h-4 w-4 text-yellow-400" />
                         </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Basic stats overlay */}
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <div className="bg-black/60 backdrop-blur-sm rounded p-2">
+                      <div className="text-center">
+                        <p className="text-white text-sm font-bold">
+                          {currentView === 'current' ? `${userData?.weight || 0}kg` : `${userData?.goalWeight || 0}kg`}
+                        </p>
+                        <p className="text-xs text-slate-400">
+                          BMI {currentView === 'current' ? bmi.toFixed(1) : goalBmi.toFixed(1)}
+                        </p>
                       </div>
                     </div>
-                  </>
-                )}
-              </div>
-
-              {/* Enhancement Notice */}
-              {currentView === 'future' && !features.realisticBodyPreview && (
-                <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                  <div className="flex items-center text-sm text-yellow-400">
-                    <Zap className="h-4 w-4 mr-2" />
-                    <span>Upgrade to Premium for realistic 3D visualization with muscle growth details</span>
                   </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Stats and Progress */}
-          <div className="space-y-6">
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4 flex items-center">
-                  <Eye className="h-5 w-5 mr-2 text-purple-400" />
-                  Body Analysis
-                </h3>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Current Status</span>
-                    <Badge variant="outline" className={`${currentBodyType.color} border-current`}>
-                      {currentBodyType.type}
-                    </Badge>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Goal Status</span>
-                    <Badge variant="outline" className={`${goalBodyType.color} border-current`}>
-                      {goalBodyType.type}
-                    </Badge>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Weight to Gain</span>
-                    <span className="text-emerald-400 font-bold">+{weightToGain.toFixed(1)}kg</span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Est. Timeline</span>
-                    <span className="text-white font-bold">{Math.ceil(weightToGain / 0.5)} weeks</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Transformation Timeline */}
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-emerald-400">Your Journey Ahead</h3>
-
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-emerald-400 mr-3"></div>
-                    <span className="text-sm">Week 1-2: Metabolism calibration</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-emerald-400 mr-3"></div>
-                    <span className="text-sm">Week 3-6: Initial muscle growth</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-emerald-400 mr-3"></div>
-                    <span className="text-sm">Week 7+: Visible transformation</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              <Button
-                onClick={onContinue}
-                size="lg"
-                className="w-full bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-black font-bold"
-                data-testid="continue-to-calibration"
-              >
-                {currentView === 'future' ? 'I Want This' : 'See My Future'}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-
-              {!features.realisticBodyPreview && onUpgrade && (
-                <Button
-                  onClick={onUpgrade}
-                  variant="outline"
-                  size="lg"
-                  className="w-full border-yellow-400/30 text-yellow-400 hover:bg-yellow-400/10"
-                  data-testid="upgrade-premium-button"
-                >
-                  <Zap className="mr-2 h-5 w-5" />
-                  Unlock Premium Features
-                </Button>
+                </>
               )}
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+
+        {/* TOP RIGHT: Body Analysis */}
+        <Card className="bg-slate-800/50 border-slate-700 w-full">
+          <CardContent className="p-3 h-full">
+            <h3 className="text-sm font-bold mb-3 flex items-center text-purple-400">
+              <Eye className="h-3 w-3 mr-1" />
+              Analysis
+            </h3>
+
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400">Status</span>
+                <Badge variant="outline" className={`text-xs px-2 py-0.5 ${currentView === 'current' ? currentBodyType.color : goalBodyType.color} border-current`}>
+                  {currentView === 'current' ? currentBodyType.type : goalBodyType.type}
+                </Badge>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400">To Gain</span>
+                <span className="text-emerald-400 font-bold">+{weightToGain.toFixed(1)}kg</span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400">Timeline</span>
+                <span className="text-white font-bold">{Math.ceil(weightToGain / 0.5)}w</span>
+              </div>
+
+              <div className="mt-3 space-y-1">
+                <p className="text-emerald-400 font-medium text-xs">Journey Phases:</p>
+                <div className="text-xs text-slate-300">
+                  <div className="flex items-center mb-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></div>
+                    <span>Week 1-2: Calibration</span>
+                  </div>
+                  <div className="flex items-center mb-1">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></div>
+                    <span>Week 3-6: Growth</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></div>
+                    <span>Week 7+: Transform</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* BOTTOM LEFT: Weight Progress */}
+        <Card className="bg-slate-800/50 border-slate-700 w-full">
+          <CardContent className="p-3 h-full">
+            <h3 className="text-sm font-bold mb-3 text-emerald-400">Weight Progress</h3>
+            
+            <div className="space-y-3">
+              <div className="text-center">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-slate-400 text-xs">Current</span>
+                  <span className="text-slate-400 text-xs">Goal</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-purple-400 font-bold text-lg">{userData?.weight || 0}kg</span>
+                  <span className="text-emerald-400 font-bold text-lg">{userData?.goalWeight || 0}kg</span>
+                </div>
+              </div>
+
+              {/* Progress bar */}
+              <div className="w-full bg-slate-700 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-purple-400 to-emerald-400 h-2 rounded-full transition-all"
+                  style={{ width: currentView === 'current' ? '0%' : '100%' }}
+                ></div>
+              </div>
+
+              <div className="text-center">
+                <p className="text-xs text-slate-400">Projected gain</p>
+                <p className="text-emerald-400 font-bold">+{weightToGain.toFixed(1)}kg</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* BOTTOM RIGHT: Action Button */}
+        <Card className="bg-slate-800/50 border-slate-700 w-full">
+          <CardContent className="p-3 h-full flex flex-col justify-center">
+            <Button
+              onClick={onContinue}
+              className="w-full bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-black font-bold text-sm mb-2"
+              data-testid="continue-to-calibration"
+            >
+              {currentView === 'future' ? 'I Want This' : 'See My Future'}
+              <ArrowRight className="ml-1 h-4 w-4" />
+            </Button>
+
+            {/* Premium upgrade - compact */}
+            {currentView === 'future' && !features.realisticBodyPreview && onUpgrade && (
+              <Button
+                onClick={onUpgrade}
+                variant="outline"
+                size="sm"
+                className="w-full border-yellow-400/30 text-yellow-400 hover:bg-yellow-400/10 text-xs"
+                data-testid="upgrade-premium-button"
+              >
+                <Zap className="mr-1 h-3 w-3" />
+                Premium
+              </Button>
+            )}
+            
+            <p className="text-xs text-slate-500 text-center mt-2">
+              {currentView === 'current' 
+                ? "Your starting point" 
+                : "Your destination"}
+            </p>
+          </CardContent>
+        </Card>
+
       </div>
     </div>
   );

@@ -350,7 +350,7 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
                   <p className="text-xs text-slate-500 mt-1">Based on 0.5kg/week gain</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-blue-400">{basePlan.projectedWeight.toFixed(1)}kg</p>
+                  <p className="text-2xl font-bold text-blue-400">{basePlan.projectedWeight ? basePlan.projectedWeight.toFixed(1) : '0.0'}kg</p>
                   <p className="text-slate-400 text-sm">Projected Weight</p>
                   <p className="text-xs text-slate-500 mt-1">After initial phase</p>
                 </div>
