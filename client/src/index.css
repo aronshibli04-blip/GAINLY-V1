@@ -95,6 +95,14 @@
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 20px rgba(0, 245, 255, 0.3);
+
+  /* Additional Size & Spacing Tokens */
+  --spacing-7: 1.75rem;   /* 28px for Alert pl-7 */
+  --spacing-8: 2rem;      /* 32px for calc spacing */
+  --size-10: 2.5rem;      /* 40px */
+  --size-11: 2.75rem;     /* 44px */
+  --size-12: 3rem;        /* 48px */
+  --size-20: 5rem;        /* 80px */
 }
 
 .dark {
