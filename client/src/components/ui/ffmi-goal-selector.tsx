@@ -310,53 +310,102 @@ export function FFMIGoalSelector({
         </Card>
       )}
 
-      {/* Unlock Status Card - Show when not in expert mode and user is not yet eligible */}
+      {/* Enhanced Unlock Status Card - Show when not in expert mode and user is not yet eligible */}
       {!expertMode && unlockStatus && !unlockStatus.eligible && (
-        <Card className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 backdrop-blur-sm">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-2">
-                {unlockStatus.eligible ? <Unlock className="h-4 w-4 text-emerald-400" /> : <Lock className="h-4 w-4 text-yellow-400" />}
-                <span className="text-sm font-medium text-white">
-                  {unlockStatus.eligible ? "Accelerated Goals Unlocked!" : "Unlock Accelerated Goals"}
-                </span>
+        <Card className="bg-gradient-to-br from-purple-500/20 via-pink-500/15 to-indigo-500/20 border border-purple-500/30 backdrop-blur-sm shadow-lg shadow-purple-500/10">
+          <CardContent className="p-5">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Lock className="h-5 w-5 text-yellow-400 animate-pulse" />
+                  <div className="absolute -top-1 -right-1 h-2 w-2 bg-yellow-400 rounded-full animate-ping" />
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-white">
+                    Unlock Elite Goals
+                  </span>
+                  <p className="text-xs text-purple-300 mt-0.5">
+                    FFMI 22-24+ Available Soon
+                  </p>
+                </div>
               </div>
-              <Badge variant="outline" className={unlockStatus.eligible ? "text-emerald-400 border-emerald-400/50" : "text-yellow-400 border-yellow-400/50"}>
-                {unlockStatus.eligible ? "Unlocked" : "Locked"}
+              <Badge variant="outline" className="text-yellow-400 border-yellow-400/50 bg-yellow-400/10">
+                <Crown className="h-3 w-3 mr-1" />
+                Locked
               </Badge>
             </div>
             
-            {!unlockStatus.eligible && (
-              <div className="space-y-3">
-                <p className="text-xs text-white/70">
-                  Achieve FFMI progress OR maintain 90 days of consistent logging to unlock advanced goals (FFMI 22-24+)
+            <div className="space-y-4">
+              <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                <p className="text-xs text-white/80 leading-relaxed">
+                  🎯 <strong>Unlock Criteria:</strong> Achieve significant FFMI progress OR maintain 90 days of consistent logging to access elite muscle-building goals (FFMI 22-24+)
                 </p>
+              </div>
+              
+              <div className="space-y-3">
+                {/* Progress Criterion */}
+                <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg p-3 border border-cyan-500/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-cyan-400" />
+                      <span className="text-sm font-medium text-white">Progress Path</span>
+                      {unlockStatus.progressCriterion && (
+                        <Badge className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                          ✓ Complete
+                        </Badge>
+                      )}
+                    </div>
+                    <span className="text-sm font-bold text-cyan-400">{Math.round(unlockStatus.progressPercentage)}%</span>
+                  </div>
+                  <Progress 
+                    value={unlockStatus.progressPercentage} 
+                    className="h-3 bg-white/10"
+                  />
+                  <p className="text-xs text-cyan-300 mt-2">
+                    Current: {unlockStatus.currentFFMI.toFixed(1)} → Target: {unlockStatus.targetFFMI.toFixed(1)} FFMI
+                  </p>
+                </div>
                 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <div className="flex items-center gap-1 mb-1">
-                      <TrendingUp className="h-3 w-3 text-cyan-400" />
-                      <span className="text-xs text-white/70">Progress</span>
-                    </div>
+                {/* Consistency Criterion */}
+                <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-lg p-3 border border-orange-500/20">
+                  <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <Progress value={unlockStatus.progressPercentage} className="flex-1 h-2 bg-white/10" />
-                      <span className="text-xs text-cyan-400">{Math.round(unlockStatus.progressPercentage)}%</span>
+                      <Shield className="h-4 w-4 text-orange-400" />
+                      <span className="text-sm font-medium text-white">Consistency Path</span>
+                      {unlockStatus.consistencyCriterion && (
+                        <Badge className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                          ✓ Complete
+                        </Badge>
+                      )}
                     </div>
+                    <span className="text-sm font-bold text-orange-400">{unlockStatus.consistencyDays}/90</span>
                   </div>
-                  
-                  <div>
-                    <div className="flex items-center gap-1 mb-1">
-                      <Shield className="h-3 w-3 text-orange-400" />
-                      <span className="text-xs text-white/70">Consistency</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Progress value={(unlockStatus.consistencyDays / 90) * 100} className="flex-1 h-2 bg-white/10" />
-                      <span className="text-xs text-orange-400">{unlockStatus.consistencyDays}/90</span>
-                    </div>
-                  </div>
+                  <Progress 
+                    value={(unlockStatus.consistencyDays / 90) * 100} 
+                    className="h-3 bg-white/10"
+                  />
+                  <p className="text-xs text-orange-300 mt-2">
+                    {90 - unlockStatus.consistencyDays} days remaining for unlock
+                  </p>
                 </div>
               </div>
-            )}
+              
+              {/* Estimated Time to Unlock */}
+              {unlockStatus.daysUntilUnlock && (
+                <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg p-3 border border-purple-500/20">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Clock className="h-4 w-4 text-purple-400" />
+                    <span className="text-sm font-medium text-white">Estimated Unlock</span>
+                  </div>
+                  <p className="text-lg font-bold text-purple-300">
+                    ~{unlockStatus.daysUntilUnlock} days
+                  </p>
+                  <p className="text-xs text-purple-300/80">
+                    Based on current progress rate
+                  </p>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}
