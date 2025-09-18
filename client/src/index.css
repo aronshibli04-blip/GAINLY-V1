@@ -664,6 +664,68 @@
   animation: routine-slide-in var(--duration-slow) var(--ease-in-out) forwards;
 }
 
+/* Enhanced Button Loading States */
+.btn-loading {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: button-loading-shimmer var(--duration-1_5s) infinite;
+}
+
+.btn-loading-pulse {
+  animation: loading-pulse var(--duration-2s) var(--ease-smooth) infinite;
+}
+
+@keyframes button-loading-shimmer {
+  to { left: 100%; }
+}
+
+/* Enhanced Input Validation Animations */
+.input-error-shake {
+  animation: input-error-shake var(--duration-fast) var(--ease-out) 3;
+}
+
+.input-success-glow {
+  border-color: rgba(34, 197, 94, 1);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+  animation: success-pulse var(--duration-1s) var(--ease-smooth);
+}
+
+@keyframes input-error-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes success-pulse {
+  0% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.5); }
+  100% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); }
+}
+
+/* Enhanced Card Hover Micro-Interactions */
+.card-micro-hover {
+  transition: transform var(--duration-normal) var(--ease-emphasized), 
+              box-shadow var(--duration-normal) var(--ease-emphasized),
+              backdrop-filter var(--duration-normal) var(--ease-emphasized);
+}
+
+.card-micro-hover:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 30px rgba(0, 245, 255, 0.15);
+  backdrop-filter: blur(20px) saturate(1.2);
+}
+
 /* Mobile-Optimized Design System Extensions */
 
 /* Missing Grid Spacing Utilities */
