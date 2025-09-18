@@ -296,8 +296,8 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 bodyFatPercentage={formData.bodyFatPercentage}
                 age={parseInt(formData.age) || 25}
                 gender={formData.sex as 'male' | 'female'}
-                selectedFFMI={formData.targetFFMI}
-                selectedTargetWeight={formData.calculatedTargetWeight}
+                selectedFFMI={formData.targetFFMI || undefined}
+                selectedTargetWeight={formData.calculatedTargetWeight || undefined}
                 onGoalSelect={(ffmi, targetWeight, timeline) => setFormData(prev => ({
                   ...prev,
                   targetFFMI: ffmi,
