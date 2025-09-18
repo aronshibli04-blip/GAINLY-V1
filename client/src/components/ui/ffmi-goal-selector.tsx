@@ -179,7 +179,7 @@ export function FFMIGoalSelector({
       {/* Standard Path Goals */}
       <div className="space-y-3">
         <h4 className="text-sm font-semibold text-white/90">Standard Path (Recommended)</h4>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 w-full">
           {goals.filter(goal => goal.tier === 'standard').map((goal) => {
             const isSelected = selectedFFMI === goal.ffmi;
             const weightGain = goal.targetWeight - currentWeight;
@@ -221,7 +221,7 @@ export function FFMIGoalSelector({
       {goals.some(goal => goal.tier === 'accelerated') && (
         <div className="space-y-3">
           <h4 className="text-sm font-semibold text-white/90">Accelerated Path</h4>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 w-full">
             {goals.filter(goal => goal.tier === 'accelerated').map((goal) => {
               const isSelected = selectedFFMI === goal.ffmi;
               const weightGain = goal.targetWeight - currentWeight;

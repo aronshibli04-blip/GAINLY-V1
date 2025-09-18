@@ -389,7 +389,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
         />
       </div>
 
-      <div className="px-6 py-4 max-w-md mx-auto flex-1 min-h-0 flex flex-col">
+      <div className="px-6 py-4 max-w-md w-full mx-auto flex-1 min-h-0 flex flex-col">
         {/* Compact Header */}
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold text-white mb-1">
@@ -401,7 +401,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
         </div>
 
         {/* Glassmorphism Card Container */}
-        <div className="bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-4 flex-1 min-h-0 flex flex-col h-full">
+        <div className="bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-4 w-full flex-1 min-h-0 flex flex-col h-full">
           {/* Step Header - Compact */}
           <div className="flex items-center mb-4">
             <span className="bg-[#00F5FF] text-black px-3 py-1 rounded-full text-sm font-bold mr-3">
