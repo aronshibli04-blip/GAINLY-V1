@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -85,157 +85,174 @@ export function BodyFatSelector({
   onSelect,
   className 
 }: BodyFatSelectorProps) {
-  const [hoveredRange, setHoveredRange] = useState<BodyFatRange | null>(null);
-
-  const getSelectedRange = () => {
-    if (!selectedPercentage) return null;
+  const [isDragging, setIsDragging] = useState(false);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  
+  // Initialize with middle range if no selection
+  const currentPercentage = selectedPercentage || 15;
+  
+  const getCurrentRange = (percentage: number) => {
     return BODY_FAT_RANGES.find(range => 
-      selectedPercentage >= range.min && selectedPercentage < range.max
-    ) || null;
+      percentage >= range.min && percentage < range.max
+    ) || BODY_FAT_RANGES[3]; // Default to "Healthy"
   };
 
-  const selectedRange = getSelectedRange();
+  const currentRange = getCurrentRange(currentPercentage);
+
+  const handleSliderChange = useCallback((clientX: number) => {
+    if (!trackRef.current) return;
+    
+    const rect = trackRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    
+    // Map to 3-40% range
+    const bodyFatPercentage = 3 + (percentage * 37);
+    const rounded = Math.round(bodyFatPercentage * 2) / 2; // Round to nearest 0.5%
+    const clamped = Math.max(3, Math.min(40, rounded));
+    
+    onSelect(clamped);
+  }, [onSelect]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    handleSliderChange(e.clientX);
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (isDragging) {
+      handleSliderChange(e.clientX);
+    }
+  }, [isDragging, handleSliderChange]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Add global mouse events
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  // Calculate thumb position (3-40% maps to 0-100% of track)
+  const thumbPosition = ((currentPercentage - 3) / 37) * 100;
+
+  const handleCustomPercentage = () => {
+    const custom = prompt("Enter your exact body fat percentage:", currentPercentage.toString());
+    if (custom && !isNaN(Number(custom))) {
+      const percentage = Math.max(3, Math.min(40, Number(custom)));
+      onSelect(percentage);
+    }
+  };
 
   return (
-    <div className={cn("space-y-4", className)}>
-      {/* Header */}
+    <div className={cn("space-y-6", className)}>
+      {/* Compact Header */}
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-white">
-          Select Your Body Fat Percentage
+        <h3 className="text-white text-sm font-bold uppercase tracking-wide">
+          Body Fat Percentage
         </h3>
-        <p className="text-sm text-white/70">
-          Choose the range that best describes your current body composition
+        <p className="text-slate-400 text-sm">
+          Drag the slider to match your body composition
         </p>
       </div>
 
       {/* Current Selection Display */}
-      {selectedRange && (
-        <Card className="bg-emerald-500/20 border-emerald-500/30 backdrop-blur-sm">
-          <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-300">
-                {selectedRange.label}
-              </Badge>
-              <span className="text-emerald-300 font-medium">
-                {selectedRange.description}
-              </span>
-            </div>
-            <p className="text-sm text-white/80">
-              {gender === 'male' ? selectedRange.maleDescription : selectedRange.femaleDescription}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      <Card className="bg-slate-900/40 backdrop-blur-xl border border-slate-700/50">
+        <CardContent className="p-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Badge className="bg-[#00F5FF]/20 text-[#00F5FF] border-[#00F5FF]/30">
+              {currentRange.label}
+            </Badge>
+            <span className="text-[#00F5FF] font-medium">
+              {currentRange.description}
+            </span>
+          </div>
+          <p className="text-sm text-white/80">
+            {gender === 'male' ? currentRange.maleDescription : currentRange.femaleDescription}
+          </p>
+        </CardContent>
+      </Card>
 
-      {/* Range Selection Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {BODY_FAT_RANGES.map((range) => {
-          const isSelected = selectedRange?.min === range.min;
-          const isHovered = hoveredRange?.min === range.min;
-          const midPoint = (range.min + range.max) / 2;
-
-          return (
-            <Card
-              key={`${range.min}-${range.max}`}
+      {/* Professional Draggable Slider */}
+      <div className="space-y-4">
+        <div className="relative">
+          {/* Track */}
+          <div
+            ref={trackRef}
+            className="relative h-3 bg-slate-800/80 rounded-full cursor-pointer select-none"
+            onMouseDown={handleMouseDown}
+            data-testid="body-fat-slider-track"
+          >
+            {/* Track Gradient */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/30 via-yellow-500/30 to-red-500/30" />
+            
+            {/* Range Markers */}
+            {BODY_FAT_RANGES.map((range, index) => {
+              const position = ((range.min - 3) / 37) * 100;
+              return (
+                <div
+                  key={index}
+                  className="absolute top-0 w-0.5 h-full bg-slate-600"
+                  style={{ left: `${position}%` }}
+                />
+              );
+            })}
+            
+            {/* Draggable Thumb */}
+            <div
               className={cn(
-                "cursor-pointer transition-all duration-200 backdrop-blur-sm",
-                "hover:scale-105 active:scale-95",
-                isSelected 
-                  ? "bg-emerald-500/30 border-emerald-500/50 ring-2 ring-emerald-400/50" 
-                  : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
+                "absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full transition-all duration-150 cursor-grab",
+                "bg-[#00F5FF] shadow-lg shadow-[#00F5FF]/50 border-2 border-white/20",
+                isDragging ? "scale-125 cursor-grabbing shadow-[#00F5FF]/80" : "hover:scale-110"
               )}
-              onMouseEnter={() => setHoveredRange(range)}
-              onMouseLeave={() => setHoveredRange(null)}
-              onClick={() => onSelect(midPoint)}
+              style={{ left: `${thumbPosition}%`, transform: `translate(-50%, -50%)` }}
+              data-testid="body-fat-slider-thumb"
             >
-              <CardContent className="p-4 space-y-3">
-                {/* Range Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Badge 
-                      variant="outline" 
-                      className={cn(
-                        "font-mono text-xs",
-                        isSelected 
-                          ? "border-emerald-400/50 text-emerald-300" 
-                          : "border-white/30 text-white/80"
-                      )}
-                    >
-                      {range.label}
-                    </Badge>
-                    <span className={cn(
-                      "font-medium text-sm",
-                      isSelected ? "text-emerald-300" : "text-white"
-                    )}>
-                      {range.description}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className={cn(
-                  "text-xs leading-relaxed",
-                  isSelected || isHovered ? "text-white/90" : "text-white/70"
-                )}>
-                  {gender === 'male' ? range.maleDescription : range.femaleDescription}
-                </p>
-
-                {/* Visual Indicator */}
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: 10 }, (_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-1.5 w-full rounded-full transition-colors",
-                        i < (range.max / 4) // Visual fill based on percentage
-                          ? isSelected 
-                            ? "bg-emerald-400" 
-                            : "bg-white/40"
-                          : "bg-white/10"
-                      )}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+              {/* Thumb Glow Effect */}
+              <div className="absolute inset-0 rounded-full bg-[#00F5FF] opacity-40 blur-sm" />
+            </div>
+          </div>
+          
+          {/* Percentage Labels */}
+          <div className="flex justify-between mt-2 text-xs text-slate-400">
+            <span>3%</span>
+            <span className="text-[#00F5FF] font-bold">{currentPercentage.toFixed(1)}%</span>
+            <span>40%</span>
+          </div>
+        </div>
       </div>
 
-      {/* Helper Text */}
+      {/* Bottom Controls */}
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-white/80">
+          Selected: <span className="text-[#00F5FF] font-bold">{currentPercentage.toFixed(1)}%</span>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleCustomPercentage}
+          className="h-8 px-3 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white hover:border-[#00F5FF]/50 text-xs"
+          data-testid="custom-percentage-button"
+        >
+          Custom %
+        </Button>
+      </div>
+
+      {/* Helper Tip - Compact */}
       <div className="text-center">
-        <p className="text-xs text-white/60 max-w-md mx-auto">
-          💡 <strong>Tip:</strong> If you're unsure, choose the middle ranges (10-20% for males, 15-25% for females). 
-          You can always adjust this later as you get more accurate measurements.
+        <p className="text-xs text-slate-500">
+          💡 Unsure? Try {gender === 'male' ? '10-20%' : '15-25%'} range first
         </p>
       </div>
-
-      {/* Custom Input Option */}
-      {selectedPercentage && (
-        <Card className="bg-white/5 border-white/10">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-white/80">
-                Selected: <span className="text-white font-medium">{selectedPercentage.toFixed(1)}%</span>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  const custom = prompt("Enter your exact body fat percentage:", selectedPercentage.toString());
-                  if (custom && !isNaN(Number(custom))) {
-                    const percentage = Math.max(3, Math.min(40, Number(custom)));
-                    onSelect(percentage);
-                  }
-                }}
-                className="text-xs h-8 border-white/20 text-white/80 hover:text-white hover:border-white/40"
-              >
-                Custom %
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
