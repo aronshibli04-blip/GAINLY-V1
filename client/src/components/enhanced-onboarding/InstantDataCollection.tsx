@@ -160,24 +160,24 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
           >
             <div className="space-y-4">
               <div>
-                <Label className="text-emerald-400 text-sm font-medium">FIRST NAME</Label>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide">FIRST NAME</Label>
                 <Input
                   value={formData.firstName}
                   onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Hva heter du?"
+                  className="mt-2 bg-slate-800/80 border-slate-600 text-white h-12 rounded-lg text-base focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
+                  placeholder="Your name"
                   data-testid="input-first-name"
                 />
               </div>
 
               <div>
-                <Label className="text-emerald-400 text-sm font-medium">AGE</Label>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide">AGE</Label>
                 <Input
                   type="number"
                   value={formData.age}
                   onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Alder"
+                  className="mt-2 bg-slate-800/80 border-slate-600 text-white h-12 rounded-lg text-base focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
+                  placeholder="25"
                   data-testid="input-age"
                 />
               </div>
@@ -196,10 +196,10 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
           >
             <div className="space-y-4">
               <div>
-                <Label className="text-emerald-400 text-sm font-medium">BIOLOGICAL SEX</Label>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide">BIOLOGICAL SEX</Label>
                 <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
-                  <SelectTrigger className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg" data-testid="select-sex">
-                    <SelectValue placeholder="Kjønn" />
+                  <SelectTrigger className="mt-2 bg-slate-800/80 border-slate-600 text-white h-12 rounded-lg text-base focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]" data-testid="select-sex">
+                    <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="male">Male</SelectItem>
@@ -209,35 +209,35 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
               </div>
 
               <div>
-                <Label className="text-emerald-400 text-sm font-medium">HEIGHT (CM)</Label>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide">HEIGHT (CM)</Label>
                 <Input
                   type="number"
                   value={formData.height}
                   onChange={(e) => setFormData(prev => ({ ...prev, height: e.target.value }))}
-                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Høyde (cm)"
+                  className="mt-2 bg-slate-800/80 border-slate-600 text-white h-12 rounded-lg text-base focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
+                  placeholder="175"
                   data-testid="input-height"
                 />
               </div>
 
               <div>
-                <Label className="text-emerald-400 text-sm font-medium">CURRENT WEIGHT (KG)</Label>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide">CURRENT WEIGHT (KG)</Label>
                 <Input
                   type="number"
                   step="0.1"
                   value={formData.weight}
                   onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
-                  className="mt-2 bg-slate-800 border-slate-600 text-white h-14 rounded-xl text-lg"
-                  placeholder="Nåværende vekt (kg)"
+                  className="mt-2 bg-slate-800/80 border-slate-600 text-white h-12 rounded-lg text-base focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
+                  placeholder="70.0"
                   data-testid="input-weight"
                 />
               </div>
 
-              <div className="bg-emerald-500/10 rounded-xl border border-emerald-500/20 p-4">
+              <div className="bg-[#00F5FF]/10 rounded-xl border border-[#00F5FF]/20 p-4">
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Target className="h-5 w-5 text-emerald-400" />
-                    <span className="text-emerald-400 font-medium">Scientific Goal Setting</span>
+                    <Target className="h-5 w-5 text-[#00F5FF]" />
+                    <span className="text-[#00F5FF] font-medium">Scientific Goal Setting</span>
                   </div>
                   <p className="text-sm text-white/70">
                     We'll calculate your optimal target weight scientifically in the next steps 
@@ -309,66 +309,53 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            className="space-y-6"
+            className="space-y-3"
           >
-            <div>
-              <Label className="text-emerald-400 text-sm font-medium">ACTIVITY PROFILE DESCRIPTION</Label>
-              <p className="text-slate-400 text-sm mt-1 mb-3">
-                Describe your daily routine for precise AI metabolic analysis
-              </p>
-              <Textarea
-                value={formData.activityDescription}
-                onChange={(e) => setFormData(prev => ({ ...prev, activityDescription: e.target.value }))}
-                className="mt-2 bg-slate-800 border-slate-600 text-white rounded-xl min-h-[120px] text-sm resize-none"
-                placeholder="Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1 hour hypertrophy training 4x per week. On weekends I'm mostly sedentary but do light household activities."
-                data-testid="textarea-activity"
-              />
-            </div>
-          </motion.div>
-        );
-
-      case 4:
-        return (
-          <motion.div
-            key="step4"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            className="space-y-6"
-          >
-            <div>
-              <Label className="text-emerald-400 text-sm font-medium mb-3 block">DIETARY PARAMETERS (OPTIONAL)</Label>
-              <p className="text-slate-400 text-sm mb-4">
-                Configure nutritional processing constraints for AI meal optimization
-              </p>
+            <div className="space-y-3">
+              <div>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide">ACTIVITY PROFILE DESCRIPTION</Label>
+                <p className="text-slate-400 text-sm mt-1 mb-2">
+                  Describe your daily routine for precise AI metabolic analysis
+                </p>
+                <Textarea
+                  value={formData.activityDescription}
+                  onChange={(e) => setFormData(prev => ({ ...prev, activityDescription: e.target.value }))}
+                  className="mt-2 bg-slate-800/80 border-slate-600 text-white rounded-lg h-16 text-sm resize-none focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
+                  placeholder="Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1 hour hypertrophy training 4x per week."
+                  data-testid="textarea-activity"
+                />
+              </div>
               
-              <div className="grid grid-cols-2 gap-3">
-                {dietaryOptions.map((option) => (
-                  <motion.button
-                    key={option}
-                    type="button"
-                    onClick={() => toggleDietaryPreference(option)}
-                    className={`flex items-center p-3 rounded-xl border transition-all text-left ${
-                      formData.dietaryPreferences.includes(option)
-                        ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
-                        : 'border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    data-testid={`option-${option.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                  >
-                    <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                      formData.dietaryPreferences.includes(option)
-                        ? 'border-emerald-400 bg-emerald-400'
-                        : 'border-slate-500'
-                    }`}>
-                      {formData.dietaryPreferences.includes(option) && (
-                        <div className="w-2 h-2 bg-black rounded-full m-0.5"></div>
-                      )}
-                    </div>
-                    <span className="text-sm font-medium">{option}</span>
-                  </motion.button>
-                ))}
+              <div>
+                <Label className="text-white text-sm font-bold uppercase tracking-wide mb-2 block">DIETARY PREFERENCES (OPTIONAL)</Label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {dietaryOptions.map((option) => (
+                    <motion.button
+                      key={option}
+                      type="button"
+                      onClick={() => toggleDietaryPreference(option)}
+                      className={`flex items-center py-1.5 px-2 rounded-lg border transition-all text-left ${
+                        formData.dietaryPreferences.includes(option)
+                          ? 'border-[#00F5FF] bg-[#00F5FF]/20 text-[#00F5FF]'
+                          : 'border-slate-600 bg-slate-800/50 text-slate-300 hover:border-slate-500'
+                      }`}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      data-testid={`option-${option.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                    >
+                      <div className={`w-3 h-3 rounded-full border-2 mr-2 ${
+                        formData.dietaryPreferences.includes(option)
+                          ? 'border-[#00F5FF] bg-[#00F5FF]'
+                          : 'border-slate-500'
+                      }`}>
+                        {formData.dietaryPreferences.includes(option) && (
+                          <div className="w-1 h-1 bg-black rounded-full m-0.5"></div>
+                        )}
+                      </div>
+                      <span className="text-xs font-medium truncate">{option}</span>
+                    </motion.button>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -380,147 +367,54 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-slate-900 to-purple-900 relative overflow-x-hidden">
-      {/* Background particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-emerald-400 rounded-full opacity-40"
-            animate={{
-              y: [0, -30, 0],
-              x: [(Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [0.5, 1.5, 0.5],
-            }}
-            transition={{
-              duration: 4 + (i % 3),
-              repeat: Infinity,
-              delay: i * 0.2,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
+    <div className="flex flex-col h-dvh min-h-0 bg-[#0F0F10] relative">
+      {/* Thin progress bar at very top */}
+      <div className="w-full bg-slate-800 h-1">
+        <motion.div
+          className="h-full bg-[#00F5FF]"
+          initial={{ width: 0 }}
+          animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
+          transition={{ duration: 0.5 }}
+        />
       </div>
 
-      <div className="relative z-10 px-4 py-8 min-h-screen flex flex-col justify-center">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          {/* AI Brain Icon */}
-          <div className="w-20 h-20 mx-auto mb-6 relative">
-            <motion.div
-              className="w-20 h-20 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 rounded-full flex items-center justify-center"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <TrendingUp className="w-8 h-8 text-white" />
-            </motion.div>
-            <motion.div
-              className="absolute inset-0 rounded-full border-4 border-emerald-400/50"
-              animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-
-          <motion.h1 
-            className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 mb-4"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            PROFILE SETUP
-          </motion.h1>
-          
-          <motion.h2 
-            className="text-xl text-white font-semibold mb-2"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            ENTER YOUR BODY DATA
-          </motion.h2>
-          
-          <motion.p 
-            className="text-slate-400"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            AI analyzing your metabolism for personalized recommendations
-          </motion.p>
-        </motion.div>
-
-        {/* Progress bar */}
-        <div className="max-w-md mx-auto mb-8">
-          <div className="flex justify-between text-sm text-slate-400 mb-2">
-            <span>Fremdrift</span>
-            <span>{Math.round((currentStep / totalSteps) * 100)}% COMPLETE</span>
-          </div>
-          <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-emerald-400 to-purple-400"
-              initial={{ width: 0 }}
-              animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
+      <div className="px-6 py-4 max-w-md mx-auto flex-1 min-h-0 flex flex-col">
+        {/* Compact Header */}
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-bold text-white mb-1">
+            GAINLY
+          </h1>
+          <p className="text-[#00F5FF] text-sm font-medium">
+            Profile Setup ({Math.round((currentStep / totalSteps) * 100)}% Complete)
+          </p>
         </div>
 
-        {/* Main Form Container */}
-        <div className="max-w-md mx-auto w-full flex-1 flex flex-col justify-center">
-          {/* Personlige opplysninger Header */}
-          <div className="bg-gradient-to-r from-emerald-600/20 to-blue-600/20 rounded-2xl p-6 border border-emerald-500/30 mb-6">
-            <div className="flex items-center mb-4">
-              <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center mr-3">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
-              </div>
-              <div>
-                <h3 className="text-white font-bold text-lg">BODY DATA SETUP</h3>
-                <p className="text-emerald-400 text-sm">● Alt klart for din plan!</p>
-              </div>
-            </div>
-            <p className="text-slate-300 text-sm">
-              Tell us about your body so we can create a personalized plan that works for you
-            </p>
+        {/* Glassmorphism Card Container */}
+        <div className="bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-4 flex-1 min-h-0 flex flex-col h-full">
+          {/* Step Header - Compact */}
+          <div className="flex items-center mb-4">
+            <span className="bg-[#00F5FF] text-black px-3 py-1 rounded-full text-sm font-bold mr-3">
+              {String(currentStep).padStart(2, '0')}
+            </span>
+            <h2 className="text-white font-bold text-lg">
+              {getStepTitle(currentStep)}
+            </h2>
           </div>
 
-          {/* Step Content */}
-          <div className="bg-slate-800/70 backdrop-blur rounded-2xl p-6 border border-slate-700 min-h-[400px] flex flex-col">
-            {/* Step Header */}
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                {getStepIcon(currentStep)}
-              </div>
-              <h4 className="text-emerald-400 font-bold text-lg mb-2 flex items-center justify-center">
-                <span className="bg-emerald-500 text-black px-3 py-1 rounded-full text-sm mr-3">
-                  {String(currentStep).padStart(2, '0')}
-                </span>
-                {getStepTitle(currentStep)}
-              </h4>
-            </div>
-
-            {/* Step Form Content */}
-            <div className="flex-1">
-              <AnimatePresence mode="wait">
-                {renderStep()}
-              </AnimatePresence>
-            </div>
+          {/* Step Form Content - No excessive spacing */}
+          <div className="flex-1 min-h-0">
+            <AnimatePresence mode="wait">
+              {renderStep()}
+            </AnimatePresence>
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-between mt-6">
+          {/* Navigation - Modern Buttons */}
+          <div className="flex justify-between mt-4 pt-4 border-t border-slate-700/50">
             <Button
               onClick={handleBack}
               disabled={currentStep === 1}
               variant="outline"
-              className="border-slate-600 text-slate-300 hover:bg-slate-700 h-12 px-6"
+              className="border-slate-600 text-slate-300 hover:bg-slate-700 h-11 px-6 rounded-xl"
               data-testid="button-back"
             >
               Back
@@ -529,24 +423,11 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             <Button
               onClick={handleNext}
               disabled={!isStepValid()}
-              className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-black font-bold h-12 px-6"
+              className="bg-[#00F5FF] hover:bg-[#00F5FF]/90 text-black font-bold h-11 px-8 rounded-xl shadow-lg shadow-[#00F5FF]/20"
               data-testid="button-next"
             >
               {currentStep === totalSteps ? 'START YOUR PLAN' : 'Next'}
             </Button>
-          </div>
-
-          {/* Bottom Icon */}
-          <div className="flex justify-center mt-6">
-            <motion.div
-              className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-purple-600 rounded-full flex items-center justify-center"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            >
-              <div className="w-6 h-6 border-2 border-white rounded-full flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
-              </div>
-            </motion.div>
           </div>
         </div>
       </div>
