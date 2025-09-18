@@ -208,7 +208,7 @@ export function FFMIGoalSelector({
   return (
     <div className={cn("space-y-6", className)}>
       {/* Header with Expert Mode Toggle */}
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-3">
         <h3 className="text-lg font-semibold text-white flex items-center justify-center gap-2">
           <Target className="h-5 w-5 text-emerald-400" />
           Set Your Body Composition Goal
@@ -219,17 +219,48 @@ export function FFMIGoalSelector({
         
         {/* Expert Mode Toggle */}
         {onExpertModeChange && (
-          <div className="flex items-center justify-center gap-3 mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
-            <Crown className="h-4 w-4 text-yellow-400" />
-            <span className="text-sm text-white/80">Expert Mode</span>
-            <Switch
-              checked={expertMode}
-              onCheckedChange={onExpertModeChange}
-              data-testid="toggle-expert-mode"
-            />
-            <span className="text-xs text-white/60">
-              {expertMode ? "All goals visible" : "Progressive unlock"}
-            </span>
+          <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Crown className="h-4 w-4 text-orange-400" />
+                  <span className="text-sm font-medium text-white">Expert Mode</span>
+                  {expertMode && (
+                    <Badge className="text-xs bg-orange-500/20 text-orange-300 border-orange-500/30">
+                      Active
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              <Switch
+                checked={expertMode}
+                onCheckedChange={onExpertModeChange}
+                data-testid="expert-mode-toggle"
+                className="data-[state=checked]:bg-orange-500"
+              />
+            </div>
+            
+            {expertMode ? (
+              <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="h-4 w-4 text-orange-400" />
+                  <span className="text-sm font-medium text-white">Expert Mode Active</span>
+                </div>
+                <p className="text-xs text-orange-300 leading-relaxed">
+                  🚀 All FFMI goals unlocked! You now have access to the complete range of physique targets (FFMI 18-28+) including genetic potential goals. Perfect for experienced users who understand their limits.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-xs text-white/70 leading-relaxed">
+                  <strong>Advanced users only:</strong> Bypass unlock requirements and access all FFMI goals simultaneously, including genetic potential targets.
+                </p>
+                <div className="flex items-center gap-2 text-xs text-amber-400">
+                  <Shield className="h-3 w-3" />
+                  <span>Recommended for experienced bodybuilders and coaches</span>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
