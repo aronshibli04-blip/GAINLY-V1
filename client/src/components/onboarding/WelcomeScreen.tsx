@@ -52,12 +52,12 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="relative inline-flex items-center justify-center w-24 h-24 mb-8"
+                className="relative inline-flex items-center justify-center w-16 h-16 md:w-24 md:h-24 mb-4 md:mb-8"
               >
                 <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-spin" 
                      style={{ animationDuration: '15s' }} />
-                <div className="relative z-10 w-20 h-20 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 flex items-center justify-center shadow-xl">
-                  <Zap className="h-10 w-10 text-black" />
+                <div className="relative z-10 w-14 h-14 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 flex items-center justify-center shadow-xl">
+                  <Zap className="h-7 w-7 md:h-10 md:w-10 text-black" />
                 </div>
               </motion.div>
 
@@ -66,7 +66,7 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-5xl md:text-6xl font-black mb-6 leading-tight"
+                className="text-3xl md:text-6xl font-black mb-3 md:mb-6 leading-tight"
               >
                 <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-400 bg-clip-text text-transparent">
                   Welcome to the Future
@@ -80,7 +80,7 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="text-xl md:text-2xl text-emerald-300/80 mb-8 font-medium"
+                className="text-base md:text-2xl text-emerald-300/80 mb-4 md:mb-8 font-medium"
               >
                 We make the impossible possible for hardgainers.
               </motion.p>
@@ -90,24 +90,24 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto"
+                className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6 md:mb-10 max-w-2xl mx-auto"
               >
                 <Card className="bg-white/5 border-emerald-400/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <Star className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-                    <p className="text-sm text-emerald-300">TDEE Analysis</p>
+                  <CardContent className="p-2 md:p-4 text-center">
+                    <Star className="h-5 w-5 md:h-6 md:w-6 text-emerald-400 mx-auto mb-1 md:mb-2" />
+                    <p className="text-xs md:text-sm text-emerald-300">TDEE Analysis</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-emerald-400/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <Target className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-                    <p className="text-sm text-emerald-300">Personalized Plans</p>
+                  <CardContent className="p-2 md:p-4 text-center">
+                    <Target className="h-5 w-5 md:h-6 md:w-6 text-emerald-400 mx-auto mb-1 md:mb-2" />
+                    <p className="text-xs md:text-sm text-emerald-300">Personalized Plans</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/5 border-emerald-400/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <Zap className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
-                    <p className="text-sm text-emerald-300">Real Results</p>
+                  <CardContent className="p-2 md:p-4 text-center">
+                    <Zap className="h-5 w-5 md:h-6 md:w-6 text-emerald-400 mx-auto mb-1 md:mb-2" />
+                    <p className="text-xs md:text-sm text-emerald-300">Real Results</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -121,11 +121,11 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 <Button
                   onClick={handleStart}
                   size="lg"
-                  className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-black font-bold px-8 py-4 text-lg rounded-xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 group"
+                  className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-black font-bold px-6 md:px-8 py-3 md:py-4 text-base md:text-lg rounded-xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 group"
                   data-testid="start-transformation-button"
                 >
                   Start My Transformation
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </motion.div>
 
@@ -133,7 +133,7 @@ export function WelcomeScreen({ onStartTransformation }: WelcomeScreenProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2 }}
-                className="text-sm text-slate-400 mt-6"
+                className="text-xs md:text-sm text-slate-400 mt-3 md:mt-6"
               >
                 Join thousands of hardgainers who've transformed their bodies
               </motion.p>
