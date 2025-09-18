@@ -37,7 +37,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
     age: '',
     height: '',
     weight: '',
-    sex: '',
+    sex: '' as '' | 'male' | 'female',
     activityDescription: '',
     bodyFatPercentage: null as number | null,
     targetFFMI: null as number | null,
@@ -208,7 +208,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             <div className="space-y-4">
               <div>
                 <Label className="text-white text-sm font-bold uppercase tracking-wide">BIOLOGICAL SEX</Label>
-                <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value }))}>
+                <Select value={formData.sex} onValueChange={(value) => setFormData(prev => ({ ...prev, sex: value as 'male' | 'female' }))}>
                   <SelectTrigger className="mt-2 bg-slate-800/80 border-slate-600 text-white h-12 rounded-lg text-base focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]" data-testid="select-sex">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
