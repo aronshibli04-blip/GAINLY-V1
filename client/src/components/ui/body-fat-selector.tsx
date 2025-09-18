@@ -116,8 +116,22 @@ export function BodyFatSelector({
   }, [onSelect]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsDragging(true);
     handleSliderChange(e.clientX);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    handleSliderChange(e.touches[0].clientX);
+  };
+
+  const handleTrackClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isDragging) {
+      handleSliderChange(e.clientX);
+    }
   };
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
@@ -126,21 +140,36 @@ export function BodyFatSelector({
     }
   }, [isDragging, handleSliderChange]);
 
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (isDragging) {
+      e.preventDefault(); // Prevent scrolling
+      handleSliderChange(e.touches[0].clientX);
+    }
+  }, [isDragging, handleSliderChange]);
+
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
   }, []);
 
-  // Add global mouse events
+  const handleTouchEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Add global mouse and touch events
   useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   // Calculate thumb position (3-40% maps to 0-100% of track)
   const thumbPosition = ((currentPercentage - 3) / 37) * 100;
@@ -169,7 +198,7 @@ export function BodyFatSelector({
       <Card className="bg-slate-900/40 backdrop-blur-xl border border-slate-700/50">
         <CardContent className="p-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <Badge className="bg-[#00F5FF]/20 text-[#00F5FF] border-[#00F5FF]/30">
+            <Badge className="bg-[#00F5FF]/20 text-black border-[#00F5FF]/30">
               {currentRange.label}
             </Badge>
             <span className="text-[#00F5FF] font-medium">
@@ -188,8 +217,10 @@ export function BodyFatSelector({
           {/* Track */}
           <div
             ref={trackRef}
-            className="relative h-3 bg-slate-800/80 rounded-full cursor-pointer select-none"
+            className="relative h-3 bg-slate-800/80 rounded-full cursor-pointer select-none touch-none"
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onClick={handleTrackClick}
             data-testid="body-fat-slider-track"
           >
             {/* Track Gradient */}
@@ -210,7 +241,7 @@ export function BodyFatSelector({
             {/* Draggable Thumb */}
             <div
               className={cn(
-                "absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full transition-all duration-150 cursor-grab",
+                "absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full transition-all duration-150 cursor-grab pointer-events-none",
                 "bg-[#00F5FF] shadow-lg shadow-[#00F5FF]/50 border-2 border-white/20",
                 isDragging ? "scale-125 cursor-grabbing shadow-[#00F5FF]/80" : "hover:scale-110"
               )}
