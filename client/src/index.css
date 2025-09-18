@@ -134,14 +134,20 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    /* Advanced layered background with depth */
-    background: 
-      radial-gradient(ellipse at 20% 50%, rgba(0, 245, 255, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(255, 0, 255, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 40% 80%, rgba(0, 255, 198, 0.04) 0%, transparent 50%),
-      linear-gradient(135deg, hsl(240, 10%, 4%) 0%, hsl(240, 10%, 2%) 100%);
+    /* Optimized background for 60fps performance */
+    background: linear-gradient(135deg, hsl(240, 10%, 4%) 0%, hsl(240, 10%, 2%) 100%);
     min-height: 100vh;
     /* Enhanced visual clarity - optimized for mobile performance */
+  }
+  
+  /* Advanced backgrounds only on hover-capable devices */
+  @media (hover: hover) and (min-width: 768px) {
+    body {
+      background: 
+        radial-gradient(ellipse at 20% 50%, rgba(0, 245, 255, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 0, 255, 0.03) 0%, transparent 50%),
+        linear-gradient(135deg, hsl(240, 10%, 4%) 0%, hsl(240, 10%, 2%) 100%);
+    }
   }
   
   /* Grok-inspired animations */
@@ -713,21 +719,54 @@
   100% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); }
 }
 
-/* Enhanced Card Hover Micro-Interactions */
+/* Optimized Card Hover - 60fps Performance */
 .card-micro-hover {
   transition: transform var(--duration-normal) var(--ease-emphasized), 
-              box-shadow var(--duration-normal) var(--ease-emphasized),
-              backdrop-filter var(--duration-normal) var(--ease-emphasized);
+              box-shadow var(--duration-normal) var(--ease-emphasized);
+  /* Prepare for hardware acceleration */
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
 }
 
-.card-micro-hover:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 8px 30px rgba(0, 245, 255, 0.15);
-  backdrop-filter: blur(20px) saturate(1.2);
+/* GPU-optimized hover effects - 60fps performance */
+@media (hover: hover) {
+  .card-micro-hover:hover {
+    transform: translate3d(0, -2px, 0) scale(1.01);
+    will-change: transform;
+  }
+  
+  .card-micro-hover:hover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 1;
+    background: radial-gradient(ellipse at center, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+/* Performance Optimization: Animation Containment */
+.animated-element {
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* 60fps Animation Optimization */
+@keyframes optimized-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
 }
 
 /* Accessibility: Respect User Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
   .btn-loading::after,
   .card-micro-hover,
   .input-error-shake,
@@ -981,20 +1020,9 @@
     0 0 30px rgba(0, 245, 255, 0.2);
 }
 
-/* Next-Gen Glassmorphism - gated for mobile performance */
+/* Optimized Glassmorphism - Performance-First */
 .glass-ultra {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-@media (hover: hover) {
-  .glass-ultra {
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-  }
-}
-
-.glass-ultra {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-xl);
   box-shadow: 
@@ -1002,6 +1030,17 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
+  /* Use transform3d to trigger hardware acceleration */
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+/* Reduced backdrop blur for better performance */
+@media (hover: hover) and (min-width: 768px) {
+  .glass-ultra {
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
 }
 
 .glass-ultra::before {

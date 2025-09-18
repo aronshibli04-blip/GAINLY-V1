@@ -15,7 +15,7 @@ import { useLocation } from "wouter";
 // Enhanced Onboarding Flow
 import { EnhancedOnboardingFlow } from "@/components/onboarding/EnhancedOnboardingFlow";
 
-// Mobile pages
+// Mobile pages  
 import MobileHome from "@/pages/mobile-home";
 import MobileDashboardNew from "@/pages/mobile-dashboard-new";
 import MobileCalories from "@/pages/mobile-calories";
