@@ -156,8 +156,19 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            className="space-y-6"
+            className="flex flex-col justify-center h-full"
           >
+            {/* Motiverende tekst */}
+            <div className="text-center mb-8">
+              <h3 className="text-white text-xl font-bold mb-2">
+                La oss komme i gang med din transformasjon
+              </h3>
+              <p className="text-slate-400 text-sm">
+                Dette tar bare 30 sekunder
+              </p>
+            </div>
+
+            {/* Input felter */}
             <div className="space-y-4">
               <div>
                 <Label className="text-white text-sm font-bold uppercase tracking-wide">FIRST NAME</Label>
