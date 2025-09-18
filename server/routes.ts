@@ -18,6 +18,7 @@ import {
 import { calculateTdeeAndPlan } from "./ai-analysis";
 import { OpenAIService } from "./openai-service";
 import { FFMICalculatorService } from "./ffmi-calculator";
+import { FFMIUnlockService } from "./ffmi-unlock-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User routes
@@ -901,6 +902,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(recommendations);
     } catch (error: any) {
       console.error("Error getting FFMI recommendations:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get user's FFMI unlock status for progressive goal disclosure
+  app.get("/api/users/:id/ffmi-unlock-status", async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const unlockService = new FFMIUnlockService(storage);
+      
+      // Check unlock eligibility using FFMIUnlockService
+      const unlockAnalysis = await unlockService.checkUnlockEligibility(userId);
+      
+      res.json(unlockAnalysis);
+    } catch (error: any) {
+      console.error("Error checking FFMI unlock status:", error);
+      
+      // Handle specific errors with appropriate status codes
+      if (error.message === 'User not found') {
+        return res.status(404).json({ message: "User not found" });
+      }
+      if (error.message === 'User has no goal FFMI set') {
+        return res.status(400).json({ message: "User has no goal FFMI set. Please complete FFMI setup first." });
+      }
+      
       res.status(500).json({ message: error.message });
     }
   });
