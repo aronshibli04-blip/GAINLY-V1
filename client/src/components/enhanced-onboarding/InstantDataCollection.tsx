@@ -331,7 +331,7 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
                 <Textarea
                   value={formData.activityDescription}
                   onChange={(e) => setFormData(prev => ({ ...prev, activityDescription: e.target.value }))}
-                  className="mt-2 bg-slate-800/80 border-slate-600 text-white rounded-lg h-16 text-sm resize-none focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
+                  className="mt-2 bg-slate-800/80 border-slate-600 text-white rounded-lg h-32 text-sm resize-none focus:border-[#00F5FF] focus:ring-1 focus:ring-[#00F5FF]"
                   placeholder="Example: I work 8 hours at a grocery store taking 15k-20k steps daily, then do 1 hour hypertrophy training 4x per week."
                   data-testid="textarea-activity"
                 />
