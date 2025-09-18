@@ -49,25 +49,35 @@ export class FFMIUnlockService {
       throw new Error('User not found');
     }
 
+    // Resolve target FFMI first (needed for both paths)
+    const targetFFMI = user.initialGoalFFMI || user.targetFFMI;
+
     // Skip check if already unlocked or in expert mode
     if (user.eliteUnlocked || user.expertMode) {
       // Still compute actual criteria for UI/analytics accuracy
-      const progressResult = await this.checkProgressUnlock(userId, parseFloat(targetFFMI.toString()));
-      const consistencyResult = await this.checkConsistencyUnlock(userId);
+      let progressResult = { eligible: false, currentFFMI: 0, progressPercentage: 0 };
+      let consistencyResult = { eligible: false, consistentDays: 0 };
+
+      // Only compute progress if target FFMI exists
+      if (targetFFMI) {
+        progressResult = await this.checkProgressUnlock(userId, parseFloat(targetFFMI.toString()));
+      }
+      
+      consistencyResult = await this.checkConsistencyUnlock(userId);
       
       return {
         eligible: true,
         progressCriterion: progressResult.eligible,
         consistencyCriterion: consistencyResult.eligible,
         currentFFMI: progressResult.currentFFMI,
-        targetFFMI: parseFloat(targetFFMI.toString()),
+        targetFFMI: targetFFMI ? parseFloat(targetFFMI.toString()) : 0,
         consistencyDays: consistencyResult.consistentDays,
         progressPercentage: progressResult.progressPercentage,
         alreadyUnlocked: true
       };
     }
 
-    const targetFFMI = user.initialGoalFFMI || user.targetFFMI;
+    // Validate target FFMI for regular users
     if (!targetFFMI) {
       throw new Error('User has no goal FFMI set');
     }
