@@ -1,0 +1,64 @@
+🔴 Critical UI/Spacing Problems:
+1. Massive, Redundant Header:
+
+The header PROFILE SETUP / ENTER YOUR BODY DATA is enormous and repeats the same information.
+
+The Fremdrift20% COMPLETE bar is unnecessarily tall and could be integrated more sleekly.
+
+2. Wasted Vertical Space:
+
+There is a huge amount of empty space between the header, the progress bar, the "Alt klart" message, and the actual form fields. This forces the user to scroll for no reason.
+
+The "Back" and "Next" buttons are floating far below the content, adding to the empty feel.
+
+3. Repetitive and Unnecessary Content:
+
+The text ● Alt klart for din plan! Tell us about your body... is shown on every single screen of the onboarding. It wastes valuable vertical real estate once the user has read it the first time.
+
+4. Weak Information Hierarchy:
+
+The form labels (FIRST NAME, AGE) are too small and lack visual weight.
+
+The placeholder text [Hva heter du?] is visually confusing with brackets and doesn't look like a tappable field.
+
+✅ Actionable Solutions to Fix This:
+Here’s a direct prompt you can give to your developer to fix this:
+
+"Redesign the onboarding screens to be compact and efficient. Follow these specific instructions:
+
+Shrink the Header: Combine the main title and subtitle into one concise header. Example:
+
+Profile Setup (20% Complete)
+
+Remove the giant ENTER YOUR BODY DATA line.
+
+Minimize the Progress Indicator: Replace the large bar with a minimal, thin progress line at the very top of the screen, just under the status bar.
+
+Remove the Redundant Text: Take out the ● Alt klart for din plan! Tell us about your body... section from all subsequent screens. It only needs to appear on the very first introduction screen.
+
+Tighten the Layout:
+
+The 01 Personal Info section should be much closer to the top.
+
+Reduce the padding/margin around the form fields (FIRST NAME, AGE).
+
+The Back and Next buttons should be anchored to the bottom of the screen but placed much higher, so they are immediately accessible after filling out the fields.
+
+Improve the Form Fields:
+
+Make the field labels (FIRST NAME) more prominent.
+
+Change the placeholder text from [Hva heter du?] to a standard, clean placeholder: Enter your name or just Your name.
+
+Use standard input fields with a bottom border or a very slight background fill to make it obvious they are tappable.
+
+Goal: All the same information should fit on a single screen without the need to scroll."
+
+🎨 Visual Comparison:
+Current Problem	Proposed Solution
+Large, repetitive header	Compact, combined header Profile Setup (20% Complete)
+Giant progress bar	Thin, minimal progress line at the top
+"Alt klart" text on every screen	Show this text only on the first screen
+Huge gaps between sections | Tightened margins and padding; content flows logically |
+
+Weak, confusing form fields | Strong labels, clean standard input fields |
