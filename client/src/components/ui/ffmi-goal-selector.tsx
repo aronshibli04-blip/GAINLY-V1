@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useFFMIRecommendations } from "@/hooks/use-ffmi";
-import { Target, Clock, TrendingUp, Zap } from "lucide-react";
+import { STANDARD_GOALS, ACCELERATED_GOALS, ALL_GOALS, type FFMIGoal } from "@shared/ffmi-goals";
+import { Target, Clock, TrendingUp, Zap, Lock, Unlock, Crown, Star, Shield } from "lucide-react";
 
 interface FFMIGoalSelectorProps {
   currentWeight: number;
@@ -19,15 +21,17 @@ interface FFMIGoalSelectorProps {
   selectedTargetWeight: number | null;
   onGoalSelect: (ffmi: number, targetWeight: number, timelineMonths: number) => void;
   className?: string;
+  userId?: string; // For unlock eligibility checking
+  expertMode?: boolean; // Expert mode toggle state
+  onExpertModeChange?: (enabled: boolean) => void; // Expert mode change handler
 }
 
-interface FFMIGoal {
-  ffmi: number;
+interface DisplayFFMIGoal extends FFMIGoal {
   targetWeight: number;
   timelineMonths: number;
-  difficulty: string;
-  description: string;
-  classification: string;
+  isUnlocked: boolean;
+  tier: 'standard' | 'accelerated';
+  difficulty: string; // Derived from category
 }
 
 // Calculate FFMI from weight, height, and body fat
@@ -101,9 +105,23 @@ export function FFMIGoalSelector({
   selectedFFMI,
   selectedTargetWeight,
   onGoalSelect,
-  className
+  className,
+  userId,
+  expertMode = false,
+  onExpertModeChange
 }: FFMIGoalSelectorProps) {
-  const [goals, setGoals] = useState<FFMIGoal[]>([]);
+  const [goals, setGoals] = useState<DisplayFFMIGoal[]>([]);
+  const [unlockStatus, setUnlockStatus] = useState<{
+    eligible: boolean;
+    progressCriterion: boolean;
+    consistencyCriterion: boolean;
+    currentFFMI: number;
+    targetFFMI: number;
+    consistencyDays: number;
+    progressPercentage: number;
+    daysUntilUnlock?: number;
+    alreadyUnlocked?: boolean;
+  } | null>(null);
 
   // Calculate current FFMI if not provided
   const calculatedCurrentFFMI = currentFFMI || calculateFFMI(currentWeight, height, bodyFatPercentage);
@@ -111,64 +129,66 @@ export function FFMIGoalSelector({
   // Fetch recommendations from API
   const { data: recommendations, isLoading } = useFFMIRecommendations(age, gender, calculatedCurrentFFMI);
 
+  // Check unlock eligibility
   useEffect(() => {
-    // Generate goal options
-    const ffmiOptions = gender === 'male' 
-      ? [18, 19, 20, 21, 22, 23, 24, 25] 
-      : [15, 16, 17, 18, 19, 20, 21, 22];
-
-    const generatedGoals: FFMIGoal[] = ffmiOptions
-      .filter(ffmi => ffmi > calculatedCurrentFFMI) // Only show goals above current FFMI
-      .map(ffmi => {
-        const targetWeight = calculateTargetWeight(ffmi, height, bodyFatPercentage);
-        const timelineMonths = estimateTimeline(calculatedCurrentFFMI, ffmi, age, gender);
-        const classification = getFFMIClassification(ffmi, gender);
-        
-        let difficulty = 'Beginner';
-        let description = '';
-
-        if (gender === 'male') {
-          if (ffmi <= 19) {
-            difficulty = 'Beginner';
-            description = 'Lean and fit - achievable with consistent training';
-          } else if (ffmi <= 21) {
-            difficulty = 'Intermediate';
-            description = 'Athletic physique - requires dedicated training';
-          } else if (ffmi <= 23) {
-            difficulty = 'Advanced';
-            description = 'Very muscular - serious training and nutrition needed';
-          } else {
-            difficulty = 'Expert';
-            description = 'Elite level - exceptional genetics and training required';
-          }
-        } else {
-          if (ffmi <= 17) {
-            difficulty = 'Beginner';
-            description = 'Toned and athletic - achievable with consistent training';
-          } else if (ffmi <= 19) {
-            difficulty = 'Intermediate';
-            description = 'Strong and defined - dedicated training required';
-          } else if (ffmi <= 21) {
-            difficulty = 'Advanced';
-            description = 'Very muscular - serious commitment needed';
-          } else {
-            difficulty = 'Expert';
-            description = 'Elite athlete level - exceptional dedication required';
-          }
+    if (!userId) return;
+    
+    const checkUnlockStatus = async () => {
+      try {
+        const response = await fetch(`/api/users/${userId}/ffmi-unlock-status`);
+        if (response.ok) {
+          const status = await response.json();
+          setUnlockStatus(status);
         }
+      } catch (error) {
+        console.error('Failed to fetch unlock status:', error);
+      }
+    };
+
+    checkUnlockStatus();
+  }, [userId]);
+
+  useEffect(() => {
+    // FIXED PROGRESSIVE DISCLOSURE: Always include accelerated goals to show locked state
+    let availableGoals: FFMIGoal[] = [];
+    
+    if (expertMode) {
+      // Expert mode: Show all goals
+      availableGoals = ALL_GOALS;
+    } else {
+      // Standard mode: ALWAYS include both tiers for progressive disclosure
+      availableGoals = [...STANDARD_GOALS, ...ACCELERATED_GOALS];
+    }
+
+    // Convert to DisplayFFMIGoal with calculated weights and timelines
+    const generatedGoals: DisplayFFMIGoal[] = availableGoals
+      .filter(goal => goal.ffmi > calculatedCurrentFFMI) // Only show goals above current FFMI
+      .map(goal => {
+        const targetWeight = calculateTargetWeight(goal.ffmi, height, bodyFatPercentage);
+        const timelineMonths = estimateTimeline(calculatedCurrentFFMI, goal.ffmi, age, gender);
+        
+        // Determine tier and unlock status
+        const isStandardGoal = STANDARD_GOALS.some(sg => sg.ffmi === goal.ffmi);
+        const tier = isStandardGoal ? 'standard' : 'accelerated';
+        
+        // Unlock logic: Expert mode OR standard goal OR (accelerated goal AND eligible)
+        const isUnlocked = expertMode || isStandardGoal || (tier === 'accelerated' && unlockStatus?.eligible === true);
+
+        // Map category to difficulty for backwards compatibility
+        const difficulty = goal.category;
 
         return {
-          ffmi,
+          ...goal,
           targetWeight,
           timelineMonths,
-          difficulty,
-          description,
-          classification
-        };
+          isUnlocked,
+          tier,
+          difficulty
+        } as DisplayFFMIGoal;
       });
 
     setGoals(generatedGoals);
-  }, [calculatedCurrentFFMI, height, bodyFatPercentage, age, gender]);
+  }, [calculatedCurrentFFMI, height, bodyFatPercentage, age, gender, expertMode, unlockStatus]);
 
   if (isLoading) {
     return (
@@ -187,7 +207,7 @@ export function FFMIGoalSelector({
 
   return (
     <div className={cn("space-y-6", className)}>
-      {/* Header */}
+      {/* Header with Expert Mode Toggle */}
       <div className="text-center space-y-2">
         <h3 className="text-lg font-semibold text-white flex items-center justify-center gap-2">
           <Target className="h-5 w-5 text-emerald-400" />
@@ -196,6 +216,22 @@ export function FFMIGoalSelector({
         <p className="text-sm text-white/70">
           Choose a realistic FFMI target based on your current level and commitment
         </p>
+        
+        {/* Expert Mode Toggle */}
+        {onExpertModeChange && (
+          <div className="flex items-center justify-center gap-3 mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
+            <Crown className="h-4 w-4 text-yellow-400" />
+            <span className="text-sm text-white/80">Expert Mode</span>
+            <Switch
+              checked={expertMode}
+              onCheckedChange={onExpertModeChange}
+              data-testid="toggle-expert-mode"
+            />
+            <span className="text-xs text-white/60">
+              {expertMode ? "All goals visible" : "Progressive unlock"}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Current Stats */}
@@ -274,29 +310,96 @@ export function FFMIGoalSelector({
         </Card>
       )}
 
+      {/* Unlock Status Card - Show when not in expert mode and user is not yet eligible */}
+      {!expertMode && unlockStatus && !unlockStatus.eligible && (
+        <Card className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 backdrop-blur-sm">
+          <CardContent className="p-4">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                {unlockStatus.eligible ? <Unlock className="h-4 w-4 text-emerald-400" /> : <Lock className="h-4 w-4 text-yellow-400" />}
+                <span className="text-sm font-medium text-white">
+                  {unlockStatus.eligible ? "Accelerated Goals Unlocked!" : "Unlock Accelerated Goals"}
+                </span>
+              </div>
+              <Badge variant="outline" className={unlockStatus.eligible ? "text-emerald-400 border-emerald-400/50" : "text-yellow-400 border-yellow-400/50"}>
+                {unlockStatus.eligible ? "Unlocked" : "Locked"}
+              </Badge>
+            </div>
+            
+            {!unlockStatus.eligible && (
+              <div className="space-y-3">
+                <p className="text-xs text-white/70">
+                  Achieve FFMI progress OR maintain 90 days of consistent logging to unlock advanced goals (FFMI 22-24+)
+                </p>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="flex items-center gap-1 mb-1">
+                      <TrendingUp className="h-3 w-3 text-cyan-400" />
+                      <span className="text-xs text-white/70">Progress</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Progress value={unlockStatus.progressPercentage} className="flex-1 h-2 bg-white/10" />
+                      <span className="text-xs text-cyan-400">{Math.round(unlockStatus.progressPercentage)}%</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="flex items-center gap-1 mb-1">
+                      <Shield className="h-3 w-3 text-orange-400" />
+                      <span className="text-xs text-white/70">Consistency</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Progress value={(unlockStatus.consistencyDays / 90) * 100} className="flex-1 h-2 bg-white/10" />
+                      <span className="text-xs text-orange-400">{unlockStatus.consistencyDays}/90</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Goal Options */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-white/80 flex items-center gap-2">
           <Zap className="h-4 w-4" />
           Choose Your Goal
+          {!expertMode && (
+            <Badge variant="outline" className="text-xs text-white/60 border-white/20">
+              {goals.filter(g => g.tier === 'standard').length} Standard
+              {goals.some(g => g.tier === 'accelerated') && (
+                <span className="text-purple-400"> + {goals.filter(g => g.tier === 'accelerated').length} Accelerated</span>
+              )}
+            </Badge>
+          )}
         </h4>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {goals.map((goal) => {
             const isSelected = selectedFFMI === goal.ffmi;
             const weightGain = goal.targetWeight - currentWeight;
+            const isLocked = !goal.isUnlocked;
             
             return (
               <Card
                 key={goal.ffmi}
                 className={cn(
-                  "cursor-pointer transition-all duration-200 backdrop-blur-sm",
-                  "hover:scale-105 active:scale-95",
+                  "transition-all duration-200 backdrop-blur-sm",
+                  isLocked ? "opacity-60 cursor-not-allowed" : "cursor-pointer hover:scale-105 active:scale-95",
                   isSelected 
                     ? "bg-emerald-500/30 border-emerald-500/50 ring-2 ring-emerald-400/50" 
-                    : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
+                    : goal.tier === 'accelerated' 
+                      ? "bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 hover:border-purple-500/50"
+                      : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
                 )}
-                onClick={() => onGoalSelect(goal.ffmi, goal.targetWeight, goal.timelineMonths)}
+                onClick={() => {
+                  if (!isLocked) {
+                    onGoalSelect(goal.ffmi, goal.targetWeight, goal.timelineMonths);
+                  }
+                }}
+                data-testid={`goal-card-ffmi-${goal.ffmi}`}
               >
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -307,7 +410,9 @@ export function FFMIGoalSelector({
                           "font-mono text-xs",
                           isSelected 
                             ? "border-emerald-400/50 text-emerald-300" 
-                            : "border-white/30 text-white/80"
+                            : goal.tier === 'accelerated'
+                              ? "border-purple-400/50 text-purple-300"
+                              : "border-white/30 text-white/80"
                         )}
                       >
                         FFMI {goal.ffmi}
@@ -318,7 +423,14 @@ export function FFMIGoalSelector({
                       >
                         {goal.difficulty}
                       </Badge>
+                      {goal.tier === 'accelerated' && (
+                        <Badge variant="secondary" className="text-xs bg-purple-500/20 text-purple-300">
+                          <Crown className="h-3 w-3 mr-1" />
+                          Elite
+                        </Badge>
+                      )}
                     </div>
+                    {isLocked && <Lock className="h-4 w-4 text-yellow-400" />}
                   </div>
 
                   <p className="text-xs text-white/70 leading-relaxed">
