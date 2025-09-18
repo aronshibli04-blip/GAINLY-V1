@@ -47,6 +47,46 @@
   --touch-target-comfortable: 48px; /* Comfortable touch target */
   --mobile-padding: 1rem;           /* 16px mobile padding */
   --mobile-margin: 0.75rem;         /* 12px mobile margin */
+  
+  /* Typography Scale - Professional Fitness App */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  
+  /* Animation System */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  
+  /* Border Radius Scale */
+  --radius-sm: 0.5rem;     /* 8px */
+  --radius-md: 0.75rem;    /* 12px */
+  --radius-lg: 1rem;       /* 16px */
+  --radius-xl: 1.5rem;     /* 24px */
+  
+  /* Shadow System */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px rgba(0, 245, 255, 0.3);
 }
 
 .dark {
@@ -96,7 +136,7 @@
   .grok-glow-hover:hover {
     box-shadow: 0 0 40px hsla(147, 100%, 50%, 0.6);
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+    transition: all var(--duration-normal) var(--ease-in-out);
   }
 
   /* Enhanced page-specific glow effects */
@@ -104,28 +144,28 @@
     box-shadow: 0 0 40px hsla(39, 100%, 55%, 0.6);
     border-color: hsla(39, 100%, 55%, 0.5);
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+    transition: all var(--duration-normal) var(--ease-in-out);
   }
 
   .training-glow-hover:hover {
     box-shadow: 0 0 40px hsla(4, 95%, 63%, 0.6);
     border-color: hsla(4, 95%, 63%, 0.5);
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+    transition: all var(--duration-normal) var(--ease-in-out);
   }
 
   .ai-coach-glow-hover:hover {
     box-shadow: 0 0 40px hsla(300, 80%, 75%, 0.6);
     border-color: hsla(300, 80%, 75%, 0.5);
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+    transition: all var(--duration-normal) var(--ease-in-out);
   }
 
   .statistics-glow-hover:hover {
     box-shadow: 0 0 40px hsla(200, 95%, 65%, 0.6);
     border-color: hsla(200, 95%, 65%, 0.5);
     transform: translateY(-2px);
-    transition: all 0.3s ease;
+    transition: all var(--duration-normal) var(--ease-in-out);
   }
 
   .measurements-glow-hover:hover {
@@ -161,14 +201,14 @@
   .grok-input {
     background: hsl(0, 0%, 6%);
     border: 1px solid hsl(0, 0%, 15%);
-    color: hsl(210, 40%, 98%);
-    border-radius: 0.75rem;
-    transition: all 0.2s ease;
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    transition: all var(--duration-fast) var(--ease-in-out);
   }
   
   .grok-input:focus {
-    border-color: hsl(147, 100%, 45%);
-    box-shadow: 0 0 0 2px hsla(147, 100%, 45%, 0.2);
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 2px rgba(0, 245, 255, 0.2);
   }
 }
 
@@ -445,11 +485,9 @@
   color: var(--text-primary);
   font-weight: 600;
   min-height: 44px; /* Mobile touch target */
-  border-radius: 12px;
-  box-shadow: 
-    0 4px 14px 0 rgba(0, 245, 255, 0.39),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all var(--duration-normal) var(--ease-in-out);
 }
 
 @media (hover: hover) {
@@ -776,12 +814,12 @@
 .form-input {
   background: var(--input);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: var(--spacing-2) var(--spacing-3);
   color: var(--text-primary);
-  font-size: 1rem;
-  min-height: 44px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: var(--text-base);
+  min-height: var(--touch-target-min);
+  transition: all var(--duration-fast) var(--ease-in-out);
 }
 
 @media (hover: hover) {
