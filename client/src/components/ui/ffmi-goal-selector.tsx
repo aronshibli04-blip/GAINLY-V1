@@ -49,10 +49,11 @@ interface FFMIGoalSelectorProps {
 }
 
 // Helper functions
-const calculateTargetWeight = (targetFFMI: number, heightCm: number, bodyFatPercentage: number): number => {
+const calculateTargetWeight = (targetFFMI: number, heightCm: number): number => {
   const heightM = heightCm / 100;
   const fatFreeMass = targetFFMI * (heightM * heightM);
-  const targetWeight = fatFreeMass / (1 - bodyFatPercentage / 100);
+  // Use fixed 12% body fat for consistent FFMI goals
+  const targetWeight = fatFreeMass / (1 - 12 / 100);
   return Math.round(targetWeight * 10) / 10;
 };
 
@@ -130,7 +131,7 @@ export function FFMIGoalSelector({
     const generatedGoals: DisplayFFMIGoal[] = availableGoals
       .filter(goal => goal.ffmi > calculatedCurrentFFMI)
       .map(goal => {
-        const targetWeight = calculateTargetWeight(goal.ffmi, height, bodyFatPercentage);
+        const targetWeight = calculateTargetWeight(goal.ffmi, height);
         const timelineMonths = estimateTimeline(calculatedCurrentFFMI, goal.ffmi, age, gender);
         
         const isStandardGoal = STANDARD_GOALS.some(sg => sg.ffmi === goal.ffmi);

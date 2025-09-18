@@ -51,14 +51,14 @@ export class FFMICalculatorService {
 
   /**
    * Calculate target weight needed to achieve a specific FFMI
+   * Uses fixed 12% body fat for consistent goal calculation
    */
   static calculateTargetWeight(
     targetFFMI: number,
-    height: number, // cm
-    bodyFatPercentage: number // percentage
+    height: number // cm
   ): number {
     // Input validation
-    if (targetFFMI <= 0 || height <= 0 || bodyFatPercentage < 0 || bodyFatPercentage >= 100) {
+    if (targetFFMI <= 0 || height <= 0) {
       throw new Error('Invalid input parameters for target weight calculation');
     }
 
@@ -68,8 +68,8 @@ export class FFMICalculatorService {
     // Calculate required lean body mass
     const requiredLeanBodyMass = targetFFMI * (heightM * heightM);
     
-    // Calculate total weight needed (accounting for body fat)
-    const targetWeight = requiredLeanBodyMass / (1 - bodyFatPercentage / 100);
+    // Calculate total weight needed (using fixed 12% body fat for consistency)
+    const targetWeight = requiredLeanBodyMass / (1 - 12 / 100);
     
     return Math.round(targetWeight * 10) / 10; // Round to 1 decimal place
   }
