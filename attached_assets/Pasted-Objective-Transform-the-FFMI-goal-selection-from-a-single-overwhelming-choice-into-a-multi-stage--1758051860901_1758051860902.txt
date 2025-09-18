@@ -1,0 +1,95 @@
+Objective: Transform the FFMI goal selection from a single, overwhelming choice into a multi-stage, adaptive user journey. Implement a system that initially guides users to an achievable "First Finish Line" (FFMI 21) and later unlocks more ambitious "Elite Potential" goals (FFMI 22-24) for committed users, maximizing motivation and long-term retention.
+
+Core Philosophy: Balance scientific honesty with user psychology. Prevent early demotivation by providing a guaranteed win, then nurture long-term engagement by offering a higher purpose for dedicated users.
+
+---
+
+📝 Phase 1: Build the Two-Tiered Goal Structure
+
+1. Define the Goal Tiers & Logic:
+
+```javascript
+// 1. STANDARD MODE (Default, Psychological Safe Path)
+standardGoals: [
+  { ffmi: 18, label: "Lean & Fit", category: "Beginner" },
+  { ffmi: 19, label: "Lean & Fit", category: "Beginner" },
+  { ffmi: 20, label: "Athletic", category: "Intermediate" },
+  { ffmi: 21, label: "Athletic Peak", category: "Intermediate" } // <- INITIAL CAP
+]
+
+// 2. ACCELERATED MODE (Proven Aggressive Path)
+acceleratedGoals: [
+  { ffmi: 22, label: "Advanced", category: "Muscular" },
+  { ffmi: 23, label: "Elite", category: "Genetic Potential" },
+  { ffmi: 24, label: "Natural Ceiling", category: "Genetic Potential" } // <- LATER UNLOCK
+]
+
+// 3. USER PROFILE FIELD
+// Add a new field to the user profile to track their chosen path
+userProfile: {
+  goalPath: 'standard', // or 'accelerated'
+  initialGoalFFMI: 21, // Their first major target
+  longTermGoalFFMI: null // To be set later after unlocking
+}
+```
+
+2. Create the "First Finish Line" Onboarding Screen (Current UI):
+
+· Modify the current goal screen to only display goals from the standardGoals array (FFMI 18-21).
+· Pre-select or prominently highlight FFMI 21. Label it with encouraging microcopy:
+  "The Athletic Peak (Recommended)" "A lean, strong, and impressive physique. An achievable long-term goal for most dedicated trainees."
+· Add a tooltip or info icon next to the title: "You can set more advanced goals later after you build your foundation."
+
+---
+
+📝 Phase 2: Implement the "Elite Unlock" Mechanism
+
+1. Create the Unlock Trigger Logic: The app should automatically prompt the user to upgrade their goal when they hit either of these criteria:
+
+· Criterion A (Progress): Their calculated FFMI reaches within 1.0 point of their initial goal (e.g., they hit FFMI ~20.0).
+· Criterion B (Consistency): They have logged their weight and nutrition consistently (e.g., 5+ times/week) for 90 days.
+
+2. Build the "Unlock" Celebration Screen: When triggered, show a modal screen that feels like a game achievement:
+
+```javascript
+// PSEUDOCODE FOR UNLOCK SCREEN
+if (user.ffmi >= (user.initialGoalFFMI - 1) || user.consistentFor(90)) {
+  showModal(
+    title: "🎉 Mastery Unlocked!",
+    message: "Congratulations! You've mastered the fundamentals and built an amazing foundation. Your consistency has proven you're ready for the next level.",
+    button: "Explore My Elite Potential"
+  );
+}
+```
+
+3. Build the "Elite Potential" Goal Screen:
+
+· This is a new screen the user is taken to after the unlock.
+· Display the full range of goals from both standardGoals and acceleratedGoals arrays.
+· Introduce the new tier with clear labeling:
+  "Elite Genetic Potential" "These goals represent the absolute peak of natural muscle building. They require exceptional dedication over several years."
+· Pre-select a logical new goal (e.g., FFMI 22 for a user coming from 21).
+
+---
+
+📝 Phase 3: Implement the "Expert Mode" Toggle
+
+1. Add a Settings Option:
+
+· In the app's settings screen, add a toggle:
+  · Label: "Expert Goal Mode"
+  · Description: "I understand FFMI and want to see the full range of advanced goals immediately."
+· Functionality: When this toggle is flipped ON, the user immediately sees the full "Elite Potential" goal screen with all options (FFMI 18-24) the next time they visit the goal section.
+
+---
+
+✅ Definition of "Done" (Quality Check):
+
+· The standard onboarding flow only shows FFMI 18-21.
+· The unlock mechanism correctly triggers based on progress OR consistency.
+· The "Elite Unlock" celebration modal is visually distinct and rewarding.
+· The "Elite Potential" screen correctly displays the full range of goals.
+· The "Expert Mode" toggle in settings works as intended.
+· The user's profile correctly stores their goalPath ('standard' or 'accelerated').
+
+🎯 Final Launch Command for Replit: "Implement this tiered FFMI goal system. The primary user journey must first guide users to a safe, achievable initial goal (FFMI 21) to build confidence and habit. Then, after they prove their consistency, unlock more ambitious goals to maintain long-term engagement. Provide a separate 'Expert Mode' for sophisticated users who want immediate access to all data. This approach balances science and psychology to maximize user success."

@@ -16,6 +16,13 @@ export const users = pgTable("users", {
   targetFFMI: decimal("target_ffmi", { precision: 4, scale: 1 }), // e.g., 22.5
   calculatedTargetWeight: decimal("calculated_target_weight", { precision: 5, scale: 1 }), // in kg
   activityLevel: text("activity_level").notNull(), // sedentary, lightly_active, moderately_active, very_active
+  // FFMI Tiered Goal System fields
+  goalPath: text("goal_path").notNull().default('standard'), // 'standard' | 'accelerated' 
+  initialGoalFFMI: decimal("initial_goal_ffmi", { precision: 4, scale: 1 }), // Their first major target
+  longTermGoalFFMI: decimal("long_term_goal_ffmi", { precision: 4, scale: 1 }), // Set after unlock
+  eliteUnlocked: boolean("elite_unlocked").notNull().default(false), // Has unlocked elite goals
+  expertMode: boolean("expert_mode").notNull().default(false), // Expert toggle in settings
+  unlockDate: timestamp("unlock_date"), // When elite goals were unlocked
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -142,6 +149,19 @@ export const ffmiCalculations = pgTable("ffmi_calculations", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const goalProgression = pgTable("goal_progression", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull().unique(),
+  currentFFMI: decimal("current_ffmi", { precision: 4, scale: 1 }).notNull(),
+  consistencyDays: integer("consistency_days").notNull().default(0),
+  lastConsistencyCheck: date("last_consistency_check"),
+  unlockEligible: boolean("unlock_eligible").notNull().default(false),
+  progressToGoal: decimal("progress_to_goal", { precision: 5, scale: 2 }), // Percentage to goal
+  weeklyLogCount: integer("weekly_log_count").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   weightLogs: many(weightLogs),
@@ -154,6 +174,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   sleepLogs: many(sleepLogs),
   stressLogs: many(stressLogs),
   ffmiCalculations: many(ffmiCalculations),
+  goalProgression: one(goalProgression),
 }));
 
 export const weightLogsRelations = relations(weightLogs, ({ one }) => ({
@@ -227,6 +248,13 @@ export const stressLogsRelations = relations(stressLogs, ({ one }) => ({
 export const ffmiCalculationsRelations = relations(ffmiCalculations, ({ one }) => ({
   user: one(users, {
     fields: [ffmiCalculations.userId],
+    references: [users.id],
+  }),
+}));
+
+export const goalProgressionRelations = relations(goalProgression, ({ one }) => ({
+  user: one(users, {
+    fields: [goalProgression.userId],
     references: [users.id],
   }),
 }));
@@ -315,7 +343,18 @@ export const insertFFMICalculationSchema = createInsertSchema(ffmiCalculations).
   timelineMonths: z.number().optional(),
 });
 
-// Enhanced User Schema with FFMI validation
+export const insertGoalProgressionSchema = createInsertSchema(goalProgression).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  currentFFMI: z.union([z.string(), z.number()]).transform(val => String(val)),
+  progressToGoal: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+});
+
+// Enhanced User Schema with FFMI validation and goal path
 export const insertUserSchemaEnhanced = insertUserSchema.extend({
   gender: z.enum(['male', 'female'], { 
     message: 'Gender must be either male or female' 
@@ -329,9 +368,17 @@ export const insertUserSchemaEnhanced = insertUserSchema.extend({
   calculatedTargetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
     val === null || val === undefined || val === "" ? null : String(val)
   ).optional(),
+  goalPath: z.enum(['standard', 'accelerated']).default('standard'),
+  initialGoalFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  longTermGoalFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  expertMode: z.boolean().default(false),
 });
 
-// FFMI Profile Update Schema - for API validation
+// FFMI Profile Update Schema - for API validation with goal path
 export const updateFFMIProfileSchema = z.object({
   gender: z.enum(['male', 'female']).optional(),
   bodyFatPercentage: z.union([z.string(), z.number(), z.null()]).transform(val => 
@@ -343,6 +390,15 @@ export const updateFFMIProfileSchema = z.object({
   calculatedTargetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
     val === null || val === undefined || val === "" ? null : String(val)
   ).optional(),
+  goalPath: z.enum(['standard', 'accelerated']).optional(),
+  initialGoalFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  longTermGoalFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
+    val === null || val === undefined || val === "" ? null : String(val)
+  ).optional(),
+  expertMode: z.boolean().optional(),
+  eliteUnlocked: z.boolean().optional(),
 });
 
 // Types
@@ -370,5 +426,7 @@ export type InsertStressLog = z.infer<typeof insertStressLogSchema>;
 export type StressLog = typeof stressLogs.$inferSelect;
 export type InsertFFMICalculation = z.infer<typeof insertFFMICalculationSchema>;
 export type FFMICalculation = typeof ffmiCalculations.$inferSelect;
+export type InsertGoalProgression = z.infer<typeof insertGoalProgressionSchema>;
+export type GoalProgression = typeof goalProgression.$inferSelect;
 export type InsertUserEnhanced = z.infer<typeof insertUserSchemaEnhanced>;
 export type UpdateFFMIProfile = z.infer<typeof updateFFMIProfileSchema>;
