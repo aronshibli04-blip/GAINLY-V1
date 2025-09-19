@@ -61,7 +61,7 @@ export default function MobileProfile() {
     age: user?.age?.toString() || '',
     height: user?.height?.toString() || '',
     weight: user?.weight?.toString() || '',
-    targetWeight: getTargetWeight(user)?.toString() || '',
+    targetWeight: getTargetWeight(user as any)?.toString() || '',
     activityLevel: user?.activityLevel || 'moderately_active'
   });
 
@@ -73,7 +73,7 @@ export default function MobileProfile() {
   const currentWeight = weightEntries?.length > 0 ? weightEntries[0]?.weight || user.weight : user.weight;
   const startWeight = weightEntries?.length > 0 ? weightEntries[weightEntries.length - 1]?.weight || user.weight : user.weight;
   const weightGained = (currentWeight || 0) - (startWeight || 0);
-  const targetWeight = getTargetWeight(user);
+  const targetWeight = getTargetWeight(user as any);
   const progressToGoal = targetWeight && startWeight && currentWeight && targetWeight > startWeight && currentWeight > startWeight 
     ? ((currentWeight - startWeight) / (targetWeight - startWeight)) * 100
     : 0;
@@ -178,7 +178,7 @@ export default function MobileProfile() {
 
     setUser(updatedUser);
     
-    if (editData.targetWeight && parseFloat(editData.targetWeight) !== getTargetWeight(user)) {
+    if (editData.targetWeight && parseFloat(editData.targetWeight) !== getTargetWeight(user as any)) {
       setTargetWeight(parseFloat(editData.targetWeight));
     }
 
@@ -491,7 +491,7 @@ export default function MobileProfile() {
                     age: user.age?.toString() || '',
                     height: user.height?.toString() || '',
                     weight: user.weight?.toString() || '',
-                    targetWeight: getTargetWeight(user)?.toString() || '',
+                    targetWeight: getTargetWeight(user as any)?.toString() || '',
                     activityLevel: user.activityLevel || 'moderately_active'
                   });
                 }
