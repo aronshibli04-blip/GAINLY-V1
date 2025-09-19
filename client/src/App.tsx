@@ -10,6 +10,7 @@ import { OnboardingFlow } from "@/components/ui/onboarding-flow";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { InstallPrompt } from "@/components/install-prompt";
 import { AnimatedPresenceWrapper } from "@/components/ui/page-transition";
+import { NotificationsSheet } from "@/components/notifications/NotificationsSheet";
 import { useLocation } from "wouter";
 
 // Enhanced Onboarding Flow
@@ -110,6 +111,9 @@ function AppContent() {
         onClose={closeMenu}
         onOpenMenu={openMenu}
       />
+      
+      {/* Global Notifications Sheet */}
+      <NotificationsSheet />
       
       <ErrorBoundary>
         <AnimatedPresenceWrapper>
