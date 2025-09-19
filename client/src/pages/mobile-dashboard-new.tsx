@@ -10,6 +10,7 @@ import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
 import { AdvancedProgressCard } from "@/components/ui/advanced-progress-card";
 import { EnhancedWeeklyStatsCard } from "@/components/ui/enhanced-weekly-stats-card";
 import { SmartGoalTrackingCard } from "@/components/ui/smart-goal-tracking-card";
+import { EnhancedQuickActionsCard } from "@/components/ui/enhanced-quick-actions-card";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -87,61 +88,22 @@ export default function MobileDashboardNew() {
           <EnhancedHabitGrid />
         </div>
 
-        {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - 2 Column Grid */}
+        {/* 4. ADVANCED PROGRESS CARD - MacroFactor Style */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-semibold text-white">Today</h2>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-          {/* Advanced Progress Card - MacroFactor Style */}
           <AdvancedProgressCard targetCalories={targetCalories} />
-
-          {/* Quick Actions Card */}
-          <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
-            <CardHeader className="pb-1">
-              <CardTitle className="heading-3 text-white flex items-center">
-                <Zap className="h-4 w-4 mr-2 text-secondary-magenta pulse-glow" />
-                <span className="premium-subtitle">Quick Actions</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1">
-              {/* Log Meal Button */}
-              <Link href="/meals">
-                <Button className="w-full btn-future ultra-smooth touch-haptic">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Log Meal
-                </Button>
-              </Link>
-
-              {/* Add Weight Button */}
-              <Button 
-                variant="outline" 
-                className="w-full border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 h-10"
-              >
-                <TrendingUp className="h-4 w-4 mr-2" />
-                Add Weight
-              </Button>
-
-              {/* View Plan Button */}
-              <Link href="/ai-coach">
-                <Button 
-                  variant="outline" 
-                  className="w-full border-purple-500/50 text-purple-400 hover:bg-purple-500/10 h-10"
-                >
-                  View AI Plan
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-          </div>
         </div>
 
-        {/* 5. ENHANCED WEEKLY ANALYTICS - MacroFactor Style */}
+        {/* 5. ENHANCED QUICK ACTIONS - MacroFactor Style */}
+        <div className="mb-6">
+          <EnhancedQuickActionsCard targetCalories={targetCalories} />
+        </div>
+
+        {/* 6. ENHANCED WEEKLY ANALYTICS - MacroFactor Style */}
         <div className="mb-6">
           <EnhancedWeeklyStatsCard targetCalories={targetCalories} />
         </div>
 
-        {/* 6. SMART GOAL TRACKING - FFMI & Weight Milestones */}
+        {/* 7. SMART GOAL TRACKING - FFMI & Weight Milestones */}
         <div className="mb-6">
           <SmartGoalTrackingCard targetCalories={targetCalories} />
         </div>
