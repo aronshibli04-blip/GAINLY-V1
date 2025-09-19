@@ -11,6 +11,8 @@ import { AdvancedProgressCard } from "@/components/ui/advanced-progress-card";
 import { EnhancedWeeklyStatsCard } from "@/components/ui/enhanced-weekly-stats-card";
 import { SmartGoalTrackingCard } from "@/components/ui/smart-goal-tracking-card";
 import { EnhancedQuickActionsCard } from "@/components/ui/enhanced-quick-actions-card";
+import { EnhancedWeightTrendChart } from "@/components/ui/enhanced-weight-trend-chart";
+import { EnhancedExpenditureChart } from "@/components/ui/enhanced-expenditure-chart";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -78,8 +80,8 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <WeightTrendMiniChart />
-            <ExpenditureMiniChart />
+            <EnhancedWeightTrendChart />
+            <EnhancedExpenditureChart targetCalories={targetCalories} />
           </div>
         </div>
 
