@@ -7,6 +7,7 @@ import { EnhancedWeeklyNutritionCalendar } from "@/components/ui/enhanced-weekly
 import { WeightTrendMiniChart } from "@/components/ui/weight-trend-mini-chart";
 import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
 import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
+import { AdvancedProgressCard } from "@/components/ui/advanced-progress-card";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -90,51 +91,8 @@ export default function MobileDashboardNew() {
             <h2 className="text-base font-semibold text-white">Today</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
-          {/* Today's Progress Card */}
-          <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
-            <CardHeader className="pb-1">
-              <CardTitle className="heading-3 text-white flex items-center">
-                <Target className="h-4 w-4 mr-2 text-accent-mint pulse-glow" />
-                <span className="premium-subtitle">Today's Progress</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1">
-              {/* Calorie Progress */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-base font-bold text-white">
-                    {todayCalories.toLocaleString()} / {targetCalories.toLocaleString()}
-                  </div>
-                  <div className="caption-text text-text-secondary">kcal consumed</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-semibold text-emerald-400">
-                    {Math.round((todayCalories / targetCalories) * 100)}%
-                  </div>
-                  <div className="caption-text text-text-secondary">of target</div>
-                </div>
-              </div>
-
-              {/* Remaining Calories */}
-              {caloriesRemaining > 0 && (
-                <div className="p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                  <div className="text-sm text-orange-400 font-medium">
-                    Still need: <span className="font-bold">{caloriesRemaining} kcal</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Weight */}
-              {todayWeight && (
-                <div className="flex items-center justify-between pt-3 border-t border-primary-cyan/30">
-                  <div className="body-text-secondary text-text-secondary">Today's Weight</div>
-                  <div className="text-lg font-semibold text-white">
-                    {todayWeight.weight} kg
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          {/* Advanced Progress Card - MacroFactor Style */}
+          <AdvancedProgressCard targetCalories={targetCalories} />
 
           {/* Quick Actions Card */}
           <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
