@@ -15,12 +15,14 @@ import { EnhancedWeightTrendChart } from "@/components/ui/enhanced-weight-trend-
 import { EnhancedExpenditureChart } from "@/components/ui/enhanced-expenditure-chart";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { Link } from "wouter";
 import { Plus, Zap, Target, TrendingUp } from "lucide-react";
 
 export default function MobileDashboardNew() {
   const { openMenu } = useSideMenu();
   const { currentTdeeAnalysis, calorieEntries, weightEntries, user } = useUserStore();
+  const { isVisible: isHeaderVisible } = useScrollDirection(50);
   
   // Calculate target calories from TDEE analysis or use default
   const targetCalories = currentTdeeAnalysis ? currentTdeeAnalysis.tdee + 1100 : 3200;
@@ -44,10 +46,11 @@ export default function MobileDashboardNew() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white pb-24 relative">
-      {/* Mobile Header */}
+      {/* Mobile Header with Auto-Hide */}
       <MobileHeader 
         title="Dashboard" 
         onOpenMenu={openMenu}
+        isVisible={isHeaderVisible}
       />
 
       {/* Subtle Background Elements */}
