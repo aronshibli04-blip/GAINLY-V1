@@ -162,6 +162,17 @@ export const goalProgression = pgTable("goal_progression", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const notifications = pgTable("notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  type: text("type").notNull(), // 'system' | 'goal' | 'reminder' | 'ai' | 'social'
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  read: boolean("read").notNull().default(false),
+  link: text("link"), // optional navigation link
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many, one }) => ({
   weightLogs: many(weightLogs),
@@ -175,6 +186,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   stressLogs: many(stressLogs),
   ffmiCalculations: many(ffmiCalculations),
   goalProgression: one(goalProgression),
+  notifications: many(notifications),
 }));
 
 export const weightLogsRelations = relations(weightLogs, ({ one }) => ({
@@ -255,6 +267,13 @@ export const ffmiCalculationsRelations = relations(ffmiCalculations, ({ one }) =
 export const goalProgressionRelations = relations(goalProgression, ({ one }) => ({
   user: one(users, {
     fields: [goalProgression.userId],
+    references: [users.id],
+  }),
+}));
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
     references: [users.id],
   }),
 }));
@@ -354,6 +373,15 @@ export const insertGoalProgressionSchema = createInsertSchema(goalProgression).o
   ).optional(),
 });
 
+export const insertNotificationSchema = createInsertSchema(notifications).omit({
+  id: true,
+  createdAt: true,
+}).extend({
+  type: z.enum(['system', 'goal', 'reminder', 'ai', 'social']),
+  read: z.boolean().default(false),
+  link: z.string().nullable().optional(),
+});
+
 // Enhanced User Schema with FFMI validation and goal path
 export const insertUserSchemaEnhanced = insertUserSchema.extend({
   gender: z.enum(['male', 'female'], { 
@@ -428,5 +456,7 @@ export type InsertFFMICalculation = z.infer<typeof insertFFMICalculationSchema>;
 export type FFMICalculation = typeof ffmiCalculations.$inferSelect;
 export type InsertGoalProgression = z.infer<typeof insertGoalProgressionSchema>;
 export type GoalProgression = typeof goalProgression.$inferSelect;
+export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+export type Notification = typeof notifications.$inferSelect;
 export type InsertUserEnhanced = z.infer<typeof insertUserSchemaEnhanced>;
 export type UpdateFFMIProfile = z.infer<typeof updateFFMIProfileSchema>;
