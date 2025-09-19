@@ -18,6 +18,7 @@ import { EnhancedOnboardingFlow } from "@/components/onboarding/EnhancedOnboardi
 // Mobile pages  
 import MobileHome from "@/pages/mobile-home";
 import MobileDashboardNew from "@/pages/mobile-dashboard-new";
+import MobileDashboardDebug from "@/pages/mobile-dashboard-debug";
 import MobileCalories from "@/pages/mobile-calories";
 import MobileTraining from "@/pages/mobile-training";
 import MobileAICoach from "@/pages/mobile-ai-coach";
@@ -66,8 +67,11 @@ function App() {
     );
   }
 
-  // If no user profile or still loading, show enhanced onboarding
-  if (!user || !isOnboarded || user === undefined) {
+  // TEMPORARY: Add bypass for testing mobile dashboard
+  const isTestMode = window.location.search.includes('test=true') || window.location.hash.includes('test');
+  
+  // If no user profile or still loading, show enhanced onboarding (unless in test mode)
+  if ((!user || !isOnboarded || user === undefined) && !isTestMode) {
     return (
       <QueryClientProvider client={queryClient}>
         <ErrorBoundary fallback={<div className="min-h-screen bg-slate-900 text-white flex items-center justify-center"><h1>Loading GAINLY...</h1></div>}>

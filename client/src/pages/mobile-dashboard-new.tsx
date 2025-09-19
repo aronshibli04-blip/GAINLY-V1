@@ -20,19 +20,24 @@ import { Plus, Zap, Target, TrendingUp } from "lucide-react";
 
 export default function MobileDashboardNew() {
   const { openMenu } = useSideMenu();
-  const { currentTdeeAnalysis, calorieEntries, weightEntries } = useUserStore();
+  const { currentTdeeAnalysis, calorieEntries, weightEntries, user } = useUserStore();
   
   // Calculate target calories from TDEE analysis or use default
   const targetCalories = currentTdeeAnalysis ? currentTdeeAnalysis.tdee + 1100 : 3200;
   
-  // Get today's data
+  // Safety checks for data availability
+  const hasCalorieData = calorieEntries && calorieEntries.length > 0;
+  const hasWeightData = weightEntries && weightEntries.length > 0;
+  const hasUserData = user && user.id;
+  
+  // Get today's data with nullish safety
   const today = new Date().toISOString().split('T')[0];
-  const todayCalories = calorieEntries
-    .filter(c => c.date === today)
-    .reduce((sum, c) => sum + c.calories, 0);
+  const todayCalories = (calorieEntries ?? [])
+    .filter(c => c && c.date === today)
+    .reduce((sum, c) => sum + (c.calories || 0), 0);
     
-  const todayWeight = weightEntries
-    .filter(w => w.date === today)
+  const todayWeight = (weightEntries ?? [])
+    .filter(w => w && w.date === today)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
   const caloriesRemaining = Math.max(0, targetCalories - todayCalories);
@@ -71,7 +76,7 @@ export default function MobileDashboardNew() {
           <EnhancedWeeklyNutritionCalendar targetCalories={targetCalories} />
         </div>
 
-        {/* 2. ANALYTICS CARDS - 2 Column Grid */}
+        {/* 2. ANALYTICS CARDS - 2 Column Grid with fallbacks */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-semibold text-white">Insights & Analytics</h2>
@@ -80,8 +85,36 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <EnhancedWeightTrendChart />
-            <EnhancedExpenditureChart targetCalories={targetCalories} />
+            {/* Enhanced charts with error boundaries */}
+            <div className="min-h-[120px]">
+              {hasWeightData ? (
+                <EnhancedWeightTrendChart />
+              ) : (
+                <Card className="bg-slate-800/60 border-slate-700 h-full">
+                  <CardContent className="p-4 flex items-center justify-center h-full">
+                    <div className="text-center text-slate-400">
+                      <TrendingUp className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-xs">Start tracking weight to see trends</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+            
+            <div className="min-h-[120px]">
+              {hasCalorieData ? (
+                <EnhancedExpenditureChart targetCalories={targetCalories} />
+              ) : (
+                <Card className="bg-slate-800/60 border-slate-700 h-full">
+                  <CardContent className="p-4 flex items-center justify-center h-full">
+                    <div className="text-center text-slate-400">
+                      <Zap className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-xs">Track calories to see energy balance</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </div>
         </div>
 
@@ -108,6 +141,20 @@ export default function MobileDashboardNew() {
         {/* 7. SMART GOAL TRACKING - FFMI & Weight Milestones */}
         <div className="mb-6">
           <SmartGoalTrackingCard targetCalories={targetCalories} />
+        </div>
+        
+        {/* 8. Mobile Layout Test - Ensure bottom spacing */}
+        <div className="mb-8">
+          <Card className="bg-slate-800/30 border-slate-700/50">
+            <CardContent className="p-4 text-center">
+              <p className="text-slate-400 text-sm">
+                🎯 Dashboard Complete • {hasUserData ? 'User Data: ✅' : 'User Data: ⚠️'} • {hasCalorieData ? 'Calories: ✅' : 'Calories: ⚠️'} • {hasWeightData ? 'Weight: ✅' : 'Weight: ⚠️'}
+              </p>
+              <p className="text-xs text-slate-500 mt-2">
+                Target: {targetCalories} kcal • Use ?test=true to bypass onboarding
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
       </div>
