@@ -6,7 +6,7 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { WeeklyCalorieGrid } from "@/components/ui/weekly-calorie-grid";
 import { WeightTrendMiniChart } from "@/components/ui/weight-trend-mini-chart";
 import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
-import { MealLoggingHabitCard, WeightTrackingHabitCard } from "@/components/ui/habit-tracking-cards";
+import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -79,18 +79,9 @@ export default function MobileDashboardNew() {
           </div>
         </div>
 
-        {/* 3. HABIT TRACKING - 2 Column Grid */}
+        {/* 3. ENHANCED HABIT TRACKING - MacroFactor Style */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-semibold text-white">Habits</h2>
-            <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
-              See All
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <MealLoggingHabitCard />
-            <WeightTrackingHabitCard />
-          </div>
+          <EnhancedHabitGrid />
         </div>
 
         {/* 4. TODAY'S SUMMARY & QUICK ACTIONS - 2 Column Grid */}

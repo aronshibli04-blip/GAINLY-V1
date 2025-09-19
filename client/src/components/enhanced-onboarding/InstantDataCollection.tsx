@@ -100,9 +100,9 @@ export function InstantDataCollection({ onComplete }: InstantDataCollectionProps
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.firstName && formData.age;
+        return formData.firstName.trim() !== '' && formData.age.trim() !== '';
       case 2:
-        return formData.sex && formData.height && formData.weight;
+        return formData.sex !== '' && formData.height.trim() !== '' && formData.weight.trim() !== '';
       case 3:
         return formData.bodyFatPercentage !== null;
       case 4:
