@@ -14,6 +14,7 @@ export function useScrollDirection(threshold: number = 50): ScrollDirectionState
   });
   
   const lastScrollY = useRef(0);
+  const lastVisibility = useRef(true);
   const ticking = useRef(false);
 
   useEffect(() => {
@@ -42,9 +43,12 @@ export function useScrollDirection(threshold: number = 50): ScrollDirectionState
             // Show header when scrolling up
             isVisible = true;
           } else {
-            // Keep current visibility state - read from current state
-            isVisible = scrollState.isVisible;
+            // Keep current visibility state - read from ref to avoid stale state
+            isVisible = lastVisibility.current;
           }
+          
+          // Update ref with current visibility to prevent stale state issues
+          lastVisibility.current = isVisible;
           
           setScrollState({
             isVisible,
