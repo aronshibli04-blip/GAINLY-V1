@@ -7,9 +7,10 @@ interface MobileHeaderProps {
   title: string;
   onOpenMenu: () => void;
   showNotifications?: boolean;
+  isVisible?: boolean;
 }
 
-export function MobileHeader({ title, onOpenMenu, showNotifications = true }: MobileHeaderProps) {
+export function MobileHeader({ title, onOpenMenu, showNotifications = true, isVisible = true }: MobileHeaderProps) {
   const { toast } = useToast();
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
 
@@ -23,7 +24,17 @@ export function MobileHeader({ title, onOpenMenu, showNotifications = true }: Mo
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-xl border-b border-primary/20 px-4 py-3">
+    <header 
+      className={`
+        fixed top-0 left-0 right-0 z-30 bg-slate-900/95 backdrop-blur-xl border-b border-primary/20 px-4 py-3
+        transition-transform duration-300 ease-in-out
+        ${
+          isVisible 
+            ? 'transform translate-y-0' 
+            : 'transform -translate-y-full'
+        }
+      `}
+    >
       <div className="flex items-center justify-between">
         {/* Menu Button */}
         <Button 
