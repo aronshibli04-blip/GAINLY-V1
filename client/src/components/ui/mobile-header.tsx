@@ -28,11 +28,7 @@ export function MobileHeader({ title, onOpenMenu, showNotifications = true, isVi
       className={`
         fixed top-0 left-0 right-0 z-30 bg-slate-900/95 backdrop-blur-xl border-b border-primary/20 px-4 py-3
         transition-transform duration-300 ease-in-out
-        ${
-          isVisible 
-            ? 'transform translate-y-0' 
-            : 'transform -translate-y-full'
-        }
+        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
       `}
     >
       <div className="flex items-center justify-between">
