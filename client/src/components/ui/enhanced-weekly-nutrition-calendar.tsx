@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserStore } from "@/store/userStore";
 import { cn } from "@/lib/utils";
-import { TrendingUp, TrendingDown, Minus, Calendar, Zap } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { useState } from "react";
 
 interface EnhancedWeeklyNutritionCalendarProps {
@@ -15,15 +15,14 @@ interface DayNutritionData {
   isToday: boolean;
   dayOfWeek: string;
   progressPercent: number;
-  status: 'surplus' | 'good' | 'deficit' | 'empty';
-  trend: 'up' | 'down' | 'stable';
+  status: 'complete' | 'partial' | 'empty';
 }
 
 export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: EnhancedWeeklyNutritionCalendarProps) {
   const { calorieEntries } = useUserStore();
   const [hoveredDay, setHoveredDay] = useState<string | null>(null);
   
-  // Get current week dates (Monday to Sunday) - MacroFactor style
+  // Get current week dates (Monday to Sunday)
   const getWeekDates = () => {
     const today = new Date();
     const currentDay = today.getDay();
@@ -57,21 +56,15 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
     const meals = dayEntries.filter(entry => entry.calories > 0).length; // Only count actual meals
     const progressPercent = Math.min((calories / targetCalories) * 100, 150); // Allow up to 150% for surplus visualization
     
-    // Advanced status determination
-    let status: 'surplus' | 'good' | 'deficit' | 'empty';
+    // Neutral status determination
+    let status: 'complete' | 'partial' | 'empty';
     if (calories === 0) {
       status = 'empty';
     } else if (calories >= targetCalories) {
-      status = 'surplus';
-    } else if (progressPercent >= 75) {
-      status = 'good';
+      status = 'complete';
     } else {
-      status = 'deficit';
+      status = 'partial';
     }
-
-    // Calculate trend (simplified for now - could use previous day comparison)
-    const trend: 'up' | 'down' | 'stable' = calories > targetCalories ? 'up' : 
-                     calories < targetCalories * 0.75 ? 'down' : 'stable';
 
     return {
       date,
@@ -80,8 +73,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
       isToday: date === today,
       dayOfWeek: dayName,
       progressPercent,
-      status,
-      trend
+      status
     };
   };
 
@@ -89,18 +81,18 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
     getDayNutritionData(dateStr, dayName)
   );
 
-  // Calculate weekly insights (MacroFactor-style)
+  // Calculate weekly summary
   const weeklyInsights = {
     totalCalories: weekData.reduce((sum, day) => sum + day.calories, 0),
     averageDaily: Math.round(weekData.reduce((sum, day) => sum + day.calories, 0) / 7),
-    surplusDays: weekData.filter(day => day.status === 'surplus').length,
-    deficitDays: weekData.filter(day => day.status === 'deficit').length,
+    completeDays: weekData.filter(day => day.status === 'complete').length,
+    partialDays: weekData.filter(day => day.status === 'partial').length,
     emptyDays: weekData.filter(day => day.status === 'empty').length,
     weeklyTarget: targetCalories * 7,
     weeklyProgress: Math.round((weekData.reduce((sum, day) => sum + day.calories, 0) / (targetCalories * 7)) * 100)
   };
 
-  // MacroFactor-style sophisticated color system
+  // Neutral color system based on progress
   const getDayStatusColor = (day: DayNutritionData) => {
     const { status, progressPercent, isToday } = day;
     
@@ -108,12 +100,10 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
     const todayClasses = isToday ? "ring-2 ring-cyan-400 ring-offset-1 ring-offset-slate-800" : "";
     
     switch (status) {
-      case 'surplus':
-        return cn(baseClasses, todayClasses, "bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/30");
-      case 'good':
-        return cn(baseClasses, todayClasses, "bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg shadow-amber-500/30");
-      case 'deficit':
-        return cn(baseClasses, todayClasses, "bg-gradient-to-br from-red-500 to-red-600 shadow-lg shadow-red-500/30");
+      case 'complete':
+        return cn(baseClasses, todayClasses, "bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30");
+      case 'partial':
+        return cn(baseClasses, todayClasses, "bg-gradient-to-br from-slate-500 to-slate-600 shadow-lg shadow-slate-500/30");
       case 'empty':
         return cn(baseClasses, todayClasses, "bg-slate-700/60 border-2 border-dashed border-slate-600");
       default:
@@ -121,13 +111,6 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
     }
   };
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-    switch (trend) {
-      case 'up': return <TrendingUp className="h-3 w-3 text-emerald-300" />;
-      case 'down': return <TrendingDown className="h-3 w-3 text-red-300" />;
-      default: return <Minus className="h-3 w-3 text-slate-400" />;
-    }
-  };
 
   return (
     <Card className="bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl">
@@ -137,7 +120,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
             <Calendar className="h-5 w-5 text-cyan-400" />
             <div>
               <CardTitle className="text-white text-lg font-semibold">Weekly Nutrition</CardTitle>
-              <p className="text-slate-400 text-sm">MacroFactor Style • {weeklyInsights.weeklyProgress}% of target</p>
+              <p className="text-slate-400 text-sm">{weeklyInsights.weeklyProgress}% complete</p>
             </div>
           </div>
           <div className="text-right">
@@ -147,7 +130,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Enhanced Day Grid - MacroFactor Style */}
+        {/* Day Grid */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {weekData.map((day, index) => (
             <div
@@ -191,10 +174,6 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
                   <div className="text-slate-400 text-xs">—</div>
                 )}
                 
-                {/* Trend Indicator - MacroFactor Style */}
-                <div className="absolute top-1 right-1">
-                  {getTrendIcon(day.trend)}
-                </div>
                 
                 {/* Progress Bar - Subtle Bottom Indicator */}
                 {day.calories > 0 && (
@@ -214,7 +193,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
                 )}
               </div>
               
-              {/* Mobile-friendly Tooltip - MacroFactor Style */}
+              {/* Mobile-friendly Tooltip */}
               {hoveredDay === day.date && (
                 <div className="fixed z-50 left-4 right-4 top-32 bg-slate-900/95 border border-slate-600 rounded-lg p-3 shadow-xl backdrop-blur-sm">
                   <div className="text-white text-sm font-medium">{day.dayOfWeek}, {weekDates[index].dayNum}</div>
@@ -222,12 +201,8 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
                     <>
                       <div className="text-slate-300 text-sm">{day.calories.toLocaleString()} kcal</div>
                       <div className="text-slate-400 text-xs">{day.meals} meals logged</div>
-                      <div className={cn(
-                        "text-xs font-medium mt-1",
-                        day.status === 'surplus' ? "text-emerald-400" : 
-                        day.status === 'good' ? "text-amber-400" : "text-red-400"
-                      )}>
-                        {day.progressPercent.toFixed(0)}% of target
+                      <div className="text-cyan-400 text-xs font-medium mt-1">
+                        {day.progressPercent.toFixed(0)}% complete
                       </div>
                     </>
                   ) : (
@@ -239,40 +214,6 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
           ))}
         </div>
 
-        {/* Weekly Insights Bar - MacroFactor Style */}
-        <div className="bg-slate-700/50 rounded-xl p-3 border border-slate-600/50">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-cyan-400" />
-                <span className="text-white font-medium">Week</span>
-              </div>
-              <div className="text-slate-300">
-                {weeklyInsights.totalCalories.toLocaleString()} / {weeklyInsights.weeklyTarget.toLocaleString()} kcal
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-              <div className="text-emerald-400 font-medium">{weeklyInsights.surplusDays}d surplus</div>
-              <div className="text-red-400 font-medium">{weeklyInsights.deficitDays}d deficit</div>
-              {weeklyInsights.emptyDays > 0 && (
-                <div className="text-slate-500 font-medium">{weeklyInsights.emptyDays}d empty</div>
-              )}
-            </div>
-          </div>
-          
-          {/* Weekly Progress Bar */}
-          <div className="mt-2 h-2 bg-slate-800 rounded-full overflow-hidden">
-            <div 
-              className={cn(
-                "h-full transition-all duration-500",
-                weeklyInsights.weeklyProgress >= 100 ? "bg-gradient-to-r from-emerald-500 to-emerald-400" : 
-                weeklyInsights.weeklyProgress >= 75 ? "bg-gradient-to-r from-amber-500 to-orange-400" : 
-                "bg-gradient-to-r from-red-500 to-red-400"
-              )}
-              style={{ width: `${Math.min(weeklyInsights.weeklyProgress, 100)}%` }}
-            />
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
