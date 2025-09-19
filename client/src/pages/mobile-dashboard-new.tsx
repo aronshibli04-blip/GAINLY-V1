@@ -8,6 +8,7 @@ import { WeightTrendMiniChart } from "@/components/ui/weight-trend-mini-chart";
 import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
 import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
 import { AdvancedProgressCard } from "@/components/ui/advanced-progress-card";
+import { EnhancedWeeklyStatsCard } from "@/components/ui/enhanced-weekly-stats-card";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -134,56 +135,9 @@ export default function MobileDashboardNew() {
           </div>
         </div>
 
-        {/* 5. WEEKLY STATS */}
+        {/* 5. ENHANCED WEEKLY ANALYTICS - MacroFactor Style */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-semibold text-white">Weekly Stats</h2>
-            <Link href="/progress">
-              <Button variant="ghost" size="sm" className="text-emerald-400 text-xs">
-                See All
-              </Button>
-            </Link>
-          </div>
-          <Card className="glass-ultra card-float ultra-smooth magnetic-hover border-premium">
-          <CardHeader className="pb-1">
-            <CardTitle className="heading-3 text-white">
-              <span className="premium-subtitle">Overview</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-3">
-              {/* Weekly Summary */}
-              <div className="text-center p-3 glass-card rounded-lg touch-haptic">
-                <div className="text-base font-bold text-accent-mint">
-                  {Math.round(
-                    calorieEntries
-                      .filter(entry => {
-                        const entryDate = new Date(entry.date);
-                        const oneWeekAgo = new Date();
-                        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                        return entryDate >= oneWeekAgo;
-                      })
-                      .reduce((sum, entry) => sum + entry.calories, 0) / 7
-                  )}
-                </div>
-                <div className="caption-text text-text-secondary">Avg Calories</div>
-              </div>
-
-              {/* Streak */}
-              <div className="text-center p-3 glass-card rounded-lg touch-haptic">
-                <div className="text-base font-bold text-primary-cyan">
-                  {calorieEntries.filter(entry => {
-                    const entryDate = new Date(entry.date);
-                    const oneWeekAgo = new Date();
-                    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                    return entryDate >= oneWeekAgo && entry.calories > 0;
-                  }).length}
-                </div>
-                <div className="caption-text text-text-secondary">Days Logged</div>
-              </div>
-            </div>
-          </CardContent>
-          </Card>
+          <EnhancedWeeklyStatsCard targetCalories={targetCalories} />
         </div>
 
       </div>
