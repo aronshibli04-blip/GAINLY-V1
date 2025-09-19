@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { WeeklyCalorieGrid } from "@/components/ui/weekly-calorie-grid";
-import { WeightTrendCard, CalorieTrendCard } from "@/components/ui/analytics-cards";
+import { WeightTrendMiniChart } from "@/components/ui/weight-trend-mini-chart";
+import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
 import { MealLoggingHabitCard, WeightTrackingHabitCard } from "@/components/ui/habit-tracking-cards";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
@@ -73,8 +74,8 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <WeightTrendCard />
-            <CalorieTrendCard targetCalories={targetCalories} />
+            <WeightTrendMiniChart />
+            <ExpenditureMiniChart />
           </div>
         </div>
 
