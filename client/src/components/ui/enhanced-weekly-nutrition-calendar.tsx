@@ -140,7 +140,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
               onMouseLeave={() => setHoveredDay(null)}
               onClick={() => setHoveredDay(hoveredDay === day.date ? null : day.date)}
             >
-              {/* Day Label */}
+              {/* Day Label - Updated */}
               <div className={cn(
                 "text-xs font-medium mb-2 transition-colors",
                 day.isToday ? "text-cyan-400" : "text-slate-400"
