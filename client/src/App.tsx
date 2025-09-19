@@ -18,7 +18,6 @@ import { EnhancedOnboardingFlow } from "@/components/onboarding/EnhancedOnboardi
 // Mobile pages  
 import MobileHome from "@/pages/mobile-home";
 import MobileDashboardNew from "@/pages/mobile-dashboard-new";
-import MobileDashboardDebug from "@/pages/mobile-dashboard-debug";
 import MobileCalories from "@/pages/mobile-calories";
 import MobileTraining from "@/pages/mobile-training";
 import MobileAICoach from "@/pages/mobile-ai-coach";
