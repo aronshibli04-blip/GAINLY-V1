@@ -9,6 +9,7 @@ import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
 import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
 import { AdvancedProgressCard } from "@/components/ui/advanced-progress-card";
 import { EnhancedWeeklyStatsCard } from "@/components/ui/enhanced-weekly-stats-card";
+import { SmartGoalTrackingCard } from "@/components/ui/smart-goal-tracking-card";
 import { useUserStore } from "@/store/userStore";
 import { useSideMenu } from "@/hooks/use-side-menu";
 import { Link } from "wouter";
@@ -138,6 +139,11 @@ export default function MobileDashboardNew() {
         {/* 5. ENHANCED WEEKLY ANALYTICS - MacroFactor Style */}
         <div className="mb-6">
           <EnhancedWeeklyStatsCard targetCalories={targetCalories} />
+        </div>
+
+        {/* 6. SMART GOAL TRACKING - FFMI & Weight Milestones */}
+        <div className="mb-6">
+          <SmartGoalTrackingCard targetCalories={targetCalories} />
         </div>
 
       </div>
