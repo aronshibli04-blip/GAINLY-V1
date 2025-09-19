@@ -13,6 +13,7 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { useSideMenu } from "@/hooks/use-side-menu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { calculateTdee } from "@/utils/tdee";
 import { Utensils, Sparkles, Plus, Clock, ChevronDown, ChevronUp, Zap, Camera, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 export default function MobileMeals() {
   const { toast } = useToast();
   const { openMenu } = useSideMenu();
+  const { isVisible: isHeaderVisible } = useScrollDirection(50);
   const [isGenerating, setIsGenerating] = useState(false);
   const [preferences, setPreferences] = useState("");
   const [selectedMealType, setSelectedMealType] = useState<MealType>('breakfast');
@@ -165,10 +167,11 @@ export default function MobileMeals() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900/20 to-slate-900 text-white pb-24">
-      {/* Mobile Header */}
+      {/* Mobile Header with Auto-Hide */}
       <MobileHeader 
         title="Meals" 
         onOpenMenu={openMenu}
+        isVisible={isHeaderVisible}
       />
       
       {/* Simplified Background */}

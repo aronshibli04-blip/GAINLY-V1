@@ -26,6 +26,7 @@ import {
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useSideMenu } from "@/hooks/use-side-menu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Tooltip, AreaChart, Area } from "recharts";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -42,6 +43,7 @@ export default function MobileProgress() {
   
   const { openMenu } = useSideMenu();
   const { toast } = useToast();
+  const { isVisible: isHeaderVisible } = useScrollDirection(50);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | 'all'>('30d');
   const [progressPhotos, setProgressPhotos] = useState<string[]>([]);
@@ -182,10 +184,11 @@ export default function MobileProgress() {
 
   return (
     <div className="mobile-container">
-      {/* Mobile Header */}
+      {/* Mobile Header with Auto-Hide */}
       <MobileHeader 
         title="Progress" 
         onOpenMenu={openMenu}
+        isVisible={isHeaderVisible}
       />
 
       {/* Futuristic Background Effect */}

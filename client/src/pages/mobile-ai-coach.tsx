@@ -5,6 +5,7 @@ import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 // Removed chat component
 import { useSideMenu } from "@/hooks/use-side-menu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { Brain, Zap, TrendingUp, Target, Activity, Apple, Beef, Coffee, Droplets, Utensils } from "lucide-react";
@@ -15,6 +16,7 @@ import { calculateTdee } from "@/utils/tdee";
 export default function MobileAICoach() {
   const { toast } = useToast();
   const { openMenu } = useSideMenu();
+  const { isVisible: isHeaderVisible } = useScrollDirection(50);
   const [isGenerating, setIsGenerating] = useState(false);
   const { 
     weightEntries, 
@@ -82,10 +84,11 @@ export default function MobileAICoach() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 text-white pb-24">
-      {/* Mobile Header with Menu Toggle */}
+      {/* Mobile Header with Menu Toggle & Auto-Hide */}
       <MobileHeader 
         title="Coach" 
         onOpenMenu={openMenu}
+        isVisible={isHeaderVisible}
       />
       
       {/* Animated Background */}

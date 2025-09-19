@@ -37,12 +37,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useSideMenu } from "@/hooks/use-side-menu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { calculateTdee } from "@/utils/tdee";
 import { getTargetWeight } from "@/utils/weight-utils";
 
 export default function MobileProfile() {
   const { toast } = useToast();
   const { openMenu } = useSideMenu();
+  const { isVisible: isHeaderVisible } = useScrollDirection(50);
   const { 
     user, 
     setUser, 
@@ -226,10 +228,11 @@ export default function MobileProfile() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900/20 to-slate-900 text-white pb-24">
-      {/* Mobile Header with Menu Toggle */}
+      {/* Mobile Header with Menu Toggle & Auto-Hide */}
       <MobileHeader 
         title="Profile" 
         onOpenMenu={openMenu}
+        isVisible={isHeaderVisible}
       />
       
       {/* Animated Background */}

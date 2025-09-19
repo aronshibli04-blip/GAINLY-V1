@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
 import { useSideMenu } from "@/hooks/use-side-menu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserStore } from "@/store/userStore";
@@ -18,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function MobileTraining() {
   const { toast } = useToast();
   const { openMenu } = useSideMenu();
+  const { isVisible: isHeaderVisible } = useScrollDirection(50);
   const { addActivityEntry, activityEntries } = useUserStore();
 
   const [activityType, setActivityType] = useState<string>("");
@@ -93,10 +95,11 @@ export default function MobileTraining() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/20 to-slate-900 text-white pb-24">
-      {/* Mobile Header with Menu Toggle */}
+      {/* Mobile Header with Menu Toggle & Auto-Hide */}
       <MobileHeader 
         title="Training" 
         onOpenMenu={openMenu}
+        isVisible={isHeaderVisible}
       />
       
       {/* Animated Background */}

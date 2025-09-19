@@ -42,7 +42,7 @@ export function useScrollDirection(threshold: number = 50): ScrollDirectionState
             // Show header when scrolling up
             isVisible = true;
           } else {
-            // Keep current visibility state
+            // Keep current visibility state - read from current state
             isVisible = scrollState.isVisible;
           }
           
@@ -65,7 +65,7 @@ export function useScrollDirection(threshold: number = 50): ScrollDirectionState
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [threshold, scrollState.isVisible]);
+  }, [threshold]); // Optimized: removed scrollState.isVisible dependency
 
   return scrollState;
 }
