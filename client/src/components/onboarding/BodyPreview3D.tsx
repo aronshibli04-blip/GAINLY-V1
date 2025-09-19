@@ -10,7 +10,8 @@ interface BodyPreview3DProps {
   userData: {
     height: number;
     weight: number;
-    goalWeight: number;
+    goalWeight?: number;
+    calculatedTargetWeight: number;
     sex: 'male' | 'female';
   };
   subscription: SubscriptionStatus;
@@ -30,8 +31,9 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
   }, []);
 
   const bmi = userData?.weight && userData?.height ? userData.weight / Math.pow(userData.height / 100, 2) : 0;
-  const goalBmi = userData?.goalWeight && userData?.height ? userData.goalWeight / Math.pow(userData.height / 100, 2) : 0;
-  const weightToGain = userData?.goalWeight && userData?.weight ? userData.goalWeight - userData.weight : 0;
+  const targetWeight = userData?.calculatedTargetWeight || userData?.goalWeight || 0;
+  const goalBmi = targetWeight && userData?.height ? targetWeight / Math.pow(userData.height / 100, 2) : 0;
+  const weightToGain = targetWeight && userData?.weight ? targetWeight - userData.weight : 0;
 
   const getBodyType = (bmi: number) => {
     if (bmi < 18.5) return { type: "Underweight", color: "text-blue-400" };
@@ -129,7 +131,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                     <div className="bg-black/60 backdrop-blur-sm rounded p-2">
                       <div className="text-center">
                         <p className="text-white text-sm font-bold">
-                          {currentView === 'current' ? `${userData?.weight || 0}kg` : `${userData?.goalWeight || 0}kg`}
+                          {currentView === 'current' ? `${userData?.weight || 0}kg` : `${targetWeight}kg`}
                         </p>
                         <p className="text-xs text-slate-400">
                           BMI {currentView === 'current' ? bmi.toFixed(1) : goalBmi.toFixed(1)}
@@ -203,7 +205,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-purple-400 font-bold text-lg">{userData?.weight || 0}kg</span>
-                  <span className="text-emerald-400 font-bold text-lg">{userData?.goalWeight || 0}kg</span>
+                  <span className="text-emerald-400 font-bold text-lg">{targetWeight}kg</span>
                 </div>
               </div>
 

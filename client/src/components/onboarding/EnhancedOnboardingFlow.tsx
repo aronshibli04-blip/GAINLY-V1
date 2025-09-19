@@ -15,7 +15,11 @@ interface UserBasicData {
   weight: number;
   sex: 'male' | 'female';
   activityLevel: string;
-  goalWeight: number;
+  // FFMI-based goal system (replaces arbitrary goalWeight)
+  bodyFatPercentage: number;
+  targetFFMI: number;
+  calculatedTargetWeight: number;
+  timelineMonths: number;
 }
 
 interface BasePlan {
@@ -114,7 +118,7 @@ export function EnhancedOnboardingFlow() {
     const carbGrams = Math.round((caloriesForSurplus * 0.45) / 4);
     const fatGrams = Math.round((caloriesForSurplus * 0.25) / 9);
     
-    const weightToGain = data.goalWeight - data.weight;
+    const weightToGain = data.calculatedTargetWeight - data.weight;
     const estimatedWeeksToGoal = Math.ceil(weightToGain / 1);
     
     let trainingDays = 4;
@@ -135,7 +139,7 @@ export function EnhancedOnboardingFlow() {
       targetCalories: caloriesForSurplus,
       tdeeEstimate: Math.round(tdee),
       surplus: 1100,
-      projectedWeight: data.goalWeight,
+      projectedWeight: data.calculatedTargetWeight,
       timeToGoal: estimatedWeeksToGoal,
       proteinTarget: proteinGrams,
       carbTarget: carbGrams,
@@ -176,7 +180,7 @@ export function EnhancedOnboardingFlow() {
         age: userData.age,
         height: userData.height,
         weight: userData.weight,
-        goalWeight: userData.goalWeight,
+        goalWeight: userData.calculatedTargetWeight,
         sex: userData.sex,
         activityLevel: userData.activityLevel,
         username: userData.firstName.toLowerCase(),

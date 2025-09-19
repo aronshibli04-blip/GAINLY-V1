@@ -24,7 +24,11 @@ interface UserBasicData {
   weight: number;
   sex: 'male' | 'female';
   activityLevel: string;
-  goalWeight: number;
+  // FFMI-based goal system (replaces arbitrary goalWeight)
+  bodyFatPercentage: number;
+  targetFFMI: number;
+  calculatedTargetWeight: number;
+  timelineMonths: number;
 }
 
 interface BasePlan {
@@ -99,11 +103,11 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
     return splits[basePlan.trainingDays as keyof typeof splits] || splits[4];
   };
 
-  const weightGainNeeded = userData.goalWeight - userData.weight;
+  const weightGainNeeded = userData.calculatedTargetWeight - userData.weight;
   const bmi = userData.weight / Math.pow(userData.height / 100, 2);
   const bodyScanData = {
     currentBmi: bmi.toFixed(1),
-    targetBmi: (userData.goalWeight / Math.pow(userData.height / 100, 2)).toFixed(1),
+    targetBmi: (userData.calculatedTargetWeight / Math.pow(userData.height / 100, 2)).toFixed(1),
     muscleGainPotential: "High", // For hardgainers
     metabolicType: "Fast"
   };
@@ -203,7 +207,7 @@ export function BasePlanPreview({ userData, basePlan, onStartApp }: BasePlanPrev
                   </div>
                   <div>
                     <p className="text-slate-400 text-sm">Target</p>
-                    <p className="text-2xl font-bold text-emerald-400">{userData.goalWeight}kg</p>
+                    <p className="text-2xl font-bold text-emerald-400">{userData.calculatedTargetWeight}kg</p>
                   </div>
                 </div>
                 
