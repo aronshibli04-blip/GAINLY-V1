@@ -6,6 +6,15 @@ import { type Server } from "http";
 import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 
+export function serveStatic(app: Express) {
+  const distPath = path.resolve(import.meta.dirname, "..", "dist", "public");
+  app.use(express.static(distPath));
+  
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+}
+
 const viteLogger = createLogger();
 
 export function log(message: string, source = "express") {
@@ -16,7 +25,7 @@ export function log(message: string, source = "express") {
     hour12: true,
   });
 
-  
+  console.log(`[${formattedTime}] ${source}: ${message}`);
 }
 
 export async function setupVite(app: Express, server: Server) {
