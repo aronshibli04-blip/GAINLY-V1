@@ -15,6 +15,7 @@ export const users = pgTable("users", {
   bodyFatPercentage: decimal("body_fat_percentage", { precision: 4, scale: 1 }), // e.g., 15.5%
   targetFFMI: decimal("target_ffmi", { precision: 4, scale: 1 }), // e.g., 22.5
   calculatedTargetWeight: decimal("calculated_target_weight", { precision: 5, scale: 1 }), // in kg
+  goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }), // DEPRECATED: Keep for DB compatibility, use calculatedTargetWeight instead
   activityLevel: text("activity_level").notNull(), // sedentary, lightly_active, moderately_active, very_active
   // FFMI Tiered Goal System fields
   goalPath: text("goal_path").notNull().default('standard'), // 'standard' | 'accelerated' 
@@ -296,9 +297,9 @@ export const insertMealLogSchema = createInsertSchema(mealLogs).omit({
   id: true,
   createdAt: true,
 }).extend({
-  protein: z.union([z.string(), z.number()]).transform(val => String(val)),
-  carbs: z.union([z.string(), z.number()]).transform(val => String(val)),
-  fat: z.union([z.string(), z.number()]).transform(val => String(val)),
+  protein: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  carbs: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  fat: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
 });
 
 export const insertActivityLogSchema = createInsertSchema(activityLogs).omit({
