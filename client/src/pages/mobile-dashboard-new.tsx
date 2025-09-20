@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/components/ui/bottom-nav";
 import { MobileHeader } from "@/components/ui/mobile-header";
-import { EnhancedWeeklyNutritionCalendar } from "@/components/ui/enhanced-weekly-nutrition-calendar";
+import { WeeklyNutritionCard } from "@/components/ui/weekly-nutrition-card";
 import { WeightTrendMiniChart } from "@/components/ui/weight-trend-mini-chart";
 import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
 import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
@@ -74,9 +74,9 @@ export default function MobileDashboardNew() {
           <h1 className="text-xl font-bold text-white mt-1">Dashboard</h1>
         </div>
 
-        {/* 1. HERO SECTION - Enhanced Weekly Nutrition Calendar */}
+        {/* 1. HERO SECTION - Weekly Nutrition Card (MacroFactor Style) */}
         <div className="mb-6">
-          <EnhancedWeeklyNutritionCalendar targetCalories={targetCalories} />
+          <WeeklyNutritionCard />
         </div>
 
         {/* 2. ANALYTICS CARDS - 2 Column Grid with fallbacks */}
