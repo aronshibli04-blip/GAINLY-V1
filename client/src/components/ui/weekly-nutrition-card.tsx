@@ -75,10 +75,14 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
                 <div 
                   key={day.date.toISOString()}
                   className={cn(
-                    "text-xs font-medium text-center py-1",
-                    day.isCurrent ? "text-cyan-400" : "text-slate-400"
+                    "text-xs font-medium text-center py-1 rounded-md transition-all duration-300 transform-gpu",
+                    "hover:scale-105 hover:bg-slate-700/50",
+                    day.isCurrent 
+                      ? "text-cyan-400 bg-cyan-500/10 border border-cyan-400/30 shadow-md shadow-cyan-500/20" 
+                      : "text-slate-400 hover:text-white hover:bg-slate-600/30"
                   )}
                   data-testid={`day-header-${index}`}
+                  title={`${day.date.toLocaleDateString('nb-NO', { weekday: 'long', month: 'short', day: 'numeric' })}`}
                 >
                   {day.dayLetter}
                 </div>
@@ -160,16 +164,17 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
 
         {/* Toggle Buttons */}
         <div className="flex justify-center">
-          <div className="bg-slate-700/50 rounded-full p-1 flex">
+          <div className="bg-slate-700/50 rounded-full p-1 flex border border-slate-600/50 shadow-lg backdrop-blur-sm">
             <Button
               variant={viewMode === 'consumed' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('consumed')}
               className={cn(
-                "rounded-full px-4 py-1 text-xs font-medium transition-all",
+                "rounded-full px-4 py-1 text-xs font-medium transition-all duration-300 transform-gpu",
+                "hover:scale-105 active:scale-95",
                 viewMode === 'consumed' 
-                  ? "bg-white text-black shadow-lg" 
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-xl shadow-cyan-500/30 border-0" 
+                  : "text-slate-400 hover:text-white hover:bg-slate-600/50 hover:shadow-md"
               )}
               data-testid="toggle-consumed"
             >
@@ -180,10 +185,11 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
               size="sm"
               onClick={() => setViewMode('remaining')}
               className={cn(
-                "rounded-full px-4 py-1 text-xs font-medium transition-all",
+                "rounded-full px-4 py-1 text-xs font-medium transition-all duration-300 transform-gpu",
+                "hover:scale-105 active:scale-95",
                 viewMode === 'remaining' 
-                  ? "bg-white text-black shadow-lg" 
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-xl shadow-cyan-500/30 border-0" 
+                  : "text-slate-400 hover:text-white hover:bg-slate-600/50 hover:shadow-md"
               )}
               data-testid="toggle-remaining"
             >
@@ -239,10 +245,13 @@ function DayProgressBar({ day, macro, viewMode, colors, dayIndex }: DayProgressB
   return (
     <div
       className={cn(
-        "relative rounded-lg overflow-hidden transition-all duration-200",
-        "hover:scale-105 hover:shadow-lg cursor-pointer",
-        day.isCurrent && "ring-2 ring-white ring-offset-1 ring-offset-slate-800",
-        day.isFuture ? "bg-slate-700/40" : colors.background
+        "relative rounded-lg overflow-hidden transition-all duration-300 transform-gpu",
+        "hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/20 cursor-pointer",
+        "hover:z-10 hover:border hover:border-cyan-400/30",
+        day.isCurrent && "ring-2 ring-cyan-400 ring-offset-1 ring-offset-slate-800 shadow-lg shadow-cyan-500/30",
+        day.isFuture ? "bg-slate-700/40" : colors.background,
+        // Enhanced interactivity for completed days
+        !day.isFuture && "hover:brightness-110"
       )}
       style={{
         background: day.isFuture 
@@ -250,24 +259,33 @@ function DayProgressBar({ day, macro, viewMode, colors, dayIndex }: DayProgressB
           : colors.background
       }}
       data-testid={`progress-bar-${macro}-${dayIndex}`}
+      title={`${macro.charAt(0).toUpperCase() + macro.slice(1)}: ${macroData.consumed}/${macroData.target} ${macroData.unit} (${percentage.toFixed(0)}%)`}
     >
       {/* Progress Fill */}
       {!day.isFuture && (
         <div
-          className="absolute bottom-0 left-0 right-0 transition-all duration-300 rounded-lg"
+          className="absolute bottom-0 left-0 right-0 transition-all duration-500 rounded-lg"
           style={{
             height: `${Math.max(percentage, 8)}%`, // Minimum 8% height for visibility
             backgroundColor: colors.primary,
-            boxShadow: percentage > 100 ? colors.glow : undefined
+            boxShadow: percentage > 100 ? colors.glow : `0 0 10px ${colors.primary}40`
           }}
         />
       )}
       
-      {/* Current Day Indicator */}
+      {/* Current Day Indicator - Enhanced */}
       {day.isCurrent && (
-        <div className="absolute top-1 right-1">
-          <div className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse" />
+        <div className="absolute inset-0 border-2 border-cyan-400/40 rounded-lg animate-pulse">
+          <div className="absolute top-1 right-1">
+            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
+            <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-300 rounded-full" />
+          </div>
         </div>
+      )}
+      
+      {/* Subtle glow effect on hover for current day */}
+      {day.isCurrent && (
+        <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
       )}
     </div>
   );
@@ -284,14 +302,33 @@ interface NutritionSummaryItemProps {
 
 function NutritionSummaryItem({ value, target, unit, viewMode, color }: NutritionSummaryItemProps) {
   const displayValue = viewMode === 'consumed' ? value : target - value;
+  const percentage = (value / target) * 100;
   
   return (
-    <div className="text-right py-2">
-      <div className="text-white text-sm font-semibold">
+    <div 
+      className="text-right py-2 px-2 rounded-lg transition-all duration-300 hover:bg-slate-700/30 hover:scale-105 transform-gpu"
+      data-testid={`summary-${unit.toLowerCase()}`}
+      title={`${percentage.toFixed(1)}% of target reached`}
+    >
+      <div 
+        className="text-sm font-semibold transition-colors duration-300"
+        style={{ color: percentage >= 100 ? color.primary : 'white' }}
+      >
         {displayValue.toLocaleString()} {unit}
       </div>
       <div className="text-slate-500 text-xs">
         of {target.toLocaleString()}
+      </div>
+      {/* Progress indicator bar */}
+      <div className="w-full h-0.5 bg-slate-600 rounded-full mt-1 overflow-hidden">
+        <div 
+          className="h-full transition-all duration-500 rounded-full"
+          style={{ 
+            width: `${Math.min(percentage, 100)}%`,
+            backgroundColor: color.primary,
+            boxShadow: percentage >= 100 ? `0 0 4px ${color.primary}` : undefined
+          }}
+        />
       </div>
     </div>
   );
