@@ -280,6 +280,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User targets endpoint - derives macro targets from AI analysis
+  app.get("/api/user-targets/:userId", async (req, res) => {
+    try {
+      const analysis = await storage.getLatestAiAnalysis(req.params.userId);
+      
+      if (!analysis) {
+        return res.json(null); // No targets available yet
+      }
+      
+      // Calculate macro targets based on target calories
+      const targetCalories = analysis.targetCalories;
+      
+      // Standard hardgainer macro ratios: 20% protein, 25% fat, 55% carbs
+      const protein = Math.round((targetCalories * 0.20) / 4); // 4 cal per gram
+      const fat = Math.round((targetCalories * 0.25) / 9); // 9 cal per gram
+      const carbs = Math.round((targetCalories * 0.55) / 4); // 4 cal per gram
+      
+      const macroTargets = {
+        calories: targetCalories,
+        protein: protein,
+        fat: fat,
+        carbs: carbs
+      };
+      
+      res.json(macroTargets);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // AI Coach Chat endpoint
   app.post("/api/ai-coach/chat", async (req, res) => {
     try {

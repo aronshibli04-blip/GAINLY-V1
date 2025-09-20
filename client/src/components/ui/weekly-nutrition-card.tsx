@@ -259,7 +259,7 @@ function DayProgressBar({ day, macro, viewMode, colors, dayIndex }: DayProgressB
           : colors.background
       }}
       data-testid={`progress-bar-${macro}-${dayIndex}`}
-      title={`${macro.charAt(0).toUpperCase() + macro.slice(1)}: ${macroData.consumed}/${macroData.target} ${macroData.unit} (${percentage.toFixed(0)}%)`}
+      title={`${macro.charAt(0).toUpperCase() + macro.slice(1)}: ${macroData.current}/${macroData.target} ${macroData.unit} (${percentage.toFixed(0)}%)`}
     >
       {/* Progress Fill */}
       {!day.isFuture && (

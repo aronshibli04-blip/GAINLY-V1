@@ -192,7 +192,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     weeklyNutritionData,
     weeklySummary,
     isLoading: mealLogsLoading || targetsLoading,
-    isError: !!mealLogsError || !!targetsError,
+    isError: !!mealLogsError, // Only block on meal logs error - targets can fallback
     refetch: () => {
       // Re-fetch both meal logs and targets
       // This will be handled by TanStack Query's invalidation
