@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, Bell, Zap } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/store/notifications";
+import { cn } from "@/lib/utils";
 
 interface MobileHeaderProps {
   title: string;
@@ -11,15 +13,21 @@ interface MobileHeaderProps {
 }
 
 export function MobileHeader({ title, onOpenMenu, showNotifications = true, isVisible = true }: MobileHeaderProps) {
-  const { toast } = useToast();
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
+  const { open, unreadCount, add } = useNotificationStore();
 
   const handleNotificationClick = () => {
-    setHasUnreadNotifications(false);
-    toast({
-      title: "Notifications",
-      description: "You have 2 new milestones available! Great progress on your weight gain journey.",
-      duration: 3000,
+    open();
+  };
+
+  // Temporary test function - for development only
+  const addTestNotification = () => {
+    add({
+      userId: 'test-user',
+      type: 'goal',
+      title: 'Ny milepæl oppnådd! 🎉',
+      message: 'Du har holdt kalorimålet ditt i 7 dager på rad. Fortsett det gode arbeidet!',
+      read: false,
+      link: '/progress',
     });
   };
 
@@ -52,20 +60,40 @@ export function MobileHeader({ title, onOpenMenu, showNotifications = true, isVi
 
         {/* Notifications */}
         {showNotifications && (
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={handleNotificationClick}
-            className="text-gray-400 hover:text-white hover:bg-primary/20 p-2 relative"
-            data-testid="button-notifications"
-          >
-            <Bell className="h-5 w-5" />
-            {hasUnreadNotifications && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full flex items-center justify-center animate-pulse">
-                <div className="w-1.5 h-1.5 bg-black rounded-full" />
-              </div>
-            )}
-          </Button>
+          <div className="flex items-center gap-1">
+            {/* Temporary test button - remove in production */}
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={addTestNotification}
+              className="text-green-400 hover:text-green-300 hover:bg-primary/20 p-1 text-xs"
+              title="Add test notification"
+            >
+              +
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleNotificationClick}
+              className="text-gray-400 hover:text-white hover:bg-primary/20 p-2 relative"
+              data-testid="button-notifications"
+            >
+              <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span 
+                  className={cn(
+                    "absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1",
+                    "bg-cyan-500 text-white text-xs font-medium rounded-full",
+                    "flex items-center justify-center leading-none"
+                  )}
+                  data-testid="badge-unread-count"
+                >
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </Button>
+          </div>
         )}
       </div>
     </header>
