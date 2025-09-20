@@ -1,0 +1,59 @@
+Here’s a full, detailed description of the “Weekly Nutrition” card from MacroFactor’s dashboard that you can hand directly to Replit as reference for your app design:
+
+⸻
+
+Weekly Nutrition Card — Detailed Breakdown
+
+Layout & Positioning
+	•	The card sits prominently at the top section of the dashboard under the title “Weekly Nutrition.”
+	•	It spans the full width of the screen and is centered, giving it strong visual hierarchy as one of the user’s primary metrics.
+
+Main Elements
+	1.	Daily Nutrition Bars (Left Side)
+	•	A horizontal row of seven columns, one for each day of the week (Mon → Sun).
+	•	Each column is a vertical bar chart with stacked colored bars.
+	•	Each color corresponds to a macronutrient or calorie type:
+	•	Blue = Protein
+	•	Yellow/Orange = Fat
+	•	Green = Carbohydrates
+	•	White/Gray = Calories (total energy)
+	•	The height of each bar reflects progress toward the user’s daily target.
+	•	Empty/gray bars indicate future or untracked days.
+	2.	Selected Day Highlight
+	•	The currently active day is outlined with a white border (e.g., “T” for Tuesday in the screenshot).
+	•	This helps the user immediately see which day’s data they’re reviewing.
+	3.	Macro & Calorie Totals (Right Side)
+	•	To the right of the daily bars, numeric values are displayed vertically in a list:
+	•	Calories: Shown with flame icon (e.g., 4519 of 4519).
+	•	Protein (P): e.g., 139 P of 139.
+	•	Fat (F): e.g., 150 F of 150.
+	•	Carbohydrates (C): e.g., 651 C of 651.
+	•	Each row pairs the actual consumed amount with the goal, formatted as [value] of [target].
+	•	Units are consistent (grams for macros, kcal for calories).
+	4.	Toggle Buttons (Bottom of Card)
+	•	Two pill-shaped toggle buttons allow the user to switch views:
+	•	Consumed → shows amounts already eaten.
+	•	Remaining → flips the numbers to show what’s left to hit the target.
+	•	Current selection is emphasized with a filled white background and dark text, while the inactive option is outlined.
+
+Visual Style
+	•	Background: Flat, dark mode card (charcoal/black).
+	•	Bars: Vibrant colors (blue, orange, green) for macros contrast strongly against the dark background.
+	•	Text: Clean white typography for numbers and headings. Small, gray secondary text for labels.
+	•	Icons: Simple, minimalistic flame icon for calories, subtle letters (P, F, C) for macros.
+
+User Experience Intent
+	•	At-a-glance summary of progress vs. target for calories and each macronutrient.
+	•	Easy day-to-day navigation through the week using the horizontal bar set.
+	•	Quick switch between “what I’ve eaten” and “what I have left to eat.”
+	•	Compact but highly information-dense—everything fits in one card without scrolling.
+
+⸻
+
+👉 If you send this to Replit, you can tell them:
+	•	Replicate this exact structure (with 7-day bar charts + macro totals + toggle).
+	•	Keep colors consistent for instant recognition.
+	•	Use a highlight outline for the active day.
+	•	Maintain dark theme + minimalist style for premium feel.
+
+Do you want me to also redesign this description into a mockup specifically adapted to your app’s style (glass/glow UI, premium look), so it’s not just a clone of MacroFactor?

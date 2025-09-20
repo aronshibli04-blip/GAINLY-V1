@@ -38,6 +38,9 @@ export const mealLogs = pgTable("meal_logs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").references(() => users.id).notNull(),
   calories: integer("calories").notNull(),
+  protein: decimal("protein", { precision: 5, scale: 2 }).default('0').notNull(),
+  carbs: decimal("carbs", { precision: 5, scale: 2 }).default('0').notNull(),
+  fat: decimal("fat", { precision: 5, scale: 2 }).default('0').notNull(),
   description: text("description"),
   logDate: date("log_date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -292,6 +295,10 @@ export const insertWeightLogSchema = createInsertSchema(weightLogs).omit({
 export const insertMealLogSchema = createInsertSchema(mealLogs).omit({
   id: true,
   createdAt: true,
+}).extend({
+  protein: z.union([z.string(), z.number()]).transform(val => String(val)),
+  carbs: z.union([z.string(), z.number()]).transform(val => String(val)),
+  fat: z.union([z.string(), z.number()]).transform(val => String(val)),
 });
 
 export const insertActivityLogSchema = createInsertSchema(activityLogs).omit({
