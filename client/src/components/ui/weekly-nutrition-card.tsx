@@ -11,6 +11,7 @@ import {
   getWeekBoundaries,
   calculatePercentage 
 } from "@shared/nutrition-types";
+import { useWeeklyNutrition } from "@/hooks/useWeeklyNutrition";
 
 interface WeeklyNutritionCardProps {
   className?: string;
@@ -19,8 +20,35 @@ interface WeeklyNutritionCardProps {
 export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
   const [viewMode, setViewMode] = useState<'consumed' | 'remaining'>('consumed');
   
-  // Mock data for development - will be replaced with real data hook
-  const mockWeeklyData: WeeklyNutritionData = generateMockData();
+  // Fetch real weekly nutrition data
+  const { weeklyNutritionData, weeklySummary, isLoading, isError } = useWeeklyNutrition();
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
+        <CardContent className="p-8 flex items-center justify-center">
+          <div className="text-center text-slate-400">
+            <div className="animate-pulse">Loading nutrition data...</div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  // Show error state
+  if (isError || !weeklyNutritionData) {
+    return (
+      <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
+        <CardContent className="p-8 flex items-center justify-center">
+          <div className="text-center text-slate-400">
+            <div>Unable to load nutrition data</div>
+            <div className="text-xs mt-2">Start logging meals to see weekly progress</div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   
   return (
     <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
@@ -43,7 +71,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
           <div className="flex-1">
             {/* Day Headers */}
             <div className="grid grid-cols-7 gap-2 mb-2">
-              {mockWeeklyData.days.map((day, index) => (
+              {weeklyNutritionData.days.map((day, index) => (
                 <div 
                   key={day.date.toISOString()}
                   className={cn(
@@ -62,7 +90,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
               {/* Calories Row */}
               <MacroRow 
                 macro="calories"
-                days={mockWeeklyData.days}
+                days={weeklyNutritionData.days}
                 viewMode={viewMode}
                 icon="🔥"
               />
@@ -70,7 +98,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
               {/* Protein Row */}
               <MacroRow 
                 macro="protein"
-                days={mockWeeklyData.days}
+                days={weeklyNutritionData.days}
                 viewMode={viewMode}
                 icon="💪"
               />
@@ -78,7 +106,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
               {/* Fat Row */}
               <MacroRow 
                 macro="fat"
-                days={mockWeeklyData.days}
+                days={weeklyNutritionData.days}
                 viewMode={viewMode}
                 icon="🧈"
               />
@@ -86,7 +114,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
               {/* Carbs Row */}
               <MacroRow 
                 macro="carbs"
-                days={mockWeeklyData.days}
+                days={weeklyNutritionData.days}
                 viewMode={viewMode}
                 icon="🌾"
               />
@@ -95,34 +123,38 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
 
           {/* Right Side: Macro Totals */}
           <div className="w-24 space-y-1">
-            <NutritionSummaryItem 
-              value={4519} 
-              target={4519} 
-              unit="kcal" 
-              viewMode={viewMode}
-              color={MACRO_COLORS.calories}
-            />
-            <NutritionSummaryItem 
-              value={139} 
-              target={139} 
-              unit="P" 
-              viewMode={viewMode}
-              color={MACRO_COLORS.protein}
-            />
-            <NutritionSummaryItem 
-              value={150} 
-              target={150} 
-              unit="F" 
-              viewMode={viewMode}
-              color={MACRO_COLORS.fat}
-            />
-            <NutritionSummaryItem 
-              value={651} 
-              target={651} 
-              unit="C" 
-              viewMode={viewMode}
-              color={MACRO_COLORS.carbs}
-            />
+            {weeklySummary && (
+              <>
+                <NutritionSummaryItem 
+                  value={weeklySummary.calories.consumed} 
+                  target={weeklySummary.calories.target} 
+                  unit={weeklySummary.calories.unit} 
+                  viewMode={viewMode}
+                  color={MACRO_COLORS.calories}
+                />
+                <NutritionSummaryItem 
+                  value={weeklySummary.protein.consumed} 
+                  target={weeklySummary.protein.target} 
+                  unit={weeklySummary.protein.unit} 
+                  viewMode={viewMode}
+                  color={MACRO_COLORS.protein}
+                />
+                <NutritionSummaryItem 
+                  value={weeklySummary.fat.consumed} 
+                  target={weeklySummary.fat.target} 
+                  unit={weeklySummary.fat.unit} 
+                  viewMode={viewMode}
+                  color={MACRO_COLORS.fat}
+                />
+                <NutritionSummaryItem 
+                  value={weeklySummary.carbs.consumed} 
+                  target={weeklySummary.carbs.target} 
+                  unit={weeklySummary.carbs.unit} 
+                  viewMode={viewMode}
+                  color={MACRO_COLORS.carbs}
+                />
+              </>
+            )}
           </div>
         </div>
 
@@ -271,68 +303,4 @@ function getCurrentWeek(): number {
   const start = new Date(now.getFullYear(), 0, 1);
   const diff = now.getTime() - start.getTime();
   return Math.ceil(diff / (7 * 24 * 60 * 60 * 1000));
-}
-
-function generateMockData(): WeeklyNutritionData {
-  const { weekStart } = getWeekBoundaries(new Date());
-  const today = new Date();
-  const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
-  
-  const days: DayNutrition[] = [];
-  
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(weekStart);
-    date.setDate(weekStart.getDate() + i);
-    
-    const isCurrent = i === currentDayIndex;
-    const isCompleted = i < currentDayIndex;
-    const isFuture = i > currentDayIndex;
-    
-    // Mock macro data with some variety
-    const caloriesConsumed = isCompleted ? 3200 + Math.random() * 800 : isCurrent ? 2100 : 0;
-    const proteinConsumed = isCompleted ? 120 + Math.random() * 40 : isCurrent ? 85 : 0;
-    const fatConsumed = isCompleted ? 80 + Math.random() * 30 : isCurrent ? 55 : 0;
-    const carbsConsumed = isCompleted ? 400 + Math.random() * 100 : isCurrent ? 280 : 0;
-    
-    days.push({
-      date,
-      dayLetter: getDayLetter(i),
-      dayIndex: i,
-      calories: {
-        current: Math.round(caloriesConsumed),
-        target: 3500,
-        percentage: calculatePercentage(caloriesConsumed, 3500),
-        unit: 'kcal'
-      },
-      protein: {
-        current: Math.round(proteinConsumed),
-        target: 140,
-        percentage: calculatePercentage(proteinConsumed, 140),
-        unit: 'g'
-      },
-      fat: {
-        current: Math.round(fatConsumed),
-        target: 100,
-        percentage: calculatePercentage(fatConsumed, 100),
-        unit: 'g'
-      },
-      carbs: {
-        current: Math.round(carbsConsumed),
-        target: 450,
-        percentage: calculatePercentage(carbsConsumed, 450),
-        unit: 'g'
-      },
-      isCompleted,
-      isCurrent,
-      isFuture
-    });
-  }
-  
-  return {
-    weekStart,
-    weekEnd: new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000),
-    days,
-    currentDayIndex,
-    viewMode: 'consumed'
-  };
 }
