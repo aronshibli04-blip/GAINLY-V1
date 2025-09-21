@@ -76,9 +76,9 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
   
   return (
     <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
-      {/* Header */}
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
+      <CardContent className="p-4">
+        {/* Header inline */}
+        <div className="flex items-center justify-between mb-3">
           <CardTitle className="text-white text-lg font-semibold">
             Weekly Nutrition
           </CardTitle>
@@ -86,9 +86,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
             <div className="text-slate-400 text-sm">Week {getCurrentWeek()}</div>
           </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="space-y-4">
         {/* MacroFactor Style Grid: 4 rows × 7 columns */}
         <div className="flex gap-4">
           {/* Left Side: 4×7 Grid */}
