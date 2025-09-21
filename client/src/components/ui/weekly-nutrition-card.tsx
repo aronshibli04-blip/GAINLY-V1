@@ -303,10 +303,6 @@ function DayProgressBar({ day, macro, viewMode, colors, dayIndex }: DayProgressB
       {/* Current Day Indicator - Enhanced */}
       {day.isCurrent && (
         <div className="absolute inset-0 border-2 border-cyan-400/40 rounded-lg animate-pulse">
-          <div className="absolute top-1 right-1">
-            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
-            <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-300 rounded-full" />
-          </div>
         </div>
       )}
       
