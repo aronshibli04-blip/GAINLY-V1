@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
   WeeklyNutritionData, 
@@ -19,9 +19,20 @@ interface WeeklyNutritionCardProps {
 
 export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
   const [viewMode, setViewMode] = useState<'consumed' | 'remaining'>('consumed');
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(0);
   
   // Fetch real weekly nutrition data
   const { weeklyNutritionData, weeklySummary, isLoading, isError } = useWeeklyNutrition();
+  
+  // Set selected day to current day when data loads
+  useEffect(() => {
+    if (weeklyNutritionData) {
+      setSelectedDayIndex(weeklyNutritionData.currentDayIndex);
+    }
+  }, [weeklyNutritionData]);
+  
+  // Get selected day's nutrition data
+  const selectedDayNutrition = weeklyNutritionData?.days[selectedDayIndex];
   
   // Show loading state
   if (isLoading) {
@@ -88,12 +99,17 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
                 <div 
                   key={day.date.toISOString()}
                   className={cn(
-                    "text-xs font-medium text-center py-1 rounded-md transition-all duration-300 transform-gpu",
+                    "text-xs font-medium text-center py-1 rounded-md transition-all duration-300 transform-gpu cursor-pointer",
                     "hover:scale-105 hover:bg-slate-700/50",
-                    day.isCurrent 
-                      ? "text-cyan-400 bg-cyan-500/10 border border-cyan-400/30 shadow-md shadow-cyan-500/20" 
-                      : "text-slate-400 hover:text-white hover:bg-slate-600/30"
+                    // Selected day highlighting (primary)
+                    index === selectedDayIndex
+                      ? "text-white bg-cyan-500/20 border border-cyan-400 shadow-lg shadow-cyan-500/30" 
+                      // Current day highlighting (secondary, if not selected)
+                      : day.isCurrent 
+                        ? "text-cyan-400 bg-cyan-500/10 border border-cyan-400/30 shadow-md shadow-cyan-500/20" 
+                        : "text-slate-400 hover:text-white hover:bg-slate-600/30"
                   )}
+                  onClick={() => setSelectedDayIndex(index)}
                   data-testid={`day-header-${index}`}
                   title={`${day.date.toLocaleDateString('nb-NO', { weekday: 'long', month: 'short', day: 'numeric' })}`}
                 >
@@ -138,35 +154,35 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
             </div>
           </div>
 
-          {/* Right Side: Macro Totals */}
+          {/* Right Side: Selected Day Totals */}
           <div className="w-24 space-y-1">
-            {weeklySummary && (
+            {selectedDayNutrition && (
               <>
                 <NutritionSummaryItem 
-                  value={weeklySummary.calories.consumed} 
-                  target={weeklySummary.calories.target} 
-                  unit={weeklySummary.calories.unit} 
+                  value={selectedDayNutrition.calories.current} 
+                  target={selectedDayNutrition.calories.target} 
+                  unit={selectedDayNutrition.calories.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.calories}
                 />
                 <NutritionSummaryItem 
-                  value={weeklySummary.protein.consumed} 
-                  target={weeklySummary.protein.target} 
-                  unit={weeklySummary.protein.unit} 
+                  value={selectedDayNutrition.protein.current} 
+                  target={selectedDayNutrition.protein.target} 
+                  unit={selectedDayNutrition.protein.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.protein}
                 />
                 <NutritionSummaryItem 
-                  value={weeklySummary.fat.consumed} 
-                  target={weeklySummary.fat.target} 
-                  unit={weeklySummary.fat.unit} 
+                  value={selectedDayNutrition.fat.current} 
+                  target={selectedDayNutrition.fat.target} 
+                  unit={selectedDayNutrition.fat.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.fat}
                 />
                 <NutritionSummaryItem 
-                  value={weeklySummary.carbs.consumed} 
-                  target={weeklySummary.carbs.target} 
-                  unit={weeklySummary.carbs.unit} 
+                  value={selectedDayNutrition.carbs.current} 
+                  target={selectedDayNutrition.carbs.target} 
+                  unit={selectedDayNutrition.carbs.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.carbs}
                 />
