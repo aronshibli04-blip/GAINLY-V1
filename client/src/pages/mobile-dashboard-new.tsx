@@ -71,7 +71,6 @@ export default function MobileDashboardNew() {
               day: 'numeric' 
             })}
           </p>
-          <h1 className="text-xl font-bold text-white mt-1">Dashboard</h1>
         </div>
 
         {/* 1. HERO SECTION - Weekly Nutrition Card (MacroFactor Style) */}
