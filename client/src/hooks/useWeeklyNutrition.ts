@@ -47,7 +47,11 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
 
   // Process the data into WeeklyNutritionData format
   const weeklyNutritionData = useMemo((): WeeklyNutritionData | null => {
-    if (!mealLogs) return null; // Only require meal logs, use fallback for targets
+    // Return null while still loading, but create empty structure for empty arrays
+    if (mealLogsLoading) return null;
+    
+    // Always create week structure - use empty array if no meal logs exist yet
+    const mealLogsArray = mealLogs || [];
 
     const today = new Date();
     const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
@@ -75,7 +79,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       const isFuture = dayIndex > currentDayIndex;
 
       // Filter meals for this specific day
-      const dayMeals = mealLogs.filter(meal => 
+      const dayMeals = mealLogsArray.filter(meal => 
         meal.logDate === dateString
       );
 
@@ -131,7 +135,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       currentDayIndex,
       viewMode: 'consumed'
     };
-  }, [mealLogs, userTargets, weekBoundaries, weekOffset]);
+  }, [mealLogs, userTargets, weekBoundaries, weekOffset, mealLogsLoading]);
 
   // Calculate weekly summary statistics
   const weeklySummary = useMemo(() => {

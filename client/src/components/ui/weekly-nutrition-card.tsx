@@ -36,14 +36,27 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
     );
   }
   
-  // Show error state
-  if (isError || !weeklyNutritionData) {
+  // Show error state only for actual API errors
+  if (isError) {
     return (
       <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
         <CardContent className="p-8 flex items-center justify-center">
           <div className="text-center text-slate-400">
             <div>Unable to load nutrition data</div>
-            <div className="text-xs mt-2">Start logging meals to see weekly progress</div>
+            <div className="text-xs mt-2">Please check your connection and try again</div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  // Handle case where data is still loading or unavailable
+  if (!weeklyNutritionData) {
+    return (
+      <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
+        <CardContent className="p-8 flex items-center justify-center">
+          <div className="text-center text-slate-400">
+            <div className="animate-pulse">Loading nutrition data...</div>
           </div>
         </CardContent>
       </Card>
