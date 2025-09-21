@@ -87,68 +87,22 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
           </div>
         </div>
 
-        {/* MacroFactor Style Grid: 4 rows × 7 columns */}
+        {/* MacroFactor Style Grid: 7 columns × 4 rows */}
         <div className="flex gap-4">
-          {/* Left Side: 4×7 Grid */}
+          {/* Left Side: 7×4 Grid */}
           <div className="flex-1">
-            {/* Day Headers */}
-            <div className="grid grid-cols-7 gap-2 mb-2">
+            {/* Day Columns Layout */}
+            <div className="grid grid-cols-7 gap-2">
               {weeklyNutritionData.days.map((day, index) => (
-                <div 
+                <DayColumn
                   key={day.date.toISOString()}
-                  className={cn(
-                    "text-xs font-medium text-center py-1 rounded-md transition-all duration-300 transform-gpu cursor-pointer",
-                    "hover:scale-105 hover:bg-slate-700/50",
-                    // Selected day highlighting (primary)
-                    index === selectedDayIndex
-                      ? "text-white bg-cyan-500/20 border border-cyan-400 shadow-lg shadow-cyan-500/30" 
-                      // Current day highlighting (secondary, if not selected)
-                      : day.isCurrent 
-                        ? "text-cyan-400 bg-cyan-500/10 border border-cyan-400/30 shadow-md shadow-cyan-500/20" 
-                        : "text-slate-400 hover:text-white hover:bg-slate-600/30"
-                  )}
-                  onClick={() => setSelectedDayIndex(index)}
-                  data-testid={`day-header-${index}`}
-                  title={`${day.date.toLocaleDateString('nb-NO', { weekday: 'long', month: 'short', day: 'numeric' })}`}
-                >
-                  {day.dayLetter}
-                </div>
+                  day={day}
+                  dayIndex={index}
+                  viewMode={viewMode}
+                  isSelected={index === selectedDayIndex}
+                  onDayClick={() => setSelectedDayIndex(index)}
+                />
               ))}
-            </div>
-
-            {/* Macro Rows */}
-            <div className="space-y-1">
-              {/* Calories Row */}
-              <MacroRow 
-                macro="calories"
-                days={weeklyNutritionData.days}
-                viewMode={viewMode}
-                icon="🔥"
-              />
-              
-              {/* Protein Row */}
-              <MacroRow 
-                macro="protein"
-                days={weeklyNutritionData.days}
-                viewMode={viewMode}
-                icon="💪"
-              />
-              
-              {/* Fat Row */}
-              <MacroRow 
-                macro="fat"
-                days={weeklyNutritionData.days}
-                viewMode={viewMode}
-                icon="🧈"
-              />
-              
-              {/* Carbs Row */}
-              <MacroRow 
-                macro="carbs"
-                days={weeklyNutritionData.days}
-                viewMode={viewMode}
-                icon="🌾"
-              />
             </div>
           </div>
 
@@ -229,63 +183,87 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
   );
 }
 
-// MacroRow Component - Single horizontal row for one macro across 7 days
-interface MacroRowProps {
-  macro: 'calories' | 'protein' | 'fat' | 'carbs';
-  days: DayNutrition[];
+// DayColumn Component - Single vertical column for one day containing all 4 macros
+interface DayColumnProps {
+  day: DayNutrition;
+  dayIndex: number;
   viewMode: 'consumed' | 'remaining';
-  icon: string;
+  isSelected: boolean;
+  onDayClick: () => void;
 }
 
-function MacroRow({ macro, days, viewMode, icon }: MacroRowProps) {
-  const colors = MACRO_COLORS[macro];
+function DayColumn({ day, dayIndex, viewMode, isSelected, onDayClick }: DayColumnProps) {
+  const macros = ['calories', 'protein', 'fat', 'carbs'] as const;
   
   return (
-    <div className="grid grid-cols-7 gap-2 h-12">
-      {days.map((day, index) => (
-        <DayProgressBar
-          key={day.date.toISOString()}
-          day={day}
-          macro={macro}
-          viewMode={viewMode}
-          colors={colors}
-          dayIndex={index}
-        />
-      ))}
+    <div
+      className={cn(
+        "relative transition-all duration-300 transform-gpu cursor-pointer rounded-lg",
+        // Vertical column highlighting
+        isSelected
+          ? "border-2 border-cyan-400 bg-cyan-500/5 shadow-lg shadow-cyan-500/30" 
+          : day.isCurrent 
+            ? "border-2 border-cyan-400/30 bg-cyan-500/5 shadow-md shadow-cyan-500/20" 
+            : "border-2 border-transparent hover:border-slate-600/50",
+        "hover:scale-105 hover:bg-slate-700/20"
+      )}
+      onClick={onDayClick}
+      data-testid={`day-column-${dayIndex}`}
+    >
+      {/* Day Header */}
+      <div className={cn(
+        "text-xs font-medium text-center py-1 rounded-t-md transition-all duration-300",
+        isSelected
+          ? "text-white bg-cyan-500/20" 
+          : day.isCurrent 
+            ? "text-cyan-400 bg-cyan-500/10" 
+            : "text-slate-400"
+      )}>
+        {day.dayLetter}
+      </div>
+
+      {/* Macro Cells */}
+      <div className="space-y-1 p-1">
+        {macros.map((macro) => (
+          <DayMacroCell
+            key={macro}
+            day={day}
+            macro={macro}
+            viewMode={viewMode}
+            colors={MACRO_COLORS[macro]}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-// DayProgressBar Component - Individual day cell
-interface DayProgressBarProps {
+// DayMacroCell Component - Individual macro cell within a day column
+interface DayMacroCellProps {
   day: DayNutrition;
   macro: 'calories' | 'protein' | 'fat' | 'carbs';
   viewMode: 'consumed' | 'remaining';
   colors: typeof MACRO_COLORS.calories;
-  dayIndex: number;
 }
 
-function DayProgressBar({ day, macro, viewMode, colors, dayIndex }: DayProgressBarProps) {
+function DayMacroCell({ day, macro, viewMode, colors }: DayMacroCellProps) {
   const macroData = day[macro];
   const percentage = Math.min(macroData.percentage, 150); // Cap at 150% for visual
   
   return (
     <div
       className={cn(
-        "relative rounded-lg overflow-hidden transition-all duration-300 transform-gpu",
-        "hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/20 cursor-pointer",
-        "hover:z-10 hover:border hover:border-cyan-400/30",
-        day.isCurrent && "ring-2 ring-cyan-400 ring-offset-1 ring-offset-slate-800 shadow-lg shadow-cyan-500/30",
+        "relative rounded-lg overflow-hidden transition-all duration-300 h-12",
         day.isFuture ? "bg-slate-700/40" : colors.background,
-        // Enhanced interactivity for completed days
-        !day.isFuture && "hover:brightness-110"
+        // Remove individual cell highlighting
+        "hover:brightness-110"
       )}
       style={{
         background: day.isFuture 
           ? 'rgba(71, 85, 105, 0.4)' 
           : colors.background
       }}
-      data-testid={`progress-bar-${macro}-${dayIndex}`}
+      data-testid={`macro-cell-${macro}`}
       title={`${macro.charAt(0).toUpperCase() + macro.slice(1)}: ${macroData.current}/${macroData.target} ${macroData.unit} (${percentage.toFixed(0)}%)`}
     >
       {/* Progress Fill */}
@@ -299,20 +277,10 @@ function DayProgressBar({ day, macro, viewMode, colors, dayIndex }: DayProgressB
           }}
         />
       )}
-      
-      {/* Current Day Indicator - Enhanced */}
-      {day.isCurrent && (
-        <div className="absolute inset-0 border-2 border-cyan-400/40 rounded-lg animate-pulse">
-        </div>
-      )}
-      
-      {/* Subtle glow effect on hover for current day */}
-      {day.isCurrent && (
-        <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-      )}
     </div>
   );
 }
+
 
 // NutritionSummaryItem Component - Right side totals
 interface NutritionSummaryItemProps {
