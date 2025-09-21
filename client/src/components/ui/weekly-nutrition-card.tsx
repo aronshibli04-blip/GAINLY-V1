@@ -277,6 +277,19 @@ function DayMacroCell({ day, macro, viewMode, colors }: DayMacroCellProps) {
           }}
         />
       )}
+
+      {/* Goal Line - White horizontal line at 100% mark (goal reached) */}
+      {!day.isFuture && (
+        <div
+          className="absolute left-0 right-0 bg-white/90 z-10"
+          style={{
+            height: '2px',
+            top: '0px', // Position at top of container (100% goal line)
+            borderRadius: '1px',
+            boxShadow: '0 0 3px rgba(0,0,0,0.4)' // Subtle shadow for better visibility
+          }}
+        />
+      )}
     </div>
   );
 }
