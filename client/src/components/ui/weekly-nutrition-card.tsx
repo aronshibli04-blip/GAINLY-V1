@@ -255,6 +255,17 @@ function DayMacroCell({ day, macro, viewMode, colors }: DayMacroCellProps) {
     ? Math.max(0, 100 - consumedPercentage) // Invert: 0% consumed = 100% remaining
     : consumedPercentage;
   
+  // Get macro label for display
+  const getMacroLabel = (macro: string) => {
+    switch (macro) {
+      case 'protein': return 'P';
+      case 'fat': return 'F';
+      case 'carbs': return 'C';
+      case 'calories': return ''; // Already shows kcal, no need for extra label
+      default: return '';
+    }
+  };
+  
   return (
     <div
       className={cn(
@@ -281,6 +292,13 @@ function DayMacroCell({ day, macro, viewMode, colors }: DayMacroCellProps) {
             boxShadow: consumedPercentage > 100 ? colors.glow : `0 0 10px ${colors.primary}40`
           }}
         />
+      )}
+
+      {/* Macro Label - Show P, F, C in top-right corner */}
+      {getMacroLabel(macro) && (
+        <div className="absolute top-1 right-1 text-xs font-bold text-white/80 bg-black/20 rounded px-1">
+          {getMacroLabel(macro)}
+        </div>
       )}
 
     </div>
