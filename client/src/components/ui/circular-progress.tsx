@@ -83,6 +83,18 @@ export function CircularProgress({
             ease: [0.4, 0, 0.2, 1],
           }}
         />
+        
+        {/* Goal Line - White horizontal line at 100% mark */}
+        <line
+          x1={size / 2 - radius * 0.6}
+          y1={size / 2 - radius}
+          x2={size / 2 + radius * 0.6}
+          y2={size / 2 - radius}
+          stroke="rgba(255, 255, 255, 0.9)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          className="drop-shadow-sm"
+        />
       </svg>
       
       {/* Content overlay */}
