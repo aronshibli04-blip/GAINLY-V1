@@ -1,4 +1,4 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { WeeklyNutritionCard } from "@/components/ui/weekly-nutrition-card";
 import { SleepTrackingCard } from "@/components/ui/sleep-tracking-card";
 import { StressTrackingCard } from "@/components/ui/stress-tracking-card";
@@ -32,15 +32,11 @@ export function TrackingCardsCarousel({ className }: TrackingCardsCarouselProps)
           </CarouselItem>
         </CarouselContent>
         
-        {/* Navigation arrows - positioned outside the cards */}
-        <CarouselPrevious className="absolute -left-12 top-1/2 -translate-y-1/2 bg-slate-800/80 border-slate-600 text-white hover:bg-slate-700" />
-        <CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 bg-slate-800/80 border-slate-600 text-white hover:bg-slate-700" />
-        
-        {/* Mobile: Show dots indicator */}
-        <div className="flex justify-center gap-2 mt-4 md:hidden">
-          <div className="w-2 h-2 rounded-full bg-slate-600"></div>
-          <div className="w-2 h-2 rounded-full bg-slate-400"></div>
-          <div className="w-2 h-2 rounded-full bg-slate-600"></div>
+        {/* Dots indicator for all screen sizes */}
+        <div className="flex justify-center gap-2 mt-4">
+          <div className="w-2 h-2 rounded-full bg-slate-600" data-testid="dot-nutrition"></div>
+          <div className="w-2 h-2 rounded-full bg-slate-400" data-testid="dot-sleep"></div>
+          <div className="w-2 h-2 rounded-full bg-slate-600" data-testid="dot-stress"></div>
         </div>
       </Carousel>
     </div>
