@@ -314,7 +314,7 @@ function NutritionSummaryItem({ value, target, unit, viewMode, color }: Nutritio
         {displayValue.toLocaleString()} {unit}
       </div>
       <div className="text-slate-500 text-xs">
-        of {target.toLocaleString()}
+        of {target.toLocaleString()}{unit}
       </div>
       {/* Progress indicator bar */}
       <div className="w-full h-0.5 bg-slate-600 rounded-full mt-1 overflow-hidden">
