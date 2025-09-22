@@ -78,8 +78,8 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
     <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
       <CardContent className="p-4">
         {/* Header inline */}
-        <div className="flex items-center justify-between mb-3">
-          <CardTitle className="text-white text-lg font-semibold">
+        <div className="flex items-center justify-between mb-2">
+          <CardTitle className="text-white text-base font-semibold">
             Weekly Nutrition
           </CardTitle>
           <div className="text-right">
