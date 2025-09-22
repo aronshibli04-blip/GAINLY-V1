@@ -22,24 +22,24 @@ export function CircularProgress({
   color = "primary",
   animationDuration = 1.5,
 }: CircularProgressProps) {
-  const normalizedValue = Math.min(100, Math.max(0, value));
+  // Allow values > 100% for overeating scenarios
+  const actualValue = Math.max(0, value);
   const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const strokeDasharray = `${circumference} ${circumference}`;
-  const strokeDashoffset = circumference - (normalizedValue / 100) * circumference;
+  
+  // Goal line at 80% height (represents 100% target)
+  const goalLineHeightPercent = 80;
+  const goalLineY = size - (size * goalLineHeightPercent / 100);
+  
+  // Calculate fill height - map value to height where 100% value = 80% height
+  // If value > 100%, continue filling past goal line
+  const fillHeightPercent = Math.min(actualValue * 0.8, 100); // 100% value = 80% height, max 100% height
+  const fillHeight = (fillHeightPercent / 100) * size;
 
-  const colorClasses = {
-    primary: "stroke-primary-cyan drop-shadow-lg",
-    secondary: "stroke-secondary-magenta drop-shadow-lg",
-    accent: "stroke-accent-mint drop-shadow-lg",
-    destructive: "stroke-destructive drop-shadow-lg",
-  };
-
-  const glowClasses = {
-    primary: "drop-shadow-[0_0_8px_rgba(0,245,255,0.5)]",
-    secondary: "drop-shadow-[0_0_8px_rgba(255,0,255,0.5)]",
-    accent: "drop-shadow-[0_0_8px_rgba(0,255,198,0.5)]",
-    destructive: "drop-shadow-[0_0_8px_rgba(220,38,38,0.5)]",
+  const fillColors = {
+    primary: "#00f5ff", // cyan
+    secondary: "#ff00ff", // magenta  
+    accent: "#00ffc6", // mint
+    destructive: "#dc2626", // red
   };
 
   return (
@@ -47,9 +47,19 @@ export function CircularProgress({
       <svg
         width={size}
         height={size}
-        className="transform -rotate-90"
         viewBox={`0 0 ${size} ${size}`}
       >
+        {/* Define circular clipping path */}
+        <defs>
+          <clipPath id={`circle-clip-${size}`}>
+            <circle
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+            />
+          </clipPath>
+        </defs>
+
         {/* Background circle */}
         <circle
           cx={size / 2}
@@ -57,39 +67,38 @@ export function CircularProgress({
           r={radius}
           stroke="rgba(255, 255, 255, 0.1)"
           strokeWidth={strokeWidth}
-          fill="transparent"
+          fill="rgba(255, 255, 255, 0.05)"
           className="backdrop-blur-sm"
         />
         
-        {/* Progress circle */}
-        <motion.circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="currentColor"
-          strokeWidth={strokeWidth}
-          fill="transparent"
-          strokeDasharray={strokeDasharray}
-          className={cn(
-            "transition-all duration-300 ease-in-out",
-            colorClasses[color],
-            glowClasses[color]
-          )}
-          strokeLinecap="round"
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset }}
+        {/* Fill that rises from bottom like water */}
+        <motion.rect
+          x={0}
+          y={size - fillHeight}
+          width={size}
+          height={fillHeight}
+          fill={fillColors[color]}
+          clipPath={`url(#circle-clip-${size})`}
+          initial={{ height: 0, y: size }}
+          animate={{ 
+            height: fillHeight,
+            y: size - fillHeight
+          }}
           transition={{
             duration: animationDuration,
             ease: [0.4, 0, 0.2, 1],
           }}
+          style={{
+            filter: `drop-shadow(0 0 8px ${fillColors[color]}40)`
+          }}
         />
         
-        {/* Goal Line - White horizontal line at 100% mark */}
+        {/* Goal Line - White horizontal line at 80% height (100% target) */}
         <line
-          x1={size / 2 - radius * 0.6}
-          y1={size / 2 - radius}
-          x2={size / 2 + radius * 0.6}
-          y2={size / 2 - radius}
+          x1={size / 2 - radius * 0.7}
+          y1={goalLineY}
+          x2={size / 2 + radius * 0.7}
+          y2={goalLineY}
           stroke="rgba(255, 255, 255, 0.9)"
           strokeWidth="2"
           strokeLinecap="round"
@@ -107,7 +116,7 @@ export function CircularProgress({
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
             >
-              {Math.round(normalizedValue)}%
+              {Math.round(actualValue)}%
             </motion.div>
           )}
           {children && (
