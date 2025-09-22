@@ -33,7 +33,7 @@ export function TrackingCardsCarousel({ className }: TrackingCardsCarouselProps)
         </CarouselContent>
         
         {/* Dots indicator for all screen sizes */}
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-2">
           <div className="w-2 h-2 rounded-full bg-slate-600" data-testid="dot-nutrition"></div>
           <div className="w-2 h-2 rounded-full bg-slate-400" data-testid="dot-sleep"></div>
           <div className="w-2 h-2 rounded-full bg-slate-600" data-testid="dot-stress"></div>
