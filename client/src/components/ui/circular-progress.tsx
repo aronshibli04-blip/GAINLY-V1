@@ -92,16 +92,15 @@ export function CircularProgress({
           }}
         />
         
-        {/* Goal Line - White horizontal line at 80% height (100% target) */}
+        {/* Goal Line - Thin white horizontal line */}
         <line
-          x1={size / 2 - radius * 0.7}
+          x1={size / 2 - radius * 0.9}
           y1={goalLineY}
-          x2={size / 2 + radius * 0.7}
+          x2={size / 2 + radius * 0.9}
           y2={goalLineY}
-          stroke="rgba(255, 255, 255, 0.9)"
-          strokeWidth="2"
+          stroke="#ffffff"
+          strokeWidth="1"
           strokeLinecap="round"
-          className="drop-shadow-sm"
         />
       </svg>
       
