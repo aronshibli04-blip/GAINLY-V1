@@ -27,7 +27,7 @@ export function CircularProgress({
   const radius = (size - strokeWidth) / 2;
   
   // Goal line at 75% from bottom (25% from top) - represents 100% target
-  const goalLineY = size * 0.25; // 25% from top = 75% from bottom
+  const goalLineY = size * 0.75; // TEST: 75% from top to see if line moves
   
   // Calculate fill height - map value to height where 100% value = 75% height (goal line)
   // If value > 100%, continue filling past goal line to top (100% height)
