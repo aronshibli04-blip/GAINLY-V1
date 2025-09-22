@@ -301,6 +301,22 @@ function NutritionSummaryItem({ value, target, unit, viewMode, color }: Nutritio
   const displayValue = viewMode === 'consumed' ? value : target - value;
   const percentage = (value / target) * 100;
   
+  // Convert new unit letters back to original units for target display
+  const getOriginalUnit = (unit: string): string => {
+    switch (unit) {
+      case 'P': // Protein
+      case 'C': // Carbs  
+      case 'F': // Fat
+        return 'g';
+      case 'kcal':
+        return 'kcal';
+      default:
+        return unit;
+    }
+  };
+
+  const originalUnit = getOriginalUnit(unit);
+  
   return (
     <div 
       className="text-right py-2 px-2 rounded-lg transition-all duration-300 hover:bg-slate-700/30 hover:scale-105 transform-gpu"
@@ -314,7 +330,7 @@ function NutritionSummaryItem({ value, target, unit, viewMode, color }: Nutritio
         {displayValue.toLocaleString()} {unit}
       </div>
       <div className="text-slate-500 text-xs">
-        of {target.toLocaleString()}{unit}
+        of {target.toLocaleString()}{originalUnit}
       </div>
       {/* Progress indicator bar */}
       <div className="w-full h-0.5 bg-slate-600 rounded-full mt-1 overflow-hidden">
