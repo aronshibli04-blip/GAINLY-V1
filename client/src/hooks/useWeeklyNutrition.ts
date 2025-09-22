@@ -108,19 +108,19 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
           current: Math.round(dailyTotals.protein),
           target: targets.protein,
           percentage: calculatePercentage(dailyTotals.protein, targets.protein),
-          unit: 'g'
+          unit: 'P'
         },
         fat: {
           current: Math.round(dailyTotals.fat),
           target: targets.fat,
           percentage: calculatePercentage(dailyTotals.fat, targets.fat),
-          unit: 'g'
+          unit: 'F'
         },
         carbs: {
           current: Math.round(dailyTotals.carbs),
           target: targets.carbs,
           percentage: calculatePercentage(dailyTotals.carbs, targets.carbs),
-          unit: 'g'
+          unit: 'C'
         },
         isCompleted,
         isCurrent,
@@ -175,19 +175,19 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
         consumed: totals.protein,
         target: totals.targetProtein,
         remaining: Math.max(0, totals.targetProtein - totals.protein),
-        unit: 'g' as const
+        unit: 'P' as const
       },
       fat: {
         consumed: totals.fat,
         target: totals.targetFat,
         remaining: Math.max(0, totals.targetFat - totals.fat),
-        unit: 'g' as const
+        unit: 'F' as const
       },
       carbs: {
         consumed: totals.carbs,
         target: totals.targetCarbs,
         remaining: Math.max(0, totals.targetCarbs - totals.carbs),
-        unit: 'g' as const
+        unit: 'C' as const
       }
     };
   }, [weeklyNutritionData]);
