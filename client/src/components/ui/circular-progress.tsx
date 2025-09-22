@@ -10,6 +10,7 @@ interface CircularProgressProps {
   showValue?: boolean;
   color?: "primary" | "secondary" | "accent" | "destructive";
   animationDuration?: number;
+  remaining?: boolean; // When true, shows remaining instead of consumed
 }
 
 export function CircularProgress({
@@ -21,17 +22,21 @@ export function CircularProgress({
   showValue = true,
   color = "primary",
   animationDuration = 1.5,
+  remaining = false,
 }: CircularProgressProps) {
   // Allow values > 100% for overeating scenarios
   const actualValue = Math.max(0, value);
   const radius = (size - strokeWidth) / 2;
+  
+  // In remaining mode, invert the value (0% consumed = 100% remaining = full circle)
+  const displayValue = remaining ? Math.max(0, 100 - actualValue) : actualValue;
   
   // Goal line at 75% from bottom (25% from top) - represents 100% target
   const goalLineY = size * 0.75; // TEST: 75% from top to see if line moves
   
   // Calculate fill height - map value to height where 100% value = 75% height (goal line)
   // If value > 100%, continue filling past goal line to top (100% height)
-  const fillHeightPercent = Math.min(actualValue * 0.75, 100); // 100% value = 75% height, max 100% height
+  const fillHeightPercent = Math.min(displayValue * 0.75, 100); // 100% value = 75% height, max 100% height
   const fillHeight = (fillHeightPercent / 100) * size;
 
   const fillColors = {
@@ -140,6 +145,7 @@ interface AnimatedProgressRingProps {
   unit?: string;
   size?: number;
   color?: "primary" | "secondary" | "accent";
+  remaining?: boolean; // When true, shows remaining instead of consumed
 }
 
 export function AnimatedProgressRing({
@@ -149,6 +155,7 @@ export function AnimatedProgressRing({
   unit = "",
   size = 100,
   color = "primary",
+  remaining = false,
 }: AnimatedProgressRingProps) {
   const percentage = total > 0 ? Math.min(100, (progress / total) * 100) : 0;
 
@@ -159,6 +166,7 @@ export function AnimatedProgressRing({
         size={size}
         color={color}
         showValue={false}
+        remaining={remaining}
       >
         <div className="text-xs font-medium text-center">
           <div className="text-primary font-bold">

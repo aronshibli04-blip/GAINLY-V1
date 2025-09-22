@@ -248,7 +248,12 @@ interface DayMacroCellProps {
 
 function DayMacroCell({ day, macro, viewMode, colors }: DayMacroCellProps) {
   const macroData = day[macro];
-  const percentage = Math.min(macroData.percentage, 150); // Cap at 150% for visual
+  const consumedPercentage = Math.min(macroData.percentage, 150); // Cap at 150% for visual
+  
+  // For remaining mode, show remaining percentage instead of consumed
+  const displayPercentage = viewMode === 'remaining' 
+    ? Math.max(0, 100 - consumedPercentage) // Invert: 0% consumed = 100% remaining
+    : consumedPercentage;
   
   return (
     <div
@@ -264,16 +269,16 @@ function DayMacroCell({ day, macro, viewMode, colors }: DayMacroCellProps) {
           : colors.background
       }}
       data-testid={`macro-cell-${macro}`}
-      title={`${macro.charAt(0).toUpperCase() + macro.slice(1)}: ${macroData.current}/${macroData.target} ${macroData.unit} (${percentage.toFixed(0)}%)`}
+      title={`${macro.charAt(0).toUpperCase() + macro.slice(1)}: ${macroData.current}/${macroData.target} ${macroData.unit} (${consumedPercentage.toFixed(0)}%)`}
     >
       {/* Progress Fill */}
       {!day.isFuture && (
         <div
           className="absolute bottom-0 left-0 right-0 transition-all duration-500 rounded-lg"
           style={{
-            height: `${Math.max(percentage, 8)}%`, // Minimum 8% height for visibility
+            height: `${Math.max(displayPercentage, 8)}%`, // Minimum 8% height for visibility
             backgroundColor: colors.primary,
-            boxShadow: percentage > 100 ? colors.glow : `0 0 10px ${colors.primary}40`
+            boxShadow: consumedPercentage > 100 ? colors.glow : `0 0 10px ${colors.primary}40`
           }}
         />
       )}
