@@ -1,4 +1,5 @@
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { useState, useEffect } from "react";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { WeeklyNutritionCard } from "@/components/ui/weekly-nutrition-card";
 import { SleepTrackingCard } from "@/components/ui/sleep-tracking-card";
 import { StressTrackingCard } from "@/components/ui/stress-tracking-card";
@@ -9,6 +10,17 @@ interface TrackingCardsCarouselProps {
 }
 
 export function TrackingCardsCarousel({ className }: TrackingCardsCarouselProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setCurrentSlide(api.selectedScrollSnap());
+    });
+  }, [api]);
+
   return (
     <div className={cn("relative", className)}>
       <Carousel
@@ -16,6 +28,7 @@ export function TrackingCardsCarousel({ className }: TrackingCardsCarouselProps)
           align: "start",
           loop: true,
         }}
+        setApi={setApi}
         className="w-full"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
@@ -34,9 +47,15 @@ export function TrackingCardsCarousel({ className }: TrackingCardsCarouselProps)
         
         {/* Dots indicator for all screen sizes */}
         <div className="flex justify-center gap-2 mt-1">
-          <div className="w-2 h-2 rounded-full bg-slate-600" data-testid="dot-nutrition"></div>
-          <div className="w-2 h-2 rounded-full bg-slate-400" data-testid="dot-sleep"></div>
-          <div className="w-2 h-2 rounded-full bg-slate-600" data-testid="dot-stress"></div>
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                currentSlide === index ? 'bg-white' : 'bg-slate-600'
+              }`}
+              data-testid={`dot-${index === 0 ? 'nutrition' : index === 1 ? 'sleep' : 'stress'}`}
+            />
+          ))}
         </div>
       </Carousel>
     </div>
