@@ -97,16 +97,6 @@ export function CircularProgress({
           }}
         />
         
-        {/* Goal Line - Thin white horizontal line */}
-        <line
-          x1={size / 2 - radius * 0.9}
-          y1={goalLineY}
-          x2={size / 2 + radius * 0.9}
-          y2={goalLineY}
-          stroke="#ffffff"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
       </svg>
       
       {/* Content overlay */}
