@@ -280,13 +280,14 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               </Button>
             </DialogTrigger>
             <DialogContent 
-              className="sm:max-w-md bg-slate-900 border border-slate-600 text-white shadow-2xl"
-              onPointerDownOutside={(e) => {
-                console.log('🔍 Click outside detected');
-                e.preventDefault();
-              }}
-              onEscapeKeyDown={(e) => {
-                console.log('🔍 Escape key pressed');
+              className="sm:max-w-md bg-slate-900/98 border border-slate-500 text-white shadow-2xl z-[100] pointer-events-auto"
+              style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '90vw',
+                maxWidth: '400px',
               }}
             >
               <DialogHeader>
