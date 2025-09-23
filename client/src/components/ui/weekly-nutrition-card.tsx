@@ -24,6 +24,14 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
   // Fetch real weekly nutrition data
   const { weeklyNutritionData, weeklySummary, isLoading, isError } = useWeeklyNutrition();
   
+  // Debug logging
+  console.log('WeeklyNutritionCard Debug:', {
+    isLoading,
+    isError,
+    hasData: !!weeklyNutritionData,
+    dataLength: weeklyNutritionData?.days?.length
+  });
+  
   // Set selected day to current day when data loads
   useEffect(() => {
     if (weeklyNutritionData) {
