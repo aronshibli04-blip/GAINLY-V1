@@ -18,7 +18,7 @@ interface SleepTrackingCardProps {
 }
 
 export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
-  const [showChart, setShowChart] = useState(false);
+  // Chart state is now data-driven, not component state
   const [chartPeriod, setChartPeriod] = useState<'7D' | '14D' | '30D'>('7D');
   const [sleepHours, setSleepHours] = useState<number>(8);
   const [sleepQuality, setSleepQuality] = useState<number>(4); // Changed to 1-5 scale
@@ -83,7 +83,9 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
   
-  // Chart stays visible after logging until user manually returns
+  // Check if user has logged today (smart daily logic)
+  const hasLoggedToday = sleepLogsData.some((log: any) => log.logDate === today);
+  const showChart = hasLoggedToday;
   
   // Save sleep log mutation
   const saveSleepMutation = useMutation({
@@ -102,8 +104,7 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
         description: `${sleepHours}t søvn med kvalitet ${sleepQuality}/5 er lagret.`,
       });
       queryClient.invalidateQueries({ queryKey: ['/api/sleep-logs', userId] });
-      // Show chart automatically after successful save
-      setShowChart(true);
+      // Chart will automatically show after query invalidation updates the data
     },
     onError: () => {
       toast({
