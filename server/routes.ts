@@ -300,14 +300,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         storage.getLatestAiAnalysis(req.params.userId)
       ]);
 
-      if (!user || !analysis) {
-        // Fallback to baseline when no data available
-        return res.json({
-          calories: 4000,
-          protein: 200,
-          fat: 111,
-          carbs: 550
-        });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (!analysis) {
+        // Calculate reasonable fallback based on user's basic data
+        const height = parseFloat(user.height);
+        const weight = user.goalWeight ? parseFloat(user.goalWeight) : 70; // Use goal weight or 70kg default
+        const age = user.age;
+        const gender = user.gender || 'male';
+        const activityLevel = user.activityLevel || 'moderate';
+        const weightGainGoal = user.weightGainGoal ? parseFloat(user.weightGainGoal) : 1.0;
+
+        // Calculate BMR using Mifflin-St Jeor equation
+        let bmr;
+        if (gender === 'male') {
+          bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+        } else {
+          bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+
+        // Apply activity multiplier
+        let activityMultiplier;
+        switch (activityLevel) {
+          case 'sedentary': activityMultiplier = 1.2; break;
+          case 'lightly_active': activityMultiplier = 1.375; break;
+          case 'moderately_active': 
+          case 'moderate': activityMultiplier = 1.55; break;
+          case 'very_active': activityMultiplier = 1.725; break;
+          case 'extremely_active': activityMultiplier = 1.9; break;
+          default: activityMultiplier = 1.55; // Default to moderate
+        }
+
+        const estimatedTdee = Math.round(bmr * activityMultiplier);
+        
+        // Use centralized calculation with estimated TDEE
+        const macroTargets = calculateNutritionTargets(estimatedTdee, weightGainGoal);
+        
+        return res.json(macroTargets);
       }
 
       // Get user's weight gain goal (default to 1.0 kg/week if not set)
