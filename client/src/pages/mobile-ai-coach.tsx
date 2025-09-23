@@ -12,6 +12,7 @@ import { Brain, Zap, TrendingUp, Target, Activity, Apple, Beef, Coffee, Droplets
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { calculateTdee } from "@/utils/tdee";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 
 export default function MobileAICoach() {
   const { toast } = useToast();
