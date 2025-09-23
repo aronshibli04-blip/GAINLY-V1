@@ -3,11 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useUserStore } from "@/store/userStore";
 import { calculateTdee } from "@/utils/tdee";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 import { Flame, Target, TrendingUp, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
 export function DailyProgressRing() {
-  const { calorieEntries, currentTdeeAnalysis, weightEntries } = useUserStore();
+  const { calorieEntries, currentTdeeAnalysis, weightEntries, user } = useUserStore();
   const [animatedProgress, setAnimatedProgress] = useState(0);
   
   const today = new Date().toISOString().split('T')[0];
@@ -15,8 +16,10 @@ export function DailyProgressRing() {
     ?.filter(c => c?.date === today)
     ?.reduce((sum, c) => sum + (c?.calories || 0), 0) || 0;
   
-  // Use TDEE analysis target calories (same as aggressive surplus tracker)
-  const targetCalories = currentTdeeAnalysis?.targetCalories || 4390; // Fallback
+  // Use TDEE analysis target calories or calculate using centralized system
+  const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
+  const targetCalories = currentTdeeAnalysis?.targetCalories || 
+    calculateCalorieTargets(4390, userWeightGoal).targetCalories;
   const caloriesRemaining = Math.max(0, targetCalories - todayCalories);
   const progress = Math.min(100, (todayCalories / targetCalories) * 100);
   const isComplete = caloriesRemaining === 0;
