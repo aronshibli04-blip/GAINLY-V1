@@ -82,7 +82,7 @@ const AnimatedCounter = ({ value, suffix = "", decimals = 0 }: {
   );
 };
 
-export function EnhancedExpenditureChart({ className, targetCalories }: EnhancedExpenditureChartProps) {
+export function EnhancedExpenditureChart({ className, targetCalories, variant = 'default' }: EnhancedExpenditureChartProps) {
   const { weightEntries, calorieEntries, currentTdeeAnalysis } = useUserStore();
   const [hoveredPoint, setHoveredPoint] = useState<ExpenditureDataPoint | null>(null);
   
