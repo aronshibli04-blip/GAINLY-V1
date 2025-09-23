@@ -18,7 +18,7 @@ interface SleepTrackingCardProps {
 }
 
 export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
-  const [viewMode, setViewMode] = useState<'logging' | 'chart'>('logging');
+  const [showChart, setShowChart] = useState(false);
   const [chartPeriod, setChartPeriod] = useState<'7D' | '14D' | '30D'>('7D');
   const [sleepHours, setSleepHours] = useState<number>(8);
   const [sleepQuality, setSleepQuality] = useState<number>(4); // Changed to 1-5 scale
@@ -99,6 +99,16 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
   
+  // Auto-return to logging mode after showing chart
+  useEffect(() => {
+    if (showChart) {
+      const timer = setTimeout(() => {
+        setShowChart(false);
+      }, 4000); // 4 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [showChart]);
+  
   // Save sleep log mutation
   const saveSleepMutation = useMutation({
     mutationFn: async (sleepData: { userId: string; quality: number; hours: number; notes?: string; logDate: string }) => {
@@ -116,6 +126,8 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
         description: `${sleepHours}t søvn med kvalitet ${sleepQuality}/5 er lagret.`,
       });
       queryClient.invalidateQueries({ queryKey: ['/api/sleep-logs', userId] });
+      // Show chart automatically after successful save
+      setShowChart(true);
     },
     onError: () => {
       toast({
@@ -516,44 +528,7 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
   return (
     <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
       <CardContent className="p-3">
-        {viewMode === 'logging' ? renderLoggingMode() : renderChartMode()}
-        
-        {/* Toggle Section */}
-        <div className="pt-3 mt-3 border-t border-slate-600">
-          <div className="flex items-center justify-center gap-1">
-            <Button
-              variant={viewMode === 'logging' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('logging')}
-              className={cn(
-                "text-xs h-7 px-3 flex items-center gap-1.5",
-                viewMode === 'logging'
-                  ? "bg-blue-500 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-slate-700"
-              )}
-              data-testid="toggle-logging"
-            >
-              <Edit3 className="w-3 h-3" />
-              Logg Søvn
-            </Button>
-            <div className="w-px h-4 bg-slate-600 mx-1"></div>
-            <Button
-              variant={viewMode === 'chart' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('chart')}
-              className={cn(
-                "text-xs h-7 px-3 flex items-center gap-1.5",
-                viewMode === 'chart'
-                  ? "bg-blue-500 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-slate-700"
-              )}
-              data-testid="toggle-chart"
-            >
-              <BarChart3 className="w-3 h-3" />
-              Graf
-            </Button>
-          </div>
-        </div>
+        {showChart ? renderChartMode() : renderLoggingMode()}
       </CardContent>
     </Card>
   );
