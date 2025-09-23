@@ -37,8 +37,8 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   const { data: userTargets, isLoading: targetsLoading, error: targetsError } = useQuery<MacroTargets | null>({
     queryKey: ["/api/user-targets", userId],
     enabled: true,
-    staleTime: 5 * 60 * 1000, // 5 minutes - targets rarely change
-    gcTime: 10 * 60 * 1000, // 10 minutes cache
+    staleTime: 0, // No cache - always fetch fresh data for accurate calorie targets
+    gcTime: 30 * 1000, // 30 seconds cache
   });
 
   // Process the data into WeeklyNutritionData format
