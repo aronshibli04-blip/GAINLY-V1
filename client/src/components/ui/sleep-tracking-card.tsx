@@ -435,7 +435,8 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
             <YAxis 
               yAxisId="quality"
               orientation="right"
-              domain={[1, 5]}
+              domain={[1, 9]}
+              ticks={[1, 2, 3, 4, 5]}
               tick={{ fontSize: 10, fill: '#94a3b8' }}
               axisLine={false}
               tickLine={false}
@@ -443,7 +444,7 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
                 const labels: { [key: number]: string } = {
                   1: 'Søvnløs', 2: 'Dårlig', 3: 'OK', 4: 'Bra', 5: 'Perfekt'
                 };
-                return labels[value] || value.toString();
+                return labels[value] || '';
               }}
             />
             
@@ -451,9 +452,18 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
             <ReferenceLine 
               yAxisId="hours"
               y={8} 
-              stroke="#ffffff" 
+              stroke="#22c55e" 
               strokeDasharray="3 3" 
-              opacity={0.7}
+              opacity={0.8}
+            />
+            
+            {/* Perfect Quality Line (aligned with 8h goal) */}
+            <ReferenceLine 
+              yAxisId="quality"
+              y={5} 
+              stroke="#22c55e" 
+              strokeDasharray="3 3" 
+              opacity={0.8}
             />
             
             {/* Quality Reference Lines */}
@@ -510,8 +520,8 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               <span className="text-slate-400">Timer</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-2 h-0.5 bg-white opacity-70"></div>
-              <span className="text-slate-400">8t mål</span>
+              <div className="w-2 h-0.5 bg-green-400 opacity-70"></div>
+              <span className="text-slate-400">8t + Perfekt</span>
             </div>
           </div>
           <div className="text-slate-400">
