@@ -243,11 +243,37 @@ export function TodaysLoggedMeals() {
                             hour: '2-digit', 
                             minute: '2-digit' 
                           })}
+                        </div>
+                      </div>
+                      <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                        {meal.calories} cal
+                      </Badge>
+
+                      {/* Action Buttons (visible on hover/touch) */}
+                      <div className="hidden group-hover:flex absolute right-3 top-1/2 transform -translate-y-1/2 gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => startEdit(meal)}
+                          className="h-7 w-7 p-0 text-slate-400 hover:text-primary hover:bg-primary/10"
+                          data-testid={`edit-meal-${meal.id}`}
+                        >
+                          <Edit3 className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleDelete(meal.id)}
+                          disabled={deleteMealMutation.isPending}
+                          className="h-7 w-7 p-0 text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+                          data-testid={`delete-meal-${meal.id}`}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-                  {meal.calories} cal
-                </Badge>
+                )}
               </div>
             ))}
             
