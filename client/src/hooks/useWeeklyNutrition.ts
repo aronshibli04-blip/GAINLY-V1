@@ -44,7 +44,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   // Process the data into WeeklyNutritionData format
   const weeklyNutritionData = useMemo((): WeeklyNutritionData | null => {
     // Return null while still loading, but create empty structure for empty arrays
-    if (mealLogsLoading) return null;
+    if (mealLogsLoading || targetsLoading) return null;
 
     // Always create week structure - use empty array if no meal logs exist yet
     const mealLogsArray = mealLogs || [];
@@ -55,7 +55,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     // Use targets from API which calculates based on TDEE + user's weight gain goal
     // This ensures the weekly nutrition card shows the correct calorie target based on actual TDEE + surplus
     const targets: MacroTargets = userTargets || {
-      calories: 4000, // Fallback only when API fails
+      calories: 3750 + 1100, // TDEE + 1kg/week surplus as fallback
       protein: 200,
       fat: 111,
       carbs: 550
@@ -190,8 +190,8 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   return {
     weeklyNutritionData,
     weeklySummary,
-    isLoading: mealLogsLoading, // Don't block on targets loading
-    isError: !!mealLogsError,
+    isLoading: mealLogsLoading || targetsLoading, // Wait for both data sources
+    isError: !!mealLogsError || !!targetsError,
     refetch: () => {
       // Re-fetch both meal logs and targets
       // This will be handled by TanStack Query's invalidation
