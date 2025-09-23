@@ -249,11 +249,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Get user data for analysis
-      const weightLogs = await storage.getWeightLogsByUser(userId, 21);
-      const dailyCalories = await storage.getDailyCaloriesByUser(userId, 21);
+      const [user, weightLogs, dailyCalories] = await Promise.all([
+        storage.getUser(userId),
+        storage.getWeightLogsByUser(userId, 21),
+        storage.getDailyCaloriesByUser(userId, 21)
+      ]);
       
-      // Calculate TDEE and plan
-      const analysis = calculateTdeeAndPlan(weightLogs, dailyCalories);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Get user's weight gain goal (default to 1.0 kg/week if not set)
+      const weightGainGoal = user.weightGainGoal ? parseFloat(user.weightGainGoal) : 1.0;
+      
+      // Calculate TDEE and plan with user's weight gain goal
+      const analysis = calculateTdeeAndPlan(weightLogs, dailyCalories, weightGainGoal);
       
       // Save analysis
       const analysisData = insertAiAnalysisSchema.parse({

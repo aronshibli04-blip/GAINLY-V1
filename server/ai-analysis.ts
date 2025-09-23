@@ -1,4 +1,5 @@
 import { WeightLog } from "@shared/schema";
+import { calculateCalorieTargets } from "@shared/calorie-calculations";
 
 interface DailyCalories {
   logDate: string;
@@ -16,7 +17,8 @@ interface TdeeAnalysis {
 
 export function calculateTdeeAndPlan(
   weightLogs: WeightLog[], 
-  dailyCalories: DailyCalories[]
+  dailyCalories: DailyCalories[],
+  weightGainGoal: number = 1.0 // kg per week, defaults to 1.0 for backwards compatibility
 ): TdeeAnalysis {
   // Sort by date (most recent first)
   const sortedWeights = [...weightLogs].sort((a, b) => 
@@ -64,9 +66,10 @@ export function calculateTdeeAndPlan(
   // Ensure TDEE is within reasonable bounds for hardgainers
   tdee = Math.max(1800, Math.min(4000, tdee));
 
-  // Aggressive surplus for hardgainers (1kg/week approach)
-  const surplus = 1100; // Aggressive 1100 calorie surplus for hardgainer goals
-  const targetCalories = tdee + surplus;
+  // Use centralized calculation based on user's weight gain goal
+  const calorieTargets = calculateCalorieTargets(tdee, weightGainGoal);
+  const surplus = calorieTargets.surplus;
+  const targetCalories = calorieTargets.targetCalories;
 
   // Calculate confidence based on data quality
   const dataPoints = Math.min(weightLogs.length, dailyCalories.length);
