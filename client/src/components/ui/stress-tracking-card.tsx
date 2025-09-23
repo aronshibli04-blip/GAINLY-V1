@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine } from "recharts";
-import { Brain, TrendingDown, TrendingUp, Minus, BarChart3, Save } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, ReferenceArea, Cell, Tooltip } from "recharts";
+import { Brain, TrendingDown, TrendingUp, Minus, BarChart3, Save, Info, TrendingUp as ArrowUp, TrendingDown as ArrowDown } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -171,6 +171,34 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
   const weeklyData = chartData.slice(-7).map(d => d.level);
   const StressIcon = getStressIcon(stressLevel);
 
+  // Calculate chart statistics
+  const chartStats = {
+    average: chartData.length > 0 ? (chartData.reduce((sum, d) => sum + d.level, 0) / chartData.length) : 0,
+    trend: 0 // Will calculate trend vs previous period if needed
+  };
+
+  // Custom tooltip for chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const level = payload[0].value;
+      const { zone, label: zoneLabel } = getStressZone(level);
+      const tip = getContextualTip(level <= 2 ? level * 5 : level <= 3.5 ? 6 : 9); // Map back to 1-10 scale for tips
+      
+      return (
+        <div className="bg-slate-800 border border-slate-600 rounded-lg p-2 shadow-lg">
+          <p className="text-white text-sm font-medium">{label}</p>
+          <p className="text-purple-400 text-xs">
+            Stress: {level}/5 - {zoneLabel}
+          </p>
+          <p className="text-slate-300 text-xs mt-1 max-w-40">
+            {tip}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const renderLoggingMode = () => (
     <>
       {/* Compact Header with Trend Line */}
@@ -245,90 +273,176 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
     </>
   );
 
-  const renderChartMode = () => (
-    <>
-      {/* Chart Header */}
-      <div className="flex items-center justify-between mb-3">
-        <CardTitle className="text-white text-sm font-semibold flex items-center gap-2">
-          <BarChart3 className="w-4 h-4 text-purple-400" />
-          Stressstatistikk
-        </CardTitle>
-        <div className="flex gap-1">
-          {(['7D', '14D', '30D'] as const).map((period) => (
-            <Button
-              key={period}
-              variant={chartPeriod === period ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setChartPeriod(period)}
-              className={cn(
-                "text-xs h-6 px-2",
-                chartPeriod === period
-                  ? "bg-purple-500 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-slate-700"
-              )}
-              data-testid={`period-${period}`}
-            >
-              {period}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {/* Chart */}
-      <div className="h-40 mb-2">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
-            <XAxis 
-              dataKey={chartPeriod === '7D' ? 'dayName' : 'date'}
-              tick={{ fontSize: 10, fill: '#94a3b8' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis 
-              domain={[1, 5]}
-              tick={{ fontSize: 10, fill: '#94a3b8' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            
-            {/* Balanced Line (level 3) */}
-            <ReferenceLine 
-              y={3} 
-              stroke="#ffffff" 
-              strokeDasharray="3 3" 
-              opacity={0.7}
-            />
-            
-            {/* Stress Bars */}
-            <Bar 
-              dataKey="level" 
-              fill="hsl(270, 91%, 60%)"
-              radius={[2, 2, 0, 0]}
-              opacity={0.8}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Chart Legend & Stats */}
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-purple-400 rounded"></div>
-            <span className="text-slate-400">Stress-nivå</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-0.5 bg-white opacity-70"></div>
-            <span className="text-slate-400">Balansert</span>
+  const renderChartMode = () => {
+    if (chartData.length === 0) {
+      return (
+        <div className="text-center py-8">
+          <BarChart3 className="w-12 h-12 text-purple-400 mx-auto mb-3 opacity-50" />
+          <h3 className="text-white text-sm font-medium mb-2">Ingen stressdata ennå</h3>
+          <p className="text-slate-400 text-xs mb-4">
+            Logg stress-nivået ditt for å se mønstre og trender
+          </p>
+          <div className="bg-slate-700/50 rounded-lg p-3 text-left">
+            <h4 className="text-white text-xs font-medium mb-2">Stress-skala forklaring:</h4>
+            <div className="space-y-1 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500 rounded"></div>
+                <span className="text-green-400">1-2: Rolig, optimal</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-yellow-500 rounded"></div>
+                <span className="text-yellow-400">3: Balansert, håndterbart</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-red-500 rounded"></div>
+                <span className="text-red-400">4-5: Høyt, trenger oppmerksomhet</span>
+              </div>
+            </div>
+            <p className="text-slate-400 text-xs mt-2">
+              🎢 Mål: Mest tid i grønn sone (1-2)
+            </p>
           </div>
         </div>
-        <div className="text-slate-400">
-          Ø: {chartData.length > 0 ? (chartData.reduce((sum, d) => sum + d.level, 0) / chartData.length).toFixed(1) : '0'}
+      );
+    }
+
+    const avgZone = getStressZone(chartStats.average);
+
+    return (
+      <>
+        {/* Summary Header */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-purple-400" />
+              <span className="text-white text-sm font-semibold">Stressstatistikk</span>
+            </div>
+            <div className="flex gap-1">
+              {(['7D', '14D', '30D'] as const).map((period) => (
+                <Button
+                  key={period}
+                  variant={chartPeriod === period ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setChartPeriod(period)}
+                  className={cn(
+                    "text-xs h-6 px-2",
+                    chartPeriod === period
+                      ? "bg-purple-500 text-white"
+                      : "text-slate-400 hover:text-white hover:bg-slate-700"
+                  )}
+                  data-testid={`period-${period}`}
+                >
+                  {period}
+                </Button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Average Summary */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <div 
+                  className="w-3 h-3 rounded" 
+                  style={{ backgroundColor: avgZone.color }}
+                ></div>
+                <span className="text-white text-sm font-medium">
+                  Ø {chartStats.average.toFixed(1)}
+                </span>
+                <span 
+                  className="text-xs px-1.5 py-0.5 rounded" 
+                  style={{ 
+                    backgroundColor: avgZone.color + '20',
+                    color: avgZone.color 
+                  }}
+                >
+                  {avgZone.label}
+                </span>
+              </div>
+            </div>
+            <div className="text-slate-400 text-xs">
+              Mål: 1-2 (grønn sone)
+            </div>
+          </div>
         </div>
-      </div>
-    </>
-  );
+
+        {/* Chart */}
+        <div className="h-40 mb-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
+              
+              {/* Color Zones Background */}
+              <ReferenceArea y1={1} y2={2} fill="#22c55e" fillOpacity={0.1} />
+              <ReferenceArea y1={2} y2={3.5} fill="#eab308" fillOpacity={0.1} />
+              <ReferenceArea y1={3.5} y2={5} fill="#ef4444" fillOpacity={0.1} />
+              
+              {/* Target Line (optimal zone) */}
+              <ReferenceLine 
+                y={2.5} 
+                stroke="#22c55e" 
+                strokeDasharray="2 2" 
+                opacity={0.8}
+              />
+              
+              <XAxis 
+                dataKey={chartPeriod === '7D' ? 'dayName' : 'date'}
+                tick={{ fontSize: 10, fill: '#94a3b8' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis 
+                domain={[1, 5]}
+                tick={{ fontSize: 9, fill: '#94a3b8' }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(value) => {
+                  if (value <= 2) return 'Rolig';
+                  if (value <= 3.5) return 'Balansert';
+                  return 'Høyt';
+                }}
+              />
+              
+              {/* Custom Tooltip */}
+              <Tooltip content={<CustomTooltip />} />
+              
+              {/* Stress Bars with Individual Colors */}
+              <Bar 
+                dataKey="level" 
+                radius={[2, 2, 0, 0]}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getBarColor(entry.level)} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Chart Legend */}
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-500 rounded"></div>
+              <span className="text-slate-400">Rolig (1-2)</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-yellow-500 rounded"></div>
+              <span className="text-slate-400">Balansert (3)</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-red-500 rounded"></div>
+              <span className="text-slate-400">Høyt (4-5)</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-0.5 bg-green-500 opacity-80"></div>
+            <span className="text-slate-400">Mål</span>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   return (
     <Card className={cn("bg-slate-800/70 border-slate-700/70 backdrop-blur-xl shadow-2xl", className)}>
