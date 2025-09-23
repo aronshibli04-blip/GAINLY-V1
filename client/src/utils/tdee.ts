@@ -1,5 +1,6 @@
 import { WeightEntry, CalorieEntry, TdeeAnalysis } from '../types';
 import { calculateCalorieTargets } from '@shared/calorie-calculations';
+import { DEFAULT_WEIGHT_GAIN_GOAL } from '@shared/weight-gain-config';
 
 export interface TdeeCalculationResult {
   tdee: number;
@@ -15,7 +16,7 @@ export function calculateTdee(
   weightEntries: WeightEntry[],
   calorieEntries: CalorieEntry[],
   userId: string,
-  weightGainGoal: number = 1.0 // kg per week, defaults to 1.0 for backward compatibility
+  weightGainGoal: number = DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek // kg per week, defaults to app-wide setting
 ): TdeeCalculationResult {
   // Sort entries by date
   const sortedWeights = [...weightEntries].sort(

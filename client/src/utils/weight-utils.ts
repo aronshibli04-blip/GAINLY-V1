@@ -1,4 +1,5 @@
 import type { User } from '@shared/schema';
+import { DEFAULT_WEIGHT_GAIN_GOAL } from '@shared/weight-gain-config';
 
 /**
  * Safely get the target weight prioritizing FFMI-calculated target over manual goal
@@ -56,7 +57,7 @@ export function getWeeksToTarget(
   }
   
   const remainingWeight = targetWeight - currentWeight;
-  const weeksToGoal = remainingWeight / 1.0; // 1kg per week target
+  const weeksToGoal = remainingWeight / DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek; // kg per week target from config
   return Math.max(0, Math.ceil(weeksToGoal));
 }
 

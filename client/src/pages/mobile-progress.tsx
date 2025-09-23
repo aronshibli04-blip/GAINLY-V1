@@ -32,6 +32,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { calculateTdee } from "@/utils/tdee";
 import { getTargetWeight } from '@/utils/weight-utils';
+import { DEFAULT_WEIGHT_GAIN_GOAL } from '@shared/weight-gain-config';
 
 export default function MobileProgress() {
   const { 
@@ -284,9 +285,9 @@ export default function MobileProgress() {
                       {(stats.weightGainRate || 0) > 0 ? '+' : ''}{(stats.weightGainRate || 0).toFixed(2)}kg/week
                     </p>
                     <Badge variant="outline" className={
-                      Math.abs((stats.weightGainRate || 0) - 1.0) < 0.3 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
+                      Math.abs((stats.weightGainRate || 0) - DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek) < 0.3 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
                     }>
-                      {Math.abs((stats.weightGainRate || 0) - 1.0) < 0.3 ? 'On Target' : 'Adjust Intake'}
+                      {Math.abs((stats.weightGainRate || 0) - DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek) < 0.3 ? 'On Target' : 'Adjust Intake'}
                     </Badge>
                   </div>
                   
@@ -312,9 +313,9 @@ export default function MobileProgress() {
                       {(stats.avgSurplus || 0) > 0 ? '+' : ''}{(stats.avgSurplus || 0).toLocaleString()}
                     </p>
                     <Badge variant="outline" className={
-                      Math.abs((stats.avgSurplus || 0) - 1100) < 200 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
+                      Math.abs((stats.avgSurplus || 0) - DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus) < 200 ? 'text-emerald-400 border-emerald-400/40' : 'text-yellow-400 border-yellow-400/40'
                     }>
-                      {Math.abs((stats.avgSurplus || 0) - 1100) < 200 ? 'Perfect' : 'Needs Adjustment'}
+                      {Math.abs((stats.avgSurplus || 0) - DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus) < 200 ? 'Perfect' : 'Needs Adjustment'}
                     </Badge>
                   </div>
                 </div>
@@ -476,11 +477,11 @@ export default function MobileProgress() {
                     </p>
                     <p className="text-xs text-slate-400">kg/week rate</p>
                     <Badge variant="outline" className={
-                      Math.abs(stats.weightGainRate - 1.0) < 0.3 
+                      Math.abs(stats.weightGainRate - DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek) < 0.3 
                         ? 'text-emerald-400 border-emerald-400/40' 
                         : 'text-yellow-400 border-yellow-400/40'
                     }>
-                      {Math.abs(stats.weightGainRate - 1.0) < 0.3 ? 'Perfect' : 'Adjust'}
+                      {Math.abs(stats.weightGainRate - DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek) < 0.3 ? 'Perfect' : 'Adjust'}
                     </Badge>
                   </div>
                   
@@ -490,11 +491,11 @@ export default function MobileProgress() {
                     </p>
                     <p className="text-xs text-slate-400">Daily surplus</p>
                     <Badge variant="outline" className={
-                      Math.abs(stats.avgSurplus - 1100) < 200 
+                      Math.abs(stats.avgSurplus - DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus) < 200 
                         ? 'text-emerald-400 border-emerald-400/40' 
                         : 'text-orange-400 border-orange-400/40'
                     }>
-                      {Math.abs(stats.avgSurplus - 1100) < 200 ? 'Optimal' : 'Review'}
+                      {Math.abs(stats.avgSurplus - DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus) < 200 ? 'Optimal' : 'Review'}
                     </Badge>
                   </div>
                   
@@ -514,11 +515,11 @@ export default function MobileProgress() {
                     AI Recommendations
                   </h4>
                   <div className="space-y-2 text-sm">
-                    {Math.abs(stats.weightGainRate - 1.0) >= 0.3 && (
+                    {Math.abs(stats.weightGainRate - DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek) >= 0.3 && (
                       <p className="text-slate-300">
                         • {stats.weightGainRate < 0.7 
-                          ? `Increase daily intake by ${Math.round((1.0 - stats.weightGainRate) * 1100)} calories` 
-                          : `Reduce daily intake by ${Math.round((stats.weightGainRate - 1.0) * 1100)} calories`}
+                          ? `Increase daily intake by ${Math.round((DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek - stats.weightGainRate) * DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus)} calories` 
+                          : `Reduce daily intake by ${Math.round((stats.weightGainRate - DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek) * DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus)} calories`}
                       </p>
                     )}
                     {stats.totalDaysTracked < 14 && (
@@ -526,9 +527,9 @@ export default function MobileProgress() {
                         • Track consistently for {14 - stats.totalDaysTracked} more days for better AI accuracy
                       </p>
                     )}
-                    {stats.avgCaloriesPerDay > 0 && Math.abs(stats.avgSurplus - 1100) >= 200 && (
+                    {stats.avgCaloriesPerDay > 0 && Math.abs(stats.avgSurplus - DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus) >= 200 && (
                       <p className="text-slate-300">
-                        • Target {stats.currentTdee + 1100} calories daily for optimal 1kg/week gain
+                        • Target {stats.currentTdee + DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus} calories daily for optimal {DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek}kg/week gain
                       </p>
                     )}
                   </div>
