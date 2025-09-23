@@ -348,14 +348,20 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
           </span>
         </div>
         
-        <div className="px-1">
+        <div 
+          className="px-1"
+          onPointerDownCapture={(e) => e.stopPropagation()}
+          onPointerMoveCapture={(e) => e.stopPropagation()}
+          onTouchStartCapture={(e) => e.stopPropagation()}
+          onTouchMoveCapture={(e) => e.stopPropagation()}
+        >
           <Slider
             value={[sleepQuality]}
             onValueChange={([value]) => setSleepQuality(value)}
             max={5}
             min={1}
             step={1}
-            className="w-full"
+            className="w-full touch-none select-none"
             data-testid="sleep-quality-slider"
           />
           <div className="flex justify-between text-xs text-slate-500 mt-1">
