@@ -7,6 +7,7 @@ import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { calculateTdee } from "@/utils/tdee";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 import { 
   Target, 
   AlertTriangle, 
@@ -22,7 +23,7 @@ import {
 export function AggressiveSurplusTracker() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { calorieEntries, weightEntries, addCalorieEntry, currentTdeeAnalysis } = useUserStore();
+  const { calorieEntries, weightEntries, addCalorieEntry, currentTdeeAnalysis, user } = useUserStore();
   const [showMotivation, setShowMotivation] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
@@ -32,9 +33,10 @@ export function AggressiveSurplusTracker() {
     ?.filter(c => c?.date === today)
     ?.reduce((sum, c) => sum + (c?.calories || 0), 0) || 0;
   
-  // USE stored AI Analysis value as the source of truth
-  // All components must show the same target calories as AI Analysis
-  const requiredCalories = currentTdeeAnalysis?.targetCalories || 4850; // Use AI Analysis result
+  // USE stored AI Analysis value as the source of truth, or calculate using centralized system
+  const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
+  const requiredCalories = currentTdeeAnalysis?.targetCalories || 
+    calculateCalorieTargets(4850, userWeightGoal).targetCalories;
   
   
   const caloriesRemaining = Math.max(0, requiredCalories - todayCalories);
