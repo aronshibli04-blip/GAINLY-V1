@@ -83,15 +83,7 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
   
-  // Auto-return to logging mode after showing chart
-  useEffect(() => {
-    if (showChart) {
-      const timer = setTimeout(() => {
-        setShowChart(false);
-      }, 4000); // 4 seconds
-      return () => clearTimeout(timer);
-    }
-  }, [showChart]);
+  // Chart stays visible after logging until user manually returns
   
   // Save sleep log mutation
   const saveSleepMutation = useMutation({
@@ -259,20 +251,11 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
           ))}
           
           {/* Annet button with modal */}
-          <Dialog open={isModalOpen} onOpenChange={(open) => {
-            console.log('🔍 Dialog state changing:', open);
-            setIsModalOpen(open);
-          }}>
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('🔍 Annet button clicked, opening modal');
-                  setIsModalOpen(true);
-                }}
                 className="text-sm px-3 py-1.5 h-8 min-w-[44px] bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600"
                 data-testid="sleep-hours-other"
               >
@@ -297,7 +280,6 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
-                <div className="text-xs text-green-400 mb-2">✅ Modal is working! State: {isModalOpen.toString()}</div>
                 <div className="grid grid-cols-3 gap-2">
                   {extendedHourOptions.map((hours) => (
                     <Button
