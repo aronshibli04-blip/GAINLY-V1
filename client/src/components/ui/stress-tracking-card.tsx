@@ -133,7 +133,11 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
     const periodDays = { '7D': 7, '14D': 14, '30D': 30 };
     const days = periodDays[chartPeriod];
     
+    console.log('🔍 Chart Debug - stressLogsData:', stressLogsData);
+    console.log('🔍 Chart Debug - chartPeriod:', chartPeriod, 'days:', days);
+    
     if (!stressLogsData.length) {
+      console.log('⚠️ No stress data available, returning mock data');
       // Return mock data if no real data available
       return Array.from({ length: days }, (_, i) => {
         const date = subDays(new Date(), days - 1 - i);
@@ -150,19 +154,28 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
     const endDate = new Date();
     const startDate = subDays(endDate, days - 1);
     
-    return Array.from({ length: days }, (_, i) => {
+    const chartDataRaw = Array.from({ length: days }, (_, i) => {
       const currentDate = subDays(endDate, days - 1 - i);
       const dateStr = format(currentDate, 'yyyy-MM-dd');
       
       // Find stress log for this date
       const stressLog = stressLogsData.find((log: any) => log.logDate === dateStr);
       
+      console.log(`📅 Date: ${dateStr}, Found log:`, stressLog);
+      
       return {
         date: format(currentDate, 'MMM dd'),
         dayName: format(currentDate, 'EEE'),
         level: stressLog ? stressLog.level : 0
       };
-    }).filter(day => day.level > 0); // Only show days with data
+    });
+    
+    console.log('📊 Raw chart data before filter:', chartDataRaw);
+    
+    const filtered = chartDataRaw.filter(day => day.level > 0);
+    console.log('📊 Filtered chart data:', filtered);
+    
+    return filtered;
   };
   
   const chartData = getChartData();
