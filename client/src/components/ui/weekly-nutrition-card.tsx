@@ -124,6 +124,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
                   unit={selectedDayNutrition.calories.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.calories}
+                  macroType="calories"
                 />
                 <NutritionSummaryItem 
                   value={selectedDayNutrition.protein.current} 
@@ -131,6 +132,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
                   unit={selectedDayNutrition.protein.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.protein}
+                  macroType="protein"
                 />
                 <NutritionSummaryItem 
                   value={selectedDayNutrition.fat.current} 
@@ -138,6 +140,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
                   unit={selectedDayNutrition.fat.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.fat}
+                  macroType="fat"
                 />
                 <NutritionSummaryItem 
                   value={selectedDayNutrition.carbs.current} 
@@ -145,6 +148,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
                   unit={selectedDayNutrition.carbs.unit} 
                   viewMode={viewMode}
                   color={MACRO_COLORS.carbs}
+                  macroType="carbs"
                 />
               </>
             )}
@@ -303,27 +307,45 @@ interface NutritionSummaryItemProps {
   unit: string;
   viewMode: 'consumed' | 'remaining';
   color: typeof MACRO_COLORS.calories;
+  macroType: 'calories' | 'protein' | 'fat' | 'carbs';
 }
 
-function NutritionSummaryItem({ value, target, unit, viewMode, color }: NutritionSummaryItemProps) {
+function NutritionSummaryItem({ value, target, unit, viewMode, color, macroType }: NutritionSummaryItemProps) {
   const displayValue = viewMode === 'consumed' ? value : target - value;
   const percentage = (value / target) * 100;
   
-  // Convert new unit letters back to original units for target display
-  const getOriginalUnit = (unit: string): string => {
-    switch (unit) {
-      case 'P': // Protein
-      case 'C': // Carbs  
-      case 'F': // Fat
-        return 'g';
-      case 'kcal':
+  // Map macro type to display unit (P, F, C for macros, kcal for calories)
+  const getDisplayUnit = (macroType: string): string => {
+    switch (macroType) {
+      case 'protein':
+        return 'P';
+      case 'fat':
+        return 'F';
+      case 'carbs':
+        return 'C';
+      case 'calories':
         return 'kcal';
       default:
         return unit;
     }
   };
 
-  const originalUnit = getOriginalUnit(unit);
+  // Original unit for target display (always g for macros, kcal for calories)
+  const getOriginalUnit = (macroType: string): string => {
+    switch (macroType) {
+      case 'protein':
+      case 'fat':
+      case 'carbs':
+        return 'g';
+      case 'calories':
+        return 'kcal';
+      default:
+        return unit;
+    }
+  };
+
+  const displayUnit = getDisplayUnit(macroType);
+  const originalUnit = getOriginalUnit(macroType);
   
   return (
     <div 
@@ -335,7 +357,7 @@ function NutritionSummaryItem({ value, target, unit, viewMode, color }: Nutritio
         className="text-sm font-semibold transition-colors duration-300"
         style={{ color: percentage >= 100 ? color.primary : 'white' }}
       >
-        {displayValue.toLocaleString()} {unit}
+        {displayValue.toLocaleString()} {displayUnit}
       </div>
       <div className="text-slate-500 text-xs">
         of {target.toLocaleString()}{originalUnit}
