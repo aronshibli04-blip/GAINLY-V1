@@ -3,6 +3,8 @@
  * Single source of truth for TDEE + surplus calculations
  */
 
+import { calculateDailySurplus, WEIGHT_GAIN_CONSTANTS } from './weight-gain-config';
+
 export interface CalorieTargets {
   tdee: number;
   surplus: number;
@@ -27,9 +29,8 @@ export function calculateCalorieTargets(
   tdee: number, 
   weightGainGoal: number
 ): CalorieTargets {
-  // 1kg of body weight ≈ 7700 calories
-  // Daily surplus = (goal in kg/week × 7700 calories) ÷ 7 days
-  const surplus = Math.round((weightGainGoal * 7700) / 7);
+  // Use centralized surplus calculation
+  const surplus = calculateDailySurplus(weightGainGoal);
   const targetCalories = tdee + surplus;
   
   return {
@@ -75,21 +76,5 @@ export function calculateNutritionTargets(
   return calculateMacroTargets(calorieTargets.targetCalories);
 }
 
-/**
- * Get calorie surplus examples for different goals
- * Useful for UI displays and user education
- */
-export const WEIGHT_GAIN_EXAMPLES = {
-  '0.5': { label: '0.5kg/week (Conservative)', surplus: 550, description: 'Slower but steady gains' },
-  '1.0': { label: '1kg/week (Standard)', surplus: 1100, description: 'Recommended for hardgainers' },
-  '1.5': { label: '1.5kg/week (Aggressive)', surplus: 1650, description: 'Maximum sustainable rate' }
-} as const;
-
-/**
- * Validate weight gain goal is within reasonable bounds
- * @param weightGainGoal - Weight gain goal in kg per week
- * @returns true if valid, false if outside reasonable range
- */
-export function isValidWeightGainGoal(weightGainGoal: number): boolean {
-  return weightGainGoal >= 0.25 && weightGainGoal <= 2.0;
-}
+// Re-export centralized weight gain utilities for backward compatibility
+export { WEIGHT_GAIN_GOALS as WEIGHT_GAIN_EXAMPLES, isValidWeightGainGoal } from './weight-gain-config';
