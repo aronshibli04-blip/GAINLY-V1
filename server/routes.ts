@@ -16,6 +16,7 @@ import {
   updateFFMIProfileSchema
 } from "@shared/schema";
 import { calculateTdeeAndPlan } from "./ai-analysis";
+import { calculateNutritionTargets } from "@shared/calorie-calculations";
 import { OpenAIService } from "./openai-service";
 import { FFMICalculatorService } from "./ffmi-calculator";
 import { FFMIUnlockService } from "./ffmi-unlock-service";
@@ -280,29 +281,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User targets endpoint - derives macro targets from AI analysis
+  // User targets endpoint - derives macro targets from TDEE and user's weight gain goal
   app.get("/api/user-targets/:userId", async (req, res) => {
     try {
-      const analysis = await storage.getLatestAiAnalysis(req.params.userId);
+      // Get user's weight gain goal preference and AI analysis
+      const [user, analysis] = await Promise.all([
+        storage.getUser(req.params.userId),
+        storage.getLatestAiAnalysis(req.params.userId)
+      ]);
       
-      if (!analysis) {
-        return res.json(null); // No targets available yet
+      if (!user || !analysis) {
+        return res.json(null); // No user or analysis available yet
       }
       
-      // Calculate macro targets based on target calories
-      const targetCalories = analysis.targetCalories;
+      // Get user's weight gain goal (default to 1.0 kg/week if not set)
+      const weightGainGoal = user.weightGainGoal ? parseFloat(user.weightGainGoal) : 1.0;
       
-      // Standard hardgainer macro ratios: 20% protein, 25% fat, 55% carbs
-      const protein = Math.round((targetCalories * 0.20) / 4); // 4 cal per gram
-      const fat = Math.round((targetCalories * 0.25) / 9); // 9 cal per gram
-      const carbs = Math.round((targetCalories * 0.55) / 4); // 4 cal per gram
-      
-      const macroTargets = {
-        calories: targetCalories,
-        protein: protein,
-        fat: fat,
-        carbs: carbs
-      };
+      // Use centralized calculation with user's preferred weight gain goal
+      const macroTargets = calculateNutritionTargets(analysis.calculatedTdee, weightGainGoal);
       
       res.json(macroTargets);
     } catch (error: any) {
