@@ -187,7 +187,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
       return (
         <div className="bg-slate-800 border border-slate-600 rounded-lg p-2 shadow-lg">
           <p className="text-white text-sm font-medium">{label}</p>
-          <p className="text-purple-400 text-xs">
+          <p className="text-slate-400 text-xs">
             Stress: {level}/5 - {zoneLabel}
           </p>
           <p className="text-slate-300 text-xs mt-1 max-w-40">
@@ -204,7 +204,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
       {/* Compact Header with Trend Line */}
       <div className="flex items-center justify-between mb-3">
         <CardTitle className="text-white text-sm font-semibold flex items-center gap-2">
-          <Brain className="w-4 h-4 text-purple-400" />
+          <Brain className="w-4 h-4 text-slate-400" />
           Stress Level
         </CardTitle>
         <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
             {weeklyData.map((value, index) => (
               <div 
                 key={index}
-                className="w-1 bg-purple-400 rounded-sm transition-all"
+                className="w-1 bg-slate-400 rounded-sm transition-all"
                 style={{ height: `${(value / 5) * 16}px` }}
               />
             ))}
@@ -264,7 +264,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
       <Button
         onClick={handleSaveStress}
         disabled={saveStressMutation.isPending}
-        className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+        className="w-full bg-slate-600 hover:bg-slate-700 text-white"
         data-testid="save-stress-button"
       >
         <Save className="w-4 h-4 mr-2" />
@@ -277,7 +277,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
     if (chartData.length === 0) {
       return (
         <div className="text-center py-8">
-          <BarChart3 className="w-12 h-12 text-purple-400 mx-auto mb-3 opacity-50" />
+          <BarChart3 className="w-12 h-12 text-slate-400 mx-auto mb-3 opacity-50" />
           <h3 className="text-white text-sm font-medium mb-2">Ingen stressdata ennå</h3>
           <p className="text-slate-400 text-xs mb-4">
             Logg stress-nivået ditt for å se mønstre og trender
@@ -314,7 +314,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-purple-400" />
+              <BarChart3 className="w-4 h-4 text-slate-400" />
               <span className="text-white text-sm font-semibold">Stressstatistikk</span>
             </div>
             <div className="flex gap-1">
@@ -327,7 +327,7 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
                   className={cn(
                     "text-xs h-6 px-2",
                     chartPeriod === period
-                      ? "bg-purple-500 text-white"
+                      ? "bg-slate-600 text-white"
                       : "text-slate-400 hover:text-white hover:bg-slate-700"
                   )}
                   data-testid={`period-${period}`}
