@@ -40,6 +40,7 @@ import { useSideMenu } from "@/hooks/use-side-menu";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { calculateTdee } from "@/utils/tdee";
 import { getTargetWeight } from "@/utils/weight-utils";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 
 export default function MobileProfile() {
   const { toast } = useToast();
@@ -87,10 +88,11 @@ export default function MobileProfile() {
     ? Math.round(calorieEntries.reduce((sum, entry) => sum + (entry?.calories || 0), 0) / calorieEntries.length)
     : 0;
 
-  // USE stored AI Analysis value as the source of truth
-  // All components must show the same TDEE as AI Analysis  
+  // USE stored AI Analysis value as the source of truth, or calculate using centralized system
+  const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
   const currentTdee = currentTdeeAnalysis?.tdee || 3750;
-  const targetCalories = currentTdeeAnalysis?.targetCalories || 4850;
+  const targetCalories = currentTdeeAnalysis?.targetCalories || 
+    calculateCalorieTargets(currentTdee, userWeightGoal).targetCalories;
   
 
   // Advanced statistics

@@ -18,14 +18,18 @@ import { useSideMenu } from "@/hooks/use-side-menu";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { Link } from "wouter";
 import { Plus, Zap, Target, TrendingUp } from "lucide-react";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 
 export default function MobileDashboardNew() {
   const { openMenu } = useSideMenu();
   const { currentTdeeAnalysis, calorieEntries, weightEntries, user } = useUserStore();
   const { isVisible: isHeaderVisible } = useScrollDirection(50);
   
-  // Calculate target calories from TDEE analysis or use default
-  const targetCalories = currentTdeeAnalysis ? currentTdeeAnalysis.tdee + 1100 : 3200;
+  // Calculate target calories using centralized calculation
+  const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
+  const targetCalories = currentTdeeAnalysis 
+    ? calculateCalorieTargets(currentTdeeAnalysis.tdee, userWeightGoal).targetCalories
+    : calculateCalorieTargets(3200, userWeightGoal).targetCalories;
   
   // Safety checks for data availability
   const hasCalorieData = calorieEntries && calorieEntries.length > 0;
