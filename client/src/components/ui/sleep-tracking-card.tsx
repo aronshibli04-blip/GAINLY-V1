@@ -404,8 +404,14 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
         </div>
       </div>
 
-      {/* Chart */}
-      <div className="h-40 mb-2">
+      {/* Chart with Smart Insights */}
+      <div className="h-44 mb-3 relative">
+        {/* Paradox indicator */}
+        {chartData.some(d => (d.hours >= 9 && d.quality <= 3) || (d.hours <= 6 && d.quality >= 4)) && (
+          <div className="absolute top-0 right-0 text-[10px] text-slate-400 bg-slate-700/80 rounded px-1.5 py-0.5 z-10">
+            💡 Tidsmytar synlige
+          </div>
+        )}
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             {/* Quality Background Zones */}
@@ -550,29 +556,53 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               }}
               activeDot={{ r: 6, strokeWidth: 2, stroke: "#fff" }}
             />
+            
+            {/* Add custom labels for paradox points */}
+            {chartData.map((entry, index) => {
+              const isParadox = (entry.hours >= 9 && entry.quality <= 3) || (entry.hours <= 6 && entry.quality >= 4);
+              if (!isParadox) return null;
+              
+              // Calculate approximate position (this is a rough estimation)
+              const xPercent = ((index + 0.5) / chartData.length) * 100;
+              const yPercent = entry.hours <= 6 ? 15 : 75; // Top for good quality/low hours, bottom for bad quality/high hours
+              
+              return (
+                <div
+                  key={`paradox-${index}`}
+                  className="absolute text-[9px] text-white bg-blue-500/90 rounded px-1 py-0.5 pointer-events-none z-20"
+                  style={{
+                    left: `${xPercent}%`,
+                    top: `${yPercent}%`,
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  {entry.hours <= 6 && entry.quality >= 4 ? '⚡' : '🤔'}
+                </div>
+              );
+            })}
           </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Chart Legend & Stats */}
-      <div className="space-y-2">
+      {/* Chart Legend & Smart Stats */}
+      <div className="space-y-2 bg-slate-800/30 rounded-lg p-2 border border-slate-600/30">
         <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-blue-400 rounded"></div>
-              <span className="text-slate-300">Timer</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 bg-blue-400 rounded"></div>
+              <span className="text-slate-200 text-xs font-medium">Timer</span>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-0.5 bg-green-400 opacity-80"></div>
-              <span className="text-slate-300">Mål: 8t + Perfekt</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-0.5 bg-green-400 opacity-90"></div>
+              <span className="text-slate-200 text-xs font-medium">Optimal: 8t + Perfekt</span>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-white rounded-full border border-slate-400"></div>
-              <span className="text-slate-300">Tidsmytar</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 bg-white rounded-full border border-slate-300"></div>
+              <span className="text-slate-200 text-xs font-medium">Søvnmyter</span>
             </div>
           </div>
-          <div className="text-slate-300 font-medium">
-            Ø: {weeklyAverage.toFixed(1)}t
+          <div className="text-slate-200 font-semibold bg-slate-700/50 rounded px-2 py-1">
+            Snitt: {weeklyAverage.toFixed(1)}t
           </div>
         </div>
         <div className="border-t border-slate-600/50 pt-2 mt-1">
@@ -592,9 +622,13 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
                 <span className="text-slate-300">4-5 Bra+</span>
               </div>
             </div>
-            <div className="text-slate-400 text-[10px] text-right leading-tight">
-              <div>🎯 Tidsmytar:</div>
-              <div>Mer tid ≠ bedre kvalitet</div>
+            <div className="text-slate-300 text-[10px] text-right leading-snug bg-slate-700/40 rounded px-2 py-1">
+              <div className="flex items-center gap-1 font-semibold">
+                <span>💡</span>
+                <span>Kvalitet {'>'} Kvantitet</span>
+              </div>
+              <div className="mt-0.5 text-slate-400">⚡ Effektiv søvn</div>
+              <div className="mt-0.5 text-slate-400">🤔 Søvnmyter</div>
             </div>
           </div>
         </div>
