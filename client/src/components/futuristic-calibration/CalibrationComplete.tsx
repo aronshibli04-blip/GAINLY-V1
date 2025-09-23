@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 
 interface CalibrationCompleteProps {
   onActivateProtocol: () => void;
@@ -34,7 +35,8 @@ export function CalibrationComplete({ onActivateProtocol, userData }: Calibratio
   }, []);
 
   const projectedWeight = userData.startWeight + 8; // Projected 8kg gain
-  const recommendedSurplus = Math.max(500, userData.estimatedTDEE * 0.15);
+  // Use centralized calculation for recommended surplus (default 1.0 kg/week goal)
+  const recommendedSurplus = calculateCalorieTargets(userData.estimatedTDEE, 1.0).surplus;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
