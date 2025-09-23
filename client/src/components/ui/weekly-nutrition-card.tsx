@@ -145,7 +145,7 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
 
         {/* Toggle Buttons */}
         <div className="flex justify-center">
-          <div className="bg-slate-700/50 rounded-full p-1 flex border border-slate-600/50 shadow-lg backdrop-blur-sm">
+          <div className="bg-slate-700/50 rounded-full p-1 flex shadow-lg backdrop-blur-sm">
             <Button
               variant={viewMode === 'consumed' ? 'default' : 'ghost'}
               size="sm"
