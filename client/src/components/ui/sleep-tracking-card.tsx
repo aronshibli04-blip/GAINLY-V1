@@ -584,55 +584,6 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
         </ResponsiveContainer>
       </div>
 
-      {/* Chart Legend & Smart Stats */}
-      <div className="space-y-2 bg-slate-800/30 rounded-lg p-2 border border-slate-600/30">
-        <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 bg-blue-400 rounded"></div>
-              <span className="text-slate-200 text-xs font-medium">Timer</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-0.5 bg-green-400 opacity-90"></div>
-              <span className="text-slate-200 text-xs font-medium">Optimal: 8t + Perfekt</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 bg-white rounded-full border border-slate-300"></div>
-              <span className="text-slate-200 text-xs font-medium">Søvnmyter</span>
-            </div>
-          </div>
-          <div className="text-slate-200 font-semibold bg-slate-700/50 rounded px-2 py-1">
-            Snitt: {weeklyAverage.toFixed(1)}t
-          </div>
-        </div>
-        <div className="border-t border-slate-600/50 pt-2 mt-1">
-          <div className="text-xs text-slate-300 mb-2 font-medium">Søvnkvalitet & Innsikt:</div>
-          <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-red-400 rounded"></div>
-                <span className="text-slate-300">1-2 Dårlig</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-yellow-400 rounded"></div>
-                <span className="text-slate-300">3 OK</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-400 rounded"></div>
-                <span className="text-slate-300">4-5 Bra+</span>
-              </div>
-            </div>
-            <div className="text-slate-300 text-[10px] text-right leading-snug bg-slate-700/40 rounded px-2 py-1">
-              <div className="flex items-center gap-1 font-semibold">
-                <span>💡</span>
-                <span>Kvalitet {'>'} Kvantitet</span>
-              </div>
-              <div className="mt-0.5 text-slate-400">⚡ Effektiv søvn</div>
-              <div className="mt-0.5 text-slate-400">🤔 Søvnmyter</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </>
   );
 
