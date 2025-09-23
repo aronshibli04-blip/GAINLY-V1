@@ -128,8 +128,9 @@ export function FFMIGoalSelector({
     }
 
     // Convert to DisplayFFMIGoal with calculated weights and timelines
+    // Always show goals, but prioritize those above current FFMI
     const generatedGoals: DisplayFFMIGoal[] = availableGoals
-      .filter(goal => goal.ffmi > calculatedCurrentFFMI)
+      .filter(goal => goal.ffmi >= Math.max(calculatedCurrentFFMI - 2, 16)) // Show goals within 2 FFMI points below current, minimum FFMI 16
       .map(goal => {
         const targetWeight = calculateTargetWeight(goal.ffmi, height);
         const timelineMonths = estimateTimeline(calculatedCurrentFFMI, goal.ffmi, age, gender);
