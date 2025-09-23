@@ -91,35 +91,13 @@ export default function MobileDashboardNew() {
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {/* Enhanced charts with error boundaries */}
+            {/* Always show enhanced charts - they handle empty states themselves */}
             <div className="min-h-[120px]">
-              {hasWeightData ? (
-                <EnhancedWeightTrendChart />
-              ) : (
-                <Card className="bg-slate-800/60 border-slate-700 h-full">
-                  <CardContent className="p-4 flex items-center justify-center h-full">
-                    <div className="text-center text-slate-400">
-                      <TrendingUp className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                      <p className="text-xs">Start tracking weight to see trends</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              <EnhancedWeightTrendChart />
             </div>
             
             <div className="min-h-[120px]">
-              {hasCalorieData ? (
-                <EnhancedExpenditureChart targetCalories={targetCalories} />
-              ) : (
-                <Card className="bg-slate-800/60 border-slate-700 h-full">
-                  <CardContent className="p-4 flex items-center justify-center h-full">
-                    <div className="text-center text-slate-400">
-                      <Zap className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                      <p className="text-xs">Track calories to see energy balance</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              <EnhancedExpenditureChart targetCalories={targetCalories} />
             </div>
           </div>
         </div>
