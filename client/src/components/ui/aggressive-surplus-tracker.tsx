@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { calculateTdee } from "@/utils/tdee";
 import { calculateCalorieTargets } from '@shared/calorie-calculations';
+import { DEFAULT_WEIGHT_GAIN_GOAL } from '@shared/weight-gain-config';
 import { 
   Target, 
   AlertTriangle, 
@@ -318,7 +319,7 @@ export function AggressiveSurplusTracker() {
             <Zap className="h-6 w-6 text-green-400 mx-auto mb-2" />
             <p className="text-green-400 font-medium text-sm">Target Achieved!</p>
             <p className="text-green-300 text-xs">
-              Perfect 1100kcal surplus completed. You're on track for 1kg weight gain this week!
+              Perfect {DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus}kcal surplus completed. You're on track for {DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek}kg weight gain this week!
             </p>
           </div>
         )}

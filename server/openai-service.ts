@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { DEFAULT_WEIGHT_GAIN_GOAL } from '../shared/weight-gain-config';
 
 interface MealPlanRequest {
   targetCalories: number;
@@ -67,7 +68,7 @@ export class OpenAIService {
     const systemPrompt = `You are a nutrition specialist helping hardgainers achieve weight gain goals. You understand the challenges of gaining 1kg per week and focus on high-calorie, nutrient-dense meal plans.
 
 Key principles:
-- Hardgainers need aggressive calorie surplus (1100+ kcal above TDEE)
+- Hardgainers need aggressive calorie surplus (${DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus}+ kcal above TDEE for ${DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek}kg/week gain)
 - Focus on calorie-dense, easy-to-digest foods
 - Minimize food volume while maximizing calories
 - Account for low appetite with strategic meal timing
@@ -80,7 +81,7 @@ CRITICAL: Always respond with valid JSON only, no markdown code blocks, no addit
 
     const userPrompt = `Create an optimized hardgainer meal plan for aggressive weight gain:
 
-Target: ${request.targetCalories} kcal (1100+ kcal surplus for 1kg/week gain)
+Target: ${request.targetCalories} kcal (${DEFAULT_WEIGHT_GAIN_GOAL.dailySurplus}+ kcal surplus for ${DEFAULT_WEIGHT_GAIN_GOAL.kgPerWeek}kg/week gain)
 DIETARY PREFERENCES (MUST FOLLOW EXACTLY): ${request.dietaryPreferences.join(', ') || 'None'}
 Preferred foods: ${request.preferredFoods.join(', ') || 'Varied'}
 Max meals: ${request.maxMealsPerDay} per day
