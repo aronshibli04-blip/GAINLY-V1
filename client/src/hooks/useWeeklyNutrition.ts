@@ -45,19 +45,20 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   const weeklyNutritionData = useMemo((): WeeklyNutritionData | null => {
     // Return null while still loading, but create empty structure for empty arrays
     if (mealLogsLoading) return null;
-    
+
     // Always create week structure - use empty array if no meal logs exist yet
     const mealLogsArray = mealLogs || [];
 
     const today = new Date();
     const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
 
-    // Use userTargets from centralized API with fallback
+    // Use targets from API which calculates based on TDEE + user's weight gain goal
+    // This ensures the weekly nutrition card shows the correct calorie target based on actual TDEE + surplus
     const targets: MacroTargets = userTargets || {
-      calories: 4000,
-      protein: 180,
-      fat: 145,
-      carbs: 450
+      calories: 4000, // Fallback only when API fails
+      protein: 200,
+      fat: 111,
+      carbs: 550
     };
     const days: DayNutrition[] = [];
 
@@ -65,7 +66,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
       const currentDate = new Date(weekBoundaries.weekStart);
       currentDate.setDate(weekBoundaries.weekStart.getDate() + dayIndex);
-      
+
       const dateString = currentDate.toISOString().split('T')[0];
       const isCurrent = dayIndex === currentDayIndex && 
                       currentDate.toDateString() === today.toDateString();

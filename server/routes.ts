@@ -1,10 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { 
-  insertUserSchema, 
-  insertWeightLogSchema, 
-  insertMealLogSchema, 
+import {
+  insertUserSchema,
+  insertWeightLogSchema,
+  insertMealLogSchema,
   insertActivityLogSchema,
   insertAiAnalysisSchema,
   insertFoodItemSchema,
@@ -232,7 +232,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/ai-analysis", async (req, res) => {
     try {
       const { userId } = req.body;
-      
+
       if (!userId) {
         return res.status(400).json({ message: "User ID is required" });
       }
@@ -240,11 +240,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check if user has enough data (minimum 7 days)
       const progress = await storage.getDataCollectionProgress(userId);
       const minDays = 7;
-      
+
       if (progress.weightLogs < minDays || progress.mealDays < minDays) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           message: `Insufficient data. Need at least ${minDays} days of weight and meal logs.`,
-          progress 
+          progress
         });
       }
 
@@ -254,17 +254,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         storage.getWeightLogsByUser(userId, 21),
         storage.getDailyCaloriesByUser(userId, 21)
       ]);
-      
+
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       // Get user's weight gain goal (default to 1.0 kg/week if not set)
       const weightGainGoal = user.weightGainGoal ? parseFloat(user.weightGainGoal) : 1.0;
-      
+
       // Calculate TDEE and plan with user's weight gain goal
       const analysis = calculateTdeeAndPlan(weightLogs, dailyCalories, weightGainGoal);
-      
+
       // Save analysis
       const analysisData = insertAiAnalysisSchema.parse({
         userId,
@@ -299,17 +299,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         storage.getUser(req.params.userId),
         storage.getLatestAiAnalysis(req.params.userId)
       ]);
-      
+
       if (!user || !analysis) {
-        return res.json(null); // No user or analysis available yet
+        // Fallback to baseline when no data available
+        return res.json({
+          calories: 4000,
+          protein: 200,
+          fat: 111,
+          carbs: 550
+        });
       }
-      
+
       // Get user's weight gain goal (default to 1.0 kg/week if not set)
       const weightGainGoal = user.weightGainGoal ? parseFloat(user.weightGainGoal) : 1.0;
-      
+
       // Use centralized calculation with user's preferred weight gain goal
       const macroTargets = calculateNutritionTargets(analysis.calculatedTdee, weightGainGoal);
-      
+
       res.json(macroTargets);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -320,14 +326,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/ai-coach/chat", async (req, res) => {
     try {
       const { message, userId, userData } = req.body;
-      
+
       if (!message || !userId) {
         return res.status(400).json({ message: "Message and userId are required" });
       }
 
       const { AICoachService } = await import('./ai-coach-service');
       const response = await AICoachService.getPersonalizedResponse(message, userData);
-      
+
       res.json({ response });
     } catch (error: any) {
       res.status(500).json({ message: "Failed to get AI response" });
@@ -349,11 +355,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/daily-routines", async (req, res) => {
     try {
       const routineData = insertDailyRoutineSchema.parse(req.body);
-      
+
       // Use the actual onboarded user ID instead of 'user1'
       const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534"; // From onboarding
       const updatedRoutineData = { ...routineData, userId: actualUserId };
-      
+
       const routine = await storage.createDailyRoutine(updatedRoutineData);
       res.json(routine);
     } catch (error: any) {
@@ -376,11 +382,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const routineId = req.params.id;
       const updates = req.body;
-      
+
       const updatedRoutine = await storage.updateDailyRoutine(routineId, updates);
       res.json(updatedRoutine);
     } catch (error: any) {
-      
+
       res.status(400).json({ message: error.message });
     }
   });
@@ -388,11 +394,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/daily-routines/:id", async (req, res) => {
     try {
       const routineId = req.params.id;
-      
+
       await storage.deleteDailyRoutine(routineId);
       res.json({ success: true });
     } catch (error: any) {
-      
+
       res.status(400).json({ message: error.message });
     }
   });
@@ -401,11 +407,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Use the actual onboarded user ID (same pattern as other endpoints)
       const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
-      
+
       await storage.deleteAllDailyRoutines(actualUserId);
       res.json({ success: true, message: 'All routines deleted successfully' });
     } catch (error: any) {
-      
+
       res.status(500).json({ message: error.message });
     }
   });
@@ -414,19 +420,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/daily-routine-completions", async (req, res) => {
     try {
       const completionData = insertDailyRoutineCompletionSchema.parse(req.body);
-      
+
       // Use the actual onboarded user ID
       const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
       const updatedCompletionData = { ...completionData, userId: actualUserId };
-      
+
       const completion = await storage.createDailyRoutineCompletion(updatedCompletionData);
-      
+
       // Update user stats
       await storage.updateUserStats(actualUserId, updatedCompletionData.pointsEarned);
-      
+
       res.json(completion);
     } catch (error: any) {
-      
+
       res.status(400).json({ message: error.message });
     }
   });
@@ -447,11 +453,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Use the actual onboarded user ID
       const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
-      
+
       const stats = await storage.getUserStats(actualUserId);
       res.json(stats);
     } catch (error: any) {
-      
+
       res.status(500).json({ message: error.message });
     }
   });
@@ -460,22 +466,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/foods/search", async (req, res) => {
     try {
       const query = req.query.q as string || '';
-      
+
       // Try FatSecret API first for comprehensive database
       const { fatSecretService } = await import('./fatsecret-service');
       const fatSecretFoods = await fatSecretService.searchFoods(query);
-      
+
       if (fatSecretFoods.length > 0) {
         res.json(fatSecretFoods);
         return;
       }
-      
+
       // Fallback to local database if FatSecret has no results
       const localFoods = await storage.searchFoodItems(query);
       res.json(localFoods);
     } catch (error: any) {
-      
-      
+
+
       // Fallback to local database on API error
       try {
         const localFoods = await storage.searchFoodItems(req.query.q as string || '');
@@ -497,7 +503,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return;
         }
       }
-      
+
       // Fallback to local database
       const food = await storage.getFoodItemById(req.params.id);
       res.json(food || null);
@@ -513,7 +519,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const food = await fatSecretService.searchByBarcode(req.params.barcode);
       res.json(food);
     } catch (error: any) {
-      
+
       res.status(500).json({ message: error.message });
     }
   });
@@ -535,27 +541,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let mealPlan;
       try {
         const openAIService = new OpenAIService();
-        const timeout = new Promise((_, reject) => 
+        const timeout = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('OpenAI timeout')), 45000)
         );
-        
+
         mealPlan = await Promise.race([
           openAIService.generateMealPlan(mealPlanRequest),
           timeout
         ]);
-        
-        
+
+
       } catch (openAIError: any) {
-        
+
         mealPlan = generateHardgainerFallbackMealPlan(mealPlanRequest);
       }
 
       res.json(mealPlan);
     } catch (error: any) {
-      
-      res.status(500).json({ 
+
+      res.status(500).json({
         message: `Failed to generate meal plan: ${error.message}`,
-        error: error.message 
+        error: error.message
       });
     }
   });
@@ -587,7 +593,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/scan-nutrition", async (req, res) => {
     try {
       const { image } = req.body;
-      
+
       if (!image || typeof image !== 'string') {
         return res.status(400).json({ message: "Base64 image data required" });
       }
@@ -597,7 +603,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(nutritionData);
     } catch (error: any) {
-      
+
       res.status(500).json({ message: "Failed to scan nutrition label" });
     }
   });
@@ -615,30 +621,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (const desc of testDescriptions) {
         await storage.deleteMealLogsByDescription(userId, desc);
       }
-      
+
       // Clear old weight logs from August test period
       await storage.deleteWeightLogsByDateRange(userId, '2025-08-01', '2025-08-31');
-      
+
       res.json({ message: "Test data cleared successfully" });
     } catch (error: any) {
-      
-      res.status(500).json({ 
-        message: "Failed to clear test data", 
-        error: error.message 
+
+      res.status(500).json({
+        message: "Failed to clear test data",
+        error: error.message
       });
     }
   });
 
   function generateHardgainerFallbackMealPlan(request: any) {
-    const avoidOatmeal = request.dietaryPreferences.some((pref: string) => 
+    const avoidOatmeal = request.dietaryPreferences.some((pref: string) =>
       pref.toLowerCase().includes('oat') || pref.toLowerCase().includes('oat meal')
     );
-    const avoidProteinShake = request.dietaryPreferences.some((pref: string) => 
+    const avoidProteinShake = request.dietaryPreferences.some((pref: string) =>
       pref.toLowerCase().includes('protein shake') || pref.toLowerCase().includes('liquid protein')
     );
-    
+
     const targetPerMeal = Math.floor(request.targetCalories / request.maxMealsPerDay);
-    
+
     return {
       id: Date.now().toString(),
       userId: request.userId,
@@ -798,23 +804,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/generate-rewards", async (req, res) => {
     try {
       const { goalWeight, userPreferences, currentReward } = req.body;
-      
+
       if (!goalWeight || !userPreferences) {
         return res.status(400).json({ message: "Missing required fields" });
       }
-      
+
       const { generatePersonalizedRewards } = await import('./reward-generator');
       const rewards = await generatePersonalizedRewards(goalWeight, userPreferences, currentReward);
       res.json({ rewards });
     } catch (error: any) {
-      
+
       res.status(500).json({ message: "Failed to generate rewards" });
     }
   });
 
-  // COMPLETE USER DATA RESET ENDPOINT - Added for "Reset App" functionality  
+  // COMPLETE USER DATA RESET ENDPOINT - Added for "Reset App" functionality
   // This endpoint clears ALL user data from the database including:
-  // - User stats (level, XP, streaks, points) 
+  // - User stats (level, XP, streaks, points)
   // - All tracking logs (weight, meals, activities, sleep, stress)
   // - AI analysis data, daily routines, completions
   // - The entire user record
@@ -825,23 +831,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // SECURITY FIX: Use hardcoded userId like other endpoints in this app
       // This matches the pattern used in daily-routines, user-stats, etc.
       const actualUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
-      
+
       // Call storage method to clear all user data from database
       await storage.clearAllUserData(actualUserId);
-      
+
       console.log(`🗑️ Successfully cleared all data for user: ${actualUserId}`);
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: "All user data cleared successfully",
-        clearedUserId: actualUserId 
+        clearedUserId: actualUserId
       });
-      
+
     } catch (error: any) {
       console.error(`❌ Failed to clear user data via API:`, error);
-      res.status(500).json({ 
+      res.status(500).json({
         success: false,
-        message: "Failed to clear user data", 
-        error: error.message 
+        message: "Failed to clear user data",
+        error: error.message
       });
     }
   });
@@ -882,10 +888,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/ffmi/calculate", async (req, res) => {
     try {
       const calculationData = insertFFMICalculationSchema.parse(req.body);
-      
+
       // Save calculation to database
       const calculation = await storage.saveFFMICalculation(calculationData);
-      
+
       res.json(calculation);
     } catch (error: any) {
       console.error("Error saving FFMI calculation:", error);
@@ -909,10 +915,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/ffmi/recommendations", async (req, res) => {
     try {
       const { age, gender, currentFFMI } = req.query;
-      
+
       if (!age || !gender || !currentFFMI) {
-        return res.status(400).json({ 
-          message: "Missing required parameters: age, gender, currentFFMI" 
+        return res.status(400).json({
+          message: "Missing required parameters: age, gender, currentFFMI"
         });
       }
 
@@ -922,16 +928,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate inputs
       const validation = FFMICalculatorService.validateInputs(70, 175, 15, ageNum); // dummy weight/height for age validation
       if (!validation.isValid) {
-        return res.status(400).json({ 
-          message: "Invalid input parameters", 
-          errors: validation.errors 
+        return res.status(400).json({
+          message: "Invalid input parameters",
+          errors: validation.errors
         });
       }
 
       // Get recommendations
       const recommendations = FFMICalculatorService.getRecommendedFFMI(
-        ageNum, 
-        gender as 'male' | 'female', 
+        ageNum,
+        gender as 'male' | 'female',
         currentFFMINum
       );
 
@@ -947,14 +953,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.params.id;
       const unlockService = new FFMIUnlockService(storage);
-      
+
       // Check unlock eligibility using FFMIUnlockService
       const unlockAnalysis = await unlockService.checkUnlockEligibility(userId);
-      
+
       res.json(unlockAnalysis);
     } catch (error: any) {
       console.error("Error checking FFMI unlock status:", error);
-      
+
       // Handle specific errors with appropriate status codes
       if (error.message === 'User not found') {
         return res.status(404).json({ message: "User not found" });
@@ -962,7 +968,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error.message === 'User has no goal FFMI set') {
         return res.status(400).json({ message: "User has no goal FFMI set. Please complete FFMI setup first." });
       }
-      
+
       res.status(500).json({ message: error.message });
     }
   });
