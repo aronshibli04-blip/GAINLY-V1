@@ -259,25 +259,33 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
           ))}
           
           {/* Annet button with modal */}
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Dialog open={isModalOpen} onOpenChange={(open) => {
+            console.log('🔍 Dialog state changing:', open);
+            setIsModalOpen(open);
+          }}>
             <DialogTrigger asChild>
               <Button
                 variant="outline"
                 size="sm"
+                onClick={() => {
+                  console.log('🔍 Annet button clicked, current modal state:', isModalOpen);
+                  setIsModalOpen(true);
+                }}
                 className="text-sm px-3 py-1.5 h-8 min-w-[44px] bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600"
                 data-testid="sleep-hours-other"
               >
                 Annet
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md bg-slate-800 border border-slate-600">
               <DialogHeader>
-                <DialogTitle>Velg søvntimer</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-white">Velg søvntimer</DialogTitle>
+                <DialogDescription className="text-slate-300">
                   Velg hvor mange timer du sov, eller skriv inn egendefinert verdi.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
+                <div className="text-xs text-slate-500 mb-2">Debug: Modal open = {isModalOpen.toString()}</div>
                 <div className="grid grid-cols-3 gap-2">
                   {extendedHourOptions.map((hours) => (
                     <Button
