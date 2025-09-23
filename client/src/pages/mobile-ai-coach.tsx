@@ -283,7 +283,9 @@ export default function MobileAICoach() {
               const today = new Date().toISOString().split('T')[0];
               const todayMeals = calorieEntries.filter(entry => entry.date === today);
               const todayCalories = todayMeals.reduce((sum, meal) => sum + meal.calories, 0);
-              const targetCalories = currentTdeeAnalysis?.targetCalories || 3500;
+              const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
+              const targetCalories = currentTdeeAnalysis?.targetCalories || 
+                calculateCalorieTargets(3500, userWeightGoal).targetCalories;
               const calorieProgress = (todayCalories / targetCalories) * 100;
               
               return (
