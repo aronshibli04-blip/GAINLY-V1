@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, ComposedChart } from "recharts";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, ReferenceArea, ComposedChart } from "recharts";
 import { Moon, Clock, BarChart3, Edit3, Save } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -414,41 +414,69 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
         )}
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            {/* Quality Background Zones */}
+            {/* Sleep Hours Background Zones */}
             <defs>
-              {/* Green zone for excellent quality (4-5) */}
-              <linearGradient id="excellentZone" x1="0" y1="0" x2="0" y2="1">
+              {/* Green zone for optimal sleep (7-9h) */}
+              <linearGradient id="optimalSleepZone" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#22c55e" stopOpacity="0.08" />
                 <stop offset="100%" stopColor="#22c55e" stopOpacity="0.03" />
               </linearGradient>
-              {/* Yellow zone for OK quality (3) */}
-              <linearGradient id="okZone" x1="0" y1="0" x2="0" y2="1">
+              {/* Yellow zone for suboptimal sleep (6-7h and 9-10h) */}
+              <linearGradient id="suboptimalSleepZone" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.08" />
                 <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.03" />
               </linearGradient>
-              {/* Red zone for poor quality (1-2) */}
-              <linearGradient id="poorZone" x1="0" y1="0" x2="0" y2="1">
+              {/* Red zone for poor sleep (4-6h and 10-12h) */}
+              <linearGradient id="poorSleepZone" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#ef4444" stopOpacity="0.08" />
                 <stop offset="100%" stopColor="#ef4444" stopOpacity="0.03" />
               </linearGradient>
             </defs>
-            {/* Background quality zones rectangles */}
-            <defs>
-              <pattern id="excellentPattern" x="0" y="0" width="100%" height="100%">
-                <rect width="100%" height="100%" fill="url(#excellentZone)" />
-              </pattern>
-              <pattern id="okPattern" x="0" y="0" width="100%" height="100%">
-                <rect width="100%" height="100%" fill="url(#okZone)" />
-              </pattern>
-              <pattern id="poorPattern" x="0" y="0" width="100%" height="100%">
-                <rect width="100%" height="100%" fill="url(#poorZone)" />
-              </pattern>
-            </defs>
+            {/* Sleep Hours Background Zones - using ReferenceArea for proper positioning */}
+            {/* Red zone: Excessive sleep (10-12h) */}
+            <ReferenceArea 
+              yAxisId="hours" 
+              y1={10} 
+              y2={12} 
+              fill="url(#poorSleepZone)" 
+              fillOpacity={0.8}
+            />
             
-            {/* Background zones */}
-            <rect x="0" y="0" width="100%" height="22%" fill="url(#excellentZone)" />
-            <rect x="0" y="22%" width="100%" height="11%" fill="url(#okZone)" />
-            <rect x="0" y="33%" width="100%" height="67%" fill="url(#poorZone)" />
+            {/* Yellow zone: A bit much sleep (9-10h) */}
+            <ReferenceArea 
+              yAxisId="hours" 
+              y1={9} 
+              y2={10} 
+              fill="url(#suboptimalSleepZone)" 
+              fillOpacity={0.8}
+            />
+            
+            {/* Green zone: Optimal sleep (7-9h) - centered around 8h */}
+            <ReferenceArea 
+              yAxisId="hours" 
+              y1={7} 
+              y2={9} 
+              fill="url(#optimalSleepZone)" 
+              fillOpacity={0.8}
+            />
+            
+            {/* Yellow zone: Suboptimal sleep (6-7h) */}
+            <ReferenceArea 
+              yAxisId="hours" 
+              y1={6} 
+              y2={7} 
+              fill="url(#suboptimalSleepZone)" 
+              fillOpacity={0.8}
+            />
+            
+            {/* Red zone: Too little sleep (4-6h) */}
+            <ReferenceArea 
+              yAxisId="hours" 
+              y1={4} 
+              y2={6} 
+              fill="url(#poorSleepZone)" 
+              fillOpacity={0.8}
+            />
             
             <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.2} />
             <XAxis 
