@@ -128,7 +128,23 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
       });
     }
     
-    if (last7Days.every(day => day.expenditure === 0)) return null;
+    // Show TDEE chart even if no calories logged
+    if (last7Days.every(day => day.expenditure === 0)) {
+      // Use TDEE estimate for empty chart
+      const tdeeEstimate = currentTdeeAnalysis?.tdee || Math.max(targetCalories - 500, 2200);
+      
+      return {
+        chartData: last7Days.map(day => ({ ...day, expenditure: tdeeEstimate })),
+        avgExpenditure: tdeeEstimate,
+        avgSurplus: 0,
+        metabolicEfficiency: 100,
+        expenditureTrend: 0,
+        isMetabolicAdaptation: false,
+        surplusConsistency: 0,
+        totalSurplusDays: 0,
+        isEmpty: true
+      };
+    }
     
     // Calculate averages and trends with proper handling
     const avgExpenditure = last7Days.reduce((sum, day) => sum + day.expenditure, 0) / 7;
@@ -162,117 +178,7 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
   }, [weightEntries, calorieEntries, currentTdeeAnalysis, targetCalories]);
   
   if (!expenditureAnalysis) {
-    // Use TDEE from analysis or estimate for empty chart
-    const estimatedTdee = currentTdeeAnalysis?.tdee || Math.max(targetCalories - 500, 2200);
-    
-    // Create chart data showing flat TDEE line
-    const emptyChartData = Array.from({ length: 7 }, (_, i) => ({
-      day: i,
-      expenditure: estimatedTdee,
-      date: '',
-      dayName: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]
-    }));
-    
-    return (
-      <Card className={cn(
-        "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
-        "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20",
-        className
-      )}>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg">
-                <Zap className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <CardTitle className="text-base text-white font-semibold">
-                  Energy Balance
-                </CardTitle>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  📊 TDEE Baseline • Last 7 days
-                </p>
-              </div>
-            </div>
-            
-            {/* Show TDEE when available */}
-            <div className="px-2 py-1 rounded-full text-xs font-medium bg-slate-800/50 border border-orange-400/30 text-orange-400">
-              TDEE Ready
-            </div>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="pb-4 space-y-4">
-          {/* Chart showing TDEE baseline */}
-          <div className="h-20 relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart 
-                data={emptyChartData} 
-                margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
-              >
-                <XAxis dataKey="day" hide={true} />
-                <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
-                
-                {/* Gradient Definition */}
-                <defs>
-                  <linearGradient id="tdeeGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                
-                <Area
-                  type="monotone"
-                  dataKey="expenditure"
-                  stroke="#f59e0b"
-                  strokeWidth={2}
-                  fill="url(#tdeeGradient)"
-                  dot={false}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-            
-            {/* Overlay message */}
-            <div className="absolute top-2 left-3">
-              <div className="text-xs font-medium text-orange-400">TDEE Baseline</div>
-              <div className="text-xs text-slate-400">Start logging meals for surplus tracking</div>
-            </div>
-          </div>
-          
-          {/* Stats showing TDEE and estimated surplus */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 bg-slate-800/30 rounded-lg border border-slate-700/30">
-              <div className="text-xs text-slate-400 font-medium mb-1">Estimated TDEE</div>
-              <div className="text-xl font-bold text-white">
-                <AnimatedCounter value={estimatedTdee} suffix=" kcal" />
-              </div>
-            </div>
-            
-            <div className="p-3 bg-slate-800/20 rounded-lg border border-slate-700/20">
-              <div className="text-xs text-slate-500 font-medium mb-1">Avg Surplus</div>
-              <div className="text-xl font-bold text-slate-400 flex items-center">
-                <Zap className="h-4 w-4 mr-1" />
-                +-- kcal
-              </div>
-            </div>
-          </div>
-          
-          {/* TDEE ready message */}
-          <div className="p-3 rounded-lg border bg-gradient-to-r from-orange-500/20 to-amber-500/20 border-orange-400/20">
-            <div className="flex items-center space-x-2 mb-2">
-              <Zap className="h-4 w-4 text-orange-400" />
-              <span className="text-sm font-medium text-orange-400">
-                TDEE Calculated
-              </span>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Your baseline energy expenditure is {estimatedTdee} kcal/day. 
-              {currentTdeeAnalysis ? 'Start logging meals to track energy balance and surplus.' : 'Log more data for accurate TDEE calculation.'}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return null; // This shouldn't happen anymore since we fixed the logic above
   }
   
   const { 
@@ -282,7 +188,8 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
     metabolicEfficiency,
     expenditureTrend,
     isMetabolicAdaptation,
-    surplusConsistency 
+    surplusConsistency,
+    isEmpty 
   } = expenditureAnalysis;
   
   const isPositiveSurplus = avgSurplus > 0;
@@ -334,20 +241,21 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
                 Energy Balance
               </CardTitle>
               <p className="text-xs text-slate-400 mt-0.5">
-                {isPositiveSurplus ? '📈 Surplus' : '📉 Deficit'} • Last 7 days
+                {isEmpty ? '📊 TDEE Baseline • Last 7 days' : isPositiveSurplus ? '📈 Surplus • Last 7 days' : '📉 Deficit • Last 7 days'}
               </p>
             </div>
           </div>
           
-          {/* Efficiency Badge */}
+          {/* Badge */}
           <div className={cn(
             "px-2 py-1 rounded-full text-xs font-medium",
             "bg-slate-800/50 border",
+            isEmpty ? "text-orange-400 border-orange-400/30" :
             metabolicEfficiency > 110 ? "text-emerald-400 border-emerald-400/30" :
             metabolicEfficiency > 90 ? "text-amber-400 border-amber-400/30" :
             "text-red-400 border-red-400/30"
           )}>
-            {metabolicEfficiency.toFixed(0)}% efficiency
+            {isEmpty ? 'TDEE Ready' : `${metabolicEfficiency.toFixed(0)}% efficiency`}
           </div>
         </div>
       </CardHeader>
@@ -455,16 +363,18 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
             <div className="flex items-center space-x-2">
               <Activity className={cn("h-4 w-4", currentColors.accent)} />
               <span className={cn("text-sm font-medium", currentColors.accent)}>
-                Metabolic Insights
+                {isEmpty ? 'TDEE Baseline' : 'Metabolic Insights'}
               </span>
             </div>
             <div className="text-xs text-slate-400">
-              {surplusConsistency}/7 days positive
+              {isEmpty ? 'Ready for tracking' : `${surplusConsistency}/7 days positive`}
             </div>
           </div>
           
           <p className="text-xs text-slate-300 leading-relaxed">
-            {isMetabolicAdaptation ? 
+            {isEmpty ? 
+              `Your baseline energy expenditure is ${avgExpenditure} kcal/day. ${currentTdeeAnalysis ? 'Start logging meals to track energy balance and surplus.' : 'Log more data for accurate TDEE calculation.'}` :
+             isMetabolicAdaptation ? 
               `Possible metabolic adaptation detected. TDEE decreased by ${Math.abs(expenditureTrend)}kcal this week.` :
              isSurplusTarget ?
               `Excellent energy balance! You're hitting the ideal 400-600kcal surplus for lean gains.` :
