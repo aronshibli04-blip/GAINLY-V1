@@ -6,6 +6,7 @@ import { MobileHeader } from "@/components/ui/mobile-header";
 import { TrackingCardsCarousel } from "@/components/ui/tracking-cards-carousel";
 import { WeightTrendMiniChart } from "@/components/ui/weight-trend-mini-chart";
 import { ExpenditureMiniChart } from "@/components/ui/expenditure-mini-chart";
+import { WeightTrendGraph } from "@/components/ui/weight-trend-graph";
 import { EnhancedHabitGrid } from "@/components/ui/enhanced-habit-grid";
 import { AdvancedProgressCard } from "@/components/ui/advanced-progress-card";
 import { EnhancedWeeklyStatsCard } from "@/components/ui/enhanced-weekly-stats-card";
@@ -76,6 +77,11 @@ export default function MobileDashboardNew() {
         {/* 1. HERO SECTION - Tracking Cards Carousel */}
         <div className="mb-6">
           <TrackingCardsCarousel />
+        </div>
+
+        {/* 1.5. WEIGHT TREND GRAPH - Under Weekly Nutrition */}
+        <div className="mb-6">
+          <WeightTrendGraph />
         </div>
 
         {/* 2. ANALYTICS CARDS - 2 Column Grid with fallbacks */}
