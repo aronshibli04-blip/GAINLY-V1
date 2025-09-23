@@ -3,6 +3,7 @@ import { useUserStore } from "@/store/userStore";
 import { cn } from "@/lib/utils";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 
 interface EnhancedWeeklyNutritionCalendarProps {
   targetCalories?: number;
@@ -18,8 +19,15 @@ interface DayNutritionData {
   status: 'complete' | 'partial' | 'empty';
 }
 
-export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: EnhancedWeeklyNutritionCalendarProps) {
-  const { calorieEntries } = useUserStore();
+export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeeklyNutritionCalendarProps) {
+  const { calorieEntries, user, currentTdeeAnalysis } = useUserStore();
+  
+  // Calculate target calories using centralized system if not provided
+  const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
+  const calculatedTargetCalories = targetCalories || (
+    currentTdeeAnalysis?.targetCalories || 
+    calculateCalorieTargets(3200, userWeightGoal).targetCalories
+  );
   const [hoveredDay, setHoveredDay] = useState<string | null>(null);
   
   // Get current week dates (Monday to Sunday)
@@ -54,13 +62,13 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
     const dayEntries = safeCalorieEntries.filter(entry => entry && entry.date === date);
     const calories = dayEntries.reduce((sum, entry) => sum + (entry.calories || 0), 0);
     const meals = dayEntries.filter(entry => entry.calories > 0).length; // Only count actual meals
-    const progressPercent = Math.min((calories / targetCalories) * 100, 150); // Allow up to 150% for surplus visualization
+    const progressPercent = Math.min((calories / calculatedTargetCalories) * 100, 150); // Allow up to 150% for surplus visualization
     
     // Neutral status determination
     let status: 'complete' | 'partial' | 'empty';
     if (calories === 0) {
       status = 'empty';
-    } else if (calories >= targetCalories) {
+    } else if (calories >= calculatedTargetCalories) {
       status = 'complete';
     } else {
       status = 'partial';
@@ -88,8 +96,8 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories = 3200 }: Enhan
     completeDays: weekData.filter(day => day.status === 'complete').length,
     partialDays: weekData.filter(day => day.status === 'partial').length,
     emptyDays: weekData.filter(day => day.status === 'empty').length,
-    weeklyTarget: targetCalories * 7,
-    weeklyProgress: Math.round((weekData.reduce((sum, day) => sum + day.calories, 0) / (targetCalories * 7)) * 100)
+    weeklyTarget: calculatedTargetCalories * 7,
+    weeklyProgress: Math.round((weekData.reduce((sum, day) => sum + day.calories, 0) / (calculatedTargetCalories * 7)) * 100)
   };
 
   // Neutral color system based on progress

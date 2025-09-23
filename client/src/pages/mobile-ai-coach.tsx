@@ -24,7 +24,8 @@ export default function MobileAICoach() {
     calorieEntries, 
     activityEntries,
     currentTdeeAnalysis,
-    setTdeeAnalysis
+    setTdeeAnalysis,
+    user
   } = useUserStore();
 
   const totalDays = Math.max(
