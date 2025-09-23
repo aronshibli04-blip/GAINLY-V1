@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useUserStore } from "@/store/userStore";
 import { calculateTdee } from "@/utils/tdee";
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 import { Brain, RefreshCw, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -12,9 +13,12 @@ export function TdeeAnalysisCard() {
     weightEntries, 
     calorieEntries, 
     currentTdeeAnalysis, 
-    setTdeeAnalysis 
+    setTdeeAnalysis,
+    user
   } = useUserStore();
 
+  // Calculate user's weight gain goal and calorie targets using centralized system
+  const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
   const calculation = calculateTdee(weightEntries, calorieEntries, "user1");
   
   // Auto-update analysis if it's outdated or doesn't exist
@@ -24,12 +28,14 @@ export function TdeeAnalysisCard() {
   const handleUpdateAnalysis = () => {
     setIsUpdating(true);
     
+    const calorieTargets = calculateCalorieTargets(calculation.tdee, userWeightGoal);
+    
     const analysis = {
       id: Date.now().toString(),
       userId: "user1",
       tdee: calculation.tdee,
-      surplus: 1100, // Aggressive surplus for 1kg/week gain
-      targetCalories: calculation.tdee + 1100,
+      surplus: calorieTargets.surplus,
+      targetCalories: calorieTargets.targetCalories,
       confidence: calculation.confidence,
       dataPoints: Math.min(weightEntries.length, calorieEntries.length),
       weekNumber: Math.ceil(weightEntries.length / 7),
@@ -47,14 +53,16 @@ export function TdeeAnalysisCard() {
     }
   }, [needsUpdate, isUpdating]);
 
+  const fallbackTargets = calculateCalorieTargets(calculation.tdee, userWeightGoal);
+  
   const analysis = currentTdeeAnalysis || {
     tdee: calculation.tdee,
-    targetCalories: calculation.tdee + 1100,
+    targetCalories: fallbackTargets.targetCalories,
     confidence: calculation.confidence
   };
 
-  const weeklyGainGoal = 1.0; // 1kg per week
-  const dailySurplus = 1100; // Calories for 1kg/week (1100 cal/day ≈ 1kg/week)
+  const weeklyGainGoal = userWeightGoal;
+  const dailySurplus = calculateCalorieTargets(analysis.tdee, userWeightGoal).surplus;
 
   return (
     <Card className="grok-glow border-primary/20">
