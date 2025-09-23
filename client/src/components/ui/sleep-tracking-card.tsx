@@ -267,8 +267,10 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  console.log('🔍 Annet button clicked, current modal state:', isModalOpen);
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('🔍 Annet button clicked, opening modal');
                   setIsModalOpen(true);
                 }}
                 className="text-sm px-3 py-1.5 h-8 min-w-[44px] bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600"
@@ -277,7 +279,16 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
                 Annet
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md bg-slate-800 border border-slate-600">
+            <DialogContent 
+              className="sm:max-w-md bg-slate-900 border border-slate-600 text-white shadow-2xl"
+              onPointerDownOutside={(e) => {
+                console.log('🔍 Click outside detected');
+                e.preventDefault();
+              }}
+              onEscapeKeyDown={(e) => {
+                console.log('🔍 Escape key pressed');
+              }}
+            >
               <DialogHeader>
                 <DialogTitle className="text-white">Velg søvntimer</DialogTitle>
                 <DialogDescription className="text-slate-300">
@@ -285,7 +296,7 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
-                <div className="text-xs text-slate-500 mb-2">Debug: Modal open = {isModalOpen.toString()}</div>
+                <div className="text-xs text-green-400 mb-2">✅ Modal is working! State: {isModalOpen.toString()}</div>
                 <div className="grid grid-cols-3 gap-2">
                   {extendedHourOptions.map((hours) => (
                     <Button
