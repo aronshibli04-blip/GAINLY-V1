@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, ComposedChart } from "recharts";
-import { Moon, Clock, Coffee, Smartphone, Dumbbell, Brain, UtensilsCrossed, Wine, BarChart3, Edit3, Save } from "lucide-react";
+import { Moon, Clock, BarChart3, Edit3, Save } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,6 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
   const [chartPeriod, setChartPeriod] = useState<'7D' | '14D' | '30D'>('7D');
   const [sleepHours, setSleepHours] = useState<number>(8);
   const [sleepQuality, setSleepQuality] = useState<number>(4); // Changed to 1-5 scale
-  const [selectedFactors, setSelectedFactors] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [customHours, setCustomHours] = useState<string>("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -39,14 +38,6 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
   const extendedHourOptions = [4, 4.5, 5, 5.5, 10, 10.5, 11, 11.5, 12]; // For modal
   const today = format(new Date(), 'yyyy-MM-dd');
 
-  const sleepFactors = [
-    { id: "caffeine", label: "Koffein", icon: Coffee, color: "bg-amber-500" },
-    { id: "screen", label: "Skjermtid", icon: Smartphone, color: "bg-blue-500" },
-    { id: "exercise", label: "Trening", icon: Dumbbell, color: "bg-green-500" },
-    { id: "stress", label: "Stress", icon: Brain, color: "bg-purple-500" },
-    { id: "food", label: "Mat", icon: UtensilsCrossed, color: "bg-orange-500" },
-    { id: "alcohol", label: "Alkohol", icon: Wine, color: "bg-red-500" }
-  ];
 
   const getQualityColor = (quality: number) => {
     if (quality === 1) return "text-red-400";
@@ -78,13 +69,6 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
     return "Du er på rett vei! Hold oppe gode søvnrutiner 💪";
   };
 
-  const toggleFactor = (factorId: string) => {
-    setSelectedFactors(prev => 
-      prev.includes(factorId) 
-        ? prev.filter(id => id !== factorId)
-        : [...prev, factorId]
-    );
-  };
   
   // Fetch real sleep data from database
   const { data: sleepLogsData = [] } = useQuery({
@@ -148,13 +132,11 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
       return;
     }
     
-    const factorNotes = selectedFactors.length > 0 ? `Påvirkere: ${selectedFactors.join(', ')}` : undefined;
-    
     saveSleepMutation.mutate({
       userId,
       quality: sleepQuality,
       hours: sleepHours,
-      notes: factorNotes,
+      notes: undefined,
       logDate: today
     });
   };
@@ -366,33 +348,6 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
         </div>
       </div>
 
-      {/* Sleep Factors */}
-      <div className="mb-3">
-        <h4 className="text-xs font-medium text-slate-300 mb-2">Søvnpåvirkere:</h4>
-        <div className="flex flex-wrap gap-1.5">
-          {sleepFactors.map((factor) => {
-            const IconComponent = factor.icon;
-            const isSelected = selectedFactors.includes(factor.id);
-            return (
-              <Badge
-                key={factor.id}
-                variant="outline"
-                className={cn(
-                  "cursor-pointer text-xs h-6 px-2 flex items-center gap-1 transition-all",
-                  isSelected
-                    ? `${factor.color} text-white border-transparent`
-                    : "bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600"
-                )}
-                onClick={() => toggleFactor(factor.id)}
-                data-testid={`sleep-factor-${factor.id}`}
-              >
-                <IconComponent className="w-3 h-3" />
-                {factor.label}
-              </Badge>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Smart Tips */}
       <div className="pt-2 border-t border-slate-600 mb-3">
