@@ -1,4 +1,5 @@
 import { WeightEntry, CalorieEntry, TdeeAnalysis } from '../types';
+import { calculateCalorieTargets } from '@shared/calorie-calculations';
 
 export interface TdeeCalculationResult {
   tdee: number;
@@ -13,7 +14,8 @@ export interface TdeeCalculationResult {
 export function calculateTdee(
   weightEntries: WeightEntry[],
   calorieEntries: CalorieEntry[],
-  userId: string
+  userId: string,
+  weightGainGoal: number = 1.0 // kg per week, defaults to 1.0 for backward compatibility
 ): TdeeCalculationResult {
   // Sort entries by date
   const sortedWeights = [...weightEntries].sort(
@@ -74,9 +76,10 @@ export function calculateTdee(
   // Ensure TDEE is within reasonable bounds for adults
   tdee = Math.max(1200, Math.min(5000, tdee));
 
-  // Calculate recommended surplus for hardgainers  
-  const surplus = 1100; // Aggressive surplus for 1kg/week hardgainer goals
-  const targetCalories = tdee + surplus;
+  // Use centralized calculation based on user's weight gain goal
+  const calorieTargets = calculateCalorieTargets(tdee, weightGainGoal);
+  const surplus = calorieTargets.surplus;
+  const targetCalories = calorieTargets.targetCalories;
 
   // Calculate confidence based on data quality - more responsive for real-time calibration
   const uniqueWeightDays = new Set(weightEntries.map(e => e.date)).size;
