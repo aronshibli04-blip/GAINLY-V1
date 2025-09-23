@@ -128,12 +128,18 @@ export function FFMIGoalSelector({
     }
 
     // Convert to DisplayFFMIGoal with calculated weights and timelines
-    // Always show goals, but prioritize those above current FFMI
-    const generatedGoals: DisplayFFMIGoal[] = availableGoals
-      .filter(goal => goal.ffmi >= Math.max(calculatedCurrentFFMI - 2, 16)) // Show goals within 2 FFMI points below current, minimum FFMI 16
+    // Always ensure at least some goals are available
+    let filteredGoals = availableGoals.filter(goal => goal.ffmi >= Math.max(calculatedCurrentFFMI - 2, 16));
+    
+    // Fallback: if no goals pass the filter, show the highest tier goals
+    if (filteredGoals.length === 0) {
+      filteredGoals = availableGoals.slice(-3); // Show last 3 goals (highest FFMI values)
+    }
+    
+    const generatedGoals: DisplayFFMIGoal[] = filteredGoals
       .map(goal => {
         const targetWeight = calculateTargetWeight(goal.ffmi, height);
-        const timelineMonths = estimateTimeline(calculatedCurrentFFMI, goal.ffmi, age, gender);
+        const timelineMonths = Math.max(0, estimateTimeline(calculatedCurrentFFMI, goal.ffmi, age, gender)); // Prevent negative timelines
         
         const isStandardGoal = STANDARD_GOALS.some(sg => sg.ffmi === goal.ffmi);
         const tier = isStandardGoal ? 'standard' : 'accelerated';

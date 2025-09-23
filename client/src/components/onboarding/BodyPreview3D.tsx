@@ -168,7 +168,7 @@ export function BodyPreview3D({ userData, subscription, onContinue, onUpgrade }:
 
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">Timeline</span>
-                <span className="text-white font-bold">{Math.ceil(weightToGain / 0.5)}w</span>
+                <span className="text-white font-bold">{Math.max(1, Math.ceil(weightToGain / 0.5))}w</span>
               </div>
 
               <div className="mt-3 space-y-1">
