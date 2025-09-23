@@ -307,18 +307,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!analysis) {
         // Calculate reasonable fallback based on user's basic data
         const height = parseFloat(user.height);
-        const weight = user.goalWeight ? parseFloat(user.goalWeight) : 70; // Use goal weight or 70kg default
         const age = user.age;
         const gender = user.gender || 'male';
         const activityLevel = user.activityLevel || 'moderate';
         const weightGainGoal = user.weightGainGoal ? parseFloat(user.weightGainGoal) : 1.0;
 
-        // Calculate BMR using Mifflin-St Jeor equation
+        // Get current weight from most recent weight log, fallback to estimated weight if none
+        const recentWeightLogs = await storage.getWeightLogsByUser(req.params.userId, 1);
+        let currentWeight: number;
+        
+        if (recentWeightLogs && recentWeightLogs.length > 0) {
+          // Use the most recent weight log (already sorted by storage method)
+          const latestLog = recentWeightLogs[0];
+          currentWeight = parseFloat(latestLog.weight.toString());
+        } else {
+          // Estimate current weight based on target weight - assume they need to gain weight
+          const targetWeight = user.calculatedTargetWeight ? 
+            parseFloat(user.calculatedTargetWeight.toString()) : 
+            (user.goalWeight ? parseFloat(user.goalWeight.toString()) : 70);
+          
+          // For hardgainers, assume they start 10-15kg below their goal weight
+          currentWeight = Math.max(50, targetWeight - 12);
+        }
+
+        // Calculate BMR using Mifflin-St Jeor equation with current weight
         let bmr;
         if (gender === 'male') {
-          bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+          bmr = 10 * currentWeight + 6.25 * height - 5 * age + 5;
         } else {
-          bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+          bmr = 10 * currentWeight + 6.25 * height - 5 * age - 161;
         }
 
         // Apply activity multiplier
