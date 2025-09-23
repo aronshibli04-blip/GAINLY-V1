@@ -100,20 +100,14 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
           </div>
           
           {/* Stress Level Slider */}
-          <div 
-            className="px-1"
-            onPointerDownCapture={(e) => e.stopPropagation()}
-            onPointerMoveCapture={(e) => e.stopPropagation()}
-            onTouchStartCapture={(e) => e.stopPropagation()}
-            onTouchMoveCapture={(e) => e.stopPropagation()}
-          >
+          <div className="px-1">
             <Slider
               value={[stressLevel]}
               onValueChange={([value]) => setStressLevel(value)}
               max={10}
               min={1}
               step={1}
-              className="w-full touch-none select-none"
+              className="w-full"
               data-testid="stress-slider"
             />
             <div className="flex justify-between text-xs text-slate-500 mt-1">
