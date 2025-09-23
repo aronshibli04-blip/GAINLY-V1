@@ -56,15 +56,13 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     const today = new Date();
     const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
 
-    // Default macro targets - fallback if user targets not available
-    const defaultTargets: MacroTargets = {
-      calories: 3500,
-      protein: 140,
-      fat: 100,
-      carbs: 450
-    };
+    // No more hardcoded fallbacks! Use userTargets from centralized API
+    // If userTargets is null, the weekly nutrition will show loading state
+    if (!userTargets) {
+      return null; // Let the component handle loading state properly
+    }
 
-    const targets: MacroTargets = userTargets ?? defaultTargets;
+    const targets: MacroTargets = userTargets;
     const days: DayNutrition[] = [];
 
     // Process each day of the week
@@ -108,19 +106,19 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
           current: Math.round(dailyTotals.protein),
           target: targets.protein,
           percentage: calculatePercentage(dailyTotals.protein, targets.protein),
-          unit: 'P'
+          unit: 'g'
         },
         fat: {
           current: Math.round(dailyTotals.fat),
           target: targets.fat,
           percentage: calculatePercentage(dailyTotals.fat, targets.fat),
-          unit: 'F'
+          unit: 'g'
         },
         carbs: {
           current: Math.round(dailyTotals.carbs),
           target: targets.carbs,
           percentage: calculatePercentage(dailyTotals.carbs, targets.carbs),
-          unit: 'C'
+          unit: 'g'
         },
         isCompleted,
         isCurrent,
