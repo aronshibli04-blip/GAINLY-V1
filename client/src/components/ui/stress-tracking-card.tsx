@@ -128,54 +128,43 @@ export function StressTrackingCard({ className }: StressTrackingCardProps) {
     });
   };
 
+  // Stress level zones and colors
+  const getStressZone = (level: number) => {
+    if (level <= 2) return { zone: 'optimal', color: '#22c55e', label: 'Rolig' }; // Green
+    if (level <= 3.5) return { zone: 'moderate', color: '#eab308', label: 'Balansert' }; // Yellow
+    return { zone: 'high', color: '#ef4444', label: 'Høyt stress' }; // Red
+  };
+
+  const getBarColor = (level: number) => {
+    return getStressZone(level).color;
+  };
+
   // Process real stress data for chart
   const getChartData = () => {
     const periodDays = { '7D': 7, '14D': 14, '30D': 30 };
     const days = periodDays[chartPeriod];
     
-    console.log('🔍 Chart Debug - stressLogsData:', stressLogsData);
-    console.log('🔍 Chart Debug - chartPeriod:', chartPeriod, 'days:', days);
-    
     if (!stressLogsData.length) {
-      console.log('⚠️ No stress data available, returning mock data');
-      // Return mock data if no real data available
-      return Array.from({ length: days }, (_, i) => {
-        const date = subDays(new Date(), days - 1 - i);
-        const level = 2 + Math.random() * 3; // 2-5 level to match DB scale
-        return {
-          date: format(date, 'MMM dd'),
-          dayName: format(date, 'EEE'),
-          level: Math.round(level)
-        };
-      });
+      return [];
     }
     
     // Use real data
     const endDate = new Date();
-    const startDate = subDays(endDate, days - 1);
     
-    const chartDataRaw = Array.from({ length: days }, (_, i) => {
+    return Array.from({ length: days }, (_, i) => {
       const currentDate = subDays(endDate, days - 1 - i);
       const dateStr = format(currentDate, 'yyyy-MM-dd');
       
       // Find stress log for this date
       const stressLog = stressLogsData.find((log: any) => log.logDate === dateStr);
       
-      console.log(`📅 Date: ${dateStr}, Found log:`, stressLog);
-      
       return {
         date: format(currentDate, 'MMM dd'),
         dayName: format(currentDate, 'EEE'),
-        level: stressLog ? stressLog.level : 0
+        level: stressLog ? stressLog.level : 0,
+        hasData: !!stressLog
       };
-    });
-    
-    console.log('📊 Raw chart data before filter:', chartDataRaw);
-    
-    const filtered = chartDataRaw.filter(day => day.level > 0);
-    console.log('📊 Filtered chart data:', filtered);
-    
-    return filtered;
+    }).filter(day => day.hasData);
   };
   
   const chartData = getChartData();
