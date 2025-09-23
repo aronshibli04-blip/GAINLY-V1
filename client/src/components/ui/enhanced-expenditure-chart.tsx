@@ -82,7 +82,7 @@ const AnimatedCounter = ({ value, suffix = "", decimals = 0 }: {
   );
 };
 
-export function EnhancedExpenditureChart({ className, targetCalories, variant = 'default' }: EnhancedExpenditureChartProps) {
+export function EnhancedExpenditureChart({ className, targetCalories }: EnhancedExpenditureChartProps) {
   const { weightEntries, calorieEntries, currentTdeeAnalysis } = useUserStore();
   const [hoveredPoint, setHoveredPoint] = useState<ExpenditureDataPoint | null>(null);
   
@@ -173,54 +173,6 @@ export function EnhancedExpenditureChart({ className, targetCalories, variant = 
       dayName: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]
     }));
     
-    if (variant === 'compact') {
-      return (
-        <Card className={cn(
-          "bg-slate-800/60 border-slate-700 h-full",
-          className
-        )}>
-          <CardContent className="p-3 space-y-2">
-            {/* Compact Chart */}
-            <div className="h-16 relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart 
-                  data={emptyChartData} 
-                  margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
-                >
-                  <XAxis dataKey="day" hide={true} />
-                  <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
-                  
-                  <Area
-                    type="monotone"
-                    dataKey="expenditure"
-                    stroke="#f59e0b"
-                    strokeWidth={2}
-                    strokeDasharray="5 5"
-                    fill="none"
-                    dot={false}
-                    opacity={0.5}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-            
-            {/* Compact Stats */}
-            <div className="flex justify-between items-center">
-              <div className="text-center">
-                <div className="text-xs text-slate-500">TDEE</div>
-                <div className="text-sm font-bold text-white">{estimatedTdee} kcal</div>
-              </div>
-              <Zap className="h-4 w-4 text-orange-400" />
-              <div className="text-center">
-                <div className="text-xs text-slate-500">Surplus</div>
-                <div className="text-sm font-bold text-slate-400">+-- kcal</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      );
-    }
-
     return (
       <Card className={cn(
         "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
@@ -362,58 +314,6 @@ export function EnhancedExpenditureChart({ className, targetCalories, variant = 
                        isPositiveSurplus ? surplusColors.good : 
                        surplusColors.deficit;
   
-  if (variant === 'compact') {
-    return (
-      <Card className={cn(
-        "bg-slate-800/60 border-slate-700 h-full",
-        className
-      )}>
-        <CardContent className="p-3 space-y-2">
-          {/* Compact Chart */}
-          <div className="h-16 relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart 
-                data={chartData} 
-                margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
-              >
-                <XAxis dataKey="day" hide={true} />
-                <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
-                
-                <Area
-                  type="monotone"
-                  dataKey="expenditure"
-                  stroke={currentColors.primary}
-                  strokeWidth={2}
-                  fill="none"
-                  dot={false}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          
-          {/* Compact Stats */}
-          <div className="flex justify-between items-center">
-            <div className="text-center">
-              <div className="text-xs text-slate-500">TDEE</div>
-              <div className="text-sm font-bold text-white">{Math.round(avgExpenditure)} kcal</div>
-            </div>
-            {isPositiveSurplus ? (
-              <TrendingUp className={cn("h-4 w-4", currentColors.accent)} />
-            ) : (
-              <TrendingDown className={cn("h-4 w-4", currentColors.accent)} />
-            )}
-            <div className="text-center">
-              <div className="text-xs text-slate-500">Surplus</div>
-              <div className={cn("text-sm font-bold", currentColors.accent)}>
-                {isPositiveSurplus ? '+' : ''}{Math.round(avgSurplus)}
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card className={cn(
       "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",

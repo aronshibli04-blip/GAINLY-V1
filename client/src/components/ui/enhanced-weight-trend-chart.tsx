@@ -15,7 +15,6 @@ interface WeightDataPoint {
 
 interface EnhancedWeightTrendChartProps {
   className?: string;
-  variant?: 'default' | 'compact';
 }
 
 // Custom tooltip component with premium styling
@@ -72,7 +71,7 @@ const AnimatedCounter = ({ value, suffix = "", decimals = 1 }: {
   );
 };
 
-export function EnhancedWeightTrendChart({ className, variant = 'default' }: EnhancedWeightTrendChartProps) {
+export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChartProps) {
   const { weightEntries } = useUserStore();
   const [hoveredPoint, setHoveredPoint] = useState<WeightDataPoint | null>(null);
   
@@ -142,54 +141,6 @@ export function EnhancedWeightTrendChart({ className, variant = 'default' }: Enh
       dayName: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]
     }));
     
-    if (variant === 'compact') {
-      return (
-        <Card className={cn(
-          "bg-slate-800/60 border-slate-700 h-full",
-          className
-        )}>
-          <CardContent className="p-3 space-y-2">
-            {/* Compact Chart */}
-            <div className="h-16 relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart 
-                  data={emptyChartData} 
-                  margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
-                >
-                  <XAxis dataKey="day" hide={true} />
-                  <YAxis hide={true} />
-                  
-                  {/* Baseline dotted line */}
-                  <Line
-                    type="monotone"
-                    dataKey="weight"
-                    stroke="#475569"
-                    strokeWidth={2}
-                    strokeDasharray="5 5"
-                    dot={false}
-                    opacity={0.5}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            
-            {/* Compact Stats */}
-            <div className="flex justify-between items-center">
-              <div className="text-center">
-                <div className="text-xs text-slate-500">Weight</div>
-                <div className="text-sm font-bold text-slate-400">-- kg</div>
-              </div>
-              <Activity className="h-4 w-4 text-slate-400" />
-              <div className="text-center">
-                <div className="text-xs text-slate-500">Change</div>
-                <div className="text-sm font-bold text-slate-400">+0.0</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      );
-    }
-
     return (
       <Card className={cn(
         "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
@@ -313,57 +264,6 @@ export function EnhancedWeightTrendChart({ className, variant = 'default' }: Enh
   
   const currentColors = trendColors[trendDirection as keyof typeof trendColors];
   
-  if (variant === 'compact') {
-    return (
-      <Card className={cn(
-        "bg-slate-800/60 border-slate-700 h-full",
-        className
-      )}>
-        <CardContent className="p-3 space-y-2">
-          {/* Compact Chart */}
-          <div className="h-16 relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart 
-                data={chartData} 
-                margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
-              >
-                <XAxis dataKey="day" hide={true} />
-                <YAxis domain={['dataMin - 0.5', 'dataMax + 0.5']} hide={true} />
-                
-                <Line
-                  type="monotone"
-                  dataKey="weight"
-                  stroke={currentColors.primary}
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          
-          {/* Compact Stats */}
-          <div className="flex justify-between items-center">
-            <div className="text-center">
-              <div className="text-xs text-slate-500">Weight</div>
-              <div className="text-sm font-bold text-white">{currentWeight.toFixed(1)} kg</div>
-            </div>
-            {isPositiveChange ? (
-              <TrendingUp className={cn("h-4 w-4", currentColors.accent)} />
-            ) : (
-              <TrendingDown className={cn("h-4 w-4", currentColors.accent)} />
-            )}
-            <div className="text-center">
-              <div className="text-xs text-slate-500">Change</div>
-              <div className={cn("text-sm font-bold", currentColors.accent)}>
-                {isPositiveChange ? '+' : ''}{weightChange.toFixed(1)}
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card className={cn(
       "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
