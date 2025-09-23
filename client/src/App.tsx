@@ -41,6 +41,16 @@ function App() {
   const { user, isOnboarded, completeOnboarding } = useUserStore();
   const [hasError, setHasError] = useState(false);
 
+  // Initialize test user ID if missing (for development)
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (!storedUserId) {
+      const testUserId = "974acc79-f202-4202-bdab-80c4ef55f534";
+      localStorage.setItem("userId", testUserId);
+      console.log("🔧 Auto-initialized test user ID:", testUserId);
+    }
+  }, []);
+
   // Force dark theme for Grok-inspired design
   useEffect(() => {
     document.documentElement.classList.add('dark');
