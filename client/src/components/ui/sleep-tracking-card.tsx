@@ -3,7 +3,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, ComposedChart } from "recharts";
 import { Moon, Clock, BarChart3, Edit3, Save } from "lucide-react";
@@ -273,6 +273,9 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle>Velg søvntimer</DialogTitle>
+                <DialogDescription>
+                  Velg hvor mange timer du sov, eller skriv inn egendefinert verdi.
+                </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-2">
