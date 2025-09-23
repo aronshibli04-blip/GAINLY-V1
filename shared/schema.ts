@@ -17,6 +17,7 @@ export const users = pgTable("users", {
   calculatedTargetWeight: decimal("calculated_target_weight", { precision: 5, scale: 1 }), // in kg
   goalWeight: decimal("goal_weight", { precision: 5, scale: 1 }), // DEPRECATED: Keep for DB compatibility, use calculatedTargetWeight instead
   activityLevel: text("activity_level").notNull(), // sedentary, lightly_active, moderately_active, very_active
+  weightGainGoal: decimal("weight_gain_goal", { precision: 3, scale: 1 }).notNull().default('1.0'), // kg per week (0.5, 1.0, 1.5, etc.)
   // FFMI Tiered Goal System fields
   goalPath: text("goal_path").notNull().default('standard'), // 'standard' | 'accelerated' 
   initialGoalFFMI: decimal("initial_goal_ffmi", { precision: 4, scale: 1 }), // Their first major target
@@ -404,6 +405,7 @@ export const insertUserSchemaEnhanced = insertUserSchema.extend({
   calculatedTargetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
     val === null || val === undefined || val === "" ? null : String(val)
   ).optional(),
+  weightGainGoal: z.union([z.string(), z.number()]).transform(val => String(val)).default('1.0'),
   goalPath: z.enum(['standard', 'accelerated']).default('standard'),
   initialGoalFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
     val === null || val === undefined || val === "" ? null : String(val)
@@ -426,6 +428,7 @@ export const updateFFMIProfileSchema = z.object({
   calculatedTargetWeight: z.union([z.string(), z.number(), z.null()]).transform(val => 
     val === null || val === undefined || val === "" ? null : String(val)
   ).optional(),
+  weightGainGoal: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
   goalPath: z.enum(['standard', 'accelerated']).optional(),
   initialGoalFFMI: z.union([z.string(), z.number(), z.null()]).transform(val => 
     val === null || val === undefined || val === "" ? null : String(val)
