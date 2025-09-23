@@ -408,6 +408,16 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
       <div className="h-40 mb-2">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            {/* Quality Background Zones */}
+            <defs>
+              <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.1" /> {/* Good quality zone */}
+                <stop offset="40%" stopColor="#22c55e" stopOpacity="0.1" />
+                <stop offset="60%" stopColor="#fbbf24" stopOpacity="0.1" /> {/* OK quality zone */}
+                <stop offset="80%" stopColor="#ef4444" stopOpacity="0.1" /> {/* Poor quality zone */}
+                <stop offset="100%" stopColor="#ef4444" stopOpacity="0.1" />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
             <XAxis 
               dataKey={chartPeriod === '7D' ? 'dayName' : 'date'}
@@ -429,6 +439,12 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               tick={{ fontSize: 10, fill: '#94a3b8' }}
               axisLine={false}
               tickLine={false}
+              tickFormatter={(value) => {
+                const labels: { [key: number]: string } = {
+                  1: 'Søvnløs', 2: 'Dårlig', 3: 'OK', 4: 'Bra', 5: 'Perfekt'
+                };
+                return labels[value] || value.toString();
+              }}
             />
             
             {/* 8h Goal Line */}
@@ -440,6 +456,22 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               opacity={0.7}
             />
             
+            {/* Quality Reference Lines */}
+            <ReferenceLine 
+              yAxisId="quality"
+              y={3} 
+              stroke="#fbbf24" 
+              strokeDasharray="2 2" 
+              opacity={0.6}
+            />
+            <ReferenceLine 
+              yAxisId="quality"
+              y={4} 
+              stroke="#22c55e" 
+              strokeDasharray="2 2" 
+              opacity={0.6}
+            />
+            
             {/* Hours Bars */}
             <Bar 
               yAxisId="hours"
@@ -449,38 +481,59 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               opacity={0.8}
             />
             
-            {/* Quality Line */}
+            {/* Quality Line with Dynamic Colors */}
             <Line 
               yAxisId="quality"
               type="monotone" 
               dataKey="quality" 
-              stroke="hsl(168, 85%, 57%)"
-              strokeWidth={2}
-              dot={{ fill: "hsl(168, 85%, 57%)", strokeWidth: 0, r: 2 }}
-              activeDot={{ r: 4, fill: "hsl(168, 85%, 57%)" }}
+              stroke="#22c55e"
+              strokeWidth={3}
+              dot={(props) => {
+                const quality = props.payload?.quality || 3;
+                let color = '#22c55e'; // Default green
+                if (quality <= 2) color = '#ef4444'; // Red for poor
+                else if (quality === 3) color = '#fbbf24'; // Yellow for OK
+                return <circle cx={props.cx} cy={props.cy} r={3} fill={color} strokeWidth={0} />;
+              }}
+              activeDot={{ r: 5, strokeWidth: 2, stroke: "#fff" }}
             />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
 
       {/* Chart Legend & Stats */}
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-blue-400 rounded"></div>
-            <span className="text-slate-400">Timer</span>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-blue-400 rounded"></div>
+              <span className="text-slate-400">Timer</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-0.5 bg-white opacity-70"></div>
+              <span className="text-slate-400">8t mål</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-teal-400 rounded"></div>
-            <span className="text-slate-400">Kvalitet</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-0.5 bg-white opacity-70"></div>
-            <span className="text-slate-400">8t mål</span>
+          <div className="text-slate-400">
+            Ø: {weeklyAverage.toFixed(1)}t
           </div>
         </div>
-        <div className="text-slate-400">
-          Ø: {weeklyAverage.toFixed(1)}t
+        <div className="border-t border-slate-600 pt-1">
+          <div className="text-xs text-slate-400 mb-1 font-medium">Søvnkvalitet:</div>
+          <div className="flex items-center gap-3 text-xs">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-red-400 rounded"></div>
+              <span className="text-slate-400">1-2 Dårlig</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-yellow-400 rounded"></div>
+              <span className="text-slate-400">3 OK</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-400 rounded"></div>
+              <span className="text-slate-400">4-5 Bra+</span>
+            </div>
+          </div>
         </div>
       </div>
     </>
