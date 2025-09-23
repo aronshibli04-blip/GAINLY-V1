@@ -377,13 +377,13 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
 
   const renderChartMode = () => (
     <>
-      {/* Chart Header */}
-      <div className="flex items-center justify-between mb-3">
-        <CardTitle className="text-white text-sm font-semibold flex items-center gap-2">
-          <BarChart3 className="w-4 h-4 text-blue-400" />
+      {/* Enhanced Chart Header */}
+      <div className="flex items-center justify-between mb-4">
+        <CardTitle className="text-white text-base font-bold flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-blue-400" />
           Søvnstatistikk
         </CardTitle>
-        <div className="flex gap-1">
+        <div className="flex gap-1 bg-slate-700/50 rounded-lg p-1">
           {(['7D', '14D', '30D'] as const).map((period) => (
             <Button
               key={period}
@@ -391,10 +391,10 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               size="sm"
               onClick={() => setChartPeriod(period)}
               className={cn(
-                "text-xs h-6 px-2",
+                "text-xs h-6 px-3 transition-all duration-200",
                 chartPeriod === period
-                  ? "bg-blue-500 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-slate-700"
+                  ? "bg-blue-500 text-white shadow-lg"
+                  : "text-slate-300 hover:text-white hover:bg-slate-600/80"
               )}
               data-testid={`period-${period}`}
             >
@@ -410,15 +410,41 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
           <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             {/* Quality Background Zones */}
             <defs>
-              <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.1" /> {/* Good quality zone */}
-                <stop offset="40%" stopColor="#22c55e" stopOpacity="0.1" />
-                <stop offset="60%" stopColor="#fbbf24" stopOpacity="0.1" /> {/* OK quality zone */}
-                <stop offset="80%" stopColor="#ef4444" stopOpacity="0.1" /> {/* Poor quality zone */}
-                <stop offset="100%" stopColor="#ef4444" stopOpacity="0.1" />
+              {/* Green zone for excellent quality (4-5) */}
+              <linearGradient id="excellentZone" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#22c55e" stopOpacity="0.03" />
+              </linearGradient>
+              {/* Yellow zone for OK quality (3) */}
+              <linearGradient id="okZone" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.03" />
+              </linearGradient>
+              {/* Red zone for poor quality (1-2) */}
+              <linearGradient id="poorZone" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#ef4444" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#ef4444" stopOpacity="0.03" />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
+            {/* Background quality zones rectangles */}
+            <defs>
+              <pattern id="excellentPattern" x="0" y="0" width="100%" height="100%">
+                <rect width="100%" height="100%" fill="url(#excellentZone)" />
+              </pattern>
+              <pattern id="okPattern" x="0" y="0" width="100%" height="100%">
+                <rect width="100%" height="100%" fill="url(#okZone)" />
+              </pattern>
+              <pattern id="poorPattern" x="0" y="0" width="100%" height="100%">
+                <rect width="100%" height="100%" fill="url(#poorZone)" />
+              </pattern>
+            </defs>
+            
+            {/* Background zones */}
+            <rect x="0" y="0" width="100%" height="22%" fill="url(#excellentZone)" />
+            <rect x="0" y="22%" width="100%" height="11%" fill="url(#okZone)" />
+            <rect x="0" y="33%" width="100%" height="67%" fill="url(#poorZone)" />
+            
+            <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.2} />
             <XAxis 
               dataKey={chartPeriod === '7D' ? 'dayName' : 'date'}
               tick={{ fontSize: 10, fill: '#94a3b8' }}
@@ -496,16 +522,33 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
               yAxisId="quality"
               type="monotone" 
               dataKey="quality" 
-              stroke="#22c55e"
-              strokeWidth={3}
+              stroke="#ffffff"
+              strokeWidth={2}
               dot={(props) => {
                 const quality = props.payload?.quality || 3;
+                const hours = props.payload?.hours || 8;
                 let color = '#22c55e'; // Default green
                 if (quality <= 2) color = '#ef4444'; // Red for poor
                 else if (quality === 3) color = '#fbbf24'; // Yellow for OK
-                return <circle cx={props.cx} cy={props.cy} r={3} fill={color} strokeWidth={0} />;
+                
+                // Larger dot if this shows "more hours ≠ better quality"
+                const isParadox = (hours >= 9 && quality <= 3) || (hours <= 6 && quality >= 4);
+                const radius = isParadox ? 5 : 3;
+                const strokeWidth = isParadox ? 2 : 0;
+                const strokeColor = isParadox ? '#ffffff' : color;
+                
+                return (
+                  <circle 
+                    cx={props.cx} 
+                    cy={props.cy} 
+                    r={radius} 
+                    fill={color} 
+                    stroke={strokeColor}
+                    strokeWidth={strokeWidth}
+                  />
+                );
               }}
-              activeDot={{ r: 5, strokeWidth: 2, stroke: "#fff" }}
+              activeDot={{ r: 6, strokeWidth: 2, stroke: "#fff" }}
             />
           </ComposedChart>
         </ResponsiveContainer>
@@ -514,34 +557,44 @@ export function SleepTrackingCard({ className }: SleepTrackingCardProps) {
       {/* Chart Legend & Stats */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 bg-blue-400 rounded"></div>
-              <span className="text-slate-400">Timer</span>
+              <span className="text-slate-300">Timer</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-2 h-0.5 bg-green-400 opacity-70"></div>
-              <span className="text-slate-400">8t + Perfekt</span>
+              <div className="w-2 h-0.5 bg-green-400 opacity-80"></div>
+              <span className="text-slate-300">Mål: 8t + Perfekt</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-white rounded-full border border-slate-400"></div>
+              <span className="text-slate-300">Tidsmytar</span>
             </div>
           </div>
-          <div className="text-slate-400">
+          <div className="text-slate-300 font-medium">
             Ø: {weeklyAverage.toFixed(1)}t
           </div>
         </div>
-        <div className="border-t border-slate-600 pt-1">
-          <div className="text-xs text-slate-400 mb-1 font-medium">Søvnkvalitet:</div>
-          <div className="flex items-center gap-3 text-xs">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-red-400 rounded"></div>
-              <span className="text-slate-400">1-2 Dårlig</span>
+        <div className="border-t border-slate-600/50 pt-2 mt-1">
+          <div className="text-xs text-slate-300 mb-2 font-medium">Søvnkvalitet & Innsikt:</div>
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-red-400 rounded"></div>
+                <span className="text-slate-300">1-2 Dårlig</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-yellow-400 rounded"></div>
+                <span className="text-slate-300">3 OK</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-400 rounded"></div>
+                <span className="text-slate-300">4-5 Bra+</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-yellow-400 rounded"></div>
-              <span className="text-slate-400">3 OK</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-400 rounded"></div>
-              <span className="text-slate-400">4-5 Bra+</span>
+            <div className="text-slate-400 text-[10px] text-right leading-tight">
+              <div>🎯 Tidsmytar:</div>
+              <div>Mer tid ≠ bedre kvalitet</div>
             </div>
           </div>
         </div>
