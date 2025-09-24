@@ -150,24 +150,24 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
         "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
         className
       )}>
-        <CardHeader className="pb-0.5">
-          <div className="flex items-center space-x-1.5">
-            <div className="p-1 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
-              <Activity className="h-2.5 w-2.5 text-white" />
+        <CardHeader className="pb-0">
+          <div className="flex items-center space-x-1">
+            <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
+              <Activity className="h-2 w-2 text-white" />
             </div>
-            <CardTitle className="text-xs text-white font-semibold">
+            <CardTitle className="text-xs text-white font-medium">
               Weight Progress
             </CardTitle>
           </div>
         </CardHeader>
         
-        <CardContent className="pb-2 space-y-1.5">
+        <CardContent className="pb-1.5 space-y-1">
           {/* Chart */}
-          <div className="h-8 relative">
+          <div className="h-6 relative">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart 
                 data={weightChartData} 
-                margin={{ top: 1, right: 1, left: 1, bottom: 1 }}
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
               >
                 <XAxis dataKey="day" hide={true} />
                 <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
@@ -176,7 +176,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
                   type="monotone"
                   dataKey="weight"
                   stroke="#06b6d4"
-                  strokeWidth={2}
+                  strokeWidth={1.5}
                   dot={false}
                 />
               </LineChart>
@@ -185,7 +185,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
           
           {/* Simple weight number */}
           <div className="text-center">
-            <div className="text-sm font-bold text-white">
+            <div className="text-xs font-bold text-white">
               <AnimatedCounter value={currentWeight} suffix=" kg" decimals={1} />
             </div>
           </div>
