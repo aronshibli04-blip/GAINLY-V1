@@ -79,8 +79,14 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     const today = new Date();
     const todayDateString = today.toISOString().split('T')[0];
     
-    // Calculate current day index based on week boundaries, not getDay()
-    const daysDiff = Math.floor((today.getTime() - weekBoundaries.weekStart.getTime()) / (24 * 60 * 60 * 1000));
+    // Calculate current day index - ensure Monday = 0
+    const mondayDate = new Date(weekBoundaries.weekStart);
+    // Adjust if week start is Sunday (should be Monday)
+    if (mondayDate.getDay() === 0) {
+      mondayDate.setDate(mondayDate.getDate() + 1);
+    }
+    
+    const daysDiff = Math.floor((today.getTime() - mondayDate.getTime()) / (24 * 60 * 60 * 1000));
     const currentDayIndex = Math.max(0, Math.min(6, daysDiff)); // Ensure 0-6 range
     
     // Debug meal logs data

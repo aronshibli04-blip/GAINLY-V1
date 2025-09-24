@@ -85,13 +85,13 @@ export const MACRO_COLORS: Record<string, MacroColorTheme> = {
     glow: '0 0 20px rgba(59,130,246,0.3)'
   },
   protein: {
-    primary: '#F97316', // Orange  
+    primary: '#F97316', // Orange
     background: 'rgba(249,115,22,0.1)',
     glow: '0 0 20px rgba(249,115,22,0.3)'
   },
   fat: {
     primary: '#EAB308', // Yellow
-    background: 'rgba(234,179,8,0.1)', 
+    background: 'rgba(234,179,8,0.1)',
     glow: '0 0 20px rgba(234,179,8,0.3)'
   },
   carbs: {
@@ -114,20 +114,23 @@ export const calculatePercentage = (current: number, target: number): number => 
 };
 
 // Helper function to get week boundaries
-export const getWeekBoundaries = (date: Date) => {
-  const d = new Date(date);
-  const day = d.getDay();
-  
-  // Calculate Monday's date without mutating the original date
-  const mondayDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + (day === 0 ? -6 : 1));
-  const sundayDate = new Date(mondayDate.getFullYear(), mondayDate.getMonth(), mondayDate.getDate() + 6);
-  
-  // Reset time to start/end of day
-  mondayDate.setHours(0, 0, 0, 0);
-  sundayDate.setHours(23, 59, 59, 999);
-  
-  return { weekStart: mondayDate, weekEnd: sundayDate };
-};
+export function getWeekBoundaries(date: Date = new Date()) {
+  const today = new Date(date);
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+  // Calculate Monday (start of week) - fix Sunday calculation
+  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() + mondayOffset);
+  weekStart.setHours(0, 0, 0, 0);
+
+  // Calculate Sunday (end of week)
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+  weekEnd.setHours(23, 59, 59, 999);
+
+  return { weekStart, weekEnd };
+}
 
 // Validation schema for macro targets
 export const macroTargetsSchema = z.object({
