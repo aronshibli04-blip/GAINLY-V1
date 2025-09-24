@@ -118,8 +118,13 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
 
     // Process each day of the week
     for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-      const currentDate = new Date(weekBoundaries.weekStart);
-      currentDate.setDate(weekBoundaries.weekStart.getDate() + dayIndex);
+      // Use timezone-safe date calculation to avoid off-by-one errors
+      const weekStartDate = weekBoundaries.weekStart;
+      const currentDate = new Date(
+        weekStartDate.getFullYear(), 
+        weekStartDate.getMonth(), 
+        weekStartDate.getDate() + dayIndex
+      );
 
       const dateString = currentDate.toISOString().split('T')[0];
       const todayString = today.toISOString().split('T')[0];
