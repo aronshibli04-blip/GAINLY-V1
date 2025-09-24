@@ -23,7 +23,11 @@ import { calculateCalorieTargets } from '@shared/calorie-calculations';
 export default function MobileDashboardNew() {
   const { openMenu } = useSideMenu();
   const { currentTdeeAnalysis, calorieEntries, weightEntries, user } = useUserStore();
-  const { isVisible: isHeaderVisible } = useScrollDirection(50);
+  const scrollState = useScrollDirection(10); // Lower threshold for testing
+  const { isVisible: isHeaderVisible, scrollDirection, scrollY } = scrollState;
+  
+  // Debug scroll state with more details
+  console.log('Dashboard scroll state:', { isHeaderVisible, scrollDirection, scrollY });
   
   // Calculate target calories using centralized calculation
   const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
