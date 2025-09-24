@@ -77,13 +77,13 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     
     // Declare today first before using it anywhere
     const today = new Date();
-    const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
+    const currentDayIndex = today.getDay(); // Sunday = 0, Monday = 1, ..., Wednesday = 3
     
     console.log('🎯 CURRENTDAY CALCULATION:', {
       today: today.toDateString(),
       todayGetDay: today.getDay(),
       calculatedIndex: currentDayIndex,
-      shouldBe: 'Wed=2, Thu=3, Fri=4, Sat=5, Sun=6, Mon=0, Tue=1'
+      shouldBe: 'Sun=0, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6'
     });
     
     // Debug meal logs data

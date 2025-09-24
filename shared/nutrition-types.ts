@@ -101,10 +101,10 @@ export const MACRO_COLORS: Record<string, MacroColorTheme> = {
   }
 };
 
-// Helper function to get Norwegian day letter
+// Helper function to get Norwegian day letter (Sunday-based to match JavaScript getDay())
 export const getDayLetter = (dayIndex: number): DayLetter => {
-  const letters: DayLetter[] = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
-  return letters[dayIndex] || 'M';
+  const letters: DayLetter[] = ['S', 'M', 'T', 'O', 'T', 'F', 'L'];
+  return letters[dayIndex] || 'S';
 };
 
 // Helper function to calculate percentage
