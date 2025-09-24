@@ -75,24 +75,24 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
       "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
       className
     )}>
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <div className="flex items-center space-x-2">
-          <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg">
-            <Zap className="h-4 w-4 text-white" />
+          <div className="p-1.5 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg">
+            <Zap className="h-3 w-3 text-white" />
           </div>
-          <CardTitle className="text-base text-white font-semibold">
-            Energy Balance
+          <CardTitle className="text-sm text-white font-semibold">
+            TDEE
           </CardTitle>
         </div>
       </CardHeader>
       
-      <CardContent className="pb-4 space-y-3">
+      <CardContent className="pb-3 space-y-2">
         {/* Chart */}
-        <div className="h-16 relative">
+        <div className="h-12 relative">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart 
               data={chartData} 
-              margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
+              margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
             >
               <XAxis dataKey="day" hide={true} />
               <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
@@ -119,7 +119,6 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
         
         {/* Simple TDEE number */}
         <div className="text-center">
-          <div className="text-xs text-slate-400 font-medium">TDEE</div>
           <div className="text-lg font-bold text-white">
             <AnimatedCounter value={tdee} suffix=" kcal" />
           </div>
