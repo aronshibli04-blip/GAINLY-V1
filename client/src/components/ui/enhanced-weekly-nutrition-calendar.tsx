@@ -21,28 +21,31 @@ interface DayNutritionData {
 
 export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeeklyNutritionCalendarProps) {
   const { calorieEntries, user, currentTdeeAnalysis } = useUserStore();
-  
+
   // Calculate target calories using centralized system if not provided
   const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
   const calculatedTargetCalories = targetCalories || (
-    currentTdeeAnalysis?.targetCalories || 
+    currentTdeeAnalysis?.targetCalories ||
     calculateCalorieTargets(3200, userWeightGoal).targetCalories
   );
   const [hoveredDay, setHoveredDay] = useState<string | null>(null);
-  
-  // Get current week dates (Monday to Sunday)
+
+  // Get current week dates (Sunday to Saturday) - matching JavaScript's natural week system
   const getWeekDates = () => {
     const today = new Date();
-    const currentDay = today.getDay();
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - (currentDay === 0 ? 6 : currentDay - 1));
-    
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+    // Calculate Sunday (start of week) - same logic as getWeekBoundaries
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - dayOfWeek);
+    weekStart.setHours(0, 0, 0, 0);
+
     const weekDates = [];
-    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
     for (let i = 0; i < 7; i++) {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + i);
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + i);
       weekDates.push({
         dateStr: date.toISOString().split('T')[0],
         dayName: dayNames[i],
@@ -63,7 +66,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
     const calories = dayEntries.reduce((sum, entry) => sum + (entry.calories || 0), 0);
     const meals = dayEntries.filter(entry => entry.calories > 0).length; // Only count actual meals
     const progressPercent = Math.min((calories / calculatedTargetCalories) * 100, 150); // Allow up to 150% for surplus visualization
-    
+
     // Neutral status determination
     let status: 'complete' | 'partial' | 'empty';
     if (calories === 0) {
@@ -85,7 +88,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
     };
   };
 
-  const weekData = weekDates.map(({ dateStr, dayName }) => 
+  const weekData = weekDates.map(({ dateStr, dayName }) =>
     getDayNutritionData(dateStr, dayName)
   );
 
@@ -103,10 +106,10 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
   // Neutral color system based on progress
   const getDayStatusColor = (day: DayNutritionData) => {
     const { status, progressPercent, isToday } = day;
-    
+
     const baseClasses = "transition-all duration-300 relative";
     const todayClasses = isToday ? "ring-2 ring-cyan-400 ring-offset-1 ring-offset-slate-800" : "";
-    
+
     switch (status) {
       case 'complete':
         return cn(baseClasses, todayClasses, "bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30");
@@ -155,7 +158,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
               )}>
                 {day.dayOfWeek.slice(0, 3)}
               </div>
-              
+
               {/* Enhanced Day Cell */}
               <div
                 className={cn(
@@ -169,7 +172,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
                 <div className="text-white text-sm font-bold mb-1">
                   {weekDates[index].dayNum}
                 </div>
-                
+
                 {/* Calorie Info - Condensed */}
                 {day.calories > 0 ? (
                   <div className="text-white text-xs font-medium text-center">
@@ -181,18 +184,18 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
                 ) : (
                   <div className="text-slate-400 text-xs">—</div>
                 )}
-                
-                
+
+
                 {/* Progress Bar - Subtle Bottom Indicator */}
                 {day.calories > 0 && (
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30">
-                    <div 
+                    <div
                       className="h-full bg-white/60 transition-all duration-300"
                       style={{ width: `${Math.min(day.progressPercent, 100)}%` }}
                     />
                   </div>
                 )}
-                
+
                 {/* Today Pulse Indicator */}
                 {day.isToday && (
                   <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
@@ -200,7 +203,7 @@ export function EnhancedWeeklyNutritionCalendar({ targetCalories }: EnhancedWeek
                   </div>
                 )}
               </div>
-              
+
               {/* Mobile-friendly Tooltip */}
               {hoveredDay === day.date && (
                 <div className="fixed z-50 left-4 right-4 top-32 bg-slate-900/95 border border-slate-600 rounded-lg p-3 shadow-xl backdrop-blur-sm">

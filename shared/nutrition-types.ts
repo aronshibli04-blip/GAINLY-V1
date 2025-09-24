@@ -101,10 +101,10 @@ export const MACRO_COLORS: Record<string, MacroColorTheme> = {
   }
 };
 
-// Helper function to get Norwegian day letter
+// Helper function to get Norwegian day letter (Sunday=0 system)
 export const getDayLetter = (dayIndex: number): DayLetter => {
-  const letters: DayLetter[] = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
-  return letters[dayIndex] || 'M';
+  const letters: DayLetter[] = ['S', 'M', 'T', 'O', 'T', 'F', 'L']; // Sunday first
+  return letters[dayIndex] || 'S';
 };
 
 // Helper function to calculate percentage
@@ -118,18 +118,12 @@ export function getWeekBoundaries(date: Date = new Date()) {
   const today = new Date(date);
   const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
 
-  // Calculate Monday (start of week) - ensure Monday=0 in our system
-  // For Sunday (0), we want to go back 6 days to get Monday
-  // For Monday (1), we want to stay at the same day (0 offset)
-  // For Tuesday (2), we want to go back 1 day (-1 offset)
-  // etc.
-  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-  
+  // Calculate Sunday (start of week) - use JavaScript's natural Sunday=0 system
   const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - daysToSubtract);
+  weekStart.setDate(today.getDate() - dayOfWeek);
   weekStart.setHours(0, 0, 0, 0);
 
-  // Calculate Sunday (end of week)
+  // Calculate Saturday (end of week)
   const weekEnd = new Date(weekStart);
   weekEnd.setDate(weekStart.getDate() + 6);
   weekEnd.setHours(23, 59, 59, 999);

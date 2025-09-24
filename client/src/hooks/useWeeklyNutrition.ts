@@ -79,9 +79,8 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     const today = new Date();
     const todayDateString = today.toISOString().split('T')[0];
     
-    // Calculate current day index - now that weekStart is guaranteed to be Monday
-    const daysDiff = Math.floor((today.getTime() - weekBoundaries.weekStart.getTime()) / (24 * 60 * 60 * 1000));
-    const currentDayIndex = Math.max(0, Math.min(6, daysDiff)); // Ensure 0-6 range
+    // Use JavaScript's natural getDay() - Sunday=0, Monday=1, etc.
+    const currentDayIndex = today.getDay(); // No calculation needed, use native indexing
     
     // Debug meal logs data
     console.log('Weekly Nutrition Meal Data Debug:', {
