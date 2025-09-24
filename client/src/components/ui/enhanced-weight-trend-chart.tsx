@@ -150,24 +150,24 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
         "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
         className
       )}>
-        <CardHeader className="pb-1">
-          <div className="flex items-center space-x-2">
-            <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
-              <Activity className="h-3 w-3 text-white" />
+        <CardHeader className="pb-0.5">
+          <div className="flex items-center space-x-1.5">
+            <div className="p-1 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
+              <Activity className="h-2.5 w-2.5 text-white" />
             </div>
-            <CardTitle className="text-sm text-white font-semibold">
+            <CardTitle className="text-xs text-white font-semibold">
               Weight Progress
             </CardTitle>
           </div>
         </CardHeader>
         
-        <CardContent className="pb-3 space-y-2">
+        <CardContent className="pb-2 space-y-1.5">
           {/* Chart */}
-          <div className="h-12 relative">
+          <div className="h-8 relative">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart 
                 data={weightChartData} 
-                margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
+                margin={{ top: 1, right: 1, left: 1, bottom: 1 }}
               >
                 <XAxis dataKey="day" hide={true} />
                 <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
@@ -185,7 +185,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
           
           {/* Simple weight number */}
           <div className="text-center">
-            <div className="text-lg font-bold text-white">
+            <div className="text-sm font-bold text-white">
               <AnimatedCounter value={currentWeight} suffix=" kg" decimals={1} />
             </div>
           </div>
