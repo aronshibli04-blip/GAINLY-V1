@@ -87,8 +87,18 @@ export function WeeklyNutritionCard({ className }: WeeklyNutritionCardProps) {
       <CardContent className="p-4">
         {/* Header inline */}
         <div className="flex items-center justify-between mb-2">
-          <div className="text-base text-white font-medium leading-tight">
-            Weekly Nutrition
+          <div>
+            <div className="text-base text-white font-medium leading-tight">
+              Weekly Nutrition
+            </div>
+            <div className="text-slate-400 text-xs">
+              {new Date().toLocaleDateString('no-NO', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </div>
           </div>
           <div className="text-right">
             <div className="text-slate-400 text-sm">Week {getCurrentWeek()}</div>
