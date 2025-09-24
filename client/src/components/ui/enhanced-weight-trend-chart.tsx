@@ -167,7 +167,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
             <ResponsiveContainer width="100%" height="100%">
               <LineChart 
                 data={weightChartData} 
-                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                margin={{ top: 0, right: 3, left: 3, bottom: 0 }}
               >
                 <XAxis dataKey="day" hide={true} />
                 <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
@@ -248,13 +248,13 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
         </div>
       </CardHeader>
       
-      <CardContent className="pb-1.5 space-y-1">
+      <CardContent className="pb-1 space-y-0.5">
         {/* Chart */}
-        <div className="h-6 relative">
+        <div className="h-5 relative">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
               data={chartData} 
-              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+              margin={{ top: 0, right: 3, left: 3, bottom: 0 }}
             >
               <XAxis dataKey="day" hide={true} />
               <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
@@ -264,7 +264,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
                 dataKey="weight"
                 stroke={currentColors.primary}
                 strokeWidth={1.5}
-                dot={false}
+                dot={{ fill: currentColors.primary, strokeWidth: 0, r: 3 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -272,7 +272,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
         
         {/* Simple weight number */}
         <div className="text-center">
-          <div className="text-xs font-bold text-white">
+          <div className="text-sm font-bold text-white leading-tight">
             <AnimatedCounter value={currentWeight} suffix=" kg" decimals={1} />
           </div>
         </div>
