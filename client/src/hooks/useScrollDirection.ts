@@ -8,13 +8,13 @@ interface ScrollDirectionState {
 
 export function useScrollDirection(threshold: number = 50): ScrollDirectionState {
   const [scrollState, setScrollState] = useState<ScrollDirectionState>({
-    isVisible: false, // Start with date hidden
+    isVisible: true,
     scrollDirection: 'none',
     scrollY: 0
   });
   
   const lastScrollY = useRef(0);
-  const lastVisibility = useRef(false);
+  const lastVisibility = useRef(true);
   const ticking = useRef(false);
 
   useEffect(() => {
@@ -30,18 +30,18 @@ export function useScrollDirection(threshold: number = 50): ScrollDirectionState
             direction = scrollDifference > 0 ? 'down' : 'up';
           }
           
-          // Determine visibility - start hidden, only show on scroll up
-          let isVisible = false;
+          // Determine visibility
+          let isVisible = true;
           
-          if (currentScrollY <= 5) {
-            // Only show at very top of page
-            isVisible = true;
-          } else if (direction === 'up') {
-            // Show when scrolling up
+          if (currentScrollY <= 10) {
+            // Always show header at top of page
             isVisible = true;
           } else if (direction === 'down' && currentScrollY > threshold) {
-            // Hide when scrolling down past threshold
+            // Hide header when scrolling down past threshold
             isVisible = false;
+          } else if (direction === 'up') {
+            // Show header when scrolling up
+            isVisible = true;
           } else {
             // Keep current visibility state - read from ref to avoid stale state
             isVisible = lastVisibility.current;

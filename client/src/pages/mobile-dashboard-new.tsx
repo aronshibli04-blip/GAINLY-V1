@@ -23,7 +23,8 @@ import { calculateCalorieTargets } from '@shared/calorie-calculations';
 export default function MobileDashboardNew() {
   const { openMenu } = useSideMenu();
   const { currentTdeeAnalysis, calorieEntries, weightEntries, user } = useUserStore();
-  const { isVisible: isHeaderVisible } = useScrollDirection(50);
+  const scrollState = useScrollDirection(50);
+  const { isVisible: isHeaderVisible, scrollDirection, scrollY } = scrollState;
   
   // Calculate target calories using centralized calculation
   const userWeightGoal = (user as any)?.weightGainGoal || 1.0;
@@ -66,10 +67,10 @@ export default function MobileDashboardNew() {
       {/* Main Content */}
       <div className="relative z-10 px-4 pt-20 pb-6 max-w-md mx-auto">
 
-        {/* Date Header with Auto-Hide */}
+        {/* Date Header - Hidden by default, shown on scroll up */}
         <div className={`
           text-center mb-6 transition-all duration-300 ease-in-out
-          ${isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
+          ${!isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
         `}>
           <p className="text-xs text-gray-400 uppercase tracking-wider">
             {new Date().toLocaleDateString('en-US', { 
