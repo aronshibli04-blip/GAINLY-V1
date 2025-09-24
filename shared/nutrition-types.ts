@@ -85,13 +85,13 @@ export const MACRO_COLORS: Record<string, MacroColorTheme> = {
     glow: '0 0 20px rgba(59,130,246,0.3)'
   },
   protein: {
-    primary: '#F97316', // Orange
+    primary: '#F97316', // Orange  
     background: 'rgba(249,115,22,0.1)',
     glow: '0 0 20px rgba(249,115,22,0.3)'
   },
   fat: {
     primary: '#EAB308', // Yellow
-    background: 'rgba(234,179,8,0.1)',
+    background: 'rgba(234,179,8,0.1)', 
     glow: '0 0 20px rgba(234,179,8,0.3)'
   },
   carbs: {
@@ -101,10 +101,10 @@ export const MACRO_COLORS: Record<string, MacroColorTheme> = {
   }
 };
 
-// Helper function to get Norwegian day letter (Sunday=0 system)
+// Helper function to get Norwegian day letter
 export const getDayLetter = (dayIndex: number): DayLetter => {
-  const letters: DayLetter[] = ['S', 'M', 'T', 'O', 'T', 'F', 'L']; // Sunday first
-  return letters[dayIndex] || 'S';
+  const letters: DayLetter[] = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
+  return letters[dayIndex] || 'M';
 };
 
 // Helper function to calculate percentage
@@ -114,22 +114,31 @@ export const calculatePercentage = (current: number, target: number): number => 
 };
 
 // Helper function to get week boundaries
-export function getWeekBoundaries(date: Date = new Date()) {
-  const today = new Date(date);
-  const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
-
-  // Calculate Sunday (start of week) - use JavaScript's natural Sunday=0 system
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - dayOfWeek);
-  weekStart.setHours(0, 0, 0, 0);
-
-  // Calculate Saturday (end of week)
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 6);
-  weekEnd.setHours(23, 59, 59, 999);
-
-  return { weekStart, weekEnd };
-}
+export const getWeekBoundaries = (date: Date) => {
+  const d = new Date(date);
+  const day = d.getDay();
+  
+  console.log('🐛 getWeekBoundaries called with:', {
+    inputDate: date.toISOString().split('T')[0],
+    dayOfWeek: day,
+    dayName: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][day]
+  });
+  
+  // Calculate Monday's date without mutating the original date
+  const mondayDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + (day === 0 ? -6 : 1));
+  const sundayDate = new Date(mondayDate.getFullYear(), mondayDate.getMonth(), mondayDate.getDate() + 6);
+  
+  console.log('🐛 Calculated week boundaries:', {
+    mondayCalculated: mondayDate.toISOString().split('T')[0],
+    sundayCalculated: sundayDate.toISOString().split('T')[0]
+  });
+  
+  // Reset time to start/end of day
+  mondayDate.setHours(0, 0, 0, 0);
+  sundayDate.setHours(23, 59, 59, 999);
+  
+  return { weekStart: mondayDate, weekEnd: sundayDate };
+};
 
 // Validation schema for macro targets
 export const macroTargetsSchema = z.object({
