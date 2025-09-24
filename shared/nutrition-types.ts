@@ -124,34 +124,43 @@ export const getWeekBoundaries = (date: Date) => {
     dayName: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][day]
   });
   
-  // Calculate Monday's date using more reliable date arithmetic
-  // For Monday-based week: go back (day === 0 ? 6 : day - 1) days from current day
-  const daysBackToMonday = day === 0 ? 6 : day - 1;
+  // Calculate Sunday's date using Sunday-based week system
+  // For Sunday-based week: go back day days from current day (Sun=0, Mon=1, Tue=2, etc.)
+  const daysBackToSunday = day; // Sunday=0 days back, Monday=1 day back, etc.
   
-  // Use date arithmetic instead of constructor to avoid month boundary issues
-  const mondayDate = new Date(d);
-  mondayDate.setDate(mondayDate.getDate() - daysBackToMonday);
+  // Use string-based date arithmetic to avoid all timezone issues
+  const todayString = date.toISOString().split('T')[0]; // "2025-09-24"
+  const todayParts = todayString.split('-').map(Number); // [2025, 9, 24]
+  const todayYear = todayParts[0];
+  const todayMonth = todayParts[1]; // 1-indexed month
+  const todayDay = todayParts[2];
   
-  console.log('🔍 Fixed calculation:', {
-    todayString: d.toISOString().split('T')[0],
+  // Calculate Sunday and Saturday dates by doing math on day number
+  const sundayDay = todayDay - daysBackToSunday; // 24 - 3 = 21 
+  const saturdayDay = sundayDay + 6; // 21 + 6 = 27
+  
+  // Create Date objects with the calculated days - do NOT set hours to avoid timezone shifts
+  const sundayDate = new Date(todayYear, todayMonth - 1, sundayDay); // month is 0-indexed in constructor
+  const saturdayDate = new Date(todayYear, todayMonth - 1, saturdayDay);
+  
+  console.log('🔍 String-based calculation:', {
+    todayString,
+    todayParts,
     dayOfWeek: day,
-    daysBackToMonday,
-    mondayCalculated: mondayDate.toISOString().split('T')[0]
-  });
-  // Use date arithmetic for Sunday as well to avoid month boundary issues
-  const sundayDate = new Date(mondayDate);
-  sundayDate.setDate(sundayDate.getDate() + 6);
-  
-  console.log('🐛 Calculated week boundaries:', {
-    mondayCalculated: mondayDate.toISOString().split('T')[0],
-    sundayCalculated: sundayDate.toISOString().split('T')[0]
+    daysBackToSunday,
+    calculatedSundayDay: sundayDay,
+    calculatedSaturdayDay: saturdayDay,
+    sundayCalculated: sundayDate.toISOString().split('T')[0],
+    saturdayCalculated: saturdayDate.toISOString().split('T')[0]
   });
   
-  // Reset time to start/end of day
-  mondayDate.setHours(0, 0, 0, 0);
-  sundayDate.setHours(23, 59, 59, 999);
+  // Return dates WITHOUT setting hours to avoid timezone shifts
+  console.log('🔍 Final week dates (no hour changes):', {
+    weekStartFinal: sundayDate.toISOString().split('T')[0],
+    weekEndFinal: saturdayDate.toISOString().split('T')[0]
+  });
   
-  return { weekStart: mondayDate, weekEnd: sundayDate };
+  return { weekStart: sundayDate, weekEnd: saturdayDate };
 };
 
 // Validation schema for macro targets
