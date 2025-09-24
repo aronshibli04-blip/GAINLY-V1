@@ -77,22 +77,27 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     
     // Declare today first before using it anywhere
     const today = new Date();
-    const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
+    const todayDateString = today.toISOString().split('T')[0];
+    
+    // Calculate current day index based on week boundaries, not getDay()
+    const daysDiff = Math.floor((today.getTime() - weekBoundaries.weekStart.getTime()) / (24 * 60 * 60 * 1000));
+    const currentDayIndex = Math.max(0, Math.min(6, daysDiff)); // Ensure 0-6 range
     
     // Debug meal logs data
     console.log('Weekly Nutrition Meal Data Debug:', {
       mealLogsLoading,
       targetsLoading,
       mealLogsLength: mealLogsArray.length,
-      todayMealsCount: mealLogsArray.filter(m => m.logDate === today.toISOString().split('T')[0]).length,
+      todayMealsCount: mealLogsArray.filter(m => m.logDate === todayDateString).length,
       firstFewMeals: mealLogsArray.slice(0, 3).map(m => ({ id: m.id, logDate: m.logDate, calories: m.calories }))
     });
     
     // Debug day index calculation
     console.log('Weekly Nutrition Day Index Debug:', {
-      today: today.toISOString().split('T')[0],
+      today: todayDateString,
       todayGetDay: today.getDay(), // Sunday=0, Monday=1, etc.
       currentDayIndex: currentDayIndex, // Monday=0, Tuesday=1, etc.
+      daysDiff: daysDiff,
       weekStart: weekBoundaries.weekStart.toISOString().split('T')[0],
       weekEnd: weekBoundaries.weekEnd.toISOString().split('T')[0]
     });
@@ -113,10 +118,21 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       currentDate.setDate(weekBoundaries.weekStart.getDate() + dayIndex);
 
       const dateString = currentDate.toISOString().split('T')[0];
-      const isCurrent = dayIndex === currentDayIndex && 
-                      currentDate.toDateString() === today.toDateString();
+      const isCurrent = dateString === todayDateString;
       const isCompleted = dayIndex < currentDayIndex;
       const isFuture = dayIndex > currentDayIndex;
+      
+      // Enhanced debug for current day
+      if (dayIndex >= 2 && dayIndex <= 4) {
+        console.log(`🔍 Day ${dayIndex} (${dateString}):`, {
+          dayIndex,
+          currentDayIndex,
+          dateString,
+          todayString: todayDateString,
+          isCurrent: isCurrent ? "TODAY" : "not today",
+          dateMatches: dateString === todayDateString
+        });
+      }
 
       // Filter meals for this specific day - ensure consistent date format
       const dayMeals = mealLogsArray.filter(meal => {
