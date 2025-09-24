@@ -76,13 +76,8 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
       className
     )}>
       <CardHeader className="pb-0">
-        <div className="flex items-center space-x-1">
-          <div className="p-0.5 bg-gradient-to-br from-orange-500 to-red-500 rounded">
-            <Zap className="h-2 w-2 text-white" />
-          </div>
-          <div className="text-base text-white font-medium leading-tight">
-            TDEE
-          </div>
+        <div className="text-base text-white font-medium leading-tight">
+          TDEE
         </div>
       </CardHeader>
       
