@@ -62,7 +62,7 @@ export function EnhancedMealLogger() {
   const { toast } = useToast();
   const { addCalorieEntry } = useUserStore();
   const queryClient = useQueryClient();
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFoods, setSelectedFoods] = useState<{ item: FoodItem; quantity: number }[]>([]);
   const [mealType, setMealType] = useState<'breakfast' | 'lunch' | 'dinner' | 'snack'>('breakfast');
@@ -82,7 +82,7 @@ export function EnhancedMealLogger() {
 
   const addFood = (food: FoodItem, quantity: number = 1) => {
     const existingIndex = selectedFoods.findIndex(item => item.item.id === food.id);
-    
+
     if (existingIndex >= 0) {
       setSelectedFoods(prev => 
         prev.map((item, index) => 
@@ -110,7 +110,7 @@ export function EnhancedMealLogger() {
       removeFood(foodId);
       return;
     }
-    
+
     setSelectedFoods(prev => 
       prev.map(item => 
         item.item.id === foodId ? { ...item, quantity } : item
@@ -138,7 +138,7 @@ export function EnhancedMealLogger() {
     }
 
     const totals = calculateTotals();
-    
+
     try {
       // Save to database via API
       const response = await fetch('/api/meal-logs', {
@@ -175,10 +175,10 @@ export function EnhancedMealLogger() {
       const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
       const today = new Date().toISOString().split('T')[0];
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
-      // Also invalidate weekly nutrition card cache
-      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
-      // Also invalidate user targets cache which weekly nutrition depends on
+      // Also invalidate the weekly calendar data
       queryClient.invalidateQueries({ queryKey: ["/api/user-targets", userId] });
+      // Invalidate weekly nutrition queries specifically
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId, "week"] });
 
       toast({
         title: "Meal logged successfully!",
@@ -196,7 +196,7 @@ export function EnhancedMealLogger() {
   const simulateBarcodeScanning = () => {
     // Simulate barcode scanning - would integrate with real barcode scanner
     setShowBarcodeScanner(false);
-    
+
     toast({
       title: "Barcode Scanner",
       description: "Barcode scanning not available in this version.",
@@ -206,7 +206,7 @@ export function EnhancedMealLogger() {
   const simulatePhotoAnalysis = () => {
     // Simulate photo analysis - would integrate with AI image recognition
     setShowPhotoAnalyzer(false);
-    
+
     toast({
       title: "Photo Analysis",
       description: "Photo analysis not available in this version.",
@@ -437,7 +437,7 @@ export function EnhancedMealLogger() {
           Log Meal ({Math.round(totals.calories)} calories)
         </Button>
       </CardContent>
-      
+
       {/* Barcode Scanner Modal */}
       <BarcodeScannerModal
         isOpen={showBarcodeScanner}

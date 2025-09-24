@@ -27,10 +27,10 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
 
   // Fetch meal logs for the specific week
   const { data: mealLogs, isLoading: mealLogsLoading, error: mealLogsError } = useQuery<MealLog[]>({
-    queryKey: ["/api/meal-logs", userId, weekBoundaries.weekStart.toISOString().split('T')[0]],
+    queryKey: ["/api/meal-logs", userId, "week", weekBoundaries.weekStart.toISOString().split('T')[0]],
     enabled: true,
-    staleTime: 30 * 1000, // 30 seconds - meal data is dynamic
-    gcTime: 2 * 60 * 1000, // 2 minutes cache
+    staleTime: 0, // No cache - always fetch fresh data for meal logs
+    gcTime: 30 * 1000, // 30 seconds cache
   });
 
   // Fetch user's macro targets (from TDEE analysis or user settings)

@@ -87,6 +87,8 @@ export function EditableMealsList() {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
       // Also invalidate weekly nutrition card cache
       queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
+      // Invalidate weekly nutrition queries specifically
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId, "week"] });
     },
     onError: (error: any) => {
       toast({
