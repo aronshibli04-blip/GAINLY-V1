@@ -155,9 +155,9 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
             <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
               <Activity className="h-2 w-2 text-white" />
             </div>
-            <CardTitle className="text-[6px] text-white font-medium leading-[8px]">
+            <div className="text-[6px] text-white font-medium leading-[8px]">
               Weight Progress
-            </CardTitle>
+            </div>
           </div>
         </CardHeader>
         
@@ -242,9 +242,9 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
           <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
             <Activity className="h-2 w-2 text-white" />
           </div>
-          <CardTitle className="text-[6px] text-white font-medium leading-[8px]">
+          <div className="text-[6px] text-white font-medium leading-[8px]">
             Weight Progress
-          </CardTitle>
+          </div>
         </div>
       </CardHeader>
       
