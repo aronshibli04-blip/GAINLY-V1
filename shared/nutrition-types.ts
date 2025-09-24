@@ -101,10 +101,11 @@ export const MACRO_COLORS: Record<string, MacroColorTheme> = {
   }
 };
 
-// Helper function to get Norwegian day letter (Sunday-based to match JavaScript getDay())
+// Helper function to get Norwegian day letter (Monday-based indexing)
 export const getDayLetter = (dayIndex: number): DayLetter => {
-  const letters: DayLetter[] = ['S', 'M', 'T', 'O', 'T', 'F', 'L'];
-  return letters[dayIndex] || 'S';
+  // Monday-based: Mon=0, Tue=1, Wed=2, Thu=3, Fri=4, Sat=5, Sun=6
+  const letters: DayLetter[] = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
+  return letters[dayIndex] || 'M';
 };
 
 // Helper function to calculate percentage
@@ -113,10 +114,10 @@ export const calculatePercentage = (current: number, target: number): number => 
   return Math.round((current / target) * 100);
 };
 
-// Helper function to get week boundaries
+// Helper function to get week boundaries (Monday-based system)
 export const getWeekBoundaries = (date: Date) => {
   const d = new Date(date);
-  const day = d.getDay();
+  const day = d.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
   
   console.log('🐛 getWeekBoundaries called with:', {
     inputDate: date.toISOString().split('T')[0],
@@ -124,9 +125,10 @@ export const getWeekBoundaries = (date: Date) => {
     dayName: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][day]
   });
   
-  // Calculate Sunday's date using Sunday-based week system
-  // For Sunday-based week: go back day days from current day (Sun=0, Mon=1, Tue=2, etc.)
-  const daysBackToSunday = day; // Sunday=0 days back, Monday=1 day back, etc.
+  // Calculate Monday's date using Monday-based week system
+  // Convert Sunday=0 to Sunday=7 for easier math, then calculate days back to Monday
+  const dayOfWeekMondayBased = day === 0 ? 6 : day - 1; // Mon=0, Tue=1, Wed=2, Thu=3, Fri=4, Sat=5, Sun=6
+  const daysBackToMonday = dayOfWeekMondayBased; // Monday=0 days back, Tuesday=1 day back, etc.
   
   // Use string-based date arithmetic to avoid all timezone issues
   const todayString = date.toISOString().split('T')[0]; // "2025-09-24"
@@ -135,32 +137,33 @@ export const getWeekBoundaries = (date: Date) => {
   const todayMonth = todayParts[1]; // 1-indexed month
   const todayDay = todayParts[2];
   
-  // Calculate Sunday and Saturday dates by doing math on day number
-  const sundayDay = todayDay - daysBackToSunday; // 24 - 3 = 21 
-  const saturdayDay = sundayDay + 6; // 21 + 6 = 27
+  // Calculate Monday and Sunday dates by doing math on day number
+  const mondayDay = todayDay - daysBackToMonday; // For Wed (24): 24 - 2 = 22 (Monday)
+  const sundayDay = mondayDay + 6; // Monday + 6 = Sunday
   
   // Create Date objects with the calculated days - do NOT set hours to avoid timezone shifts
-  const sundayDate = new Date(todayYear, todayMonth - 1, sundayDay); // month is 0-indexed in constructor
-  const saturdayDate = new Date(todayYear, todayMonth - 1, saturdayDay);
+  const mondayDate = new Date(todayYear, todayMonth - 1, mondayDay); // month is 0-indexed in constructor
+  const sundayDate = new Date(todayYear, todayMonth - 1, sundayDay);
   
-  console.log('🔍 String-based calculation:', {
+  console.log('🔍 Monday-based calculation:', {
     todayString,
     todayParts,
-    dayOfWeek: day,
-    daysBackToSunday,
+    jsGetDay: day, // JavaScript getDay() result
+    dayOfWeekMondayBased, // Our Monday-based index (Wed = 2)
+    daysBackToMonday,
+    calculatedMondayDay: mondayDay,
     calculatedSundayDay: sundayDay,
-    calculatedSaturdayDay: saturdayDay,
-    sundayCalculated: sundayDate.toISOString().split('T')[0],
-    saturdayCalculated: saturdayDate.toISOString().split('T')[0]
+    mondayCalculated: mondayDate.toISOString().split('T')[0],
+    sundayCalculated: sundayDate.toISOString().split('T')[0]
   });
   
-  // Return dates WITHOUT setting hours to avoid timezone shifts
-  console.log('🔍 Final week dates (no hour changes):', {
-    weekStartFinal: sundayDate.toISOString().split('T')[0],
-    weekEndFinal: saturdayDate.toISOString().split('T')[0]
+  // Return Monday as weekStart, Sunday as weekEnd for Monday-based week system
+  console.log('🔍 Final week dates (Monday-based):', {
+    weekStartFinal: mondayDate.toISOString().split('T')[0],
+    weekEndFinal: sundayDate.toISOString().split('T')[0]
   });
   
-  return { weekStart: sundayDate, weekEnd: saturdayDate };
+  return { weekStart: mondayDate, weekEnd: sundayDate };
 };
 
 // Validation schema for macro targets
