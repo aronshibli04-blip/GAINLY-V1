@@ -117,17 +117,16 @@ export const calculatePercentage = (current: number, target: number): number => 
 export const getWeekBoundaries = (date: Date) => {
   const d = new Date(date);
   const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when Sunday
   
-  const monday = new Date(d.setDate(diff));
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
+  // Calculate Monday's date without mutating the original date
+  const mondayDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + (day === 0 ? -6 : 1));
+  const sundayDate = new Date(mondayDate.getFullYear(), mondayDate.getMonth(), mondayDate.getDate() + 6);
   
   // Reset time to start/end of day
-  monday.setHours(0, 0, 0, 0);
-  sunday.setHours(23, 59, 59, 999);
+  mondayDate.setHours(0, 0, 0, 0);
+  sundayDate.setHours(23, 59, 59, 999);
   
-  return { weekStart: monday, weekEnd: sunday };
+  return { weekStart: mondayDate, weekEnd: sundayDate };
 };
 
 // Validation schema for macro targets
