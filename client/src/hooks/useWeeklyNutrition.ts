@@ -42,10 +42,8 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       return data;
     },
     enabled: !!userId,
-    staleTime: 0, // Force fresh data to clear cached error
-    gcTime: 0, // No cache to force immediate refetch
-    retry: 3, // Retry failed requests
-    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)
+    staleTime: 30 * 1000, // 30 seconds - meal data is dynamic
+    gcTime: 2 * 60 * 1000, // 2 minutes cache
   });
 
   // Fetch user's macro targets (from TDEE analysis or user settings)
@@ -77,6 +75,10 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     // Always create week structure - use empty array if no meal logs exist yet
     const mealLogsArray = mealLogs || [];
     
+    // Declare today first before using it anywhere
+    const today = new Date();
+    const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
+    
     // Debug meal logs data
     console.log('Weekly Nutrition Meal Data Debug:', {
       mealLogsLoading,
@@ -85,9 +87,6 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       todayMealsCount: mealLogsArray.filter(m => m.logDate === today.toISOString().split('T')[0]).length,
       firstFewMeals: mealLogsArray.slice(0, 3).map(m => ({ id: m.id, logDate: m.logDate, calories: m.calories }))
     });
-
-    const today = new Date();
-    const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
     
     // Debug day index calculation
     console.log('Weekly Nutrition Day Index Debug:', {
