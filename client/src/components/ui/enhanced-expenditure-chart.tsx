@@ -72,34 +72,27 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
   return (
     <Card className={cn(
       "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
-      "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20",
+      "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
       className
     )}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <div>
-              <CardTitle className="text-base text-white font-semibold">
-                Energy Balance
-              </CardTitle>
-              <p className="text-xs text-slate-400 mt-0.5">
-                📊 TDEE Baseline • Last 7 days
-              </p>
-            </div>
+      <CardHeader className="pb-2">
+        <div className="flex items-center space-x-2">
+          <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg">
+            <Zap className="h-4 w-4 text-white" />
           </div>
+          <CardTitle className="text-base text-white font-semibold">
+            Energy Balance
+          </CardTitle>
         </div>
       </CardHeader>
       
-      <CardContent className="pb-4 space-y-4">
+      <CardContent className="pb-4 space-y-3">
         {/* Chart */}
-        <div className="h-20 relative">
+        <div className="h-16 relative">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart 
               data={chartData} 
-              margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
+              margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
             >
               <XAxis dataKey="day" hide={true} />
               <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
@@ -124,13 +117,11 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
           </ResponsiveContainer>
         </div>
         
-        {/* Simple TDEE display */}
-        <div className="grid grid-cols-1 gap-3">
-          <div className="p-3 bg-slate-800/20 rounded-lg border border-slate-700/20">
-            <div className="text-xs text-slate-400 font-medium mb-1">TDEE</div>
-            <div className="text-xl font-bold text-white">
-              <AnimatedCounter value={tdee} suffix=" kcal" />
-            </div>
+        {/* Simple TDEE number */}
+        <div className="text-center">
+          <div className="text-xs text-slate-400 font-medium">TDEE</div>
+          <div className="text-lg font-bold text-white">
+            <AnimatedCounter value={tdee} suffix=" kcal" />
           </div>
         </div>
       </CardContent>
