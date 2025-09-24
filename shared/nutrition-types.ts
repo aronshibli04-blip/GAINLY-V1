@@ -118,10 +118,15 @@ export function getWeekBoundaries(date: Date = new Date()) {
   const today = new Date(date);
   const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
 
-  // Calculate Monday (start of week) - fix Sunday calculation
-  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  // Calculate Monday (start of week) - ensure Monday=0 in our system
+  // For Sunday (0), we want to go back 6 days to get Monday
+  // For Monday (1), we want to stay at the same day (0 offset)
+  // For Tuesday (2), we want to go back 1 day (-1 offset)
+  // etc.
+  const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  
   const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() + mondayOffset);
+  weekStart.setDate(today.getDate() - daysToSubtract);
   weekStart.setHours(0, 0, 0, 0);
 
   // Calculate Sunday (end of week)
