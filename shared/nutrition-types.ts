@@ -138,7 +138,9 @@ export const getWeekBoundaries = (date: Date) => {
     daysBackToMonday,
     mondayCalculated: mondayDate.toISOString().split('T')[0]
   });
-  const sundayDate = new Date(mondayDate.getFullYear(), mondayDate.getMonth(), mondayDate.getDate() + 6);
+  // Use date arithmetic for Sunday as well to avoid month boundary issues
+  const sundayDate = new Date(mondayDate);
+  sundayDate.setDate(sundayDate.getDate() + 6);
   
   console.log('🐛 Calculated week boundaries:', {
     mondayCalculated: mondayDate.toISOString().split('T')[0],
