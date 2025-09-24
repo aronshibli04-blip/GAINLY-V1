@@ -65,11 +65,11 @@ export default function MobileDashboardNew() {
       </div>
       
       {/* Main Content */}
-      <div className="relative z-10 px-4 pt-20 pb-6 max-w-md mx-auto">
+      <div className="relative z-10 px-4 pt-16 pb-6 max-w-md mx-auto">
 
         {/* Date Header - Hidden by default, shown on scroll up */}
         <div className={`
-          text-center mb-6 transition-all duration-300 ease-in-out
+          text-center mb-3 transition-all duration-300 ease-in-out
           ${!isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
         `}>
           <p className="text-xs text-gray-400 uppercase tracking-wider">
@@ -82,7 +82,7 @@ export default function MobileDashboardNew() {
         </div>
 
         {/* 1. HERO SECTION - Tracking Cards Carousel */}
-        <div className="mb-6">
+        <div className="mb-4">
           <TrackingCardsCarousel />
         </div>
 
