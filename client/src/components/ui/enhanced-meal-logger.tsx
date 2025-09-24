@@ -175,6 +175,8 @@ export function EnhancedMealLogger() {
       const userId = "974acc79-f202-4202-bdab-80c4ef55f534";
       const today = new Date().toISOString().split('T')[0];
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
 
       toast({
         title: "Meal logged successfully!",

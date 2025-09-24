@@ -126,6 +126,8 @@ export function ImprovedMealLogger({ userId }: ImprovedMealLoggerProps) {
       setSelectedFoods([]);
       setSearchQuery("");
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", "974acc79-f202-4202-bdab-80c4ef55f534"] });
     },
     onError: () => {
       toast({

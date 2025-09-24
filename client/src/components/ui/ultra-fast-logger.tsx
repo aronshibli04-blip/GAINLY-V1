@@ -262,6 +262,8 @@ export function UltraFastLogger({ userId, onMealLogged, selectedMealType }: Ultr
       setShowSearch(false);
       setSearchQuery("");
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs'] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
     },
     onError: (error: any) => {
       // Meal save error logged

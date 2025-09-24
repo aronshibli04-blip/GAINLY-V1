@@ -131,6 +131,8 @@ export function AggressiveSurplusTracker() {
     onSuccess: () => {
       // Invalidate meal logs cache with exact same query key as PremiumLoggedMeals
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
     },
     onError: (error) => {
       toast({

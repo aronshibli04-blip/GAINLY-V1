@@ -70,6 +70,8 @@ export function PremiumLoggedMeals() {
         description: "Swiped away successfully!",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
       setSwipeState(null);
     },
     onError: (error: any) => {
@@ -100,6 +102,8 @@ export function PremiumLoggedMeals() {
       });
       setEditingMeal(null);
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
     },
     onError: (error: any) => {
       toast({

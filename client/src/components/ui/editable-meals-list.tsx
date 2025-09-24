@@ -55,6 +55,8 @@ export function EditableMealsList() {
         description: "The meal has been removed from your log.",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
     },
     onError: (error: any) => {
       toast({
@@ -83,6 +85,8 @@ export function EditableMealsList() {
       });
       setEditingMeal(null);
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
+      // Also invalidate weekly nutrition card cache
+      queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
     },
     onError: (error: any) => {
       toast({
