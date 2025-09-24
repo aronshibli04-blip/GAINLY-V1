@@ -66,8 +66,11 @@ export default function MobileDashboardNew() {
       {/* Main Content */}
       <div className="relative z-10 px-4 pt-20 pb-6 max-w-md mx-auto">
 
-        {/* Date Header */}
-        <div className="text-center mb-6">
+        {/* Date Header with Auto-Hide */}
+        <div className={`
+          text-center mb-6 transition-all duration-300 ease-in-out
+          ${isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
+        `}>
           <p className="text-xs text-gray-400 uppercase tracking-wider">
             {new Date().toLocaleDateString('en-US', { 
               weekday: 'short', 
