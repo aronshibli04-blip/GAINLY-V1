@@ -150,7 +150,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
         "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
         className
       )}>
-        <CardHeader className="p-2 pb-1">
+        <CardHeader className="pb-0">
           <div className="flex items-center space-x-1">
             <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
               <Activity className="h-2 w-2 text-white" />
@@ -161,7 +161,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
           </div>
         </CardHeader>
         
-        <CardContent className="p-2 pt-0 space-y-1">
+        <CardContent className="pb-1 space-y-0.5">
           {/* Chart */}
           <div className="h-5 relative">
             <ResponsiveContainer width="100%" height="100%">
