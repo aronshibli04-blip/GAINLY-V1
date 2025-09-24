@@ -29,14 +29,21 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   const { data: mealLogs, isLoading: mealLogsLoading, error: mealLogsError } = useQuery<MealLog[]>({
     queryKey: ["/api/meal-logs", userId, "week", weekBoundaries.weekStart.toISOString().split('T')[0]],
     queryFn: async () => {
+      // Format date as YYYY-MM-DD to ensure proper API pattern matching
       const weekStartDate = weekBoundaries.weekStart.toISOString().split('T')[0];
+      console.log('Fetching meal logs for week starting:', weekStartDate);
+      
       const response = await fetch(`/api/meal-logs/${userId}/week/${weekStartDate}`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch meal logs: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Meal logs API error:', response.status, errorText);
+        throw new Error(`Failed to fetch meal logs: ${response.status} - ${errorText}`);
       }
-      return response.json();
+      const data = await response.json();
+      console.log('Meal logs fetched successfully:', data?.length || 0, 'entries');
+      return data;
     },
-    enabled: true,
+    enabled: !!userId,
     staleTime: 0, // No cache - always fetch fresh data for meal logs
     gcTime: 30 * 1000, // 30 seconds cache
   });
@@ -45,13 +52,19 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   const { data: userTargets, isLoading: targetsLoading, error: targetsError } = useQuery<MacroTargets | null>({
     queryKey: ["/api/user-targets", userId],
     queryFn: async () => {
+      console.log('Fetching user targets for:', userId);
+      
       const response = await fetch(`/api/user-targets/${userId}`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch user targets: ${response.status}`);
+        const errorText = await response.text();
+        console.error('User targets API error:', response.status, errorText);
+        throw new Error(`Failed to fetch user targets: ${response.status} - ${errorText}`);
       }
-      return response.json();
+      const data = await response.json();
+      console.log('User targets fetched successfully:', data);
+      return data;
     },
-    enabled: true,
+    enabled: !!userId,
     staleTime: 0, // No cache - always fetch fresh data for accurate calorie targets
     gcTime: 30 * 1000, // 30 seconds cache
   });
