@@ -124,8 +124,20 @@ export const getWeekBoundaries = (date: Date) => {
     dayName: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][day]
   });
   
-  // Calculate Monday's date without mutating the original date
-  const mondayDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + (day === 0 ? -6 : 1));
+  // Calculate Monday's date using more reliable date arithmetic
+  // For Monday-based week: go back (day === 0 ? 6 : day - 1) days from current day
+  const daysBackToMonday = day === 0 ? 6 : day - 1;
+  
+  // Use date arithmetic instead of constructor to avoid month boundary issues
+  const mondayDate = new Date(d);
+  mondayDate.setDate(mondayDate.getDate() - daysBackToMonday);
+  
+  console.log('🔍 Fixed calculation:', {
+    todayString: d.toISOString().split('T')[0],
+    dayOfWeek: day,
+    daysBackToMonday,
+    mondayCalculated: mondayDate.toISOString().split('T')[0]
+  });
   const sundayDate = new Date(mondayDate.getFullYear(), mondayDate.getMonth(), mondayDate.getDate() + 6);
   
   console.log('🐛 Calculated week boundaries:', {
