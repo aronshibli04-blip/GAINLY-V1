@@ -28,6 +28,14 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   // Fetch meal logs for the specific week
   const { data: mealLogs, isLoading: mealLogsLoading, error: mealLogsError } = useQuery<MealLog[]>({
     queryKey: ["/api/meal-logs", userId, "week", weekBoundaries.weekStart.toISOString().split('T')[0]],
+    queryFn: async () => {
+      const weekStartDate = weekBoundaries.weekStart.toISOString().split('T')[0];
+      const response = await fetch(`/api/meal-logs/${userId}/week/${weekStartDate}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch meal logs: ${response.status}`);
+      }
+      return response.json();
+    },
     enabled: true,
     staleTime: 0, // No cache - always fetch fresh data for meal logs
     gcTime: 30 * 1000, // 30 seconds cache
@@ -36,6 +44,13 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
   // Fetch user's macro targets (from TDEE analysis or user settings)
   const { data: userTargets, isLoading: targetsLoading, error: targetsError } = useQuery<MacroTargets | null>({
     queryKey: ["/api/user-targets", userId],
+    queryFn: async () => {
+      const response = await fetch(`/api/user-targets/${userId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user targets: ${response.status}`);
+      }
+      return response.json();
+    },
     enabled: true,
     staleTime: 0, // No cache - always fetch fresh data for accurate calorie targets
     gcTime: 30 * 1000, // 30 seconds cache
@@ -198,6 +213,16 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       }
     };
   }, [weeklyNutritionData]);
+
+  // Add debug logging for errors
+  if (mealLogsError || targetsError) {
+    console.error('Weekly Nutrition Errors:', {
+      mealLogsError: mealLogsError?.message,
+      targetsError: targetsError?.message,
+      weekBoundaries,
+      userId
+    });
+  }
 
   return {
     weeklyNutritionData,
