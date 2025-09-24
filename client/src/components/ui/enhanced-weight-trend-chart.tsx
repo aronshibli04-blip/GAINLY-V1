@@ -177,7 +177,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
                   dataKey="weight"
                   stroke="#06b6d4"
                   strokeWidth={1.5}
-                  dot={false}
+                  dot={{ fill: '#06b6d4', strokeWidth: 0, r: 3 }}
                 />
               </LineChart>
             </ResponsiveContainer>

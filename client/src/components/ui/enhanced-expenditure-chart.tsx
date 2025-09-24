@@ -111,7 +111,7 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
                 stroke="#f59e0b"
                 strokeWidth={1.5}
                 fill="url(#tdeeGradient)"
-                dot={false}
+                dot={{ fill: '#f59e0b', strokeWidth: 0, r: 3 }}
               />
             </AreaChart>
           </ResponsiveContainer>
