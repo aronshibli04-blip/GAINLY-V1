@@ -72,7 +72,7 @@ const AnimatedCounter = ({ value, suffix = "", decimals = 1 }: {
 };
 
 export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChartProps) {
-  const { weightEntries } = useUserStore();
+  const { weightEntries, user } = useUserStore();
   const [hoveredPoint, setHoveredPoint] = useState<WeightDataPoint | null>(null);
   
   // Enhanced data processing with trend analysis
@@ -133,10 +133,13 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
   }, [weightEntries]);
   
   if (!chartAnalysis) {
-    // Create empty chart data for visualization
-    const emptyChartData = Array.from({ length: 7 }, (_, i) => ({
+    // Get user's current weight from profile
+    const currentWeight = user?.weight || 70; // Default to 70kg if no weight set
+    
+    // Create flat line chart data using current weight
+    const weightChartData = Array.from({ length: 7 }, (_, i) => ({
       day: i,
-      weight: 0,
+      weight: currentWeight,
       date: '',
       dayName: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]
     }));
@@ -144,83 +147,47 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
     return (
       <Card className={cn(
         "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
-        "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20",
+        "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
         className
       )}>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
-                <Activity className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <CardTitle className="text-base text-white font-semibold">
-                  Weight Progress
-                </CardTitle>
-                <p className="text-xs text-slate-400 mt-0.5">🔄 Ready to track • Last 7 days</p>
-              </div>
+        <CardHeader className="pb-1">
+          <div className="flex items-center space-x-2">
+            <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
+              <Activity className="h-3 w-3 text-white" />
             </div>
+            <CardTitle className="text-sm text-white font-semibold">
+              Weight Progress
+            </CardTitle>
           </div>
         </CardHeader>
         
-        <CardContent className="pb-4 space-y-4">
-          {/* Empty Chart Placeholder */}
-          <div className="h-20 relative">
+        <CardContent className="pb-3 space-y-2">
+          {/* Chart */}
+          <div className="h-12 relative">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart 
-                data={emptyChartData} 
-                margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
+                data={weightChartData} 
+                margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
               >
                 <XAxis dataKey="day" hide={true} />
-                <YAxis hide={true} />
+                <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
                 
-                {/* Empty chart line */}
                 <Line
                   type="monotone"
                   dataKey="weight"
-                  stroke="#475569"
+                  stroke="#06b6d4"
                   strokeWidth={2}
-                  strokeDasharray="5 5"
                   dot={false}
-                  opacity={0.5}
                 />
               </LineChart>
             </ResponsiveContainer>
-            
-            {/* Centered message overlay */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-slate-400">
-                <Activity className="h-5 w-5 mx-auto mb-1 opacity-60" />
-                <p className="text-xs font-medium">Start logging weight</p>
-              </div>
-            </div>
           </div>
           
-          {/* Empty Stats Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 bg-slate-800/20 rounded-lg border border-slate-700/20">
-              <div className="text-xs text-slate-500 font-medium mb-1">Current</div>
-              <div className="text-xl font-bold text-slate-400">-- kg</div>
+          {/* Simple weight number */}
+          <div className="text-center">
+            <div className="text-lg font-bold text-white">
+              <AnimatedCounter value={currentWeight} suffix=" kg" decimals={1} />
             </div>
-            
-            <div className="p-3 bg-slate-800/20 rounded-lg border border-slate-700/20">
-              <div className="text-xs text-slate-500 font-medium mb-1">Change</div>
-              <div className="text-xl font-bold text-slate-400 flex items-center">
-                <Activity className="h-4 w-4 mr-1" />
-                +0.0kg
-              </div>
-            </div>
-          </div>
-          
-          {/* Ready to start message */}
-          <div className="p-3 rounded-lg border bg-slate-800/20 border-slate-700/20">
-            <div className="flex items-center space-x-2 mb-2">
-              <Activity className="h-4 w-4 text-slate-400" />
-              <span className="text-sm font-medium text-slate-400">Ready to Track</span>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Log your first weight entry to start tracking progress and see trends.
-            </p>
           </div>
         </CardContent>
       </Card>
