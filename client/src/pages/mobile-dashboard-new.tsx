@@ -92,13 +92,8 @@ export default function MobileDashboardNew() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             {/* Enhanced charts with error boundaries */}
-            <div className="min-h-[120px]">
-              <EnhancedWeightTrendChart />
-            </div>
-            
-            <div className="min-h-[120px]">
-              <EnhancedExpenditureChart targetCalories={targetCalories} />
-            </div>
+            <EnhancedWeightTrendChart />
+            <EnhancedExpenditureChart targetCalories={targetCalories} />
           </div>
         </div>
 

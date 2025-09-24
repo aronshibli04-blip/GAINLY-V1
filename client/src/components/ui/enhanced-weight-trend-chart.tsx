@@ -234,160 +234,47 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
   return (
     <Card className={cn(
       "bg-slate-900/80 border-slate-700/50 backdrop-blur-sm group transition-all duration-300",
-      "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20",
+      "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
       className
     )}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className={cn(
-              "p-2 rounded-lg transition-transform group-hover:scale-110",
-              `bg-gradient-to-br from-blue-500 to-cyan-500`
-            )}>
-              <Activity className="h-4 w-4 text-white" />
-            </div>
-            <div>
-              <CardTitle className="text-base text-white font-semibold">
-                Weight Progress
-              </CardTitle>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {trendDirection === 'increasing' ? '📈 Gaining' : 
-                 trendDirection === 'decreasing' ? '📉 Losing' : '➡️ Stable'} • Last 7 days
-              </p>
-            </div>
+      <CardHeader className="pb-0">
+        <div className="flex items-center space-x-1">
+          <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
+            <Activity className="h-2 w-2 text-white" />
           </div>
-          
-          {/* Trend Indicator */}
-          {isStrongTrend && (
-            <div className={cn(
-              "px-2 py-1 rounded-full text-xs font-medium",
-              "bg-slate-800/50 border",
-              currentColors.accent,
-              "border-current/30"
-            )}>
-              {Math.abs(weeklyProjection) > 0.5 ? 'Strong' : 'Moderate'} trend
-            </div>
-          )}
+          <CardTitle className="text-xs text-white font-medium">
+            Weight Progress
+          </CardTitle>
         </div>
       </CardHeader>
       
-      <CardContent className="pb-4 space-y-4">
-        {/* Enhanced Chart with Gradient */}
-        <div className="h-20 relative">
+      <CardContent className="pb-1.5 space-y-1">
+        {/* Chart */}
+        <div className="h-6 relative">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
               data={chartData} 
-              margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
-              onMouseMove={(e: any) => {
-                if (e.activePayload && e.activePayload[0]) {
-                  setHoveredPoint(e.activePayload[0].payload);
-                }
-              }}
-              onMouseLeave={() => setHoveredPoint(null)}
+              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
-              <XAxis 
-                dataKey="day" 
-                hide={true}
-              />
-              <YAxis 
-                domain={['dataMin - 0.5', 'dataMax + 0.5']} 
-                hide={true}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              
-              {/* Gradient Definition */}
-              <defs>
-                <linearGradient id="weightGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={currentColors.primary} stopOpacity={0.3} />
-                  <stop offset="100%" stopColor={currentColors.primary} stopOpacity={0.0} />
-                </linearGradient>
-              </defs>
+              <XAxis dataKey="day" hide={true} />
+              <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
               
               <Line
                 type="monotone"
                 dataKey="weight"
                 stroke={currentColors.primary}
-                strokeWidth={3}
-                dot={{ fill: currentColors.primary, strokeWidth: 0, r: 4 }}
-                activeDot={{ 
-                  r: 6, 
-                  fill: currentColors.secondary, 
-                  strokeWidth: 2, 
-                  stroke: "white",
-                  style: { filter: `drop-shadow(0 0 6px ${currentColors.primary})` }
-                }}
-                fill="url(#weightGradient)"
-                fillOpacity={1}
+                strokeWidth={1.5}
+                dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
-          
-          {/* Hover Data Overlay */}
-          <AnimatePresence>
-            {hoveredPoint && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute top-2 right-2 bg-slate-800/90 backdrop-blur-sm rounded-lg p-2 text-xs"
-              >
-                <div className="text-slate-300">{hoveredPoint.dayName}</div>
-                <div className="text-white font-semibold">{hoveredPoint.weight.toFixed(1)} kg</div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
         
-        {/* Enhanced Stats Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* Current Weight */}
-          <div className="p-3 bg-slate-800/30 rounded-lg border border-slate-700/30 group-hover:border-slate-600/30 transition-all">
-            <div className="text-xs text-slate-400 font-medium mb-1">Current</div>
-            <div className="text-xl font-bold text-white">
-              <AnimatedCounter value={currentWeight} suffix=" kg" />
-            </div>
+        {/* Simple weight number */}
+        <div className="text-center">
+          <div className="text-xs font-bold text-white">
+            <AnimatedCounter value={currentWeight} suffix=" kg" decimals={1} />
           </div>
-          
-          {/* Change */}
-          <div className="p-3 bg-slate-800/30 rounded-lg border border-slate-700/30 group-hover:border-slate-600/30 transition-all">
-            <div className="text-xs text-slate-400 font-medium mb-1">Change</div>
-            <div className={cn("text-xl font-bold flex items-center", currentColors.accent)}>
-              {isPositiveChange ? (
-                <TrendingUp className="h-4 w-4 mr-1" />
-              ) : (
-                <TrendingDown className="h-4 w-4 mr-1" />
-              )}
-              {isPositiveChange ? '+' : ''}{weightChange.toFixed(1)}kg
-            </div>
-          </div>
-        </div>
-        
-        {/* Smart Insights */}
-        <div className={cn(
-          "p-3 rounded-lg border transition-all",
-          "bg-gradient-to-r", currentColors.bg,
-          "border-current/20"
-        )}>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-2">
-              <Target className={cn("h-4 w-4", currentColors.accent)} />
-              <span className={cn("text-sm font-medium", currentColors.accent)}>
-                7-Day Analysis
-              </span>
-            </div>
-            <div className="text-xs text-slate-400">
-              Volatility: {volatility > 0.2 ? 'High' : 'Low'}
-            </div>
-          </div>
-          
-          <p className="text-xs text-slate-300 leading-relaxed">
-            {weeklyProjection > 0.5 ? 
-              `Strong upward trend. Projected +${weeklyProjection.toFixed(1)}kg/week if maintained.` :
-             weeklyProjection < -0.5 ?
-              `Downward trend detected. Projected ${weeklyProjection.toFixed(1)}kg/week change.` :
-              'Weight remaining relatively stable. Consider increasing calorie surplus for gains.'
-            }
-          </p>
         </div>
       </CardContent>
     </Card>
