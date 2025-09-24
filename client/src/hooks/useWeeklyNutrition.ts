@@ -42,8 +42,10 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       return data;
     },
     enabled: !!userId,
-    staleTime: 30 * 1000, // 30 seconds - meal data is dynamic
-    gcTime: 2 * 60 * 1000, // 2 minutes cache
+    staleTime: 0, // Force fresh data to clear cached error
+    gcTime: 0, // No cache to force immediate refetch
+    retry: 3, // Retry failed requests
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000)
   });
 
   // Fetch user's macro targets (from TDEE analysis or user settings)
@@ -74,9 +76,27 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
 
     // Always create week structure - use empty array if no meal logs exist yet
     const mealLogsArray = mealLogs || [];
+    
+    // Debug meal logs data
+    console.log('Weekly Nutrition Meal Data Debug:', {
+      mealLogsLoading,
+      targetsLoading,
+      mealLogsLength: mealLogsArray.length,
+      todayMealsCount: mealLogsArray.filter(m => m.logDate === today.toISOString().split('T')[0]).length,
+      firstFewMeals: mealLogsArray.slice(0, 3).map(m => ({ id: m.id, logDate: m.logDate, calories: m.calories }))
+    });
 
     const today = new Date();
     const currentDayIndex = (today.getDay() + 6) % 7; // Monday = 0
+    
+    // Debug day index calculation
+    console.log('Weekly Nutrition Day Index Debug:', {
+      today: today.toISOString().split('T')[0],
+      todayGetDay: today.getDay(), // Sunday=0, Monday=1, etc.
+      currentDayIndex: currentDayIndex, // Monday=0, Tuesday=1, etc.
+      weekStart: weekBoundaries.weekStart.toISOString().split('T')[0],
+      weekEnd: weekBoundaries.weekEnd.toISOString().split('T')[0]
+    });
 
     // Use targets from API which calculates based on TDEE + user's weight gain goal
     // This ensures the weekly nutrition card shows the correct calorie target based on actual TDEE + surplus
@@ -104,7 +124,21 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
         // Handle both date string formats and ensure consistent comparison
         const mealDate = meal.logDate;
         const normalizedMealDate = typeof mealDate === 'string' ? mealDate.split('T')[0] : mealDate;
-        return normalizedMealDate === dateString;
+        const matches = normalizedMealDate === dateString;
+        
+        // Debug logging for today
+        if (dateString === new Date().toISOString().split('T')[0]) {
+          console.log(`Date Filter Debug - ${dateString}:`, {
+            mealId: meal.id,
+            mealDate: mealDate,
+            normalizedMealDate: normalizedMealDate,
+            dateString: dateString,
+            matches: matches,
+            calories: meal.calories
+          });
+        }
+        
+        return matches;
       });
 
       // Calculate daily totals
