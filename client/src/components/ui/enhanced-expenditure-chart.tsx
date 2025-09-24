@@ -80,15 +80,15 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
           <div className="p-0.5 bg-gradient-to-br from-orange-500 to-red-500 rounded">
             <Zap className="h-2 w-2 text-white" />
           </div>
-          <div className="text-sm text-white font-medium">
+          <div className="text-base text-white font-medium leading-tight">
             TDEE
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="pb-1.5 space-y-1">
+      <CardContent className="pb-1 space-y-0.5">
         {/* Chart */}
-        <div className="h-6 relative">
+        <div className="h-5 relative">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart 
               data={chartData} 
@@ -119,7 +119,7 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
         
         {/* Simple TDEE number */}
         <div className="text-center">
-          <div className="text-xs font-bold text-white">
+          <div className="text-sm font-bold text-white leading-tight">
             <AnimatedCounter value={tdee} suffix=" kcal" />
           </div>
         </div>

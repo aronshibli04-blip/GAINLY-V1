@@ -155,15 +155,15 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
             <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
               <Activity className="h-2 w-2 text-white" />
             </div>
-            <div className="text-sm text-white font-medium">
+            <div className="text-base text-white font-medium leading-tight">
               Weight Progress
             </div>
           </div>
         </CardHeader>
         
-        <CardContent className="pb-1.5 space-y-1">
+        <CardContent className="pb-1 space-y-0.5">
           {/* Chart */}
-          <div className="h-6 relative">
+          <div className="h-5 relative">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart 
                 data={weightChartData} 
@@ -185,7 +185,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
           
           {/* Simple weight number */}
           <div className="text-center">
-            <div className="text-xs font-bold text-white">
+            <div className="text-sm font-bold text-white leading-tight">
               <AnimatedCounter value={currentWeight} suffix=" kg" decimals={1} />
             </div>
           </div>
@@ -242,7 +242,7 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
           <div className="p-0.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded">
             <Activity className="h-2 w-2 text-white" />
           </div>
-          <div className="text-sm text-white font-medium">
+          <div className="text-base text-white font-medium leading-tight">
             Weight Progress
           </div>
         </div>
