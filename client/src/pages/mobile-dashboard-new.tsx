@@ -82,7 +82,7 @@ export default function MobileDashboardNew() {
         </div>
 
         {/* 1. HERO SECTION - Tracking Cards Carousel */}
-        <div className="mb-4">
+        <div className="mb-4 -mx-4">
           <TrackingCardsCarousel />
         </div>
 
