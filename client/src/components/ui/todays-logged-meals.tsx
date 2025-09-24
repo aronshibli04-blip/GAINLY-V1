@@ -58,6 +58,8 @@ export function TodaysLoggedMeals() {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
       // Also invalidate weekly nutrition card cache
       queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
+      // Also invalidate user targets cache which weekly nutrition depends on
+      queryClient.invalidateQueries({ queryKey: ["/api/user-targets", userId] });
     },
     onError: (error: any) => {
       toast({
@@ -88,6 +90,8 @@ export function TodaysLoggedMeals() {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
       // Also invalidate weekly nutrition card cache
       queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
+      // Also invalidate user targets cache which weekly nutrition depends on
+      queryClient.invalidateQueries({ queryKey: ["/api/user-targets", userId] });
     },
     onError: (error: any) => {
       toast({
@@ -110,7 +114,7 @@ export function TodaysLoggedMeals() {
 
   const saveEdit = () => {
     if (!editingMeal) return;
-    
+
     const calories = parseInt(editValues.calories);
     if (isNaN(calories) || calories < 0) {
       toast({
@@ -280,7 +284,7 @@ export function TodaysLoggedMeals() {
                 )}
               </div>
             ))}
-            
+
             {/* Daily Progress */}
             <div className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded-lg">
               <div className="flex items-center justify-between text-sm">

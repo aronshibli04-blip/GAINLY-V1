@@ -177,6 +177,8 @@ export function EnhancedMealLogger() {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-logs', userId, today] });
       // Also invalidate weekly nutrition card cache
       queryClient.invalidateQueries({ queryKey: ["/api/meal-logs", userId] });
+      // Also invalidate user targets cache which weekly nutrition depends on
+      queryClient.invalidateQueries({ queryKey: ["/api/user-targets", userId] });
 
       toast({
         title: "Meal logged successfully!",
