@@ -95,8 +95,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
     console.log('Weekly Nutrition Day Index Debug:', {
       today: todayDateString,
       todayGetDay: today.getDay(), // Sunday=0, Monday=1, etc.
-      currentDayIndex: currentDayIndex, // Monday=0, Tuesday=1, etc.
-      daysDiff: daysDiff,
+      currentDayIndex: currentDayIndex, // Sunday=0, Monday=1, etc.
       weekStart: weekBoundaries.weekStart.toISOString().split('T')[0],
       weekEnd: weekBoundaries.weekEnd.toISOString().split('T')[0]
     });
