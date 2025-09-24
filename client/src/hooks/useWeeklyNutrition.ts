@@ -27,7 +27,7 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
 
   // Fetch meal logs for the specific week
   const { data: mealLogs, isLoading: mealLogsLoading, error: mealLogsError } = useQuery<MealLog[]>({
-    queryKey: ["/api/meal-logs", userId],
+    queryKey: ["/api/meal-logs", userId, weekBoundaries.weekStart.toISOString().split('T')[0]],
     enabled: true,
     staleTime: 30 * 1000, // 30 seconds - meal data is dynamic
     gcTime: 2 * 60 * 1000, // 2 minutes cache
@@ -73,10 +73,13 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
       const isCompleted = dayIndex < currentDayIndex;
       const isFuture = dayIndex > currentDayIndex;
 
-      // Filter meals for this specific day
-      const dayMeals = mealLogsArray.filter(meal => 
-        meal.logDate === dateString
-      );
+      // Filter meals for this specific day - ensure consistent date format
+      const dayMeals = mealLogsArray.filter(meal => {
+        // Handle both date string formats and ensure consistent comparison
+        const mealDate = meal.logDate;
+        const normalizedMealDate = typeof mealDate === 'string' ? mealDate.split('T')[0] : mealDate;
+        return normalizedMealDate === dateString;
+      });
 
       // Calculate daily totals
       const dailyTotals = dayMeals.reduce(
@@ -88,6 +91,15 @@ export function useWeeklyNutrition({ weekOffset = 0 }: WeeklyNutritionParams = {
         }),
         { calories: 0, protein: 0, fat: 0, carbs: 0 }
       );
+
+      // Debug logging for today's data
+      if (isCurrent && dayMeals.length > 0) {
+        console.log(`Weekly Nutrition Debug - ${dateString}:`, {
+          dayMealsCount: dayMeals.length,
+          totalCalories: dailyTotals.calories,
+          meals: dayMeals.map(m => ({ id: m.id, calories: m.calories, logDate: m.logDate }))
+        });
+      }
 
       days.push({
         date: currentDate,
