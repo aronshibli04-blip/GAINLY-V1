@@ -75,41 +75,43 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
       "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
       className
     )}>
-      <CardHeader className="pb-0">
-        <div className="text-base text-white font-medium leading-tight">
+      <CardHeader className="pb-2 pt-3">
+        <div className="text-base text-white font-medium leading-tight text-center">
           TDEE
         </div>
       </CardHeader>
       
-      <CardContent className="pb-1 space-y-0.5">
-        {/* Chart */}
-        <div className="h-5 relative">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart 
-              data={chartData} 
-              margin={{ top: 0, right: 3, left: 3, bottom: 0 }}
-            >
-              <XAxis dataKey="day" hide={true} />
-              <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
-              
-              {/* Gradient Definition */}
-              <defs>
-                <linearGradient id="tdeeGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.0} />
-                </linearGradient>
-              </defs>
-              
-              <Area
-                type="monotone"
-                dataKey="expenditure"
-                stroke="#f59e0b"
-                strokeWidth={1.5}
-                fill="url(#tdeeGradient)"
-                dot={{ fill: '#f59e0b', strokeWidth: 0, r: 3 }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+      <CardContent className="pb-1 pt-0 space-y-1">
+        {/* Chart - Centered */}
+        <div className="h-6 relative flex justify-center">
+          <div className="w-full max-w-[80%]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart 
+                data={chartData} 
+                margin={{ top: 2, right: 3, left: 3, bottom: 2 }}
+              >
+                <XAxis dataKey="day" hide={true} />
+                <YAxis domain={['dataMin - 100', 'dataMax + 100']} hide={true} />
+                
+                {/* Gradient Definition */}
+                <defs>
+                  <linearGradient id="tdeeGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.3} />
+                    <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                
+                <Area
+                  type="monotone"
+                  dataKey="expenditure"
+                  stroke="#f59e0b"
+                  strokeWidth={1.5}
+                  fill="url(#tdeeGradient)"
+                  dot={{ fill: '#f59e0b', strokeWidth: 0, r: 3 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
         
         {/* Simple TDEE number */}
