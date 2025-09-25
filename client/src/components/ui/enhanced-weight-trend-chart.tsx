@@ -150,32 +150,34 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
         "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
         className
       )}>
-        <CardHeader className="pb-0">
-          <div className="text-base text-white font-medium leading-tight">
+        <CardHeader className="pb-2 pt-3">
+          <div className="text-base text-white font-medium leading-tight text-center">
             Weight Progress
           </div>
         </CardHeader>
         
-        <CardContent className="pb-1 space-y-0.5">
-          {/* Chart */}
-          <div className="h-5 relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart 
-                data={weightChartData} 
-                margin={{ top: 0, right: 3, left: 3, bottom: 0 }}
-              >
-                <XAxis dataKey="day" hide={true} />
-                <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
-                
-                <Line
-                  type="monotone"
-                  dataKey="weight"
-                  stroke="#06b6d4"
-                  strokeWidth={1.5}
-                  dot={{ fill: '#06b6d4', strokeWidth: 0, r: 3 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+        <CardContent className="pb-1 pt-0 space-y-1">
+          {/* Chart - Centered */}
+          <div className="h-6 relative flex justify-center">
+            <div className="w-full max-w-[80%]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart 
+                  data={weightChartData} 
+                  margin={{ top: 2, right: 3, left: 3, bottom: 2 }}
+                >
+                  <XAxis dataKey="day" hide={true} />
+                  <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
+                  
+                  <Line
+                    type="monotone"
+                    dataKey="weight"
+                    stroke="#06b6d4"
+                    strokeWidth={1.5}
+                    dot={{ fill: '#06b6d4', strokeWidth: 0, r: 3 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
           
           {/* Simple weight number */}
@@ -232,32 +234,34 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
       "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
       className
     )}>
-      <CardHeader className="pb-0">
-        <div className="text-base text-white font-medium leading-tight">
+      <CardHeader className="pb-2 pt-3">
+        <div className="text-base text-white font-medium leading-tight text-center">
           Weight Progress
         </div>
       </CardHeader>
       
-      <CardContent className="pb-1 space-y-0.5">
-        {/* Chart */}
-        <div className="h-5 relative">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart 
-              data={chartData} 
-              margin={{ top: 0, right: 3, left: 3, bottom: 0 }}
-            >
-              <XAxis dataKey="day" hide={true} />
-              <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
-              
-              <Line
-                type="monotone"
-                dataKey="weight"
-                stroke={currentColors.primary}
-                strokeWidth={1.5}
-                dot={{ fill: currentColors.primary, strokeWidth: 0, r: 3 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+      <CardContent className="pb-1 pt-0 space-y-1">
+        {/* Chart - Centered */}
+        <div className="h-6 relative flex justify-center">
+          <div className="w-full max-w-[80%]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart 
+                data={chartData} 
+                margin={{ top: 2, right: 3, left: 3, bottom: 2 }}
+              >
+                <XAxis dataKey="day" hide={true} />
+                <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide={true} />
+                
+                <Line
+                  type="monotone"
+                  dataKey="weight"
+                  stroke={currentColors.primary}
+                  strokeWidth={1.5}
+                  dot={{ fill: currentColors.primary, strokeWidth: 0, r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
         
         {/* Simple weight number */}
