@@ -234,8 +234,8 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
       "hover:border-slate-600/50 hover:shadow-lg hover:shadow-slate-900/20 h-full",
       className
     )}>
-      <CardHeader className="pb-0 pt-0 -mt-2">
-        <div className="text-base text-white font-medium leading-tight text-center">
+      <CardHeader className="pb-0 pt-0 -mt-4 -mb-1">
+        <div className="text-base text-white font-medium leading-tight text-center -mt-2">
           Weight Progress
         </div>
       </CardHeader>
