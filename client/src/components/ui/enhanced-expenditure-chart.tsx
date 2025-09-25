@@ -76,8 +76,8 @@ export function EnhancedExpenditureChart({ className, targetCalories }: Enhanced
       className
     )}>
       <CardHeader className="pb-2 pt-3">
-        <div className="text-base text-white font-medium leading-tight text-center">
-          TDEE
+        <div className="text-base text-blue-500 font-bold leading-tight text-center border-4 border-green-400">
+          🚀 TEST TDEE 🚀
         </div>
       </CardHeader>
       

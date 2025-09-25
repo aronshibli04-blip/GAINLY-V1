@@ -235,8 +235,8 @@ export function EnhancedWeightTrendChart({ className }: EnhancedWeightTrendChart
       className
     )}>
       <CardHeader className="pb-2 pt-3">
-        <div className="text-base text-white font-medium leading-tight text-center">
-          Weight Progress
+        <div className="text-base text-red-500 font-bold leading-tight text-center border-4 border-yellow-400">
+          🔥 TEST WEIGHT 🔥
         </div>
       </CardHeader>
       
